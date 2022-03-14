@@ -15,6 +15,25 @@
       <description>October is here and everyone is running after their 4 PR&amp;rsquo;s to win a digitalocean t-shirt!
 For those who don&amp;rsquo;t know, in October there is Hacktoberfest, an online and global event where people are awarded for contributing open source code. More information you can see on the official website of the event.
 OWASP and projects! The information security crowd knows how important the tools that assist in the process of code and vulnerability analysis are, and now is the time to contribute these tools and materials.</description>
+      <content:encoded><![CDATA[<p>October is here and everyone is running after their 4 PR&rsquo;s to win a digitalocean t-shirt!</p>
+<p>For those who don&rsquo;t know, in October there is Hacktoberfest, an online and global event where people are awarded for contributing open source code. More information you can see on the official website of the <a href="https://hacktoberfest.digitalocean.com">event</a>.</p>
+<h1 id="owasp-and-projects">OWASP and projects!</h1>
+<p>The information security crowd knows how important the tools that assist in the process of code and vulnerability analysis are, and now is the time to contribute these tools and materials.</p>
+<p>Here&rsquo;s a list of the most interesting OWASP projects that can help you with your work and also accept that you contribute code or documentation:</p>
+<h2 id="owasp-top-10">OWASP Top 10</h2>
+<p>It is a web application security awareness document. It meets the most critical web application security risks. In this list you can find some vulnerabilities, such as checking if your application is not vulnerable to them and also some countermeasures. <a href="https://github.com/OWASP/Top10/issues">Github</a></p>
+<h2 id="owasp-zed-attack-proxyzap">OWASP Zed Attack Proxy(ZAP)</h2>
+<p>ZAP is a popular vulnerability testing tool among security professionals and pentesters. It can help you in the process of finding and addressing vulnerabilities in your web applications. <a href="https://github.com/zaproxy/zaproxy/">Github</a> <a href="https://github.com/zaproxy/zap-extensions/">ZAP Extensions</a></p>
+<h2 id="owasp-juice-shop-project">OWASP Juice Shop Project</h2>
+<p>As they like to say, it&rsquo;s probably the most modern and sophisticated insecure web application! Yes, that&rsquo;s right, an insecure application for you to test and learn about the Top 10 vulnerabilities, with a complete learning support, book and tools to make learning easier. <a href="https://github.com/bkimminich/juice-shop">Github</a></p>
+<h2 id="owasp-defectdojo">OWASP DefectDojo</h2>
+<p>A great vulnerability management tool, it streamlines the testing process with modeling, reporting, and metrics tools. Stop spending a fortune on other vulnerability managers and start contributing the code of this powerful tool. <a href="https://github.com/DefectDojo/django-DefectDojo/">Github</a></p>
+<h2 id="owasp-amass">OWASP Amass</h2>
+<p>DNS enumeration and infrastructure mapping with techniques for obtaining web-scraped subdomains, APIs, and querying public databases. All that power in one simple tool is worth putting in your utility belt-bat. <a href="https://github.com/OWASP/Amass">Github</a></p>
+<h2 id="owasp-d4n155">OWASP D4N155</h2>
+<p>OSINT In a smart way, this project creates wordlists based on the content of your target along with Google Dorks techniques. In the future some data intelligence features will be added and you can be part of the development of this tool. <a href="https://github.com/OWASP/D4N155">Github</a></p>
+<p>These are some of the many projects, so if you want to know all the projects, you can check out the <a href="https://www.owasp.org/index.php/Category:OWASP_Project#tab=Project_Inventory">project repository</a>. If you would like to participate in the projects, log into the project github or contact your Project Leader.</p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -24,6 +43,36 @@ OWASP and projects! The information security crowd knows how important the tools
       
       <guid>https://fguisso.github.io/posts/escrevendo-artigos-e-palestras/</guid>
       <description>Algumas dicas de como montar uma boa palestra e de quebra já escrever um artigo</description>
+      <content:encoded><![CDATA[<h1 id="escrevendo-artigos-e-palestras">Escrevendo artigos e palestras</h1>
+<p>Veja como começar a compartilhar conhecimento de umas vez por todas.</p>
+<p>Se você chegou até aqui, o seu desafio é começar um artigo ou palestra logo após terminar a leitura, não me deixe desapontado.</p>
+<p>Escrever artigos e palestras é uma coisa magnifica pois é um dos meios de compartilhar e descentralizar o conhecimento, o que é um dos mantras da cultura hacker que eu gosto muito de seguir.</p>
+<p>A algum tempo participo e ajudo a organizar eventos de tecnologia, atualmente sou membro da equipe de conteúdos da Campus Party Brasil e responsável pelas comunidades do evento. Sendo assim eu busquei um pouco sobre como palestrar melhor e aprendi algumas coisas por ai. Inclusive fiz um curso bem legal que foi muito bom não só para palestrar, mas também para o meu auto conhecimento, recomendo muito. <a href="https://leonardocalixto.com.br/">https://leonardocalixto.com.br/</a></p>
+<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/2094/0*foIwlR7-piwD2uWs" alt="Palestra sobre phishing no LAMEC 2018"  />
+<em>Palestra sobre phishing no LAMEC 2018</em></p>
+<p>Lógico que palestrar e escrever um artigo são coisas diferentes, mas na minha mente uma boa palestra começa com um bom planejamento, que pode ser um artigo. Imagina se toda palestra já tivesse seu artigo bunitinho, o mundo seria melhor.</p>
+<h3 id="storytelling">Storytelling</h3>
+<p>Aqui você não vai encontrar muito sobre este assunto, então vou deixar alguns links para você se aprofundar, mas em resumo, um bom artigo ou palestra nada mais é do que uma boa historia contada.</p>
+<p>E uma historia precisa de um começo, meio e fim. Por exemplo a chapeuzinho vermelho:</p>
+<p>Começa com uma garota, como ela é, o que ela tem e oque ela precisa de fazer.</p>
+<p>No meio, se desenvolve o que ela fez com tudo o que foi apresentado, a historia chega a dar um frio na barriga, uma curiosidade, até chegar no climax da situação.</p>
+<p>Por fim tudo que foi desenvolvido no meio, chega em uma solução, tudo se encaixa e termina bem.</p>
+<p>Assim deve ser o seu artigo ou palestra, você escolhe um tema, pequeno pois não quer escrever um livro e nem dar uma palestra-filme, elucida os pontos para iniciar o desenvolvimento da historia e atraia a curiosidade do leitor, depois explica cada ponto trazido no inicio, e ao fim, chega em uma conclusão.</p>
+<h3 id="dicas-e-links">Dicas e links</h3>
+<p>Pegue artigos e palestra com o tema parecido com seu e analise como foi construído.</p>
+<p>Fale de coisas que você tenha propriedade, isso não quer dizer que se você não entende um assunto 100%, não pode falar sobre ele. Por exemplo gosto muito palestras, mas não sou formado em comunicação para estar falando aqui, acontece que mesmo assim estou compartilhando experiencias que deram certo comigo e são legais para quem esta começando e não vou alem do que eu não sei.</p>
+<p>Medo, vai com medo mesmo, feedbacks são importantes, se preocupe se você só tiver recebendo feedbacks bons, talvez as pessoas não querem perder tempo discutindo com você. Se for feedback ruim, melhor ainda que você vai ter coisas para melhor e aprender coisas novas.</p>
+<p>Em palestras as coisas vão muito alem de uma linha de raciocínio do storytelling, existe o tom de voz, a postura do palestrante, improviso, humor e por ai vai, técnicas de palco em geral, nada muito difícil que você não possa aprender na internet.</p>
+<p>Manual ilustrado para palestrantes dos TEDx &lt;<a href="http://storage.ted.com/tedx/manuals/IllustratedTEDxSpeakerGuide.pdf">http://storage.ted.com/tedx/manuals/IllustratedTEDxSpeakerGuide.pdf</a>&gt;</p>
+<p>Palestra de humor de como um TED fica tão bom, é engraçado mas da para tirar alguns insights de como montar uma palestra chamativa &lt;<a href="https://www.youtube.com/watch?v=8S0FDjFBj8o">https://www.youtube.com/watch?v=8S0FDjFBj8o</a>&gt;</p>
+<p>Outras referencias sobre Talks about talks &lt;<a href="https://www.ted.com/playlists/574/how_to_make_a_great_presentation">https://www.ted.com/playlists/574/how_to_make_a_great_presentation</a>&gt;</p>
+<p>Artigo muito bom de como começar com artigos &lt;<a href="https://medium.com/trainingcenter/o-que-eu-devo-saber-para-escrever-artigos-1d6a6902d6bb">https://medium.com/trainingcenter/o-que-eu-devo-saber-para-escrever-artigos-1d6a6902d6bb</a>&gt;</p>
+<p>Dicas marotas para artigos técnicos &lt;<a href="https://medium.com/@rosariopfernandes/writer-4195046ab0c4">https://medium.com/@rosariopfernandes/writer-4195046ab0c4</a>&gt;</p>
+<p>O famoso design thinking para palestras &lt;<a href="https://medium.com/uxconfbr/como-criar-uma-apresenta%C3%A7%C3%A3o-inteira-antes-mesmo-de-abrir-o-powerpoint-fbdbebbbb3a6">https://medium.com/uxconfbr/como-criar-uma-apresenta%C3%A7%C3%A3o-inteira-antes-mesmo-de-abrir-o-powerpoint-fbdbebbbb3a6</a>&gt;</p>
+<p>10 dicas ótimas &lt;<a href="https://medium.com/uxconfbr/guia-para-palestrar-em-eventos-da-sua-comunidade-profissional-parte-i-4c2dc28553dd">https://medium.com/uxconfbr/guia-para-palestrar-em-eventos-da-sua-comunidade-profissional-parte-i-4c2dc28553dd</a>&gt;</p>
+<p>Palestras acessíveis <em>-</em> &lt;<a href="https://medium.com/uxconfbr/guia-para-eventos-acessiveis-como-fazer-apresentacoes-parte-i-137317610631">https://medium.com/uxconfbr/guia-para-eventos-acessiveis-como-fazer-apresentacoes-parte-i-137317610631</a>&gt;</p>
+<p>Passei de curioso para influencer de artigos, como se tornar Zika da balada no Medium &lt;<a href="https://valternascimento.com.br/como-escrever-textos-de-sucesso-no-medium-5cba69be8a1e">https://valternascimento.com.br/como-escrever-textos-de-sucesso-no-medium-5cba69be8a1e</a>&gt;</p>
+]]></content:encoded>
     </item>
     
   </channel>
