@@ -23,6 +23,7 @@ params:
   defaultTheme: auto # dark, light
   disableThemeToggle: false
 
+  ShowFullTextinRSS: true
   ShowReadingTime: true
   ShowShareButtons: true
   ShowPostNavLinks: true
