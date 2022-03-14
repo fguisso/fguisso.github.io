@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>blockchain on Fernando Guisso</title>
+    <link>https://fguisso.github.io/tags/blockchain/</link>
+    <description>Recent content in blockchain on Fernando Guisso</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 01 Sep 2018 20:42:45 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/blockchain/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Desvendando o blockchain</title>
+      <link>https://fguisso.github.io/posts/desvendando-o-blockchain/</link>
+      <pubDate>Sat, 01 Sep 2018 20:42:45 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/posts/desvendando-o-blockchain/</guid>
+      <description>Uma das tecnologias que estão revolucionando varios mercados que você precisa conhecer.</description>
+    </item>
+    
+  </channel>
+</rss>

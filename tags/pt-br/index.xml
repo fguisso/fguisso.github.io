@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>pt-br on Fernando Guisso</title>
+    <link>https://fguisso.github.io/tags/pt-br/</link>
+    <description>Recent content in pt-br on Fernando Guisso</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 05 Oct 2019 11:26:27 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/pt-br/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hacktoberfest Owasp</title>
+      <link>https://fguisso.github.io/posts/hacktoberfest-owasp/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/posts/hacktoberfest-owasp/</guid>
+      <description>Mês de outubro chegou e todo mundo está correndo atrás dos seus 4 PR’s para ganhar uma camiseta da digitalocean!
+Para quem não sabe, no mês de outubro acontece o Hacktoberfest, um evento online e global onde as pessoas são premiadas por contribuir com código open source. Mais informações você pode ver no site oficial do evento.
+OWASP e seus projetos! A galera de segurança da informação sabe o quão importante são as ferramentas que auxiliam no processo de análise de código e vulnerabilidades e agora é a hora de contribuirmos com essas ferramentas e materiais.</description>
+    </item>
+    
+    <item>
+      <title>Conhecendo a OWASP</title>
+      <link>https://fguisso.github.io/posts/conhecendo-a-owasp/</link>
+      <pubDate>Wed, 20 Mar 2019 20:42:45 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/posts/conhecendo-a-owasp/</guid>
+      <description>Uma breve apresentação da OWASP e seus projetos</description>
+    </item>
+    
+    <item>
+      <title>Desvendando o blockchain</title>
+      <link>https://fguisso.github.io/posts/desvendando-o-blockchain/</link>
+      <pubDate>Sat, 01 Sep 2018 20:42:45 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/posts/desvendando-o-blockchain/</guid>
+      <description>Uma das tecnologias que estão revolucionando varios mercados que você precisa conhecer.</description>
+    </item>
+    
+  </channel>
+</rss>

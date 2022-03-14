@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Categories on Fernando Guisso</title>
+    <link>https://fguisso.github.io/categories/</link>
+    <description>Recent content in Categories on Fernando Guisso</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 05 Oct 2019 11:26:27 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AppSec</title>
+      <link>https://fguisso.github.io/categories/appsec/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/categories/appsec/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hacktoberfest</title>
+      <link>https://fguisso.github.io/categories/hacktoberfest/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/categories/hacktoberfest/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OWASP</title>
+      <link>https://fguisso.github.io/categories/owasp/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/categories/owasp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Softskill</title>
+      <link>https://fguisso.github.io/categories/softskill/</link>
+      <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/categories/softskill/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Blockchain</title>
+      <link>https://fguisso.github.io/categories/blockchain/</link>
+      <pubDate>Sat, 01 Sep 2018 20:42:45 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/categories/blockchain/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

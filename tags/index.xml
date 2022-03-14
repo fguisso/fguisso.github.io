@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on Fernando Guisso</title>
+    <link>https://fguisso.github.io/tags/</link>
+    <description>Recent content in Tags on Fernando Guisso</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 05 Oct 2019 11:26:27 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>appsec</title>
+      <link>https://fguisso.github.io/tags/appsec/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/tags/appsec/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>en</title>
+      <link>https://fguisso.github.io/tags/en/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/tags/en/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hacktoberfest</title>
+      <link>https://fguisso.github.io/tags/hacktoberfest/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/tags/hacktoberfest/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>owasp</title>
+      <link>https://fguisso.github.io/tags/owasp/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/tags/owasp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pt-br</title>
+      <link>https://fguisso.github.io/tags/pt-br/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/tags/pt-br/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>softskill</title>
+      <link>https://fguisso.github.io/tags/softskill/</link>
+      <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/tags/softskill/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>storytelling</title>
+      <link>https://fguisso.github.io/tags/storytelling/</link>
+      <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/tags/storytelling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>bitcoin</title>
+      <link>https://fguisso.github.io/tags/bitcoin/</link>
+      <pubDate>Sat, 01 Sep 2018 20:42:45 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/tags/bitcoin/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>blockchain</title>
+      <link>https://fguisso.github.io/tags/blockchain/</link>
+      <pubDate>Sat, 01 Sep 2018 20:42:45 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/tags/blockchain/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
