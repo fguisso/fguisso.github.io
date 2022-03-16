@@ -5,7 +5,200 @@
     <link>https://fguisso.github.io/tags/en/</link>
     <description>Recent content in en on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sat, 05 Oct 2019 11:26:27 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/en/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/en/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Basic Recon Automation Using Github Actions</title>
+      <link>https://fguisso.github.io/posts/github-actions-recon-en/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/posts/github-actions-recon-en/</guid>
+      <description>Demonstration of how to use Github Actions to automate a Recon</description>
+      <content:encoded><![CDATA[<p>Currently, the number of companies using CI (Continuous Integration) and CD (Continuous Deploy) solutions to automate the software lifecycle process (SLD) is growing. The most used tools are Jenkins, Github Actions, Gitlab CI, and so on. These tools bring the ease of automating software testing, code linters, creating releases, and final versions of the software.</p>
+<p>In the security world, some companies are also already implementing static security testing (SAST) and compromised software composition testing (SCA). With each addition of code or feature, the software can now be tested before going into production.</p>
+<p>The idea of working with security tools in CI/CD goes beyond the fact of automating tasks, but also of bringing the culture of information security to the teams of developers and infrastructure teams, the famous culture of DevSecOps. Very important at the moment we go through where development teams are scaling absurdly and we don&rsquo;t have security experts to accompany these teams.</p>
+<p>Link for the projects repository: <a href="https://github.com/fguisso/ga-recon">https://github.com/fguisso/ga-recon</a></p>
+<h2 id="use-cases-beyond-static-tests-sast-and-sca">Use cases beyond static tests (SAST and SCA)</h2>
+<p>The simplest use case we can address is dynamic security tests scheduled to take place periodically, taking into account that the application is already in production.</p>
+<p>Other interesting cases would be the possibility of Red Team teams, taking advantage of the event notifications of a pipeline, to launch automated tests as soon as the development of a new feature begins. I will address this topic in more depth in another article.</p>
+<p>What we will explore more in this article is the recognition of applications already in production, where we will point a domain to our CI that will periodically run some recognition tools, which can be used later by security teams for future security analyses.</p>
+<h2 id="github-and-github-actions">Github and Github Actions</h2>
+<p>We are going to use Github to version and store our project, so go to github.com and create a new repository. Now let&rsquo;s create and edit some files, if you don&rsquo;t know how Github works, you can use the graphical interface.
+Github Actions is already an enabled Github service, just put the pipeline configuration files in a folder called <code>.github/workflows</code> and all interactions and logs of this pipeline will be visible in the actions tab.</p>
+<p>To facilitate the creation of pipelines, Github Actions offers Actions, which are sets of configurations and installations ready for you to use in your pipeline, without you having to worry about it. Some official Actions are available on the Github Marketplace, however, you can directly use any Action that is a repository on Github.</p>
+<p>Learn more about Actions <a href="https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions">here</a> and the <a href="https://github.com/marketplace?type=actions">link</a> to the marketplace.</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/5755568/158624544-226a1e59-fef5-441e-beca-73b66c30dd5d.png" alt="image"  />
+
+<em>Examples of separate workflow files.</em></p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/5755568/158624831-2aebfc25-a58b-49b2-91cb-33d17f0f77c2.png" alt="image"  />
+
+<em>Github Actions resource tab with configured workflows.</em></p>
+<h3 id="amass-action">Amass Action</h3>
+<p>Amass according to its official documentation:</p>
+<p>The OWASP Amass project performs attack surface network mapping and external asset discovery using open-source intelligence gathering and active reconnaissance techniques.</p>
+<p>Amass is a very powerful tool that provides us with functions for the recognition and also for the management of the collected information. In our case, we are going to use the Amass Action just to enumerate a domain and bring the result in a txt file for later use.</p>
+<p>In your repository create a file called <code>amass.yml</code> inside the <code>.github/workflows</code> folder and add these settings and let&rsquo;s analyze what we are doing line by line:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">🔎 Recon</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">workflow_dispatch</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">recon</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/setup-go@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">go-version</span><span class="p">:</span><span class="w"> </span><span class="m">1.17</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Amass - Enumeration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">fguisso/amass-action@main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">domains</span><span class="p">:</span><span class="w"> </span><span class="l">owasp.org</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">brute</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l">hosts.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">GitHub Workflow artifacts</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/upload-artifact@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hosts.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">hosts.txt</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Note: .yml/.yaml files are heavily indented, so the tabs and spaces within the file must be correct to avoid errors. You can use Github itself to validate your file or use a linter of YAML files.</p>
+<p>On the first line <code>name:</code> ​​is just an identifier for your pipeline to be easily found within the Actions tab of Github.</p>
+<p>After <code>on:</code> is where we can automate so that the workflow starts according to some programmed event, which can be triggered by one or more events, at the moment we choose <code>workflow_dispatch:</code> so that it is available in the Actions dashboard and we can activate any time. Towards the end, we will see how to trigger this workflow scheduled to run once a week, but you can also trigger it using Git events like trigger whenever there is a Pull Request in the development branch, trigger only when a Merge from the main branch happens.</p>
+<p><code>jobs:</code> is where we can separate Actions to run in parallel, as we are using the Free version of Github Actions, we will try to always keep just one job running everything we need. <a href="https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow">Job documentation link</a>.</p>
+<p>The first <code>steps</code> I will summarize as just settings to compile and run the Amass tool which is developed in Golang. Usually, when you are going to use an Action, the necessary settings will be in the documentation, don&rsquo;t worry.</p>
+<p>After the initial <code>steps</code>, let&rsquo;s call the Amass Action using the Action&rsquo;s Github address, <code>uses: fguisso/amass-action@main</code> and pass in some configuration inputs:</p>
+<p><code>domains:</code> I will use the domain of owasp.org to be our target, you can use the domain of your application or also pass more than one domain separated by commas.</p>
+<p>Let&rsquo;s enable <code>brute:</code> to brute force the searches found and finally pass the name of the final file <code>output: hosts.txt</code>, where we will store the results.</p>
+<p>Well, so far we&rsquo;ve done the whole process of using a tool through Github Actions, but due to how an automated pipeline works, every <code>job</code> that we run, will upload a new machine and at the end of the process it is turned off and deleted, no holding no information or files created. So, we need to get our final <code>hosts.txt</code> file and save it somewhere for later reference. We have several options such as uploading the file to another machine, saving the result in the Git repository, using Github Actions we can also create and interact with Issues or Pull Requests and the most used for CI/CD services is to create an artifact of your <code>job</code>, which is what we are going to do.</p>
+<p>In the last <code>step</code> we start another Action that serves to upload files for the artifacts of your workflow, just passing the name of the current file and the final name that will be available within the artifacts of this workflow.</p>
+<p>Now let&rsquo;s run our workflow manually, just go to the Actions tab of your repository, choose the Amass Enum workflow, and click on the Run Workflow button.
+<img loading="lazy" src="https://user-images.githubusercontent.com/5755568/158627084-09f2ab97-6d95-439e-9241-6557a5e72aef.png" alt="image"  />
+</p>
+<p>Right after you can see your workflow running and if you want to follow the <code>steps</code> and logs, just click on your <code>job</code> <code>recon</code>.</p>
+<p>Once the workflow finishes all the <code>steps</code> you will be able to see the results and your artifact will be available for download:</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/5755568/158697555-07a8c02a-8132-45e8-ab55-4a3d790cf092.png" alt="image"  />
+</p>
+<h3 id="naabu-action">Naabu Action</h3>
+<p>Naabu is a port scan tool where it will look for the open and active ports of a given host. The creators of the project maintain an official version of a Github Actions to run Naabu, so let&rsquo;s follow their documentation to follow our recon workflow.</p>
+<p>Let&rsquo;s add the Naabu Action to port recognition from this list of domains that Amass has given us. As one depends on the result of the other, let&rsquo;s put it in the sequence of <code>steps</code> so that it will be executed right away if there is no error in the execution of the previous step.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Naabu - Port Scannner</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">projectdiscovery/naabu-action@main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">list</span><span class="p">:</span><span class="w"> </span><span class="l">hosts.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l">urls.txt</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>As we are working with just one <code>job</code>, Github Actions goes up a machine with some configurations and at the end of the process, this machine will be turned off and removed, with everything that was generated inside it. Since we haven&rsquo;t finished our <code>job</code> yet, so the <code>hosts.txt</code> file is still available. In case you want to keep these results, we need to do as before and pass the result files to the artifacts of this <code>job</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">GitHub Workflow artifacts</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/upload-artifact@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hosts.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">            hosts.txt
+</span></span></span><span class="line"><span class="cl"><span class="sd">            urls.txt</span><span class="w">            
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>For simplicity, let&rsquo;s pass the files straight to just one artifact, so Github will create a final .zip file for you with all these files inside.</p>
+<h3 id="nuclei-action">Nuclei Action</h3>
+<p>Nuclei is a template-based vulnerability scanning tool, with the help of the community today there are over 1000 ready-to-use templates that will test your application for known vulnerabilities. Like Naabu, we also have an official Nuclei Action that we will use: <a href="https://github.com/marketplace/actions/nuclei-dast-scan">https://github.com/marketplace/actions/nuclei-dast-scan</a></p>
+<p><strong>Attention!</strong> Due to a bug found in the ProjectDiscovery Actions, I will use a fork of my own where I fixed the problem, as soon as the correction is included in the official project, I will update the article and change <code>fguisso/nuclei- action@inputs</code> by <code>projectdiscovery/nuclei-action@main</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Nuclei - DAST Scan</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">fguisso/nuclei-action@inputs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">urls</span><span class="p">:</span><span class="w"> </span><span class="l">urls.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l">nuclei.txt</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>As a previous result, now we have the hosts and their active ports, let&rsquo;s move to the cores to check if all these services are found, we find any vulnerability.</p>
+<h3 id="running-your-workflow-manually">Running your workflow manually</h3>
+<p>With everything configured, we can now run our workflow manually. Just access the Actions tab in your repository, select your workflow and click on <code>Run workflow</code>.</p>
+<p>You can follow the execution of your workflow or just wait until the icon turns green, which means that all the <code>steps</code> happened correctly and you can probably download your results in the artifacts field.</p>
+<p>Whenever you want, you can update the domain you want to scan and you can also add more than one domain using just commas to separate them. Ex: <code>owasp.org,github.com</code>.</p>
+<h3 id="events-to-dispatch">Events to dispatch</h3>
+<p>As mentioned before, workflows can respond to specific events to be able to run, and here we are just going to create a schedule so that we can run our workflow once a week.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;0 0 * * 0&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">workflow_dispatch</span><span class="p">:</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>We can schedule using cron schedule expressions, so our workflow will run once a week, every Sunday at 00:00.</p>
+<p>Do not remove the <code>workflow_dispatch</code> line unless you are already certain that you will no longer use the manual trigger button.</p>
+<p>Here is a list of other events that you can use to run your workflows automatically. Read more about it in the Github Actions documentation <a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on">https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on</a>.</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>Hacktoberfest Owasp English</title>
       <link>https://fguisso.github.io/posts/hacktoberfest-owasp-en/</link>
