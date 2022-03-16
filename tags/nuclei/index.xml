@@ -97,7 +97,7 @@ O Github Actions já é um serviço habilitado do Github, bastando apenas que vo
 </div><p>Obs: arquivos .yml/.yaml são fortemente identados, então os tabs e espaços dentro do arquivo precisam estar corretos para não acontecer erros. Você pode utilizar o próprio Github para validar seu arquivo ou utilizar um linter de arquivos YAML.</p>
 <p>Na primeira linha <code>name:</code> é apenas um identificador para sua pipeline ser facilmente encontrada dentro da aba Actions do Github.</p>
 <p>Depois do <code>on:</code> é onde podemos automatizar para que o workflow inicie de acordo com algum evento programado, podendo ser acionada por um ou mais eventos, no momento escolhemos <code>workflow_dispatch:</code> para que ela fique disponível no dashboard de Actions e possamos ativar a qualquer momento. Mais para o final veremos como disparar este workflow agendada para rodar 1 vez por semana, mas você também pode disparar usando eventos do Git como, disparar sempre que houver um Pull Request na branch de desenvolvimento, disparar apenas quando acontecer um Merge do branch principal.</p>
-<p><code>jobs:</code> é onde podemos separar Actions para rodar em paralelo, como estamos usando a versão Free do Github Actions, vamos tentar manter sempre apenas um job executando tudo o que precisarmos.</p>
+<p><code>jobs:</code> é onde podemos separar Actions para rodar em paralelo, como estamos usando a versão Free do Github Actions, vamos tentar manter sempre apenas um job executando tudo o que precisarmos. <a href="https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow">Link da documentação sobre jobs</a>.</p>
 <p>Os primeiros <code>steps</code> vou resumir como apenas configurações para compilar e rodar a ferramenta Amass que é desenvolvida em Golang. Geralmente quando você for usar uma Action, as configurações necessárias estarão na documentações, não se preocupe.</p>
 <p>Depois dos <code>steps</code> iniciais, vamos chamar o Amass Action utilizando o endereço da Action no Github, <code>uses: fguisso/amass-action@main</code> e passar alguns inputs de configurações:</p>
 <p><code>domains:</code> vou utilizar o domínio da owasp.org para ser nosso target, você pode utilizar o domínio de sua aplicação ou também passar mais de um domínio separados por vírgula.</p>
@@ -107,26 +107,94 @@ O Github Actions já é um serviço habilitado do Github, bastando apenas que vo
 <p>Agora vamos rodar nosso workflow manualmente, basta ir na aba Actions do seu repositório, escolher o workflow Amass Enum e clicar no botão Run Workflow.
 <img loading="lazy" src="https://user-images.githubusercontent.com/5755568/158627084-09f2ab97-6d95-439e-9241-6557a5e72aef.png" alt="image"  />
 </p>
-<p>Logo apos você podera ver seu workflow rodando e caso queira acompanhar os <code>steps</code> e logs, é só clicar no seu <code>job</code> <code>amass-scan</code>.</p>
+<p>Logo apos você podera ver seu workflow rodando e caso queira acompanhar os <code>steps</code> e logs, é só clicar no seu <code>job</code> <code>recon</code>.</p>
 <p>Assim que o workflow finalizar todos os <code>steps</code> você vai conseguir ver os resultados e seu artefato estará disponível para download:</p>
+<p><img loading="lazy" src="https://user-images.githubusercontent.com/5755568/158697555-07a8c02a-8132-45e8-ab55-4a3d790cf092.png" alt="image"  />
+</p>
 <h3 id="naabu-action">Naabu Action</h3>
 <p>Naabu é uma ferramenta de scan de portas, onde ele vai procurar as portas abertas e ativas de um determinado host. Os criadores do projeto mantém uma versão oficial de uma Github Actions para rodar o Naabu, então vamos seguir a documentação deles para seguir com o nosso workflow de recon.</p>
 <p>Vamos adicionar a Naabu Action para fazermos o reconhecimento das portas dessa lista de domínios que o Amass nos entregou. Como um depende do resultado do outro, vamos colocar na sequência de <code>steps</code> para que seja executado logo em seguida caso não tenha nenhum erro na execução do passo anterior.</p>
-<p>Como estamos trabalhando com apenas um <code>job</code>, o Github Actions sobe uma máquina com algumas configurações e ao final do processo esta máquina vai ser desligada e removida, com tudo o que foi gerado dentro dela. Já que não finalizamos nosso <code>job</code> ainda, então o arquivo <code>hosts.txt</code> ainda está disponível. Caso você queira manter estes resultados, precisamos fazer como anteriormente e passar os arquivos de resultado para os artefatos deste <code>job</code>.</p>
-<p>Para simplificar, vamos passar os arquivos direto para apenas um artefato, assim o Github vai criar um arquivo .zip final para você com todos estes arquivos dentro.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Naabu - Port Scannner</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">projectdiscovery/naabu-action@main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">list</span><span class="p">:</span><span class="w"> </span><span class="l">hosts.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l">urls.txt</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Como estamos trabalhando com apenas um <code>job</code>, o Github Actions sobe uma máquina com algumas configurações e ao final do processo esta máquina vai ser desligada e removida, com tudo o que foi gerado dentro dela. Já que não finalizamos nosso <code>job</code> ainda, então o arquivo <code>hosts.txt</code> ainda está disponível. Caso você queira manter estes resultados, precisamos fazer como anteriormente e passar os arquivos de resultado para os artefatos deste <code>job</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">GitHub Workflow artifacts</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/upload-artifact@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hosts.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">            hosts.txt
+</span></span></span><span class="line"><span class="cl"><span class="sd">            urls.txt</span><span class="w">            
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Para simplificar, vamos passar os arquivos direto para apenas um artefato, assim o Github vai criar um arquivo .zip final para você com todos estes arquivos dentro.</p>
 <h3 id="nuclei-action">Nuclei Action</h3>
 <p>Nuclei é uma ferramenta de scan de vulnerabilidades baseado em templates, com a ajuda da comunidade hoje existem mais de 1000 templates prontos para usar que vão testar sua aplicação em busca de vulnerabilidades conhecidas. Assim como Naabu, também temos um Action oficial do Nuclei que vamos utilizar: <a href="https://github.com/marketplace/actions/nuclei-dast-scan">https://github.com/marketplace/actions/nuclei-dast-scan</a></p>
-<p>Com o resultado anterior, agora temos os hosts e suas portas ativas, vamos passar para o nuclei verificar se em todos estes serviços encontrados, achamos alguma vulnerabilidade.</p>
+<p><strong>Atenção!</strong> Devido a um bug encontrado nas Actions do ProjectDiscovery, vou utilizar um fork proprio onde eu corrigi o problema, assim que a correção for incluida no projeto oficial, vou fazer o update do artigo e trocar <code>fguisso/nuclei-action@inputs</code> por <code>projectdiscovery/nuclei-action@main</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Nuclei - DAST Scan</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">fguisso/nuclei-action@inputs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">urls</span><span class="p">:</span><span class="w"> </span><span class="l">urls.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">output</span><span class="p">:</span><span class="w"> </span><span class="l">nuclei.txt</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Com o resultado anterior, agora temos os hosts e suas portas ativas, vamos passar para o nuclei verificar se em todos estes serviços encontrados, achamos alguma vulnerabilidade.</p>
 <h3 id="rodando-seu-workflow-manualmente">Rodando seu workflow manualmente</h3>
 <p>Com tudo configurado, agora podemos rodar o nosso workflow manualmente. Basta acessar a aba Actions no seu repositório, selecionar seu workflow e clicar em <code>Run workflow</code>.</p>
 <p>Você pode acompanhar a execução do seu workflow ou apenas esperar até o ícone ficar verde, o que quer dizer que todas os <code>steps</code> aconteceram de forma correta e provavelmente você pode baixar seus resultados no campo de artefatos.</p>
 <p>Sempre que quiser, você pode atualizar o domínio que quer escanear e também pode acrescentar mais de um domínio utilizando apenas vírgulas para separá-los. Ex: <code>owasp.org,github.com</code>.</p>
 <h3 id="eventos-para-automatizar">Eventos para automatizar</h3>
 <p>Como já falado anteriormente, os workflows podem responder a eventos específicos para poder rodar e aqui vamos apenas criar um agendamento, para que possamos rodar nosso workflow uma vez por semana.</p>
-<p>Podemos agendar usando expressões cron schedule, assim nosso workflow vai executar uma vez por semana, toda segunda feira as 00:00.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;0 0 * * 0&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">workflow_dispatch</span><span class="p">:</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Podemos agendar usando expressões cron schedule, assim nosso workflow vai executar uma vez por semana, toda segunda feira as 00:00.</p>
 <p>Não remova a linha <code>workflow_dispatch</code> a não ser que você já esteja certo de que não vai usar mais o botão de disparo manual.</p>
 <p>Aqui tem uma lista de outros eventos que você pode utilizar para executar seus workflows automaticamente. Leia mais sobre na documentação do Github Actions <a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on">https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on</a>.</p>
-<p><a href="https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow">https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow</a></p>
 ]]></content:encoded>
     </item>
     
