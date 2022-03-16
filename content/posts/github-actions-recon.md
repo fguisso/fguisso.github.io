@@ -84,7 +84,7 @@ Na primeira linha `name:` é apenas um identificador para sua pipeline ser facil
 
 Depois do `on:` é onde podemos automatizar para que o workflow inicie de acordo com algum evento programado, podendo ser acionada por um ou mais eventos, no momento escolhemos `workflow_dispatch:` para que ela fique disponível no dashboard de Actions e possamos ativar a qualquer momento. Mais para o final veremos como disparar este workflow agendada para rodar 1 vez por semana, mas você também pode disparar usando eventos do Git como, disparar sempre que houver um Pull Request na branch de desenvolvimento, disparar apenas quando acontecer um Merge do branch principal.
 
-`jobs:` é onde podemos separar Actions para rodar em paralelo, como estamos usando a versão Free do Github Actions, vamos tentar manter sempre apenas um job executando tudo o que precisarmos.
+`jobs:` é onde podemos separar Actions para rodar em paralelo, como estamos usando a versão Free do Github Actions, vamos tentar manter sempre apenas um job executando tudo o que precisarmos. [Link da documentação sobre jobs](https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow).
 
 Os primeiros `steps` vou resumir como apenas configurações para compilar e rodar a ferramenta Amass que é desenvolvida em Golang. Geralmente quando você for usar uma Action, as configurações necessárias estarão na documentações, não se preocupe.
 
@@ -102,10 +102,11 @@ Agora vamos rodar nosso workflow manualmente, basta ir na aba Actions do seu rep
 ![image](https://user-images.githubusercontent.com/5755568/158627084-09f2ab97-6d95-439e-9241-6557a5e72aef.png)
 
 
-Logo apos você podera ver seu workflow rodando e caso queira acompanhar os `steps` e logs, é só clicar no seu `job` `amass-scan`.
+Logo apos você podera ver seu workflow rodando e caso queira acompanhar os `steps` e logs, é só clicar no seu `job` `recon`.
 
 Assim que o workflow finalizar todos os `steps` você vai conseguir ver os resultados e seu artefato estará disponível para download:
 
+![image](https://user-images.githubusercontent.com/5755568/158697555-07a8c02a-8132-45e8-ab55-4a3d790cf092.png)
 
 ### Naabu Action
 
@@ -113,10 +114,25 @@ Naabu é uma ferramenta de scan de portas, onde ele vai procurar as portas abert
 
 Vamos adicionar a Naabu Action para fazermos o reconhecimento das portas dessa lista de domínios que o Amass nos entregou. Como um depende do resultado do outro, vamos colocar na sequência de `steps` para que seja executado logo em seguida caso não tenha nenhum erro na execução do passo anterior.
 
-
+```yaml
+      - name: Naabu - Port Scannner
+        uses: projectdiscovery/naabu-action@main
+        with:
+            list: hosts.txt
+            output: urls.txt
+```
 
 Como estamos trabalhando com apenas um `job`, o Github Actions sobe uma máquina com algumas configurações e ao final do processo esta máquina vai ser desligada e removida, com tudo o que foi gerado dentro dela. Já que não finalizamos nosso `job` ainda, então o arquivo `hosts.txt` ainda está disponível. Caso você queira manter estes resultados, precisamos fazer como anteriormente e passar os arquivos de resultado para os artefatos deste `job`.
 
+```yaml
+      - name: GitHub Workflow artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: hosts.txt
+          path: |
+            hosts.txt
+            urls.txt
+```
 
 Para simplificar, vamos passar os arquivos direto para apenas um artefato, assim o Github vai criar um arquivo .zip final para você com todos estes arquivos dentro.
 
@@ -124,6 +140,15 @@ Para simplificar, vamos passar os arquivos direto para apenas um artefato, assim
 
 Nuclei é uma ferramenta de scan de vulnerabilidades baseado em templates, com a ajuda da comunidade hoje existem mais de 1000 templates prontos para usar que vão testar sua aplicação em busca de vulnerabilidades conhecidas. Assim como Naabu, também temos um Action oficial do Nuclei que vamos utilizar: https://github.com/marketplace/actions/nuclei-dast-scan
 
+**Atenção!** Devido a um bug encontrado nas Actions do ProjectDiscovery, vou utilizar um fork proprio onde eu corrigi o problema, assim que a correção for incluida no projeto oficial, vou fazer o update do artigo e trocar `fguisso/nuclei-action@inputs` por `projectdiscovery/nuclei-action@main`.
+
+```yaml
+      - name: Nuclei - DAST Scan
+        uses: fguisso/nuclei-action@inputs
+        with:
+          urls: urls.txt
+          output: nuclei.txt
+```
 
 Com o resultado anterior, agora temos os hosts e suas portas ativas, vamos passar para o nuclei verificar se em todos estes serviços encontrados, achamos alguma vulnerabilidade.
 
@@ -139,19 +164,15 @@ Sempre que quiser, você pode atualizar o domínio que quer escanear e também p
 
 Como já falado anteriormente, os workflows podem responder a eventos específicos para poder rodar e aqui vamos apenas criar um agendamento, para que possamos rodar nosso workflow uma vez por semana.
 
+```yaml
+on:
+    schedule:
+        - cron: '0 0 * * 0'
+    workflow_dispatch:
+```
 
 Podemos agendar usando expressões cron schedule, assim nosso workflow vai executar uma vez por semana, toda segunda feira as 00:00.
 
 Não remova a linha `workflow_dispatch` a não ser que você já esteja certo de que não vai usar mais o botão de disparo manual.
 
 Aqui tem uma lista de outros eventos que você pode utilizar para executar seus workflows automaticamente. Leia mais sobre na documentação do Github Actions https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on.
-
-
-
-
-
-
-
-
-
-https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow
