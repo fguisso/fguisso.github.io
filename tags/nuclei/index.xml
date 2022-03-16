@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>AppSec on Fernando Guisso</title>
-    <link>https://fguisso.github.io/categories/appsec/</link>
-    <description>Recent content in AppSec on Fernando Guisso</description>
+    <title>nuclei on Fernando Guisso</title>
+    <link>https://fguisso.github.io/tags/nuclei/</link>
+    <description>Recent content in nuclei on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 16 Mar 2022 00:00:45 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/categories/appsec/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Mar 2022 00:00:45 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/nuclei/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Automação básica de Recon utilizando o Github Actions</title>
       <link>https://fguisso.github.io/posts/github-actions-recon/</link>
@@ -127,98 +127,6 @@ O Github Actions já é um serviço habilitado do Github, bastando apenas que vo
 <p>Não remova a linha <code>workflow_dispatch</code> a não ser que você já esteja certo de que não vai usar mais o botão de disparo manual.</p>
 <p>Aqui tem uma lista de outros eventos que você pode utilizar para executar seus workflows automaticamente. Leia mais sobre na documentação do Github Actions <a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on">https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on</a>.</p>
 <p><a href="https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow">https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow</a></p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Hacktoberfest Owasp</title>
-      <link>https://fguisso.github.io/posts/hacktoberfest-owasp/</link>
-      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
-      
-      <guid>https://fguisso.github.io/posts/hacktoberfest-owasp/</guid>
-      <description>Mês de outubro chegou e todo mundo está correndo atrás dos seus 4 PR’s para ganhar uma camiseta da digitalocean!
-Para quem não sabe, no mês de outubro acontece o Hacktoberfest, um evento online e global onde as pessoas são premiadas por contribuir com código open source. Mais informações você pode ver no site oficial do evento.
-OWASP e seus projetos! A galera de segurança da informação sabe o quão importante são as ferramentas que auxiliam no processo de análise de código e vulnerabilidades e agora é a hora de contribuirmos com essas ferramentas e materiais.</description>
-      <content:encoded><![CDATA[<p>Mês de outubro chegou e todo mundo está correndo atrás dos seus 4 PR’s para ganhar uma camiseta da digitalocean!</p>
-<p>Para quem não sabe, no mês de outubro acontece o Hacktoberfest, um evento online e global onde as pessoas são premiadas por contribuir com código open source. Mais informações você pode ver no site oficial do <a href="https://hacktoberfest.digitalocean.com">evento</a>.</p>
-<h1 id="owasp-e-seus-projetos">OWASP e seus projetos!</h1>
-<p>A galera de segurança da informação sabe o quão importante são as ferramentas que auxiliam no processo de análise de código e vulnerabilidades e agora é a hora de contribuirmos com essas ferramentas e materiais.</p>
-<p>Segue uma lista com os projetos mais interessantes da OWASP que podem te ajudar no trabalho e também aceitam que você contribua com o código ou documentação:</p>
-<h2 id="owasp-top-10">OWASP Top 10</h2>
-<p>É um documento de conscientização para segurança de aplicações web. Ele reúne os riscos mais críticos de segurança de aplicações web. Nesta lista você pode encontrar algumas vulnerabilidades, como checar se sua aplicação não está vulnerável a elas e também algumas contramedidas. <a href="https://github.com/OWASP/Top10/issues">Github</a></p>
-<h2 id="owasp-zed-attack-proxy-zap">OWASP Zed Attack Proxy (ZAP)</h2>
-<p>O ZAP é uma ferramenta de testes de vulnerabilidades popular entre profissionais de segurança e pentesters. Ele pode te ajudar no processo de encontrar e tratar vulnerabilidades em suas aplicações web. <a href="https://github.com/zaproxy/zaproxy/">Github</a> <a href="https://github.com/zaproxy/zap-extensions/">Extensões ZAP</a></p>
-<h2 id="owasp-juice-shop-project">OWASP Juice Shop Project</h2>
-<p>Como eles gostam de dizer, é provavelmente a mais moderna e sofisticada aplicação web insegura! Sim, é isso mesmo, uma aplicação insegura para você testar e aprender sobre as Top 10 vulnerabilidades, com todo um suporte de aprendizagem, livro e ferramentas para facilitar na hora de aprender. <a href="https://github.com/bkimminich/juice-shop">Github</a></p>
-<h2 id="owasp-defectdojo">OWASP DefectDojo</h2>
-<p>Uma ótima ferramenta de gerenciamento de vulnerabilidades, otimiza o processo de teste, com ferramentas de modelagem, geração de relatórios e métricas. Pare de gastar uma fortuna com outros gerenciadores de vulnerabilidades e comece contribuindo com o código dessa poderosa ferramenta. <a href="https://github.com/DefectDojo/django-DefectDojo/">Github</a></p>
-<h2 id="owasp-amass">OWASP Amass</h2>
-<p>Enumeração de DNS e mapeamento de infraestrutura com técnicas para obter subdomínios com scraping na web, APIs e consultando bancos de dados públicos. Todo esse poder em uma simples ferramenta, vale a pena colocar no seu bat-cinto de utilidades. <a href="https://github.com/OWASP/Amass">Github</a></p>
-<h2 id="owasp-d4n155">OWASP D4N155</h2>
-<p>OSINT de uma maneira inteligente, este projeto cria wordlists baseado no conteúdo do seu alvo, juntamente com técnicas de Google Dorks. Futuramente algumas features de inteligência de dados serão adicionados e você pode fazer parte do desenvolvimento desta ferramenta. <a href="https://github.com/OWASP/D4N155">Github</a></p>
-<p>Estes são alguns dos muitos projetos, caso você queira conhecer todos os projetos, pode dar uma olhada no <a href="https://www.owasp.org/index.php/Category:OWASP_Project#tab=Project_Inventory">repositório de projetos</a>. Caso você queira participar dos projetos, entre no github do projeto ou entre em contato com o seu Project Leader.</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Hacktoberfest Owasp English</title>
-      <link>https://fguisso.github.io/posts/hacktoberfest-owasp-en/</link>
-      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
-      
-      <guid>https://fguisso.github.io/posts/hacktoberfest-owasp-en/</guid>
-      <description>October is here and everyone is running after their 4 PR&amp;rsquo;s to win a digitalocean t-shirt!
-For those who don&amp;rsquo;t know, in October there is Hacktoberfest, an online and global event where people are awarded for contributing open source code. More information you can see on the official website of the event.
-OWASP and projects! The information security crowd knows how important the tools that assist in the process of code and vulnerability analysis are, and now is the time to contribute these tools and materials.</description>
-      <content:encoded><![CDATA[<p>October is here and everyone is running after their 4 PR&rsquo;s to win a digitalocean t-shirt!</p>
-<p>For those who don&rsquo;t know, in October there is Hacktoberfest, an online and global event where people are awarded for contributing open source code. More information you can see on the official website of the <a href="https://hacktoberfest.digitalocean.com">event</a>.</p>
-<h1 id="owasp-and-projects">OWASP and projects!</h1>
-<p>The information security crowd knows how important the tools that assist in the process of code and vulnerability analysis are, and now is the time to contribute these tools and materials.</p>
-<p>Here&rsquo;s a list of the most interesting OWASP projects that can help you with your work and also accept that you contribute code or documentation:</p>
-<h2 id="owasp-top-10">OWASP Top 10</h2>
-<p>It is a web application security awareness document. It meets the most critical web application security risks. In this list you can find some vulnerabilities, such as checking if your application is not vulnerable to them and also some countermeasures. <a href="https://github.com/OWASP/Top10/issues">Github</a></p>
-<h2 id="owasp-zed-attack-proxyzap">OWASP Zed Attack Proxy(ZAP)</h2>
-<p>ZAP is a popular vulnerability testing tool among security professionals and pentesters. It can help you in the process of finding and addressing vulnerabilities in your web applications. <a href="https://github.com/zaproxy/zaproxy/">Github</a> <a href="https://github.com/zaproxy/zap-extensions/">ZAP Extensions</a></p>
-<h2 id="owasp-juice-shop-project">OWASP Juice Shop Project</h2>
-<p>As they like to say, it&rsquo;s probably the most modern and sophisticated insecure web application! Yes, that&rsquo;s right, an insecure application for you to test and learn about the Top 10 vulnerabilities, with a complete learning support, book and tools to make learning easier. <a href="https://github.com/bkimminich/juice-shop">Github</a></p>
-<h2 id="owasp-defectdojo">OWASP DefectDojo</h2>
-<p>A great vulnerability management tool, it streamlines the testing process with modeling, reporting, and metrics tools. Stop spending a fortune on other vulnerability managers and start contributing the code of this powerful tool. <a href="https://github.com/DefectDojo/django-DefectDojo/">Github</a></p>
-<h2 id="owasp-amass">OWASP Amass</h2>
-<p>DNS enumeration and infrastructure mapping with techniques for obtaining web-scraped subdomains, APIs, and querying public databases. All that power in one simple tool is worth putting in your utility belt-bat. <a href="https://github.com/OWASP/Amass">Github</a></p>
-<h2 id="owasp-d4n155">OWASP D4N155</h2>
-<p>OSINT In a smart way, this project creates wordlists based on the content of your target along with Google Dorks techniques. In the future some data intelligence features will be added and you can be part of the development of this tool. <a href="https://github.com/OWASP/D4N155">Github</a></p>
-<p>These are some of the many projects, so if you want to know all the projects, you can check out the <a href="https://www.owasp.org/index.php/Category:OWASP_Project#tab=Project_Inventory">project repository</a>. If you would like to participate in the projects, log into the project github or contact your Project Leader.</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Conhecendo a OWASP</title>
-      <link>https://fguisso.github.io/posts/conhecendo-a-owasp/</link>
-      <pubDate>Wed, 20 Mar 2019 20:42:45 -0300</pubDate>
-      
-      <guid>https://fguisso.github.io/posts/conhecendo-a-owasp/</guid>
-      <description>Uma breve apresentação da OWASP e seus projetos</description>
-      <content:encoded><![CDATA[<h2 id="open-web-application-security-project">Open Web Application Security Project</h2>
-<p><img loading="lazy" src="https://cdn-images-1.medium.com/max/2000/1*o7CzvTK5nN9_dXMFYR2dJA.jpeg" alt=""  />
-</p>
-<h3 id="open-community">Open Community</h3>
-<p>OWASP é uma comunidade internacional aberta, dedicada em ajudar organizações a manter, desenvolver, adquirir e operar aplicações confiáveis. Com ferramentas, documentos, fóruns e capítulos, abertas e gratuitas para qualquer pessoa interessada em melhorar a segurança de suas aplicações.</p>
-<p>O projeto também mantem a Fundação OWASP, uma instituição internacional para dar suporte aos projetos de longo prazo da comunidade.</p>
-<h3 id="valores">Valores</h3>
-<p>OPEN/ABERTO; <em>Tudo é radicalmente transparente, desde as finanças até o nosso código.</em></p>
-<p>INNOVATION/INOVAÇÃO; <em>Incentiva e apoia inovações e experimentos para solucionar desafios de segurança do software.</em></p>
-<p>GLOBAL; <em>Qualquer pessoa em todo o mundo é incentivada a participar da comunidade.</em></p>
-<p>INTEGRITY/INTEGRIDADE; É uma comunidade global honesta e verdadeira, neutra em relação a fornecedores.</p>
-<h2 id="projetos">Projetos</h2>
-<p>Vamos apresentar agora alguns projetos conhecidos da OWASP, sempre lembrando que você pode encontrar todo o conteúdo aberto pela internet e também pode colaborar com a construção deles.</p>
-<h3 id="owasp-top-10">OWASP Top 10</h3>
-<p>É um documento de conscientização para segurança de aplicações web. Ele reune os riscos mais críticos de segurança de aplicações web. Nesta lista você pode encontrar algumas vulnerabilidades, como checar se sua aplicação não esta vulnerável a elas e também algumas contramedidas. <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">Link do projeto</a>.</p>
-<h3 id="owasp-zed-attack-proxy-zap">OWASP Zed Attack Proxy (ZAP)</h3>
-<p>O ZAP é uma ferramenta de testes de vulnerabilidades popular entre profissionais de segurança e pentesters. Ele pode te ajudar no processo de encontrar e tratar vulnerabilidades em suas aplicações web. <a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">Link do projeto.</a></p>
-<h3 id="owasp-offensive-web-testing-framework-owtf">OWASP Offensive Web Testing Framework (OWTF)</h3>
-<p>Também uma ferramenta para te auxiliar na busca de vulnerabilidades, o OWTF foi criado para automatizar estes processos e tornar os testes manuais e repetitivos menos chatos. Com suporte direto para os padrões NTIS e PTES. <a href="https://owtf.github.io/">Link do projeto.</a></p>
-<h3 id="owasp-juice-shop-project">OWASP Juice Shop Project</h3>
-<p>Como eles gostam de dizer, *é provavelmente a mais moderna e sofisticada aplicação web insegura! *Sim, é isso mesmo, uma aplicação insegura para você testar e aprender sobre as Top 10 vulnerabilidades, com todo um suporte de aprendizagem, livro e ferramentas para facilitar na hora de aprender. <a href="https://www.owasp.org/index.php/OWASP_Juice_Shop_Project">Link do projeto.</a></p>
-<p>Estes são alguns dos muitos projetos, caso você queira conhecer todos os projetos, pode dar uma olhada no <a href="https://www.owasp.org/index.php/Category:OWASP_Project#tab=Project_Inventory">repositório de projetos</a>. Caso você queira participar dos projetos, entre no github do projeto ou entre em contato com o seu Project Leader.</p>
 ]]></content:encoded>
     </item>
     
