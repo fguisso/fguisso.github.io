@@ -50,7 +50,7 @@ Amass é uma ferramenta muito poderosa que nos fornece funções para o reconhec
 Em seu repositório crie um arquivo chamado `amass.yml` dentro da pasta `.github/workflows` e adicione estas configurações e vamos analisar linha a linha o que estamos fazendo:
 
 ```yaml
-name: 🔎 Amass Enum
+name: 🔎 Recon
 
 on:
     workflow_dispatch:
