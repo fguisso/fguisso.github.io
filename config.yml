@@ -56,10 +56,6 @@ params:
     enabled: true
     title: Fernando Guisso
     subtitle: "Secure Software Engineer"
-    imageUrl: "/guisso.png"
-    imageWidth: 120
-    imageHeight: 120
-    imageTitle: Guisso's logo
     buttons:
       - name: Posts
         url: posts
@@ -72,8 +68,10 @@ params:
     Content: Welcome to my blog
 
   socialIcons:
-    - name: twitter
-      url: "https://twitter.com/_fguisso"
+    - name: mastodon
+      url: "https://bolha.us/@guisso"
+    - name: instagram
+      url: "https://bolha.photos/guisso"
     - name: stackoverflow
       url: "https://stackoverflow.com/users/6896873/fguisso"
     - name: github
