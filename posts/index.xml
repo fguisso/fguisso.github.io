@@ -13,9 +13,53 @@
       <pubDate>Fri, 13 Oct 2023 02:02:04 -0300</pubDate>
       
       <guid>https://fguisso.github.io/posts/tm-mermaid-example/</guid>
-      <description>Testando Mermaid para Threat Modeling flowchart LR user(user) mobile((mobile\napplication)) proxy((reverse\nproxy)) api((API)) db[|borders:tb|database] subgraph external [Internet] user--personal data--&gt;mobile mobile--&gt;proxy end subgraph dmz [Internal Network] proxy--&gt;api db--&gt;api api--&gt;db end classDef boundary fill:none,stroke-dasharray: 5 5 dmz:::boundary external:::boundary </description>
+      <description>Testando Mermaid para Threat Modeling 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 flowchart LR user(user) mobile((mobile\napplication)) proxy((reverse\nproxy)) api((API)) db[|borders:tb|database] subgraph external [Internet] user--personal data--&amp;gt;mobile mobile--&amp;gt;proxy end subgraph dmz [Internal Network] proxy--&amp;gt;api db--&amp;gt;api api--&amp;gt;db end classDef boundary fill:none,stroke-dasharray: 5 5 dmz:::boundary external:::boundary flowchart LR user(user) mobile((mobile\napplication)) proxy((reverse\nproxy)) api((API)) db[|borders:tb|database] subgraph external [Internet] user--personal data--&gt;mobile mobile--&gt;proxy end subgraph dmz [Internal Network] proxy--&gt;api db--&gt;api api--&gt;db end classDef boundary fill:none,stroke-dasharray: 5 5 dmz:::boundary external:::boundary </description>
       <content:encoded><![CDATA[<h1 id="testando-mermaid-para-threat-modeling">Testando Mermaid para Threat Modeling</h1>
-<div class="mermaid">flowchart LR
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">flowchart LR
+</span></span><span class="line"><span class="cl">    user(user)
+</span></span><span class="line"><span class="cl">    mobile((mobile\napplication))
+</span></span><span class="line"><span class="cl">    proxy((reverse\nproxy))
+</span></span><span class="line"><span class="cl">    api((API))
+</span></span><span class="line"><span class="cl">    db[|borders:tb|database]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    subgraph external [Internet]
+</span></span><span class="line"><span class="cl">        user--personal data--&gt;mobile
+</span></span><span class="line"><span class="cl">        mobile--&gt;proxy
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">    subgraph dmz [Internal Network]
+</span></span><span class="line"><span class="cl">        proxy--&gt;api
+</span></span><span class="line"><span class="cl">        db--&gt;api
+</span></span><span class="line"><span class="cl">        api--&gt;db
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">    classDef boundary fill:none,stroke-dasharray: 5 5
+</span></span><span class="line"><span class="cl">    dmz:::boundary
+</span></span><span class="line"><span class="cl">    external:::boundary
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="mermaid">flowchart LR
     user(user)
     mobile((mobile\napplication))
     proxy((reverse\nproxy))
