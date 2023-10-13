@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>AppSec on Fernando Guisso</title>
-    <link>https://fguisso.github.io/categories/appsec/</link>
+    <link>https://guisso.dev/categories/appsec/</link>
     <description>Recent content in AppSec on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/categories/appsec/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://guisso.dev/categories/appsec/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Basic Recon Automation Using Github Actions</title>
-      <link>https://fguisso.github.io/posts/github-actions-recon-en/</link>
+      <link>https://guisso.dev/posts/github-actions-recon-en/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/github-actions-recon-en/</guid>
+      <guid>https://guisso.dev/posts/github-actions-recon-en/</guid>
       <description>Demonstration of how to use Github Actions to automate a Recon</description>
       <content:encoded><![CDATA[<p>Currently, the number of companies using CI (Continuous Integration) and CD (Continuous Deploy) solutions to automate the software lifecycle process (SLD) is growing. The most used tools are Jenkins, Github Actions, Gitlab CI, and so on. These tools bring the ease of automating software testing, code linters, creating releases, and final versions of the software.</p>
 <p>In the security world, some companies are also already implementing static security testing (SAST) and compromised software composition testing (SCA). With each addition of code or feature, the software can now be tested before going into production.</p>
@@ -202,10 +202,10 @@ Github Actions is already an enabled Github service, just put the pipeline confi
     
     <item>
       <title>Automação básica de Recon utilizando o Github Actions</title>
-      <link>https://fguisso.github.io/posts/github-actions-recon/</link>
+      <link>https://guisso.dev/posts/github-actions-recon/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/github-actions-recon/</guid>
+      <guid>https://guisso.dev/posts/github-actions-recon/</guid>
       <description>Demostração de como utilizar o Github Actions para automatizar um Recon</description>
       <content:encoded><![CDATA[<p>Atualmente vem crescendo o número de empresas que utilizam soluções de CI(Continuous Integration) e CD(Continuous Deploy) para automatizar o processo do ciclo de vida do software(SLD). As ferramentas mais utilizadas são Jenkins, Github Actions, Gitlab CI e por aí vai. Estas ferramentas trazem a facilidade de automatizar os testes de software, linters de código, criação de releases e versões finais do software.</p>
 <p>No mundo da segurança algumas empresas também já estão implementando os testes de segurança estáticos(SAST) e testes de composição de software(SCA) comprometidos. A cada adição de código ou feature, agora o software pode ser testado antes de ir para produção.</p>
@@ -394,10 +394,10 @@ O Github Actions já é um serviço habilitado do Github, bastando apenas que vo
     
     <item>
       <title>Hacktoberfest Owasp</title>
-      <link>https://fguisso.github.io/posts/hacktoberfest-owasp/</link>
+      <link>https://guisso.dev/posts/hacktoberfest-owasp/</link>
       <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/hacktoberfest-owasp/</guid>
+      <guid>https://guisso.dev/posts/hacktoberfest-owasp/</guid>
       <description>Mês de outubro chegou e todo mundo está correndo atrás dos seus 4 PR’s para ganhar uma camiseta da digitalocean!
 Para quem não sabe, no mês de outubro acontece o Hacktoberfest, um evento online e global onde as pessoas são premiadas por contribuir com código open source. Mais informações você pode ver no site oficial do evento.
 OWASP e seus projetos! A galera de segurança da informação sabe o quão importante são as ferramentas que auxiliam no processo de análise de código e vulnerabilidades e agora é a hora de contribuirmos com essas ferramentas e materiais.</description>
@@ -424,10 +424,10 @@ OWASP e seus projetos! A galera de segurança da informação sabe o quão impor
     
     <item>
       <title>Hacktoberfest Owasp English</title>
-      <link>https://fguisso.github.io/posts/hacktoberfest-owasp-en/</link>
+      <link>https://guisso.dev/posts/hacktoberfest-owasp-en/</link>
       <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/hacktoberfest-owasp-en/</guid>
+      <guid>https://guisso.dev/posts/hacktoberfest-owasp-en/</guid>
       <description>October is here and everyone is running after their 4 PR&amp;rsquo;s to win a digitalocean t-shirt!
 For those who don&amp;rsquo;t know, in October there is Hacktoberfest, an online and global event where people are awarded for contributing open source code. More information you can see on the official website of the event.
 OWASP and projects! The information security crowd knows how important the tools that assist in the process of code and vulnerability analysis are, and now is the time to contribute these tools and materials.</description>
@@ -454,10 +454,10 @@ OWASP and projects! The information security crowd knows how important the tools
     
     <item>
       <title>Conhecendo a OWASP</title>
-      <link>https://fguisso.github.io/posts/conhecendo-a-owasp/</link>
+      <link>https://guisso.dev/posts/conhecendo-a-owasp/</link>
       <pubDate>Wed, 20 Mar 2019 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/conhecendo-a-owasp/</guid>
+      <guid>https://guisso.dev/posts/conhecendo-a-owasp/</guid>
       <description>Uma breve apresentação da OWASP e seus projetos</description>
       <content:encoded><![CDATA[<h2 id="open-web-application-security-project">Open Web Application Security Project</h2>
 <p><img loading="lazy" src="https://cdn-images-1.medium.com/max/2000/1*o7CzvTK5nN9_dXMFYR2dJA.jpeg" alt=""  />

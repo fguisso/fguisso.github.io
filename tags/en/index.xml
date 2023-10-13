@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>en on Fernando Guisso</title>
-    <link>https://fguisso.github.io/tags/en/</link>
+    <link>https://guisso.dev/tags/en/</link>
     <description>Recent content in en on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/en/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://guisso.dev/tags/en/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Basic Recon Automation Using Github Actions</title>
-      <link>https://fguisso.github.io/posts/github-actions-recon-en/</link>
+      <link>https://guisso.dev/posts/github-actions-recon-en/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/github-actions-recon-en/</guid>
+      <guid>https://guisso.dev/posts/github-actions-recon-en/</guid>
       <description>Demonstration of how to use Github Actions to automate a Recon</description>
       <content:encoded><![CDATA[<p>Currently, the number of companies using CI (Continuous Integration) and CD (Continuous Deploy) solutions to automate the software lifecycle process (SLD) is growing. The most used tools are Jenkins, Github Actions, Gitlab CI, and so on. These tools bring the ease of automating software testing, code linters, creating releases, and final versions of the software.</p>
 <p>In the security world, some companies are also already implementing static security testing (SAST) and compromised software composition testing (SCA). With each addition of code or feature, the software can now be tested before going into production.</p>
@@ -202,10 +202,10 @@ Github Actions is already an enabled Github service, just put the pipeline confi
     
     <item>
       <title>Hacktoberfest Owasp English</title>
-      <link>https://fguisso.github.io/posts/hacktoberfest-owasp-en/</link>
+      <link>https://guisso.dev/posts/hacktoberfest-owasp-en/</link>
       <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/hacktoberfest-owasp-en/</guid>
+      <guid>https://guisso.dev/posts/hacktoberfest-owasp-en/</guid>
       <description>October is here and everyone is running after their 4 PR&amp;rsquo;s to win a digitalocean t-shirt!
 For those who don&amp;rsquo;t know, in October there is Hacktoberfest, an online and global event where people are awarded for contributing open source code. More information you can see on the official website of the event.
 OWASP and projects! The information security crowd knows how important the tools that assist in the process of code and vulnerability analysis are, and now is the time to contribute these tools and materials.</description>
@@ -232,10 +232,10 @@ OWASP and projects! The information security crowd knows how important the tools
     
     <item>
       <title>Escrevendo artigos e palestras</title>
-      <link>https://fguisso.github.io/posts/escrevendo-artigos-e-palestras/</link>
+      <link>https://guisso.dev/posts/escrevendo-artigos-e-palestras/</link>
       <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/escrevendo-artigos-e-palestras/</guid>
+      <guid>https://guisso.dev/posts/escrevendo-artigos-e-palestras/</guid>
       <description>Algumas dicas de como montar uma boa palestra e de quebra já escrever um artigo</description>
       <content:encoded><![CDATA[<h1 id="escrevendo-artigos-e-palestras">Escrevendo artigos e palestras</h1>
 <p>Veja como começar a compartilhar conhecimento de umas vez por todas.</p>

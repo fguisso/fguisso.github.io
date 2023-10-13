@@ -2,94 +2,94 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://fguisso.github.io/</loc>
+    <loc>https://guisso.dev/</loc>
     <lastmod>2023-10-13T02:02:04-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/posts/</loc>
+    <loc>https://guisso.dev/posts/</loc>
     <lastmod>2023-10-13T02:02:04-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/posts/tm-mermaid-example/</loc>
+    <loc>https://guisso.dev/posts/tm-mermaid-example/</loc>
     <lastmod>2023-10-13T02:02:04-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/amass/</loc>
+    <loc>https://guisso.dev/tags/amass/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/appsec/</loc>
+    <loc>https://guisso.dev/tags/appsec/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/categories/appsec/</loc>
+    <loc>https://guisso.dev/categories/appsec/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/posts/github-actions-recon-en/</loc>
+    <loc>https://guisso.dev/posts/github-actions-recon-en/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/categories/</loc>
+    <loc>https://guisso.dev/categories/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/en/</loc>
+    <loc>https://guisso.dev/tags/en/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/naabu/</loc>
+    <loc>https://guisso.dev/tags/naabu/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/nuclei/</loc>
+    <loc>https://guisso.dev/tags/nuclei/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/owasp/</loc>
+    <loc>https://guisso.dev/tags/owasp/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/categories/owasp/</loc>
+    <loc>https://guisso.dev/categories/owasp/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/recon/</loc>
+    <loc>https://guisso.dev/tags/recon/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/</loc>
+    <loc>https://guisso.dev/tags/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/posts/github-actions-recon/</loc>
+    <loc>https://guisso.dev/posts/github-actions-recon/</loc>
     <lastmod>2022-03-16T00:00:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/pt-br/</loc>
+    <loc>https://guisso.dev/tags/pt-br/</loc>
     <lastmod>2022-03-16T00:00:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/hacktoberfest/</loc>
+    <loc>https://guisso.dev/tags/hacktoberfest/</loc>
     <lastmod>2019-10-05T11:26:27-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/categories/hacktoberfest/</loc>
+    <loc>https://guisso.dev/categories/hacktoberfest/</loc>
     <lastmod>2019-10-05T11:26:27-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/posts/hacktoberfest-owasp/</loc>
+    <loc>https://guisso.dev/posts/hacktoberfest-owasp/</loc>
     <lastmod>2019-10-05T11:26:27-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/posts/hacktoberfest-owasp-en/</loc>
+    <loc>https://guisso.dev/posts/hacktoberfest-owasp-en/</loc>
     <lastmod>2019-10-05T11:26:27-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/posts/conhecendo-a-owasp/</loc>
+    <loc>https://guisso.dev/posts/conhecendo-a-owasp/</loc>
     <lastmod>2019-03-20T20:42:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/posts/escrevendo-artigos-e-palestras/</loc>
+    <loc>https://guisso.dev/posts/escrevendo-artigos-e-palestras/</loc>
     <lastmod>2019-02-22T20:42:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/softskill/</loc>
+    <loc>https://guisso.dev/tags/softskill/</loc>
     <lastmod>2019-02-22T20:42:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/categories/softskill/</loc>
+    <loc>https://guisso.dev/categories/softskill/</loc>
     <lastmod>2019-02-22T20:42:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/storytelling/</loc>
+    <loc>https://guisso.dev/tags/storytelling/</loc>
     <lastmod>2019-02-22T20:42:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/bitcoin/</loc>
+    <loc>https://guisso.dev/tags/bitcoin/</loc>
     <lastmod>2018-09-01T20:42:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/tags/blockchain/</loc>
+    <loc>https://guisso.dev/tags/blockchain/</loc>
     <lastmod>2018-09-01T20:42:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/categories/blockchain/</loc>
+    <loc>https://guisso.dev/categories/blockchain/</loc>
     <lastmod>2018-09-01T20:42:45-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/posts/desvendando-o-blockchain/</loc>
+    <loc>https://guisso.dev/posts/desvendando-o-blockchain/</loc>
     <lastmod>2018-09-01T20:42:45-03:00</lastmod>
   </url>
 </urlset>

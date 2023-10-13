@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>storytelling on Fernando Guisso</title>
-    <link>https://fguisso.github.io/tags/storytelling/</link>
+    <link>https://guisso.dev/tags/storytelling/</link>
     <description>Recent content in storytelling on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 22 Feb 2019 20:42:45 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/storytelling/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Feb 2019 20:42:45 -0300</lastBuildDate><atom:link href="https://guisso.dev/tags/storytelling/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Escrevendo artigos e palestras</title>
-      <link>https://fguisso.github.io/posts/escrevendo-artigos-e-palestras/</link>
+      <link>https://guisso.dev/posts/escrevendo-artigos-e-palestras/</link>
       <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/escrevendo-artigos-e-palestras/</guid>
+      <guid>https://guisso.dev/posts/escrevendo-artigos-e-palestras/</guid>
       <description>Algumas dicas de como montar uma boa palestra e de quebra já escrever um artigo</description>
       <content:encoded><![CDATA[<h1 id="escrevendo-artigos-e-palestras">Escrevendo artigos e palestras</h1>
 <p>Veja como começar a compartilhar conhecimento de umas vez por todas.</p>

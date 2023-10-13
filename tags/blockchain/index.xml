@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>blockchain on Fernando Guisso</title>
-    <link>https://fguisso.github.io/tags/blockchain/</link>
+    <link>https://guisso.dev/tags/blockchain/</link>
     <description>Recent content in blockchain on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 01 Sep 2018 20:42:45 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/blockchain/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Sep 2018 20:42:45 -0300</lastBuildDate><atom:link href="https://guisso.dev/tags/blockchain/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Desvendando o blockchain</title>
-      <link>https://fguisso.github.io/posts/desvendando-o-blockchain/</link>
+      <link>https://guisso.dev/posts/desvendando-o-blockchain/</link>
       <pubDate>Sat, 01 Sep 2018 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/posts/desvendando-o-blockchain/</guid>
+      <guid>https://guisso.dev/posts/desvendando-o-blockchain/</guid>
       <description>Uma das tecnologias que estão revolucionando varios mercados que você precisa conhecer.</description>
       <content:encoded><![CDATA[<p>São quase 10 anos desde o paper de Satoshi Nakamoto apresentando o conceito de um sistema de dinheiro eletrônico peer-to-peer, e você ainda não sabe o que é Bitcoin e muito menos Blockchain. Então vamos lá porque ainda da tempo de entrar na crista da onda!</p>
 <p><img loading="lazy" src="https://cdn-images-1.medium.com/max/2000/0*JqgiftyvFtTFVAao.jpg" alt="In Blockchain we trust!"  />

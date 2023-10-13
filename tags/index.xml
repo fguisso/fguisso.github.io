@@ -2,137 +2,137 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Tags on Fernando Guisso</title>
-    <link>https://fguisso.github.io/tags/</link>
+    <link>https://guisso.dev/tags/</link>
     <description>Recent content in Tags on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://guisso.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>amass</title>
-      <link>https://fguisso.github.io/tags/amass/</link>
+      <link>https://guisso.dev/tags/amass/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/amass/</guid>
+      <guid>https://guisso.dev/tags/amass/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>appsec</title>
-      <link>https://fguisso.github.io/tags/appsec/</link>
+      <link>https://guisso.dev/tags/appsec/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/appsec/</guid>
+      <guid>https://guisso.dev/tags/appsec/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>en</title>
-      <link>https://fguisso.github.io/tags/en/</link>
+      <link>https://guisso.dev/tags/en/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/en/</guid>
+      <guid>https://guisso.dev/tags/en/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>naabu</title>
-      <link>https://fguisso.github.io/tags/naabu/</link>
+      <link>https://guisso.dev/tags/naabu/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/naabu/</guid>
+      <guid>https://guisso.dev/tags/naabu/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>nuclei</title>
-      <link>https://fguisso.github.io/tags/nuclei/</link>
+      <link>https://guisso.dev/tags/nuclei/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/nuclei/</guid>
+      <guid>https://guisso.dev/tags/nuclei/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>owasp</title>
-      <link>https://fguisso.github.io/tags/owasp/</link>
+      <link>https://guisso.dev/tags/owasp/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/owasp/</guid>
+      <guid>https://guisso.dev/tags/owasp/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>recon</title>
-      <link>https://fguisso.github.io/tags/recon/</link>
+      <link>https://guisso.dev/tags/recon/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/recon/</guid>
+      <guid>https://guisso.dev/tags/recon/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>pt-br</title>
-      <link>https://fguisso.github.io/tags/pt-br/</link>
+      <link>https://guisso.dev/tags/pt-br/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/pt-br/</guid>
+      <guid>https://guisso.dev/tags/pt-br/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>hacktoberfest</title>
-      <link>https://fguisso.github.io/tags/hacktoberfest/</link>
+      <link>https://guisso.dev/tags/hacktoberfest/</link>
       <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/hacktoberfest/</guid>
+      <guid>https://guisso.dev/tags/hacktoberfest/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>softskill</title>
-      <link>https://fguisso.github.io/tags/softskill/</link>
+      <link>https://guisso.dev/tags/softskill/</link>
       <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/softskill/</guid>
+      <guid>https://guisso.dev/tags/softskill/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>storytelling</title>
-      <link>https://fguisso.github.io/tags/storytelling/</link>
+      <link>https://guisso.dev/tags/storytelling/</link>
       <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/storytelling/</guid>
+      <guid>https://guisso.dev/tags/storytelling/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>bitcoin</title>
-      <link>https://fguisso.github.io/tags/bitcoin/</link>
+      <link>https://guisso.dev/tags/bitcoin/</link>
       <pubDate>Sat, 01 Sep 2018 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/bitcoin/</guid>
+      <guid>https://guisso.dev/tags/bitcoin/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>blockchain</title>
-      <link>https://fguisso.github.io/tags/blockchain/</link>
+      <link>https://guisso.dev/tags/blockchain/</link>
       <pubDate>Sat, 01 Sep 2018 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/tags/blockchain/</guid>
+      <guid>https://guisso.dev/tags/blockchain/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>

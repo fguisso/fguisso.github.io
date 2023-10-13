@@ -2,57 +2,57 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Categories on Fernando Guisso</title>
-    <link>https://fguisso.github.io/categories/</link>
+    <link>https://guisso.dev/categories/</link>
     <description>Recent content in Categories on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://guisso.dev/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AppSec</title>
-      <link>https://fguisso.github.io/categories/appsec/</link>
+      <link>https://guisso.dev/categories/appsec/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/categories/appsec/</guid>
+      <guid>https://guisso.dev/categories/appsec/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>OWASP</title>
-      <link>https://fguisso.github.io/categories/owasp/</link>
+      <link>https://guisso.dev/categories/owasp/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/categories/owasp/</guid>
+      <guid>https://guisso.dev/categories/owasp/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>Hacktoberfest</title>
-      <link>https://fguisso.github.io/categories/hacktoberfest/</link>
+      <link>https://guisso.dev/categories/hacktoberfest/</link>
       <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/categories/hacktoberfest/</guid>
+      <guid>https://guisso.dev/categories/hacktoberfest/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>Softskill</title>
-      <link>https://fguisso.github.io/categories/softskill/</link>
+      <link>https://guisso.dev/categories/softskill/</link>
       <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/categories/softskill/</guid>
+      <guid>https://guisso.dev/categories/softskill/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
       <title>Blockchain</title>
-      <link>https://fguisso.github.io/categories/blockchain/</link>
+      <link>https://guisso.dev/categories/blockchain/</link>
       <pubDate>Sat, 01 Sep 2018 20:42:45 -0300</pubDate>
       
-      <guid>https://fguisso.github.io/categories/blockchain/</guid>
+      <guid>https://guisso.dev/categories/blockchain/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
