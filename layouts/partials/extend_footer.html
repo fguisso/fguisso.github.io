@@ -3,6 +3,7 @@
 <script>
     const elementCode = '.mermaid'
     const loadMermaid = function(theme) {
+        
         mermaid.initialize({theme})
         mermaid.init({theme}, document.querySelectorAll(elementCode))
     }
@@ -46,19 +47,23 @@
 
     saveOriginalData()
         .catch( console.error )
-    document.getElementById("theme-toggle").addEventListener("click",()=>{
-        let statusTheme = localStorage.getItem("pref-theme")
-        console.log(statusTheme);
+   
+    let statusTheme = localStorage.getItem("pref-theme")
         if (statusTheme == 'dark') {
-            resetProcessed()
-                .then(loadMermaid('neutral'))
-                .catch(console.error)
-        }
-        if (statusTheme == 'light') {
             resetProcessed()
                 .then(loadMermaid('dark'))
                 .catch(console.error)
         }
+        if (statusTheme == 'light') {
+            resetProcessed()
+                .then(loadMermaid('neutral'))
+                .catch(console.error)
+        }
+       document.getElementById("theme-toggle").addEventListener("click",()=>{
+        resetProcessed()
+            .then(loadMermaid(mermaid.mermaidAPI.getConfig().theme == 'neutral' ? 'dark' : 'neutral'))
+            .catch(console.error)
+
     })
 </script>
 {{ end }}

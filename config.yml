@@ -1,4 +1,4 @@
-baseURL: "https://fguisso.github.io/"
+baseURL: "https://guisso.dev/"
 title: Fernando Guisso
 paginate: 5
 theme: PaperMod
@@ -10,7 +10,6 @@ buildExpired: false
 
 minify:
   disableXML: true
-  minifyOutput: true
 
 params:
   env: Development
