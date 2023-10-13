@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://fguisso.github.io/</loc>
+    <lastmod>2023-10-13T02:02:04-03:00</lastmod>
+  </url><url>
+    <loc>https://fguisso.github.io/posts/</loc>
+    <lastmod>2023-10-13T02:02:04-03:00</lastmod>
+  </url><url>
+    <loc>https://fguisso.github.io/posts/tm-mermaid-example/</loc>
+    <lastmod>2023-10-13T02:02:04-03:00</lastmod>
+  </url><url>
     <loc>https://fguisso.github.io/tags/amass/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
@@ -20,9 +29,6 @@
     <loc>https://fguisso.github.io/tags/en/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
-    <loc>https://fguisso.github.io/</loc>
-    <lastmod>2022-03-16T00:00:46-03:00</lastmod>
-  </url><url>
     <loc>https://fguisso.github.io/tags/naabu/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
@@ -33,9 +39,6 @@
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
     <loc>https://fguisso.github.io/categories/owasp/</loc>
-    <lastmod>2022-03-16T00:00:46-03:00</lastmod>
-  </url><url>
-    <loc>https://fguisso.github.io/posts/</loc>
     <lastmod>2022-03-16T00:00:46-03:00</lastmod>
   </url><url>
     <loc>https://fguisso.github.io/tags/recon/</loc>

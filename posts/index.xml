@@ -6,7 +6,39 @@
     <description>Recent content in Posts on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 13 Oct 2023 02:02:04 -0300</lastBuildDate><atom:link href="https://fguisso.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Threat Modeling Mermaid</title>
+      <link>https://fguisso.github.io/posts/tm-mermaid-example/</link>
+      <pubDate>Fri, 13 Oct 2023 02:02:04 -0300</pubDate>
+      
+      <guid>https://fguisso.github.io/posts/tm-mermaid-example/</guid>
+      <description>Testando Mermaid para Threat Modeling flowchart LR user(user) mobile((mobile\napplication)) proxy((reverse\nproxy)) api((API)) db[|borders:tb|database] subgraph external [Internet] user--personal data--&gt;mobile mobile--&gt;proxy end subgraph dmz [Internal Network] proxy--&gt;api db--&gt;api api--&gt;db end classDef boundary fill:none,stroke-dasharray: 5 5 dmz:::boundary external:::boundary </description>
+      <content:encoded><![CDATA[<h1 id="testando-mermaid-para-threat-modeling">Testando Mermaid para Threat Modeling</h1>
+<div class="mermaid">flowchart LR
+    user(user)
+    mobile((mobile\napplication))
+    proxy((reverse\nproxy))
+    api((API))
+    db[|borders:tb|database]
+
+    subgraph external [Internet]
+        user--personal data-->mobile
+        mobile-->proxy
+    end
+    subgraph dmz [Internal Network]
+        proxy-->api
+        db-->api
+        api-->db
+    end
+    classDef boundary fill:none,stroke-dasharray: 5 5
+    dmz:::boundary
+    external:::boundary
+</div>
+
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>Basic Recon Automation Using Github Actions</title>
       <link>https://fguisso.github.io/posts/github-actions-recon-en/</link>
