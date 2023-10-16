@@ -13,8 +13,8 @@
       <pubDate>Fri, 13 Oct 2023 02:02:04 -0300</pubDate>
       
       <guid>https://guisso.dev/posts/tm-mermaid-example/</guid>
-      <description>Testando Mermaid para Threat Modeling 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 flowchart LR user(user) mobile((mobile\napplication)) proxy((reverse\nproxy)) api((API)) db[|borders:tb|database] subgraph external [Internet] user--personal data--&amp;gt;mobile mobile--&amp;gt;proxy end subgraph dmz [Internal Network] proxy--&amp;gt;api db--&amp;gt;api api--&amp;gt;db end classDef boundary fill:none,stroke-dasharray: 5 5 dmz:::boundary external:::boundary flowchart LR user(user) mobile((mobile\napplication)) proxy((reverse\nproxy)) api((API)) db[|borders:tb|database] subgraph external [Internet] user--personal data--&gt;mobile mobile--&gt;proxy end subgraph dmz [Internal Network] proxy--&gt;api db--&gt;api api--&gt;db end classDef boundary fill:none,stroke-dasharray: 5 5 dmz:::boundary external:::boundary </description>
-      <content:encoded><![CDATA[<h1 id="testando-mermaid-para-threat-modeling">Testando Mermaid para Threat Modeling</h1>
+      <description>DFD - Data Flow Diagram 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 flowchart LR user(user) mobile((mobile\napplication)) proxy((reverse\nproxy)) api((API)) db[|borders:tb|database] subgraph external [Internet] user--personal data--&amp;gt;mobile mobile--&amp;gt;proxy end subgraph dmz [Internal Network] proxy--&amp;gt;api db--&amp;gt;api api--&amp;gt;db end classDef boundary fill:none,stroke-dasharray: 5 5 dmz:::boundary external:::boundary flowchart LR user(user) mobile((mobile\napplication)) proxy((reverse\nproxy)) api((API)) db[|borders:tb|database] subgraph external [Internet] user--personal data--&gt;mobile mobile--&gt;proxy end subgraph dmz [Internal Network] proxy--&gt;api db--&gt;api api--&gt;db end classDef boundary fill:none,stroke-dasharray: 5 5 dmz:::boundary external:::boundary Full Threat Modeling 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 flowchart LR subgraph u [&amp;#34; &amp;#34;] user(user) attack mitigation end subgraph m [&amp;#34; &amp;#34;] mobile((mobile\napplication)) attack2 end subgraph p [&amp;#34; &amp;#34;] proxy((reverse\nproxy)) end subgraph a [&amp;#34; &amp;#34;] api((API)) end subgraph d[&amp;#34; &amp;#34;] db[|borders:tb|database] attack3 end subgraph external [Internet] u m p user--personal data--&amp;gt;mobile mobile--&amp;gt;proxy end subgraph dmz [Internal Network] p a d proxy--&amp;gt;api db--&amp;gt;api api--&amp;gt;db end classDef boundary fill:none,stroke-dasharray: 5 5 classDef entity fill:none,stroke: none dmz:::boundary external:::boundary u:::entity m:::entity p:::entity a:::entity d:::entity flowchart LR subgraph u [&#34;</description>
+      <content:encoded><![CDATA[<h2 id="dfd---data-flow-diagram">DFD - Data Flow Diagram</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -78,6 +78,153 @@
     classDef boundary fill:none,stroke-dasharray: 5 5
     dmz:::boundary
     external:::boundary
+</div>
+
+<h2 id="full-threat-modeling">Full Threat Modeling</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">flowchart LR
+</span></span><span class="line"><span class="cl">    subgraph u [&#34; &#34;]
+</span></span><span class="line"><span class="cl">    user(user)
+</span></span><span class="line"><span class="cl">    attack
+</span></span><span class="line"><span class="cl">    mitigation
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">    subgraph m [&#34; &#34;]
+</span></span><span class="line"><span class="cl">    mobile((mobile\napplication))
+</span></span><span class="line"><span class="cl">    attack2
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">    subgraph p [&#34; &#34;]
+</span></span><span class="line"><span class="cl">    proxy((reverse\nproxy))
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">    subgraph a [&#34; &#34;]
+</span></span><span class="line"><span class="cl">    api((API))
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">    subgraph d[&#34; &#34;]
+</span></span><span class="line"><span class="cl">    db[|borders:tb|database]
+</span></span><span class="line"><span class="cl">    attack3
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    subgraph external [Internet]
+</span></span><span class="line"><span class="cl">        u
+</span></span><span class="line"><span class="cl">        m
+</span></span><span class="line"><span class="cl">        p
+</span></span><span class="line"><span class="cl">        user--personal data--&gt;mobile
+</span></span><span class="line"><span class="cl">        mobile--&gt;proxy
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">    subgraph dmz [Internal Network]
+</span></span><span class="line"><span class="cl">        p
+</span></span><span class="line"><span class="cl">        a
+</span></span><span class="line"><span class="cl">        d
+</span></span><span class="line"><span class="cl">        proxy--&gt;api
+</span></span><span class="line"><span class="cl">        db--&gt;api
+</span></span><span class="line"><span class="cl">        api--&gt;db
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    classDef boundary fill:none,stroke-dasharray: 5 5
+</span></span><span class="line"><span class="cl">    classDef entity fill:none,stroke: none
+</span></span><span class="line"><span class="cl">    dmz:::boundary
+</span></span><span class="line"><span class="cl">    external:::boundary
+</span></span><span class="line"><span class="cl">    u:::entity
+</span></span><span class="line"><span class="cl">    m:::entity
+</span></span><span class="line"><span class="cl">    p:::entity
+</span></span><span class="line"><span class="cl">    a:::entity
+</span></span><span class="line"><span class="cl">    d:::entity
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="mermaid">flowchart LR
+    subgraph u [" "]
+    user(user)
+    attack
+    mitigation
+    end
+    subgraph m [" "]
+    mobile((mobile\napplication))
+    attack2
+    end
+    subgraph p [" "]
+    proxy((reverse\nproxy))
+    end
+    subgraph a [" "]
+    api((API))
+    end
+    subgraph d[" "]
+    db[|borders:tb|database]
+    attack3
+    end
+
+    subgraph external [Internet]
+        u
+        m
+        p
+        user--personal data-->mobile
+        mobile-->proxy
+    end
+    subgraph dmz [Internal Network]
+        p
+        a
+        d
+        proxy-->api
+        db-->api
+        api-->db
+    end
+
+    classDef boundary fill:none,stroke-dasharray: 5 5
+    classDef entity fill:none,stroke: none
+    dmz:::boundary
+    external:::boundary
+    u:::entity
+    m:::entity
+    p:::entity
+    a:::entity
+    d:::entity
 </div>
 
 ]]></content:encoded>
