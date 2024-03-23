@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Injection on Fernando Guisso</title>
+    <link>https://guisso.dev/categories/injection/</link>
+    <description>Recent content in Injection on Fernando Guisso</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 23 Mar 2024 10:42:45 -0300</lastBuildDate><atom:link href="https://guisso.dev/categories/injection/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python Injection</title>
+      <link>https://guisso.dev/posts/python-injection/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/posts/python-injection/</guid>
+      <description>Demostração de um bot para telegram feito em python com vulnerabilidade de injection</description>
+      <content:encoded><![CDATA[<h2 id="bot-do-telegram-com-vulnerabilidade-de-injeção">Bot do Telegram com Vulnerabilidade de Injeção</h2>
+<p>Este projeto demonstra um bot simples do Telegram implementado em Python usando a biblioteca <code>python-telegram-bot</code>. O bot inclui uma vulnerabilidade na função <code>echo</code>, que avalia qualquer entrada de texto recebida, potencialmente levando a ataques de injeção de código.</p>
+<h2 id="executando-o-projeto">Executando o Projeto</h2>
+<p>Siga estas etapas para executar o projeto localmente:</p>
+<ol>
+<li>
+<p>Clone o repositório:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/fguisso/python-injection
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Instale as dependências necessárias:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pip install python-telegram-bot
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Obtenha um Token de Bot do Telegram:</p>
+<ul>
+<li>Inicie uma conversa com BotFather no Telegram. Você pode encontrá-lo pesquisando por &ldquo;@BotFather&rdquo; na barra de pesquisa do Telegram ou clicando <a href="https://t.me/BotFather">aqui</a>.</li>
+<li>Envie o comando <code>/newbot</code> para iniciar o processo de criação de um novo bot.</li>
+<li>Siga as instruções para escolher um nome e um username para o seu bot.</li>
+<li>Após criar o bot, o BotFather irá fornecer um token. Copie esse token.</li>
+</ul>
+</li>
+<li>
+<p>Defina o Token do Bot como uma Variável de Ambiente:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">TOKEN_TELEGRAM</span><span class="o">=</span><span class="s2">&#34;seu_token_do_bot_aqui&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Execute o script Python:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python main.py
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Interaja com o bot no Telegram.</p>
+</li>
+</ol>
+<h2 id="funcionamento-do-bot">Funcionamento do Bot</h2>
+<p>O bot está configurado para receber mensagens contendo operações matemáticas como entrada. Essas operações são resolvidas no comando <code>echo</code>, que retorna o resultado da operação como resposta.</p>
+<p>Por exemplo, ao enviar a mensagem <code>2 + 2</code> para o bot, ele retornará <code>4</code>. Isso pode ser útil para realizar cálculos simples diretamente no Telegram.</p>
+<h2 id="explicação-da-vulnerabilidade">Explicação da vulnerabilidade</h2>
+<p>As vulnerabilidades de injeção estão entre as principais preocupações de segurança de aplicativos da web. De acordo com o <a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a>, a injeção de código (como SQL injection, XSS, Command Injection e outras) é uma das principais ameaças para a segurança dos aplicativos.</p>
+<p>No contexto deste bot, a vulnerabilidade de injeção ocorre na função <code>echo</code>, que utiliza a função <code>eval</code> para evoluir qualquer entrada de texto recebida. Isso permite que possíveis atacantes executem código arbitrário enviando uma entrada maliciosa. Exploits são os códigos maliciosos usados para atacar o sistemas e neste cenario estes são alguns exemplos de exploits que você pode enviar para seu bot que serão executados na maquina onde o seu bot esta rodando:</p>
+<table>
+<thead>
+<tr>
+<th>Mensagem para o bot</th>
+<th>Resultado do exploit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>os.getenv(&quot;TOKEN_TELEGRAM&quot;)</code></td>
+<td>Acesso a variáveis de ambiente</td>
+</tr>
+<tr>
+<td><code>os.system(&quot;rm -rf /&quot;)</code></td>
+<td>Execução de comandos do sistema operacional, no caso, rm vai deletar todos os arquivos do sistema.</td>
+</tr>
+<tr>
+<td><code>import malicious_module</code></td>
+<td>Importação de módulos maliciosos</td>
+</tr>
+<tr>
+<td><code>__import__(&quot;malicious_module&quot;).malicious_function()</code></td>
+<td>Execução de código malicioso.</td>
+</tr>
+</tbody>
+</table>
+<p>Os usuários são encorajados a testar esses exploits em seu próprio bot e observar os resultados. No entanto, tenha cuidado ao usar exploits, pois eles podem causar danos ao sistema.</p>
+<h2 id="documentação">Documentação</h2>
+<ul>
+<li><a href="https://python-telegram-bot.readthedocs.io/en/stable/">python-telegram-bot Documentation</a></li>
+<li><a href="https://core.telegram.org/bots/api">Telegram Bot API Documentation</a></li>
+<li><a href="https://core.telegram.org/bots#botfather">Telegram BotFather Documentation</a></li>
+<li><a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a></li>
+</ul>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

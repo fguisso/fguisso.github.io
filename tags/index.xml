@@ -6,23 +6,63 @@
     <description>Recent content in Tags on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://guisso.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 23 Mar 2024 10:42:45 -0300</lastBuildDate><atom:link href="https://guisso.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>appsec</title>
+      <link>https://guisso.dev/tags/appsec/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/tags/appsec/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>injection</title>
+      <link>https://guisso.dev/tags/injection/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/tags/injection/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>owasp</title>
+      <link>https://guisso.dev/tags/owasp/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/tags/owasp/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>pt-br</title>
+      <link>https://guisso.dev/tags/pt-br/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/tags/pt-br/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://guisso.dev/tags/python/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/tags/python/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
     <item>
       <title>amass</title>
       <link>https://guisso.dev/tags/amass/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
       <guid>https://guisso.dev/tags/amass/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>appsec</title>
-      <link>https://guisso.dev/tags/appsec/</link>
-      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
-      
-      <guid>https://guisso.dev/tags/appsec/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
@@ -58,31 +98,11 @@
     </item>
     
     <item>
-      <title>owasp</title>
-      <link>https://guisso.dev/tags/owasp/</link>
-      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
-      
-      <guid>https://guisso.dev/tags/owasp/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
       <title>recon</title>
       <link>https://guisso.dev/tags/recon/</link>
       <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
       
       <guid>https://guisso.dev/tags/recon/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>pt-br</title>
-      <link>https://guisso.dev/tags/pt-br/</link>
-      <pubDate>Wed, 16 Mar 2022 00:00:45 -0300</pubDate>
-      
-      <guid>https://guisso.dev/tags/pt-br/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>

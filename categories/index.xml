@@ -6,11 +6,11 @@
     <description>Recent content in Categories on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="https://guisso.dev/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 23 Mar 2024 10:42:45 -0300</lastBuildDate><atom:link href="https://guisso.dev/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AppSec</title>
       <link>https://guisso.dev/categories/appsec/</link>
-      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
       
       <guid>https://guisso.dev/categories/appsec/</guid>
       <description></description>
@@ -18,11 +18,41 @@
     </item>
     
     <item>
+      <title>Injection</title>
+      <link>https://guisso.dev/categories/injection/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/categories/injection/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
       <title>OWASP</title>
       <link>https://guisso.dev/categories/owasp/</link>
-      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
       
       <guid>https://guisso.dev/categories/owasp/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://guisso.dev/categories/python/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/categories/python/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Telegram</title>
+      <link>https://guisso.dev/categories/telegram/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/categories/telegram/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
