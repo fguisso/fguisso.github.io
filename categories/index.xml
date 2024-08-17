@@ -6,7 +6,27 @@
     <description>Recent content in Categories on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 23 Mar 2024 10:42:45 -0300</lastBuildDate><atom:link href="https://guisso.dev/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 17 Aug 2024 10:42:45 -0300</lastBuildDate><atom:link href="https://guisso.dev/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Homelab</title>
+      <link>https://guisso.dev/categories/homelab/</link>
+      <pubDate>Sat, 17 Aug 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/categories/homelab/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Proxmox</title>
+      <link>https://guisso.dev/categories/proxmox/</link>
+      <pubDate>Sat, 17 Aug 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/categories/proxmox/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
     <item>
       <title>AppSec</title>
       <link>https://guisso.dev/categories/appsec/</link>

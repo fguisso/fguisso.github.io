@@ -6,7 +6,50 @@
     <description>Recent content in Posts on Fernando Guisso</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 23 Mar 2024 10:42:45 -0300</lastBuildDate><atom:link href="https://guisso.dev/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 17 Aug 2024 10:42:45 -0300</lastBuildDate><atom:link href="https://guisso.dev/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Proxmox e Homelab</title>
+      <link>https://guisso.dev/posts/proxmox-debian-day/</link>
+      <pubDate>Sat, 17 Aug 2024 10:42:45 -0300</pubDate>
+      
+      <guid>https://guisso.dev/posts/proxmox-debian-day/</guid>
+      <description>Como Transformei um Mini PC em um Servidor de Respeito</description>
+      <content:encoded><![CDATA[<h3 id="proxmox-e-homelab-como-transformei-um-mini-pc-em-um-servidor-de-respeito">Proxmox e Homelab: Como Transformei um Mini PC em um Servidor de Respeito</h3>
+<p>Recentemente, tive a oportunidade de apresentar no Debian Day Natal 2024, onde compartilhei minha jornada de transformar um mini PC, adquirido no AliExpress, em um servidor de homelab completo. Utilizando o Proxmox, um sistema operacional baseado em Debian, consegui configurar uma série de serviços que facilitam tanto minha vida pessoal quanto profissional. Se você é um entusiasta de software livre e quer explorar as possibilidades de um homelab, este artigo é para você.</p>
+<h4 id="o-que-é-proxmox-e-por-que-usá-lo"><strong>O Que É Proxmox e Por Que Usá-lo?</strong></h4>
+<p>Na minha palestra, comecei explicando o que é o <a href="https://www.proxmox.com/en/downloads">Proxmox</a>. Para quem não está familiarizado, Proxmox é uma plataforma de virtualização baseada em Debian que permite a criação e gestão de containers e máquinas virtuais de maneira simples e eficiente. Sua instalação é direta e oferece uma interface web poderosa, acessível até pelo celular.</p>
+<h4 id="meu-homelab-e-hardware-utilizado"><strong>Meu Homelab e Hardware Utilizado</strong></h4>
+<p>Para este projeto, utilizei um mini PC com o seguinte hardware:</p>
+<ul>
+<li><strong>Processador:</strong> AMD Ryzen 5 5600H</li>
+<li><strong>Memória:</strong> 16GB RAM</li>
+<li><strong>Armazenamento:</strong> 500GB SSD</li>
+</ul>
+<p>Se você estiver interessado, pode encontrar esse mini PC no <a href="https://pt.aliexpress.com/item/1005003443853901.html?spm=a2g0o.order_list.order_list_main.187.4d3ecaa4Qh7Z9i&amp;gatewayAdapt=glo2bra">AliExpress</a>.</p>
+<p>Este setup me permitiu rodar vários serviços em containers e VMs, atendendo minhas necessidades com folga. No entanto, se você procura uma solução mais compacta e acessível, pode considerar utilizar um Raspberry Pi com o <a href="https://github.com/pimox/pimox7">Pimox</a>, que traz as funcionalidades do Proxmox para o hardware do Raspberry.</p>
+<h4 id="meu-homelab-e-tailscale"><strong>Meu Homelab e Tailscale</strong></h4>
+<p>Uso o Proxmox como base para meu homelab, onde rodo vários serviços que posso acessar de qualquer lugar. Para simplificar o acesso remoto, utilizo o Tailscale, uma solução VPN que torna a conexão segura e fácil de configurar em diferentes dispositivos. Durante a demonstração, usei meu celular para mostrar o Proxmox Web, explicando como gerencio containers e VMs.</p>
+<h4 id="serviços-que-transformam-o-homelab"><strong>Serviços que Transformam o Homelab</strong></h4>
+<p><strong>1. AdGuard:</strong>
+O primeiro serviço que apresentei foi o <a href="https://tteck.github.io/Proxmox/#adguard-home-lxc">AdGuard</a>. Trata-se de um bloqueador de anúncios e rastreamento que protege toda a rede. Além disso, mostrei como utilizo o recurso de &ldquo;rewrite&rdquo; de regras para criar meus próprios domínios locais, como <code>pve.pandora:8006</code> e <code>photoprism.pandora:80</code>.</p>
+<p><strong>2. Paperlessngx:</strong>
+Este é o serviço que utilizo para digitalizar e organizar documentos como notas fiscais e documentos pessoais. O <a href="https://tteck.github.io/Proxmox/#paperless-ngx-lxc">Paperlessngx</a> elimina a necessidade de manter pilhas de papel, permitindo um gerenciamento eficiente e acessível dos meus documentos.</p>
+<p><strong>3. Photoprism:</strong>
+O <a href="https://tteck.github.io/Proxmox/#photoprism-lxc">Photoprism</a> é meu gerenciador de fotos inteligente. Mesmo em um hardware limitado, ele é capaz de realizar buscas por rostos e indexar todas as minhas fotos e vídeos. Isso torna a organização e a busca de imagens extremamente fácil e eficiente.</p>
+<p><strong>4. VSCode Web:</strong>
+Por fim, apresentei o <a href="https://tteck.github.io/Proxmox/#vs-code-server">VSCode Web</a>. Com ele, posso programar remotamente, utilizando apenas um tablet ou celular, além de executar comandos de terminal diretamente no servidor. Isso facilita muito o desenvolvimento, especialmente quando preciso compilar e testar códigos rapidamente.</p>
+<h4 id="automatizando-com-tteck-e-expansões-futuras"><strong>Automatizando com tteck e Expansões Futuras</strong></h4>
+<p>Para facilitar ainda mais, finalizei mostrando a lista de scripts automatizados do <a href="https://tteck.github.io/Proxmox">tteck</a>, que permitem a criação rápida de diversos serviços no Proxmox. Embora não tenha mencionado durante a palestra, também vale a pena explorar outras ferramentas que podem ser integradas ao seu homelab, como:</p>
+<ul>
+<li><strong><a href="https://tteck.github.io/Proxmox/#nextcloud-lxc">Nextcloud</a>:</strong> Uma excelente solução para armazenamento e sincronização de arquivos.</li>
+<li><strong><a href="https://tteck.github.io/Proxmox/#nginx-proxy-manager-lxc">Nginx Proxy Manager</a>:</strong> Para gerenciar proxies reversos de maneira fácil e intuitiva.</li>
+<li><strong><a href="https://tteck.github.io/Proxmox/#jellyfin-media-server-lxc">Jellyfin Media Server</a>:</strong> Uma solução open-source para streaming de mídia.</li>
+<li><strong><a href="https://tteck.github.io/Proxmox/#vaultwarden-lxc">Vaultwarden</a>:</strong> Um gerenciador de senhas seguro e eficiente.</li>
+</ul>
+<p>Espero que este artigo inspire você a explorar o mundo dos homelabs. Com um pouco de criatividade e as ferramentas certas, as possibilidades são infinitas!</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>Python Injection</title>
       <link>https://guisso.dev/posts/python-injection/</link>
