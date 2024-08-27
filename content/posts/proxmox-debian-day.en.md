@@ -4,7 +4,7 @@ description: "Como Transformei um Mini PC em um Servidor de Respeito"
 date: 2024-08-17T10:42:45-03:00
 showTableOfContents: true
 showDate: true
-tags: ["proxmox", "debian", "adguard", "talscale", "homelab"]
+tags: ["proxmox", "debian", "adguard", "tailscale", "homelab"]
 categories:
 - Homelab
 - Proxmox

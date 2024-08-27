@@ -1,12 +1,10 @@
-Here's the translation of the blog post:
-
 ---
 
 title: "Unraveling Blockchain"
 description: "One of the technologies revolutionizing various markets that you need to know."
 date: 2018-09-01T20:42:45-03:00
 showDate: true
-tags: ["blockchain", "bitcoin", "en"]
+tags: ["blockchain", "bitcoin"]
 categories:
 - Blockchain
 
