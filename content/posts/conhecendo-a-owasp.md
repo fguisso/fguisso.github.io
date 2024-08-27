@@ -35,11 +35,11 @@ Vamos apresentar agora alguns projetos conhecidos da OWASP, sempre lembrando que
 
 ### OWASP Top 10
 
-É um documento de conscientização para segurança de aplicações web. Ele reune os riscos mais críticos de segurança de aplicações web. Nesta lista você pode encontrar algumas vulnerabilidades, como checar se sua aplicação não esta vulnerável a elas e também algumas contramedidas. [Link do projeto](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project).
+É um documento de conscientização para segurança de aplicações web. Ele reune os riscos mais críticos de segurança de aplicações web. Nesta lista você pode encontrar algumas vulnerabilidades, como checar se sua aplicação não esta vulnerável a elas e também algumas contramedidas. [Link do projeto](https://owasp.org/www-project-top-ten/).
 
 ### OWASP Zed Attack Proxy (ZAP)
 
-O ZAP é uma ferramenta de testes de vulnerabilidades popular entre profissionais de segurança e pentesters. Ele pode te ajudar no processo de encontrar e tratar vulnerabilidades em suas aplicações web. [Link do projeto.](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project)
+O ZAP é uma ferramenta de testes de vulnerabilidades popular entre profissionais de segurança e pentesters. Ele pode te ajudar no processo de encontrar e tratar vulnerabilidades em suas aplicações web. [Link do projeto.](https://www.zaproxy.org/)
 
 ### OWASP Offensive Web Testing Framework (OWTF)
 
@@ -47,6 +47,6 @@ Também uma ferramenta para te auxiliar na busca de vulnerabilidades, o OWTF foi
 
 ### OWASP Juice Shop Project
 
-Como eles gostam de dizer, *é provavelmente a mais moderna e sofisticada aplicação web insegura! *Sim, é isso mesmo, uma aplicação insegura para você testar e aprender sobre as Top 10 vulnerabilidades, com todo um suporte de aprendizagem, livro e ferramentas para facilitar na hora de aprender. [Link do projeto.](https://www.owasp.org/index.php/OWASP_Juice_Shop_Project)
+Como eles gostam de dizer, *é provavelmente a mais moderna e sofisticada aplicação web insegura! *Sim, é isso mesmo, uma aplicação insegura para você testar e aprender sobre as Top 10 vulnerabilidades, com todo um suporte de aprendizagem, livro e ferramentas para facilitar na hora de aprender. [Link do projeto.](https://owasp.org/www-project-juice-shop/)
 
-Estes são alguns dos muitos projetos, caso você queira conhecer todos os projetos, pode dar uma olhada no [repositório de projetos](https://www.owasp.org/index.php/Category:OWASP_Project#tab=Project_Inventory). Caso você queira participar dos projetos, entre no github do projeto ou entre em contato com o seu Project Leader.
+Estes são alguns dos muitos projetos, caso você queira conhecer todos os projetos, pode dar uma olhada no [repositório de projetos](https://owasp.org/projects/). Caso você queira participar dos projetos, entre no github do projeto ou entre em contato com o seu Project Leader.

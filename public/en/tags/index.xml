@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Guisso - EN</title>
+    <link>http://localhost:1313/en/tags/</link>
+    <description>Recent content in Tags on Guisso - EN</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>Copy, _right?_ :thinking_face:</copyright>
+    <lastBuildDate>Sat, 17 Aug 2024 10:42:45 -0300</lastBuildDate><atom:link href="http://localhost:1313/en/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Adguard</title>
+      <link>http://localhost:1313/en/tags/adguard/</link>
+      <pubDate>Sat, 17 Aug 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/adguard/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Debian</title>
+      <link>http://localhost:1313/en/tags/debian/</link>
+      <pubDate>Sat, 17 Aug 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/debian/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Homelab</title>
+      <link>http://localhost:1313/en/tags/homelab/</link>
+      <pubDate>Sat, 17 Aug 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/homelab/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Proxmox</title>
+      <link>http://localhost:1313/en/tags/proxmox/</link>
+      <pubDate>Sat, 17 Aug 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/proxmox/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Talscale</title>
+      <link>http://localhost:1313/en/tags/talscale/</link>
+      <pubDate>Sat, 17 Aug 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/talscale/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Appsec</title>
+      <link>http://localhost:1313/en/tags/appsec/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/appsec/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Injection</title>
+      <link>http://localhost:1313/en/tags/injection/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/injection/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Owasp</title>
+      <link>http://localhost:1313/en/tags/owasp/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/owasp/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Pt-Br</title>
+      <link>http://localhost:1313/en/tags/pt-br/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/pt-br/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>http://localhost:1313/en/tags/python/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/python/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Amass</title>
+      <link>http://localhost:1313/en/tags/amass/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/amass/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>En</title>
+      <link>http://localhost:1313/en/tags/en/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/en/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Naabu</title>
+      <link>http://localhost:1313/en/tags/naabu/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/naabu/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Nuclei</title>
+      <link>http://localhost:1313/en/tags/nuclei/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/nuclei/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Recon</title>
+      <link>http://localhost:1313/en/tags/recon/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/recon/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Hacktoberfest</title>
+      <link>http://localhost:1313/en/tags/hacktoberfest/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/hacktoberfest/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Softskill</title>
+      <link>http://localhost:1313/en/tags/softskill/</link>
+      <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/softskill/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Storytelling</title>
+      <link>http://localhost:1313/en/tags/storytelling/</link>
+      <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/tags/storytelling/</guid>
+      <description></description>
+      
+    </item>
+    
+  </channel>
+</rss>

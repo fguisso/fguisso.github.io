@@ -1,3 +1,4 @@
-[submodule "themes/PaperMod"]
-	path = themes/PaperMod
-	url = https://github.com/fguisso/hugo-PaperMod.git
+[submodule "themes/blowfish"]
+	path = themes/blowfish
+	url = https://github.com/nunocoracao/blowfish.git
+	branch = main

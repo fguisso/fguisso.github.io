@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Softskill on Guisso - EN</title>
+    <link>http://localhost:1313/en/tags/softskill/</link>
+    <description>Recent content in Softskill on Guisso - EN</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>Copy, _right?_ :thinking_face:</copyright>
+    <lastBuildDate>Fri, 22 Feb 2019 20:42:45 -0300</lastBuildDate><atom:link href="http://localhost:1313/en/tags/softskill/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Escrevendo artigos e palestras</title>
+      <link>http://localhost:1313/en/posts/escrevendo-artigos-e-palestras/</link>
+      <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/posts/escrevendo-artigos-e-palestras/</guid>
+      <description>Escrevendo artigos e palestras # Veja como começar a compartilhar conhecimento de umas vez por todas.</description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>En on Guisso - EN</title>
+    <link>http://localhost:1313/en/tags/en/</link>
+    <description>Recent content in En on Guisso - EN</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>Copy, _right?_ :thinking_face:</copyright>
+    <lastBuildDate>Wed, 16 Mar 2022 00:00:46 -0300</lastBuildDate><atom:link href="http://localhost:1313/en/tags/en/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Basic Recon Automation Using Github Actions</title>
+      <link>http://localhost:1313/en/posts/github-actions-recon/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:46 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/posts/github-actions-recon/</guid>
+      <description>Currently, the number of companies using CI (Continuous Integration) and CD (Continuous Deploy) solutions to automate the software lifecycle process (SLD) is growing.</description>
+      
+    </item>
+    
+    <item>
+      <title>Getting to Know OWASP</title>
+      <link>http://localhost:1313/en/posts/conhecendo-a-owasp/</link>
+      <pubDate>Wed, 20 Mar 2019 20:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/posts/conhecendo-a-owasp/</guid>
+      <description>Open Web Application Security Project # Open Community # OWASP is an open international community dedicated to helping organizations develop, acquire, and operate reliable applications.</description>
+      
+    </item>
+    
+    <item>
+      <title>Escrevendo artigos e palestras</title>
+      <link>http://localhost:1313/en/posts/escrevendo-artigos-e-palestras/</link>
+      <pubDate>Fri, 22 Feb 2019 20:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/en/posts/escrevendo-artigos-e-palestras/</guid>
+      <description>Escrevendo artigos e palestras # Veja como começar a compartilhar conhecimento de umas vez por todas.</description>
+      
+    </item>
+    
+  </channel>
+</rss>

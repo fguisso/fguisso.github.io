@@ -1,0 +1,38 @@
+/* Dracula scheme */
+:root {
+  --color-neutral: 98, 114, 164;
+  /* Gray */
+  --color-neutral-50: 205, 208, 228;
+  --color-neutral-100: 181 , 186 , 214;
+  --color-neutral-200:  158 , 164 , 200; 
+  --color-neutral-300: 136 , 143 , 184;
+  --color-neutral-400: 114 , 122 , 168;
+  --color-neutral-500: 95 , 103 , 149;
+  --color-neutral-600: 83 , 89 , 124;
+  --color-neutral-700: 69 , 74 , 100;
+  --color-neutral-800: 55 , 58 , 77;
+  --color-neutral-900: 40 , 42 , 54;
+  /* Blue */
+  --color-primary-50: 250 , 254 , 255; 
+  --color-primary-100:212 , 248 , 255;
+  --color-primary-200:175 , 240 , 254;
+  --color-primary-300:139 , 233 , 253;
+  --color-primary-400:103 , 225 , 251;
+  --color-primary-500:68 , 217 , 248;
+  --color-primary-600:34 , 208 , 245;
+  --color-primary-700:13 , 191 , 229;
+  --color-primary-800:12 , 160 , 191;
+  --color-primary-900:12 , 129 , 154;
+  /* Cyan */
+  --color-secondary-50: 226 , 255 , 233;
+  --color-secondary-100:188 , 255 , 205;
+  --color-secondary-200:151 , 254 , 177;
+  --color-secondary-300:115 , 252 , 150;
+  --color-secondary-400:80 , 250 , 123;
+  --color-secondary-500:45 , 247 , 96;
+  --color-secondary-600:12 , 243 , 70;
+  --color-secondary-700:12 , 205 , 61;
+  --color-secondary-800:11 , 168 , 51;
+  --color-secondary-900:10 , 131 , 41;
+}
+

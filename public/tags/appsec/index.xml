@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Appsec on Guisso</title>
+    <link>http://localhost:1313/tags/appsec/</link>
+    <description>Recent content in Appsec on Guisso</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>pt-br</language>
+    <copyright>Copy, _right?_ :thinking_face:</copyright>
+    <lastBuildDate>Sat, 23 Mar 2024 10:42:45 -0300</lastBuildDate><atom:link href="http://localhost:1313/tags/appsec/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python Injection</title>
+      <link>http://localhost:1313/posts/python-injection/</link>
+      <pubDate>Sat, 23 Mar 2024 10:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/posts/python-injection/</guid>
+      <description>Bot do Telegram com Vulnerabilidade de Injeção # Este projeto demonstra um bot simples do Telegram implementado em Python usando a biblioteca python-telegram-bot.</description>
+      
+    </item>
+    
+    <item>
+      <title>Automação básica de Recon utilizando o Github Actions</title>
+      <link>http://localhost:1313/posts/github-actions-recon/</link>
+      <pubDate>Wed, 16 Mar 2022 00:00:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/posts/github-actions-recon/</guid>
+      <description>Atualmente vem crescendo o número de empresas que utilizam soluções de CI(Continuous Integration) e CD(Continuous Deploy) para automatizar o processo do ciclo de vida do software(SLD).</description>
+      
+    </item>
+    
+    <item>
+      <title>Hacktoberfest Owasp</title>
+      <link>http://localhost:1313/posts/hacktoberfest-owasp/</link>
+      <pubDate>Sat, 05 Oct 2019 11:26:27 -0300</pubDate>
+      
+      <guid>http://localhost:1313/posts/hacktoberfest-owasp/</guid>
+      <description>Mês de outubro chegou e todo mundo está correndo atrás dos seus 4 PR’s para ganhar uma camiseta da digitalocean!</description>
+      
+    </item>
+    
+    <item>
+      <title>Conhecendo a OWASP</title>
+      <link>http://localhost:1313/posts/conhecendo-a-owasp/</link>
+      <pubDate>Wed, 20 Mar 2019 20:42:45 -0300</pubDate>
+      
+      <guid>http://localhost:1313/posts/conhecendo-a-owasp/</guid>
+      <description>Open Web Application Security Project # Open Community # OWASP é uma comunidade internacional aberta, dedicada em ajudar organizações a manter, desenvolver, adquirir e operar aplicações confiáveis.</description>
+      
+    </item>
+    
+  </channel>
+</rss>
