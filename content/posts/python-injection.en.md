@@ -1,10 +1,10 @@
 ---
 title: "Python Injection"
-description: "Demostração de um bot para telegram feito em python com vulnerabilidade de injection"
+description: "Demonstration of a Telegram bot made in Python with injection vulnerability"
 date: 2024-03-23T10:42:45-03:00
 showDate: true
 showTableOfContents: true
-tags: ["owasp", "appsec", "python", "injection", "pt-br"]
+tags: ["owasp", "appsec", "python", "injection", "en"]
 categories:
 - OWASP
 - AppSec
@@ -13,71 +13,71 @@ categories:
 - Injection
 ---
 
-## Bot do Telegram com Vulnerabilidade de Injeção
+## Telegram Bot with Injection Vulnerability
 
-Este projeto demonstra um bot simples do Telegram implementado em Python usando a biblioteca `python-telegram-bot`. O bot inclui uma vulnerabilidade na função `echo`, que avalia qualquer entrada de texto recebida, potencialmente levando a ataques de injeção de código.
+This project demonstrates a simple Telegram bot implemented in Python using the `python-telegram-bot` library. The bot includes a vulnerability in the `echo` function, which evaluates any received text input, potentially leading to code injection attacks.
 
-## Executando o Projeto
+## Running the Project
 
-Siga estas etapas para executar o projeto localmente:
+Follow these steps to run the project locally:
 
-1. Clone o repositório:
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/fguisso/python-injection
    ```
 
-2. Instale as dependências necessárias:
+2. Install the necessary dependencies:
 
    ```bash
    pip install python-telegram-bot
    ```
 
-3. Obtenha um Token de Bot do Telegram:
+3. Obtain a Telegram Bot Token:
 
-   - Inicie uma conversa com BotFather no Telegram. Você pode encontrá-lo pesquisando por "@BotFather" na barra de pesquisa do Telegram ou clicando [aqui](https://t.me/BotFather).
-   - Envie o comando `/newbot` para iniciar o processo de criação de um novo bot.
-   - Siga as instruções para escolher um nome e um username para o seu bot.
-   - Após criar o bot, o BotFather irá fornecer um token. Copie esse token.
+   - Start a conversation with BotFather on Telegram. You can find it by searching for "@BotFather" in the Telegram search bar or clicking [here](https://t.me/BotFather).
+   - Send the `/newbot` command to start the process of creating a new bot.
+   - Follow the instructions to choose a name and username for your bot.
+   - After creating the bot, BotFather will provide a token. Copy this token.
 
-4. Defina o Token do Bot como uma Variável de Ambiente:
+4. Set the Bot Token as an Environment Variable:
 
    ```bash
-   export TOKEN_TELEGRAM="seu_token_do_bot_aqui"
+   export TOKEN_TELEGRAM="your_bot_token_here"
    ```
 
-5. Execute o script Python:
+5. Run the Python script:
 
    ```bash
    python main.py
    ```
 
-6. Interaja com o bot no Telegram.
+6. Interact with the bot on Telegram.
 
-## Funcionamento do Bot
+## Bot Functionality
 
-O bot está configurado para receber mensagens contendo operações matemáticas como entrada. Essas operações são resolvidas no comando `echo`, que retorna o resultado da operação como resposta.
+The bot is configured to receive messages containing mathematical operations as input. These operations are solved in the `echo` command, which returns the result of the operation as a response.
 
-Por exemplo, ao enviar a mensagem `2 + 2` para o bot, ele retornará `4`. Isso pode ser útil para realizar cálculos simples diretamente no Telegram.
+For example, when sending the message `2 + 2` to the bot, it will return `4`. This can be useful for performing simple calculations directly on Telegram.
 
-## Explicação da vulnerabilidade
+## Explanation of the Vulnerability
 
-As vulnerabilidades de injeção estão entre as principais preocupações de segurança de aplicativos da web. De acordo com o [OWASP Top 10](https://owasp.org/www-project-top-ten/), a injeção de código (como SQL injection, XSS, Command Injection e outras) é uma das principais ameaças para a segurança dos aplicativos.
+Injection vulnerabilities are among the main concerns in web application security. According to the [OWASP Top 10](https://owasp.org/www-project-top-ten/), code injection (such as SQL injection, XSS, Command Injection, and others) is one of the main threats to application security.
 
-No contexto deste bot, a vulnerabilidade de injeção ocorre na função `echo`, que utiliza a função `eval` para evoluir qualquer entrada de texto recebida. Isso permite que possíveis atacantes executem código arbitrário enviando uma entrada maliciosa. Exploits são os códigos maliciosos usados para atacar o sistemas e neste cenario estes são alguns exemplos de exploits que você pode enviar para seu bot que serão executados na maquina onde o seu bot esta rodando:
+In the context of this bot, the injection vulnerability occurs in the `echo` function, which uses the `eval` function to evaluate any received text input. This allows potential attackers to execute arbitrary code by sending malicious input. Exploits are malicious codes used to attack systems, and in this scenario, here are some examples of exploits you can send to your bot that will be executed on the machine where your bot is running:
 
-|Mensagem para o bot|Resultado do exploit|
+|Message to the bot|Exploit result|
 |--|--|
-|`os.getenv("TOKEN_TELEGRAM")`|Acesso a variáveis de ambiente|
-|`os.system("rm -rf /")`|Execução de comandos do sistema operacional, no caso, rm vai deletar todos os arquivos do sistema.|
-|`import malicious_module`|Importação de módulos maliciosos|
-|`__import__("malicious_module").malicious_function()`|Execução de código malicioso.|
+|`os.getenv("TOKEN_TELEGRAM")`|Access to environment variables|
+|`os.system("rm -rf /")`|Execution of operating system commands, in this case, rm will delete all system files.|
+|`import malicious_module`|Importing malicious modules|
+|`__import__("malicious_module").malicious_function()`|Execution of malicious code.|
 
-Os usuários são encorajados a testar esses exploits em seu próprio bot e observar os resultados. No entanto, tenha cuidado ao usar exploits, pois eles podem causar danos ao sistema.
+Users are encouraged to test these exploits on their own bot and observe the results. However, be careful when using exploits, as they can cause damage to the system.
 
-## Documentação
+## Documentation
 
 - [python-telegram-bot Documentation](https://python-telegram-bot.readthedocs.io/en/stable/)
 - [Telegram Bot API Documentation](https://core.telegram.org/bots/api)
 - [Telegram BotFather Documentation](https://core.telegram.org/bots#botfather)
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/) [OWASP Top 10](https://owasp.org/www-project-top-ten/)
