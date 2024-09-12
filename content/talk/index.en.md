@@ -55,5 +55,8 @@ Slides PT-BR
 {{< youtubeLite id="bR9SlnxJI-w" label="devsecops" >}}
 {{< /timelineItem >}}
 
+{{< timelineItem icon="wand-magic-sparkles" header="Campus Party Amazônia" badge="blockchain" subheader="Lightning payments" >}}
+{{< youtubeLite id="2HKUgc0LjcI" label="lightning-network" >}}
+{{< /timelineItem >}}
 
 {{< /timeline >}}
