@@ -11,13 +11,13 @@ title = "Guisso"
   # logo = "img/logo.png"
   # secondaryLogo = "img/secondary-logo.png"
   # description = "My awesome website"
-  copyright = "Copy, _right?_ :thinking_face:"
+  copyright = "Copy, _right?_ 🤔"
 
 [author]
   name = "Fernando Guisso"
   image = "https://avatars.githubusercontent.com/u/5755568?v=4"
 #   imageQuality = 96
-  headline = "Analista de AppSec"
+  headline = "Analista Segurança de Aplicações"
   bio = "Compartilhando e aprendendo, hack the planet!"
   links = [
 #     { email = "mailto:hello@your_domain.com" },
@@ -25,7 +25,7 @@ title = "Guisso"
 #     { amazon = "https://www.amazon.com/hz/wishlist/ls/wishlist-id" },
 #     { apple = "https://www.apple.com" },
 #     { blogger = "https://username.blogspot.com/" },
-#     { bluesky = "https://bsky.app/profile/username" },
+    { bluesky = "https://bsky.app/profile/guisso.dev" },
 #     { codepen = "https://codepen.io/username" },
     { dev = "https://dev.to/fguisso" },
 #     { discord = "https://discord.gg/invitecode" },
