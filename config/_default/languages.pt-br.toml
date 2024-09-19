@@ -13,7 +13,7 @@ title = "Guisso"
   # description = "My awesome website"
   copyright = "Copy, _right?_ 🤔"
 
-[author]
+[params.author]
   name = "Fernando Guisso"
   image = "https://avatars.githubusercontent.com/u/5755568?v=4"
 #   imageQuality = 96
