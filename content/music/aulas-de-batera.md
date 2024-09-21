@@ -1,7 +1,7 @@
 ---
 title: "Aulas de bateria"
 description: "aulas de bateria"
-date: 2024-09-02T10:44:55-03:00
+date: 2024-04-24T10:44:55-03:00
 showTableOfContents: false
 showDate: true
 series: ["Aulas de bateria com Grillo"]

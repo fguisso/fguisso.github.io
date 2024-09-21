@@ -5,7 +5,7 @@ date: 2024-09-19T10:44:55-03:00
 showTableOfContents: false
 showDate: true
 series: ["Aulas de bateria com Grillo"]
-series_order: 2
+series_order: 9
 tags: ["bateria", "aulas"]
 categories:
 - Bateria
