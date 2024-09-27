@@ -11,7 +11,7 @@ title = "Guisso - EN"
   # logo = "img/logo.png"
   # secondaryLogo = "img/secondary-logo.png"
   # description = "My awesome website"
-  copyright = "Copy, _right?_ 🤔"
+  copyright = "Copy, _right?_ 🤔. Avatar by <a href='https://paintswap.finance/marketplace/fantom/assets/0xe65469083b4f50d1ecd089584c671bb1d23f9ac7/12'>Fantom Kitten</a>"
 
 [params.author]
   name = "Fernando Guisso"
