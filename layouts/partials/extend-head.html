@@ -1,0 +1,32 @@
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Get <a> inside <div class="flex flex-1 items-center justify-between">
+  const divLinks = document.querySelectorAll('div.flex.flex-1.items-center.justify-between a');
+  divLinks.forEach((link, index) => {
+    const eventName = "link-menu-" + (link.textContent.trim()).toLowerCase().replace(/\s+/g, '-');
+    link.setAttribute("data-tianji-event", eventName);
+  });
+
+  // Get button with id="appearance-switcher"
+  const appearanceSwitcher = document.getElementById('appearance-switcher');
+  if (appearanceSwitcher) {
+    appearanceSwitcher.setAttribute("data-tianji-event", "button-appearance-switcher");
+  }
+
+  // Get <a> inside <main id="main-content" class="grow">
+  const mainLinks = document.querySelectorAll('main#main-content.grow a');
+  mainLinks.forEach((link, index) => {
+    const href = link.getAttribute('href');
+    if (href) {
+      try {
+        // Extract the domain name from the href attribute
+        const url = new URL(href);
+        const domain = url.hostname.split('.')[0]; // Remove 'www.' and extract the base domain
+        link.setAttribute("data-tianji-event", `link-social-${domain}`);
+      } catch (error) {
+        console.error(`Invalid URL in href: ${href}`);
+      }
+    }
+  });});
+</script>
+<script async defer src="https://tc.guisso.dev/tracker.js" data-website-id="cm1qw8nys00019ohh4n9t4nxt" data-domains="guisso.dev,www.guisso.dev"></script>
