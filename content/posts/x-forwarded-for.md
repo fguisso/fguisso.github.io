@@ -31,7 +31,7 @@ graph LR
 
 Neste fluxo, o `Proxy Reverso` lida com solicitações recebidas dos `Usuários` e as encaminha para o `App`. O gerenciamento adequado dos cabeçalhos como `X-Forwarded-For` e `X-Real-IP` é essencial para garantir que o `App` receba informações precisas sobre os clientes e mantenha a segurança.
 
-### **Como os Proxies Reversos Lidem com os Cabeçalhos de Segurança**
+### **Como os Proxies Reversos Lidam com os Cabeçalhos de Segurança**
 
 Os proxies reversos desempenham um papel crítico na gestão e encaminhamento das solicitações dos clientes para os servidores backend. Um aspecto fundamental de sua operação envolve o manuseio de cabeçalhos como `X-Forwarded-For` e `X-Real-IP`. Entender como diferentes proxies reversos gerenciam esses cabeçalhos é fundamental para garantir uma identificação segura e precisa dos clientes.
 
