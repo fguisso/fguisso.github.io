@@ -14,102 +14,108 @@ tags: ["Threat Modeling", "Security", "DevSecOps"]
 
 # Threat Modeling Express: An Agile Approach to Security
 
-{{< button href="https://guisso.dev/talks/threat-modeling" target="_self" >}}
-Slides
-{{< /button >}}
-
 ## Introduction
 
-Threat Modeling is a powerful technique to identify potential threats and vulnerabilities in systems. In an ever-evolving security landscape, agile approaches such as **Threat Modeling Express** emerge as an efficient and collaborative way to continuously address these threats throughout the software development lifecycle.
-
-In this article, we will explore the concept of Threat Modeling, its evolution, traditional approaches, and a new agile and practical method to integrate Threat Modeling into the workflows of development and security teams.
+Threat Modeling is a powerful technique for identifying potential threats and vulnerabilities in systems. In an ever-evolving security landscape, agile approaches like **Threat Modeling Express** emerge as an efficient and collaborative way to address these threats continuously throughout the software development lifecycle. This methodology allows teams to visualize risks practically, facilitating decision-making and the implementation of appropriate countermeasures.
 
 ## What is Threat Modeling?
 
-**Threat Modeling** is the process of identifying threats, vulnerabilities, and countermeasures in systems, aiming to minimize risks and strengthen security. It involves thinking like an attacker to anticipate potential risks and security flaws at every stage of a system's development.
+**Threat Modeling** is the process of identifying threats, vulnerabilities, and controls within systems to minimize risks and strengthen security. It involves thinking like an attacker to anticipate potential risks and security flaws at every stage of system development. Unlike other practices, the focus is on business impact, directly linking threats to organizational risks.
 
-## The Origins of Threat Modeling
+## Origin and Evolution of Threat Modeling
 
-Threat Modeling has a long history, starting in the 1960s when the first shared systems were exploited for vulnerabilities. Here are some important milestones:
+Threat Modeling has evolved over the decades since the 1960s, with significant milestones shaping its current practice:
 
-- **1960s**: Initial attacks on shared systems.
-- **1988**: Robert Barnard develops the first attacker profile for IT systems.
-- **1994**: Edward Amoroso introduces the concept of "threat trees".
-- **1998**: Bruce Schneier presents "attack trees" to systematize cyber risk analysis.
-- **1999**: Microsoft develops **STRIDE**, one of the most popular Threat Modeling models.
-- **2020**: Publication of the **Threat Modeling Manifesto**, highlighting the essential values and principles for Threat Modeling.
-- **2024**: Launch of the **Threat Modeling Capabilities** document, which helps maximize the value of Threat Modeling practice.
+- **1960s**: The first attacks against shared systems emerged with multi-user access environments.
+- **1988**: Robert Barnard developed the first attacker profile for IT systems.
+- **1994**: Edward Amoroso introduced the concept of "threat trees," structuring graphically how threats could be exploited.
+- **1998**: Bruce Schneier popularized "attack trees," enabling a more systematic analysis of cyber risks.
+- **1999**: Microsoft created **STRIDE**, a widely used methodology to identify specific threats in systems.
+- **2020**: The **Threat Modeling Manifesto** was launched, emphasizing core principles for Threat Modeling practice.
+- **2024**: The publication of the **Threat Modeling Capabilities** document offered guidelines for maximizing the effectiveness of Threat Modeling.
+
+These milestones show how the practice has developed to become an essential component in modern security, increasingly integrating into software development processes.
+
+## Why is Threat Modeling Important?
+
+Unlike other security practices that focus solely on listing technical vulnerabilities, Threat Modeling provides a clearer and more direct view of business risks. It connects specific threats to potential impacts on the organization, making communication between technical teams and managers easier.
+
+For example, it is simpler for an executive to understand that there is a risk of financial loss due to data tampering (threat) than to explain that a technical vulnerability like **Insecure Deserialization** could lead to **RCE** (Remote Code Execution). With Threat Modeling, communication about risks becomes clearer, and mitigation decisions are more justified.
 
 ## Growth of Threat Modeling in the Market
 
-As cybersecurity gains relevance, more companies are adopting **Threat Modeling** as part of their secure development strategies. It provides a clearer view of risks and vulnerabilities during the design phases, reducing correction costs by anticipating problems.
+The use of Threat Modeling has grown exponentially as companies seek proactive ways to protect against cyber threats. Events like the **International Threat Modeling Conference** (ThreatModCon) bring together industry leaders to share their experiences and innovative approaches, showcasing how the practice is evolving to meet the needs of a constantly changing market.
 
-At events such as the **International Threat Modeling Conference** (ThreatModCon), industry leaders discuss new trends and best practices in the application of Threat Modeling. The event gathers more than 100 companies, 20 international speakers, and an audience largely composed of security professionals.
+## Traditional Approaches and Threat Modeling Tools
 
-## Traditional Approaches
+There are several well-established methodologies for Threat Modeling, each with its own specificities:
 
-Several well-established methodologies for **Threat Modeling** exist, each with its own characteristics. Here are some of the most well-known:
+- **STRIDE**: Focuses on specific threats like spoofing and privilege escalation.
+- **PASTA**: A seven-step model that aligns business objectives with technical requirements.
+- **Trike**: Emphasizes auditing and risk management.
+- **VAST**: Integrated into DevOps, using flow diagrams for agile threat modeling.
+- **Hybrid**: Combines elements from different methodologies for complex scenarios.
 
-- **STRIDE**: Created by Microsoft, it helps identify threats in complex systems.
-- **PASTA**: Focuses on attack simulations and compliance analysis.
-- **Trike**: Uses threat models for auditing and risk management.
-- **VAST**: Integrated with DevOps and based on process flows and diagrams.
-- **Hybrid**: Combines different methodologies for a customized approach.
+### Data Flow Modeling Tools
+
+Before starting the modeling process, it is essential to choose a tool for drawing the **data flow**. Some popular options include:
+
+- **draw.io**
+- **Excalidraw**
+- **MermaidJS**
+
+What matters is that the team is comfortable with the chosen tool, as the goal is to use time to model threats, not to learn a new tool. If the team is already familiar with one of these options, it is more efficient to proceed with it to ensure everyone remains focused on the main objective.
 
 ## Threat Modeling Express
 
-The new agile approach called **Threat Modeling Express** simplifies the traditional process, focusing on collaboration, quick iterations, and continuous integration with DevSecOps. Its principles are based on agility and flexibility, making it ideal for teams that need to integrate security into the fast-paced development cycle.
+The agile approach called **Threat Modeling Express** simplifies the traditional process, focusing on collaboration and quick iterations. The methodology is designed to integrate into DevSecOps, allowing teams to develop threat models in short cycles and continuously refine them as development progresses.
 
-## The Threat Modeling Express Process
+## Threat Modeling Express Process
 
 ### 1. Team Preparation and Engagement
 
-The first step is to ensure that the development and security teams are aligned. Creating a shared security culture is key so that everyone understands the importance of Threat Modeling.
+The first step is to ensure that the development and security teams are aligned and engaged. This begins with creating a shared security culture. Participate in the team's existing rituals, such as daily stand-ups and planning meetings, to understand what the team does and how each part connects to the product. This initial engagement helps build trust and interest in security.
+
+The phrase “Security should be defended like programming languages or IDEs” is fundamental here. The goal is to make the team "fight" for security just as they advocate for their favorite technologies. When the team feels part of the process and sees value in what they are doing, collaboration flows better, and threat modeling becomes more effective.
 
 ### 2. Data Flow Creation
 
-Mapping the main data flows in the system is essential to identify critical vulnerability points. Visualize where data flows and how it might be intercepted or compromised.
+Creating the **data flow** is essential to map where data flows through the system and where it might be compromised. The process involves the development team, as they are the ones who know the system best. Encourage the team to lead the creation of the data flow, identifying users, processes, and databases.
+
+During this stage, it is important to focus only on the main flows and simplify. We can detail each endpoint, but for an agile approach, the goal is to capture the most critical flows. Remember that the scope should focus on what the team can act on, avoiding mapping processes outside the team's direct control.
 
 ### 3. Asset Identification
 
-It is important to identify the most critical assets for system security, those that require the most protection. Each part of the system that stores or processes sensitive data must be assessed for vulnerability.
+Asset identification is the next step. Here, we list the critical components of the system that need to be protected, such as databases, APIs, and sensitive services. Explain to the team what assets are and why it is important to focus on what could truly impact the business. Highlighting the assets helps the team see clearly where risks are concentrated.
 
 ### 4. Threat Enumeration
 
-At this stage, you must put yourself in the attackers' shoes and think about how they might compromise the system. Consider different types of threats, such as cybercriminals, state actors, hacktivists, and even internal threats, such as disgruntled employees.
+In threat enumeration, the goal is to put yourself in the attacker’s position and think about how they might compromise the system. The team should use the created **data flow** to identify the points where assets can be attacked. Encourage the team to "wear the hat" of different threat actors, opening their minds to new possibilities.
+
+#### Threat Actors
+
+Threat modeling should consider a variety of actors, including:
+
+- **Cybercriminals**: Motivated by financial gain, they often use ransomware and phishing.
+- **State-sponsored actors**: Focused on espionage and sabotage, targeting critical infrastructure.
+- **Hacktivists**: Aim to promote social or political causes.
+- **Thrill-seekers**: Attack for fun or learning but may cause damage.
+- **Insiders**: Internal actors, intentional or accidental, with privileged system access.
+- **Cyberterrorists**: Driven by political or religious ideologies, seeking to cause chaos.
+
+Additionally, at our company, we discussed new possibilities, such as **reality show fans(Big Brother Brazil)** who organize mass voting campaigns or online defamation efforts. Today we have more than [3M votes per minute](https://www.hcaptcha.com/post/globo-counts-nearly-3-million-votes-per-minute-with-hcaptcha-enterprise), this is the biggest voting in the world. To understand these emerging actors better and how to think in new possibilties, check out the [OWASP Global AppSec 2023](https://owasp2023globalappsecwashin.sched.com/event/1M6Qh/the-threat-actors-we-forgot-to-model-profiling-socially-motivated-cyber-criminals) talk.
 
 ### 5. Control Definition
 
-With the threats identified, the next step is to define the technical and procedural controls to mitigate those threats. These controls are implemented as clear tasks for the development and security teams.
+With threats identified, the next step is to define technical and procedural controls to mitigate them. Here, the team should note all controls, even those already implemented, to ensure they are continuously applied correctly and remain effective.
 
-## Tools and Techniques
-
-To facilitate the Threat Modeling process, some tools can be used:
-
-- **Excalidraw**: A tool for visualizing data flows and modeling threats.
-- **Jira/Trello**: Task management and integration with the Threat Modeling process.
-  
-Other important tools include:
-
-- **Microsoft Threat Modeling Tool**: Uses the STRIDE model to identify threats.
-- **IriusRisk**: A tool that integrates Threat Modeling throughout the development lifecycle.
-- **OWASP Threat Dragon**: An open-source tool that helps create threat diagrams as part of the secure development lifecycle.
-
-## Types of Threats
-
-Enumerating threats is one of the main steps of modeling. To do this, you need to put yourself in the place of each **threat actor** and think about the ways they could cause problems to the system or access assets. Some examples of threat actors include:
-
-- **Cybercriminals**: Motivated by financial gain.
-- **State-sponsored actors**: Engaged in espionage and sabotage.
-- **Hacktivists**: Use attacks to promote political or social causes.
-- **Thrill-seekers**: Attack for fun or learning but may cause harm.
-- **Insiders**: Internal threats, either intentional or accidental, from employees.
-- **Cyberterrorists**: Act with political or ideological motivations.
-
-Beyond these traditional actors, in our company, we discussed other possibilities, such as **reality show fans**, who can organize massive voting campaigns, disrupt voting systems, or even promote online defamation campaigns. For more information on emerging threat actors, check out the [OWASP Global AppSec 2023](https://owasp2023globalappsecwashin.sched.com/event/1M6Qh/the-threat-actors-we-forgot-to-model-profiling-socially-motivated-cyber-criminals) presentation.
+The team should create clear tasks for implementing and monitoring these controls throughout the product lifecycle. This includes, for example, validating if controls like multi-factor authentication or encryption remain active and effective after system updates.
 
 ## Conclusion
 
-**Threat Modeling Express** offers an agile and efficient way to integrate Threat Modeling into the development cycle, helping mitigate risks before they become problems. With the increasing complexity of threats, it is essential that security and development teams work together to protect their systems proactively.
+**Threat Modeling Express** offers an agile and efficient way to integrate threat modeling into the development cycle, helping mitigate risks before they become problems. With the increasing complexity of threats, it is essential for security and development teams to work together to protect their systems proactively.
 
-If you haven't implemented Threat Modeling yet, now is the time to start. Integrate it into your development pipeline and keep your organization safe from the threats of today and tomorrow.
+If you haven’t implemented Threat Modeling yet, now is the time to start. Integrate it into your development pipeline and keep your organization safe from today’s and tomorrow’s threats.
+
+Remember, security is a continuous and collaborative process, and the earlier it is integrated into development, the more effective the protection of your systems will be.
+
