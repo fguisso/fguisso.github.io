@@ -3,333 +3,333 @@
     <style>
       @import url('https://fonts.googleapis.com/css?family=Didact+Gothic&amp;display=swap');
       text {
-        font-size: 296.85px;
-        font-family: DidactGothic-Regular, Didact Gothic;
+      font-size: 296.85px;
+      font-family: DidactGothic-Regular, Didact Gothic;
       }
       #logo:is(.dark *) {
-        fill: white;
+      fill: white;
       }
       #layer_2, #layer_3 {
-        fill: #006400;
+      fill: #006400;
       }
       #log {
-        fill: black;
+      fill: black;
       }
       #layer_2, #layer_3 {
-        fill: #39FF14;
-        pointer-events: all;
-        opacity: 0;
+      fill: #39FF14;
+      pointer-events: all;
+      opacity: 0;
       }
       .animate-glitch1 {
-        animation: glitch1 2s infinite;
+      animation: glitch1 2s infinite;
       }
       .animate-glitch2 {
-        animation: glitch2 2s infinite;
+      animation: glitch2 2s infinite;
       }
       #layer_2 {
-        -webkit-animation:glitch-1 ease-out 1.8s infinite;
-        animation:glitch-1 ease-out 1.8s infinite
+      -webkit-animation:glitch-1 ease-out 1.8s infinite;
+      animation:glitch-1 ease-out 1.8s infinite
       }
       #layer_3 {
-        -webkit-animation:glitch-2 ease-out 1.8s infinite;
-        animation:glitch-2 ease-out 1.8s infinite
+      -webkit-animation:glitch-2 ease-out 1.8s infinite;
+      animation:glitch-2 ease-out 1.8s infinite
       }
       @-webkit-keyframes glitch-1 {
       0% {
-        transform:translate(-40px,-50px)
+      transform:translate(-40px,-50px)
       }
       5% {
-        transform:translate(-40px,-20px)
+      transform:translate(-40px,-20px)
       }
       10% {
-        transform:translate(-20px,-50px)
+      transform:translate(-20px,-50px)
       }
       15% {
-        transform:translate(-10px,-50px)
+      transform:translate(-10px,-50px)
       }
       20% {
-        transform:translate(-10px,-40px)
+      transform:translate(-10px,-40px)
       }
       25% {
-        transform:translate(-20px,-50px)
+      transform:translate(-20px,-50px)
       }
       30% {
-        transform:translate(-30px,-20px)
+      transform:translate(-30px,-20px)
       }
       35% {
-        transform:translate(-20px,-50px)
+      transform:translate(-20px,-50px)
       }
       40% {
-        transform:translate(-40px,-30px)
+      transform:translate(-40px,-30px)
       }
       45% {
-        transform:translate(-60px,-50px)
+      transform:translate(-60px,-50px)
       }
       50% {
-        transform:translate(-30px,-50px)
+      transform:translate(-30px,-50px)
       }
       55% {
-        transform:translate(-60px,-10px)
+      transform:translate(-60px,-10px)
       }
       60% {
-        transform:translate(-60px,-10px)
+      transform:translate(-60px,-10px)
       }
       65% {
-        transform:translate(-40px,-50px)
+      transform:translate(-40px,-50px)
       }
       70% {
-        transform:translate(-10px,-10px)
+      transform:translate(-10px,-10px)
       }
       75% {
-        transform:translate(-60px,-20px)
+      transform:translate(-60px,-20px)
       }
       80% {
-        transform:translate(-50px,-50px)
+      transform:translate(-50px,-50px)
       }
       85% {
-        transform:translate(-50px,-40px)
+      transform:translate(-50px,-40px)
       }
       90% {
-        transform:translate(-60px,-20px)
+      transform:translate(-60px,-20px)
       }
       95% {
-        transform:translate(-30px,-30px)
+      transform:translate(-30px,-30px)
       }
       100% {
-        transform:translate(-40px,-20px)
+      transform:translate(-40px,-20px)
       }
       }
       @keyframes glitch-1 {
       0% {
-        transform:translate(-40px,-50px)
+      transform:translate(-40px,-50px)
       }
       5% {
-        transform:translate(-40px,-20px)
+      transform:translate(-40px,-20px)
       }
       10% {
-        transform:translate(-20px,-50px)
+      transform:translate(-20px,-50px)
       }
       15% {
-        transform:translate(-10px,-50px)
+      transform:translate(-10px,-50px)
       }
       20% {
-        transform:translate(-10px,-40px)
+      transform:translate(-10px,-40px)
       }
       25% {
-        transform:translate(-20px,-50px)
+      transform:translate(-20px,-50px)
       }
       30% {
-        transform:translate(-30px,-20px)
+      transform:translate(-30px,-20px)
       }
       35% {
-        transform:translate(-20px,-50px)
+      transform:translate(-20px,-50px)
       }
       40% {
-        transform:translate(-40px,-30px)
+      transform:translate(-40px,-30px)
       }
       45% {
-        transform:translate(-60px,-50px)
+      transform:translate(-60px,-50px)
       }
       50% {
-        transform:translate(-30px,-50px)
+      transform:translate(-30px,-50px)
       }
       55% {
-        transform:translate(-60px,-10px)
+      transform:translate(-60px,-10px)
       }
       60% {
-        transform:translate(-60px,-10px)
+      transform:translate(-60px,-10px)
       }
       65% {
-        transform:translate(-40px,-50px)
+      transform:translate(-40px,-50px)
       }
       70% {
-        transform:translate(-10px,-10px)
+      transform:translate(-10px,-10px)
       }
       75% {
-        transform:translate(-60px,-20px)
+      transform:translate(-60px,-20px)
       }
       80% {
-        transform:translate(-50px,-50px)
+      transform:translate(-50px,-50px)
       }
       85% {
-        transform:translate(-50px,-40px)
+      transform:translate(-50px,-40px)
       }
       90% {
-        transform:translate(-60px,-20px)
+      transform:translate(-60px,-20px)
       }
       95% {
-        transform:translate(-30px,-30px)
+      transform:translate(-30px,-30px)
       }
       100% {
-        transform:translate(-40px,-20px)
+      transform:translate(-40px,-20px)
       }
       }
       @-webkit-keyframes glitch-2 {
       0% {
-        transform:translate(20px,30px)
+      transform:translate(20px,30px)
       }
       5% {
-        transform:translate(10px,10px)
+      transform:translate(10px,10px)
       }
       10% {
-        transform:translate(10px,40px)
+      transform:translate(10px,40px)
       }
       15% {
-        transform:translate(20px,10px)
+      transform:translate(20px,10px)
       }
       20% {
-        transform:translate(10px,30px)
+      transform:translate(10px,30px)
       }
       25% {
-        transform:translate(30px,30px)
+      transform:translate(30px,30px)
       }
       30% {
-        transform:translate(50px,20px)
+      transform:translate(50px,20px)
       }
       35% {
-        transform:translate(40px,20px)
+      transform:translate(40px,20px)
       }
       40% {
-        transform:translate(50px,50px)
+      transform:translate(50px,50px)
       }
       45% {
-        transform:translate(20px,20px)
+      transform:translate(20px,20px)
       }
       50% {
-        transform:translate(50px,10px)
+      transform:translate(50px,10px)
       }
       55% {
-        transform:translate(30px,30px)
+      transform:translate(30px,30px)
       }
       60% {
-        transform:translate(10px,10px)
+      transform:translate(10px,10px)
       }
       65% {
-        transform:translate(30px,50px)
+      transform:translate(30px,50px)
       }
       70% {
-        transform:translate(10px,40px)
+      transform:translate(10px,40px)
       }
       75% {
-        transform:translate(50px,50px)
+      transform:translate(50px,50px)
       }
       80% {
-        transform:translate(40px,50px)
+      transform:translate(40px,50px)
       }
       85% {
-        transform:translate(20px,20px)
+      transform:translate(20px,20px)
       }
       90% {
-        transform:translate(30px,30px)
+      transform:translate(30px,30px)
       }
       95% {
-        transform:translate(40px,40px)
+      transform:translate(40px,40px)
       }
       100% {
-        transform:translate(40px,20px)
+      transform:translate(40px,20px)
       }
       }
       @keyframes glitch-2 {
       0% {
-        transform:translate(20px,30px)
+      transform:translate(20px,30px)
       }
       5% {
-        transform:translate(10px,10px)
+      transform:translate(10px,10px)
       }
       10% {
-        transform:translate(10px,40px)
+      transform:translate(10px,40px)
       }
       15% {
-        transform:translate(20px,10px)
+      transform:translate(20px,10px)
       }
       20% {
-        transform:translate(10px,30px)
+      transform:translate(10px,30px)
       }
       25% {
-        transform:translate(30px,30px)
+      transform:translate(30px,30px)
       }
       30% {
-        transform:translate(50px,20px)
+      transform:translate(50px,20px)
       }
       35% {
-        transform:translate(40px,20px)
+      transform:translate(40px,20px)
       }
       40% {
-        transform:translate(50px,50px)
+      transform:translate(50px,50px)
       }
       45% {
-        transform:translate(20px,20px)
+      transform:translate(20px,20px)
       }
       50% {
-        transform:translate(50px,10px)
+      transform:translate(50px,10px)
       }
       55% {
-        transform:translate(30px,30px)
+      transform:translate(30px,30px)
       }
       60% {
-        transform:translate(10px,10px)
+      transform:translate(10px,10px)
       }
       65% {
-        transform:translate(30px,50px)
+      transform:translate(30px,50px)
       }
       70% {
-        transform:translate(10px,40px)
+      transform:translate(10px,40px)
       }
       75% {
-        transform:translate(50px,50px)
+      transform:translate(50px,50px)
       }
       80% {
-        transform:translate(40px,50px)
+      transform:translate(40px,50px)
       }
       85% {
-        transform:translate(20px,20px)
+      transform:translate(20px,20px)
       }
       90% {
-        transform:translate(30px,30px)
+      transform:translate(30px,30px)
       }
       95% {
-        transform:translate(40px,40px)
+      transform:translate(40px,40px)
       }
       100% {
-        transform:translate(40px,20px)
+      transform:translate(40px,20px)
       }
       }
-      </style>
+    </style>
     <script>
       window.addEventListener('load', function() {
-        const logo = document.getElementById('logo');
-        const layer2 = document.getElementById('layer_2');
-        const layer3 = document.getElementById('layer_3');
+      const logo = document.getElementById('logo');
+      const layer2 = document.getElementById('layer_2');
+      const layer3 = document.getElementById('layer_3');
 
-        logo.addEventListener('mouseenter', function() {
-          layer2.style.opacity = '1';
-          layer3.style.opacity = '1';
-          layer2.classList.add('animate-glitch1');
-          layer3.classList.add('animate-glitch2');
-        });
-
-        logo.addEventListener('mouseleave', function() {
-          layer2.style.opacity = '0';
-          layer3.style.opacity = '0';
-          layer2.classList.remove('animate-glitch1');
-          layer3.classList.remove('animate-glitch2');
-        });
+      logo.addEventListener('mouseenter', function() {
+      layer2.style.opacity = '1';
+      layer3.style.opacity = '1';
+      layer2.classList.add('animate-glitch1');
+      layer3.classList.add('animate-glitch2');
       });
-      </script>
-    </defs>
+
+      logo.addEventListener('mouseleave', function() {
+      layer2.style.opacity = '0';
+      layer3.style.opacity = '0';
+      layer2.classList.remove('animate-glitch1');
+      layer3.classList.remove('animate-glitch2');
+      });
+      });
+    </script>
+  </defs>
   <g id="layer_2">
     <text transform="translate(5.52 250.66)">guisso</text>
     <polygon points="60.34 198.02 84.8 150.91 107.45 198.02 60.34 198.02"></polygon>
     <polygon points="741.17 161.02 765.63 208.13 788.28 161.02 741.17 161.02"></polygon>
-    </g>
+  </g>
   <g id="layer_3">
     <text transform="translate(5.52 250.66)">guisso</text>
     <polygon points="60.34 198.02 84.8 150.91 107.45 198.02 60.34 198.02"></polygon>
     <polygon points="741.17 161.02 765.63 208.13 788.28 161.02 741.17 161.02"></polygon>
-    </g>
+  </g>
   <g id="logo">
     <text transform="translate(5.52 250.66)">guisso</text>
     <polygon points="60.34 198.02 84.8 150.91 107.45 198.02 60.34 198.02"></polygon>
     <polygon points="741.17 161.02 765.63 208.13 788.28 161.02 741.17 161.02"></polygon>
-    </g>
-  </svg>
+  </g>
+</svg>

@@ -1,0 +1,239 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2160 471.5999999999999">
+    <defs>
+        <style class="style-fonts">
+            @font-face { font-family: Nunito; src:
+            url(data:font/woff2;base64,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);
+            }
+        </style>
+    </defs>
+    <g id="user">
+        <g stroke-linecap="round" transform="translate(10 170) rotate(0 155 80)">
+            <path d="M0 0 L310 0 L310 160 L0 160" stroke="none" stroke-width="0" fill="#343a40" />
+            <path
+                d="M0 0 C71.5 0, 143 0, 310 0 M0 0 C113.87 0, 227.74 0, 310 0 M310 0 C310 54.5, 310 108.99, 310 160 M310 0 C310 53.36, 310 106.71, 310 160 M310 160 C214.69 160, 119.38 160, 0 160 M310 160 C214.99 160, 119.98 160, 0 160 M0 160 C0 106.98, 0 53.95, 0 0 M0 160 C0 106.89, 0 53.78, 0 0"
+                stroke="#343a40" stroke-width="2" fill="none" />
+        </g>
+        <g
+            transform="translate(125.60366719563802 225.69999999999982) rotate(0 39.396332804361975 24.299999999999955)">
+            <text x="39.39633280436198" y="36.144000000000005" font-family="Nunito, Segoe UI Emoji"
+                font-size="36px" fill="#ffffff" text-anchor="middle" style="white-space: pre;"
+                direction="ltr" dominant-baseline="alphabetic">User</text>
+        </g>
+    </g>
+
+    <g id="arrow-user-mobile" stroke-linecap="round">
+        <g transform="translate(330 250) rotate(0 89.99999999999999 0)">
+            <path d="M0 0 C57.85 0, 115.71 0, 180 0 M0 0 C45.27 0, 90.54 0, 180 0" stroke="#ffffff"
+                stroke-width="4" fill="none" />
+        </g>
+        <g transform="translate(330 250) rotate(0 89.99999999999999 0)">
+            <path
+                d="M156.51 8.55 C164.06 5.8, 171.61 3.05, 180 0 M156.51 8.55 C162.42 6.4, 168.32 4.25, 180 0"
+                stroke="#ffffff" stroke-width="4" fill="none" />
+        </g>
+        <g transform="translate(330 250) rotate(0 89.99999999999999 0)">
+            <path
+                d="M156.51 -8.55 C164.06 -5.8, 171.61 -3.05, 180 0 M156.51 -8.55 C162.42 -6.4, 168.32 -4.25, 180 0"
+                stroke="#ffffff" stroke-width="4" fill="none" />
+        </g>
+    </g>
+
+    <g id="mobile-app">
+        <g stroke-linecap="round" transform="translate(530 170) rotate(0 150 80)">
+            <path
+                d="M32 0 C123.14 0, 214.28 0, 268 0 C289.33 0, 300 10.67, 300 32 C300 56.44, 300 80.88, 300 128 C300 149.33, 289.33 160, 268 160 C187.69 160, 107.38 160, 32 160 C10.67 160, 0 149.33, 0 128 C0 101.1, 0 74.2, 0 32 C0 10.67, 10.67 0, 32 0"
+                stroke="none" stroke-width="0" fill="#ced4da" />
+            <path
+                d="M32 0 C82.39 0, 132.78 0, 268 0 M32 0 C95.12 0, 158.23 0, 268 0 M268 0 C289.33 0, 300 10.67, 300 32 M268 0 C289.33 0, 300 10.67, 300 32 M300 32 C300 61.86, 300 91.72, 300 128 M300 32 C300 57.98, 300 83.96, 300 128 M300 128 C300 149.33, 289.33 160, 268 160 M300 128 C300 149.33, 289.33 160, 268 160 M268 160 C185.33 160, 102.66 160, 32 160 M268 160 C179.22 160, 90.45 160, 32 160 M32 160 C10.67 160, 0 149.33, 0 128 M32 160 C10.67 160, 0 149.33, 0 128 M0 128 C0 93.93, 0 59.86, 0 32 M0 128 C0 101.67, 0 75.34, 0 32 M0 32 C0 10.67, 10.67 0, 32 0 M0 32 C0 10.67, 10.67 0, 32 0"
+                stroke="#343a40" stroke-width="2" fill="none" />
+        </g>
+        <g
+            transform="translate(584.9100004831951 225.69999999999982) rotate(0 95.08999951680502 24.299999999999955)">
+            <text x="95.08999951680501" y="36.144000000000005" font-family="Nunito, Segoe UI Emoji"
+                font-size="36px" fill="#343a40" text-anchor="middle" style="white-space: pre;"
+                direction="ltr" dominant-baseline="alphabetic">Mobile App</text>
+        </g>
+    </g>
+
+    <g id="arrow-mobile-proxy" stroke-linecap="round">
+        <g transform="translate(831 250) rotate(0 39.5 0)">
+            <path d="M0 0 C25.39 0, 50.77 0, 79 0 M0 0 C27.11 0, 54.23 0, 79 0" stroke="#ffffff"
+                stroke-width="4" fill="none" />
+        </g>
+        <g transform="translate(831 250) rotate(0 39.5 0)">
+            <path
+                d="M55.51 8.55 C63.06 5.8, 70.61 3.06, 79 0 M55.51 8.55 C63.57 5.62, 71.63 2.68, 79 0"
+                stroke="#ffffff" stroke-width="4" fill="none" />
+        </g>
+        <g transform="translate(831 250) rotate(0 39.5 0)">
+            <path
+                d="M55.51 -8.55 C63.06 -5.8, 70.61 -3.06, 79 0 M55.51 -8.55 C63.57 -5.62, 71.63 -2.68, 79 0"
+                stroke="#ffffff" stroke-width="4" fill="none" />
+        </g>
+    </g>
+
+    <g id="reverse-proxy">
+        <g stroke-linecap="round" transform="translate(930 170) rotate(0 150 80)">
+            <path
+                d="M32 0 C105.04 0, 178.07 0, 268 0 C289.33 0, 300 10.67, 300 32 C300 66.9, 300 101.8, 300 128 C300 149.33, 289.33 160, 268 160 C194.77 160, 121.54 160, 32 160 C10.67 160, 0 149.33, 0 128 C0 105.86, 0 83.72, 0 32 C0 10.67, 10.67 0, 32 0"
+                stroke="none" stroke-width="0" fill="#ced4da" />
+            <path
+                d="M32 0 C125.82 0, 219.65 0, 268 0 M32 0 C113.16 0, 194.31 0, 268 0 M268 0 C289.33 0, 300 10.67, 300 32 M268 0 C289.33 0, 300 10.67, 300 32 M300 32 C300 56.36, 300 80.72, 300 128 M300 32 C300 67.79, 300 103.58, 300 128 M300 128 C300 149.33, 289.33 160, 268 160 M300 128 C300 149.33, 289.33 160, 268 160 M268 160 C198.12 160, 128.25 160, 32 160 M268 160 C173.98 160, 79.97 160, 32 160 M32 160 C10.67 160, 0 149.33, 0 128 M32 160 C10.67 160, 0 149.33, 0 128 M0 128 C0 107.61, 0 87.23, 0 32 M0 128 C0 92.65, 0 57.3, 0 32 M0 32 C0 10.67, 10.67 0, 32 0 M0 32 C0 10.67, 10.67 0, 32 0"
+                stroke="#343a40" stroke-width="2" fill="none" />
+        </g>
+        <g
+            transform="translate(1014.2280006408691 201.4000000000001) rotate(0 65.77199935913086 48.59999999999991)">
+            <text x="65.77199935913086" y="36.144000000000005" font-family="Nunito, Segoe UI Emoji"
+                font-size="36px" fill="#343a40" text-anchor="middle" style="white-space: pre;"
+                direction="ltr" dominant-baseline="alphabetic">Reverse</text>
+            <text x="65.77199935913086" y="84.744" font-family="Nunito, Segoe UI Emoji"
+                font-size="36px"
+                fill="#343a40" text-anchor="middle" style="white-space: pre;" direction="ltr"
+                dominant-baseline="alphabetic">Proxy</text>
+        </g>
+    </g>
+
+    <g id="arrow-proxy-api" stroke-linecap="round">
+        <g transform="translate(1231 250) rotate(0 39.5 0)">
+            <path d="M0 0 C25.73 0, 51.45 0, 79 0 M0 0 C19.98 0, 39.97 0, 79 0" stroke="#ffffff"
+                stroke-width="4" fill="none" />
+        </g>
+        <g transform="translate(1231 250) rotate(0 39.5 0)">
+            <path
+                d="M55.51 8.55 C63.16 5.77, 70.81 2.98, 79 0 M55.51 8.55 C61.45 6.39, 67.39 4.22, 79 0"
+                stroke="#ffffff" stroke-width="4" fill="none" />
+        </g>
+        <g transform="translate(1231 250) rotate(0 39.5 0)">
+            <path
+                d="M55.51 -8.55 C63.16 -5.77, 70.81 -2.98, 79 0 M55.51 -8.55 C61.45 -6.39, 67.39 -4.22, 79 0"
+                stroke="#ffffff" stroke-width="4" fill="none" />
+        </g>
+    </g>
+
+    <g id="api-rest">
+        <g stroke-linecap="round" transform="translate(1330 170) rotate(0 150 80)">
+            <path
+                d="M32 0 C117.69 0, 203.37 0, 268 0 C289.33 0, 300 10.67, 300 32 C300 61.71, 300 91.42, 300 128 C300 149.33, 289.33 160, 268 160 C182.21 160, 96.41 160, 32 160 C10.67 160, 0 149.33, 0 128 C0 98.21, 0 68.42, 0 32 C0 10.67, 10.67 0, 32 0"
+                stroke="none" stroke-width="0" fill="#ced4da" />
+            <path
+                d="M32 0 C120.07 0, 208.13 0, 268 0 M32 0 C117.55 0, 203.09 0, 268 0 M268 0 C289.33 0, 300 10.67, 300 32 M268 0 C289.33 0, 300 10.67, 300 32 M300 32 C300 66.34, 300 100.67, 300 128 M300 32 C300 54.3, 300 76.59, 300 128 M300 128 C300 149.33, 289.33 160, 268 160 M300 128 C300 149.33, 289.33 160, 268 160 M268 160 C190.44 160, 112.89 160, 32 160 M268 160 C195.15 160, 122.31 160, 32 160 M32 160 C10.67 160, 0 149.33, 0 128 M32 160 C10.67 160, 0 149.33, 0 128 M0 128 C0 96.55, 0 65.1, 0 32 M0 128 C0 103.43, 0 78.85, 0 32 M0 32 C0 10.67, 10.67 0, 32 0 M0 32 C0 10.67, 10.67 0, 32 0"
+                stroke="#343a40" stroke-width="2" fill="none" />
+        </g>
+        <g
+            transform="translate(1408.670666885376 225.69999999999982) rotate(0 71.32933311462398 24.299999999999955)">
+            <text x="71.32933311462402" y="36.144000000000005" font-family="Nunito, Segoe UI Emoji"
+                font-size="36px" fill="#343a40" text-anchor="middle" style="white-space: pre;"
+                direction="ltr" dominant-baseline="alphabetic">API Rest</text>
+        </g>
+    </g>
+
+    <g id="arrow-api-db" stroke-linecap="round">
+        <g transform="translate(1630 250) rotate(0 70 0)">
+            <path d="M0 0 C40.85 0, 81.71 0, 140 0 M0 0 C29.48 0, 58.95 0, 140 0" stroke="#ffffff"
+                stroke-width="4" fill="none" />
+        </g>
+        <g transform="translate(1630 250) rotate(0 70 0)">
+            <path
+                d="M116.51 8.55 C123.36 6.06, 130.22 3.56, 140 0 M116.51 8.55 C121.45 6.75, 126.4 4.95, 140 0"
+                stroke="#ffffff" stroke-width="4" fill="none" />
+        </g>
+        <g transform="translate(1630 250) rotate(0 70 0)">
+            <path
+                d="M116.51 -8.55 C123.36 -6.06, 130.22 -3.56, 140 0 M116.51 -8.55 C121.45 -6.75, 126.4 -4.95, 140 0"
+                stroke="#ffffff" stroke-width="4" fill="none" />
+        </g>
+    </g>
+
+    <g id="database">
+        <g stroke-linecap="round" transform="translate(1790 170) rotate(0 155 80)">
+            <path d="M0 0 L310 0 L310 160 L0 160" stroke="none" stroke-width="0" fill="#868e96" />
+            <path
+                d="M0 0 C101.06 0, 202.11 0, 310 0 M0 0 C107.76 0, 215.51 0, 310 0 M310 0 C310 44.89, 310 89.78, 310 160 M310 0 C310 44.29, 310 88.57, 310 160 M310 160 C197.15 160, 84.29 160, 0 160 M310 160 C242.02 160, 174.05 160, 0 160 M0 160 C0 117.85, 0 75.71, 0 0 M0 160 C0 104.56, 0 49.12, 0 0"
+                stroke="#343a40" stroke-width="2" fill="none" />
+        </g>
+        <g
+            transform="translate(1866.653000640869 225.69999999999982) rotate(0 78.3469993591309 24.299999999999955)">
+            <text x="78.34699935913086" y="36.144000000000005" font-family="Nunito, Segoe UI Emoji"
+                font-size="36px" fill="#343a40" text-anchor="middle" style="white-space: pre;"
+                direction="ltr" dominant-baseline="alphabetic">Database</text>
+        </g>
+    </g>
+
+    <g id="trust-boundary">
+        <g stroke-linecap="round" transform="translate(1270 68.33333333333348) rotate(0 440 190)">
+            <path
+                d="M0 0 C241.4 0, 482.79 0, 880 0 M880 0 C880 114.26, 880 228.53, 880 380 M880 380 C600.52 380, 321.03 380, 0 380 M0 380 C0 265.67, 0 151.34, 0 0"
+                stroke="#2f9e44" stroke-width="4.5" fill="none" stroke-dasharray="8 12" />
+        </g>
+        <g transform="translate(1270 10) rotate(0 232.24966599146524 24.299999999999955)">
+            <text x="0" y="36.144000000000005" font-family="Nunito, Segoe UI Emoji" font-size="36px"
+                fill="#2f9e44" text-anchor="start" style="white-space: pre;" direction="ltr"
+                dominant-baseline="alphabetic">Trust Boundary / VPN / DMZ</text>
+        </g>
+    </g>
+
+
+    <g id="asset-1">
+        <g stroke-linecap="round" transform="translate(550 130) rotate(0 30 15.799999999999955)">
+            <path d="M0 0 L60 0 L60 31.6 L0 31.6" stroke="none" stroke-width="0" fill="#f08c00" />
+            <path
+                d="M0 0 C20.06 0, 40.13 0, 60 0 M0 0 C17.66 0, 35.31 0, 60 0 M60 0 C60 10.12, 60 20.24, 60 31.6 M60 0 C60 11.94, 60 23.87, 60 31.6 M60 31.6 C47.42 31.6, 34.84 31.6, 0 31.6 M60 31.6 C43.88 31.6, 27.76 31.6, 0 31.6 M0 31.6 C0 21.67, 0 11.74, 0 0 M0 31.6 C0 25.1, 0 18.61, 0 0"
+                stroke="#f08c00" stroke-width="1" fill="none" />
+        </g>
+        <g
+            transform="translate(569.1413332621256 135) rotate(0 10.858666737874344 10.799999999999955)">
+            <text x="10.85866673787435" y="16.064" font-family="Nunito, Segoe UI Emoji"
+                font-size="16px"
+                fill="#ffffff" text-anchor="middle" style="white-space: pre;" direction="ltr"
+                dominant-baseline="alphabetic">A1</text>
+        </g>
+    </g>
+
+    <g id="asset-1-db">
+        <g stroke-linecap="round" transform="translate(1790 130) rotate(0 30 15.799999999999955)">
+            <path d="M0 0 L60 0 L60 31.6 L0 31.6" stroke="none" stroke-width="0" fill="#f08c00" />
+            <path
+                d="M0 0 C14.22 0, 28.44 0, 60 0 M0 0 C17.1 0, 34.21 0, 60 0 M60 0 C60 8.43, 60 16.86, 60 31.6 M60 0 C60 10.22, 60 20.44, 60 31.6 M60 31.6 C43.97 31.6, 27.94 31.6, 0 31.6 M60 31.6 C45.88 31.6, 31.76 31.6, 0 31.6 M0 31.6 C0 25.06, 0 18.53, 0 0 M0 31.6 C0 19.68, 0 7.75, 0 0"
+                stroke="#f08c00" stroke-width="1" fill="none" />
+        </g>
+        <g
+            transform="translate(1809.1413332621257 135) rotate(0 10.858666737874387 10.799999999999955)">
+            <text x="10.85866673787435" y="16.064" font-family="Nunito, Segoe UI Emoji"
+                font-size="16px"
+                fill="#ffffff" text-anchor="middle" style="white-space: pre;" direction="ltr"
+                dominant-baseline="alphabetic">A1</text>
+        </g>
+    </g>
+
+    <g id="asset-2">
+        <g stroke-linecap="round" transform="translate(630 130) rotate(0 30 15.799999999999955)">
+            <path d="M0 0 L60 0 L60 31.6 L0 31.6" stroke="none" stroke-width="0" fill="#f08c00" />
+            <path
+                d="M0 0 C16.59 0, 33.17 0, 60 0 M0 0 C23.56 0, 47.11 0, 60 0 M60 0 C60 8.22, 60 16.45, 60 31.6 M60 0 C60 7.47, 60 14.94, 60 31.6 M60 31.6 C44.6 31.6, 29.2 31.6, 0 31.6 M60 31.6 C39.01 31.6, 18.02 31.6, 0 31.6 M0 31.6 C0 19.53, 0 7.46, 0 0 M0 31.6 C0 21.92, 0 12.23, 0 0"
+                stroke="#f08c00" stroke-width="1" fill="none" />
+        </g>
+        <g
+            transform="translate(649.0053330103556 135) rotate(0 10.994666989644372 10.799999999999955)">
+            <text x="10.994666989644369" y="16.064" font-family="Nunito, Segoe UI Emoji"
+                font-size="16px"
+                fill="#ffffff" text-anchor="middle" style="white-space: pre;" direction="ltr"
+                dominant-baseline="alphabetic">A2</text>
+        </g>
+    </g>
+
+    <g id="asset-3">
+        <g stroke-linecap="round" transform="translate(1350 130) rotate(0 30 15.799999999999955)">
+            <path d="M0 0 L60 0 L60 31.6 L0 31.6" stroke="none" stroke-width="0" fill="#f08c00" />
+            <path
+                d="M0 0 C22.57 0, 45.13 0, 60 0 M0 0 C21.77 0, 43.54 0, 60 0 M60 0 C60 10.32, 60 20.64, 60 31.6 M60 0 C60 8.29, 60 16.57, 60 31.6 M60 31.6 C42.35 31.6, 24.71 31.6, 0 31.6 M60 31.6 C42.93 31.6, 25.86 31.6, 0 31.6 M0 31.6 C0 22.72, 0 13.84, 0 0 M0 31.6 C0 22.47, 0 13.35, 0 0"
+                stroke="#f08c00" stroke-width="1" fill="none" />
+        </g>
+        <g
+            transform="translate(1369.1333330472312 135) rotate(0 10.86666695276898 10.799999999999955)">
+            <text x="10.866666952768961" y="16.064" font-family="Nunito, Segoe UI Emoji"
+                font-size="16px"
+                fill="#ffffff" text-anchor="middle" style="white-space: pre;" direction="ltr"
+                dominant-baseline="alphabetic">A3</text>
+        </g>
+    </g>
+</svg>

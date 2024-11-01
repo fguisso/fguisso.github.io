@@ -23,9 +23,19 @@ Estes slides fazem parte de um projeto automatizado na pipeline, onde utilizo [S
 ---
 {{< timeline >}}
 
+{{< timelineItem icon="fire" header="Meetup OWASP Brasília" badge="threat-modeling" subheader="Threat Modeling Express" >}}
+Eu fiz uma postagem com tudo que foi falado, de uma olhada:
+{{< article link="/posts/threat-modeling-intro/" >}}
+</br>
+{{< button href="https://guisso.dev/talks/threat-modeling" target="_self" >}}
+Slides PT-BR
+{{< /button >}}
+{{< youtubeLite id="3TVmFqaAA1o" label="threat-modeling" >}}
+{{< /timelineItem >}}
+
 {{< timelineItem icon="code" header="Debian Day Natal 2024" badge="homelab" subheader="Proxmox e Homelab" >}}
 Esta palestra foi total mão na massa, mas eu fiz uma postagem com tudo que foi falado para você não precisar de anotações, da uma olhada:
-{{< article link="/posts/proxmox-debian-day/" >}}
+{{< article link="/misc/proxmox-debian-day/" >}}
 {{< /timelineItem >}}
 
 
