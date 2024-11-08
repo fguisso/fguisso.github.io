@@ -1,5 +1,5 @@
 ---
-title: "Threat Modeling Mermaid"
+title: "<span>Threat Modeling</span> Mermaid"
 date: 2023-10-13T02:02:04-03:00
 ---
 Example of Dataflow for Threat Modeling using Mermaid.js

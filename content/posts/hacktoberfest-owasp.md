@@ -1,5 +1,5 @@
 ---
-title: "Hacktoberfest Owasp"
+title: "<span>Hack</span>toberfest <span>Owasp</span>"
 date: 2019-10-05T11:26:27-03:00
 showDate: true
 tags: ["owasp","appsec", "hacktoberfest", "pt-br"]

@@ -10,13 +10,13 @@
       fill: white;
       }
       #layer_2, #layer_3 {
-      fill: #006400;
+      fill: #00ff78;
       }
-      #log {
+      #logo {
       fill: black;
       }
       #layer_2, #layer_3 {
-      fill: #39FF14;
+      fill: #00ff78;
       pointer-events: all;
       opacity: 0;
       }

@@ -1,5 +1,5 @@
 ---
-title: "Meetup Checklist"
+title: "<span>Meetup</span> Checklist"
 description: "Checklist para meetup"
 date: 2024-09-17T11:03:17-03:00
 showTableOfContents: true

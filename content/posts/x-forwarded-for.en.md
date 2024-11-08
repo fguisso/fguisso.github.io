@@ -1,5 +1,5 @@
 ---
-title: "Misconfiguration Vulnerabilities in Reverse Proxies: A Comprehensive Guide"
+title: "<span>Misconf</span>iguration Vulnerabilities in <span>Reverse Proxies</span>: A Comprehensive Guide"
 description: "One of the technologies revolutionizing various markets that you need to know."
 date: 2024-09-02T10:44:55-03:00
 showTableOfContents: false

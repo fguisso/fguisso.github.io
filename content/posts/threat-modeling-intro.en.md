@@ -1,5 +1,5 @@
 ---
-title: "Threat Modeling Intro"
+title: "<span>Threat Modeling</span> Intro"
 description: "Threat Modeling Intro"
 date: 2024-09-28T07:29:47-03:00
 showTableOfContents: false

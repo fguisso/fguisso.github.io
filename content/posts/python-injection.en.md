@@ -1,5 +1,5 @@
 ---
-title: "Python Injection"
+title: "<span>Python</span> Injection"
 description: "Demonstration of a Telegram bot made in Python with injection vulnerability"
 date: 2024-03-23T10:42:45-03:00
 showDate: true

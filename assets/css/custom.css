@@ -1,0 +1,31 @@
+@font-face {
+  font-family: Nunito;
+  src: url("/fonts/Nunito-VariableFont_wght.ttf");
+}
+
+.dark\:prose-invert {
+  --tw-prose-links: #00c25a;
+}
+
+
+article h1 span:is(.dark *),
+section a div span:is(.dark *) {
+  color: #00ff78 !important;
+}
+
+article h1:is(.dark *),
+section a div:not(.prose):is(.dark *) {
+  font-family: "Nunito" !important;
+  color: #869fb2 !important;
+}
+
+article h1 span,
+section a div span {
+  color: #00c25a !important;
+}
+
+article h1,
+section a div:not(.prose) {
+  font-family: "Nunito" !important;
+  color: #869fb2 !important;
+}

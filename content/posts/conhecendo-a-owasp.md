@@ -1,5 +1,5 @@
 ---
-title: "Conhecendo a OWASP"
+title: "Conhecendo a <span>OWASP</span>"
 description: "Uma breve apresentação da OWASP e seus projetos"
 date: 2019-03-20T20:42:45-03:00
 showDate: true

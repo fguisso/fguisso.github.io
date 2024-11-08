@@ -8,13 +8,13 @@
                 }
 
                 #layer_2 {
-                fill: #cc0f39;
+                fill: #00ff78;
                 -webkit-animation: glitch-1 ease-out 1.8s infinite;
                 animation: glitch-1 ease-out 1.8s infinite;
                 }
 
                 #layer_3 {
-                fill: #0ffbf9;
+                fill: #00ff78;
                 -webkit-animation: glitch-2 ease-out 1.8s infinite;
                 animation: glitch-2 ease-out 1.8s infinite;
                 }

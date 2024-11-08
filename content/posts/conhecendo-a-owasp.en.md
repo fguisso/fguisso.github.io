@@ -1,6 +1,6 @@
 ---
 
-title: "Getting to Know OWASP"
+title: "Getting to Know <span>OWASP</span>"
 description: "A brief introduction to OWASP and its projects"
 date: 2019-03-20T20:42:45-03:00
 showDate: true

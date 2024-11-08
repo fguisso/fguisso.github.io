@@ -1,5 +1,5 @@
 ---
-title: "Vulnerabilidades de Configuração Incorreta em Proxies Reversos: Um Guia Completo"
+title: "Vulnerabilidades de <span>Configuração Incorreta</span> em <span>Proxies Reversos</span>: Um Guia Completo"
 description: "Reverse proxies are essential for managing client-server interactions, but improper handling of headers like X-Forwarded-For and X-Real-IP can introduce significant security vulnerabilities."
 date: 2024-09-02T10:44:55-03:00
 showTableOfContents: false

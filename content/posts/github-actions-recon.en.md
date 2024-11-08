@@ -1,5 +1,5 @@
 ---
-title: "Basic Recon Automation Using Github Actions"
+title: "<span>Basic Recon</span> Automation Using <span>Github Actions</span>"
 description: "Demonstration of how to use Github Actions to automate a Recon"
 date: 2022-03-16T00:00:46-03:00
 showDate: true

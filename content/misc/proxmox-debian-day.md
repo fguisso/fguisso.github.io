@@ -1,5 +1,5 @@
 ---
-title: "Proxmox e Homelab: Como Transformei um Mini PC em um Servidor de Respeito"
+title: "<span>Proxmox</span> e <span>Homelab</span>: Como <span>Transformei</span> um Mini PC em um <span>Servidor de Respeito</span>"
 description: "Como Transformei um Mini PC em um Servidor de Respeito"
 date: 2024-08-17T10:42:45-03:00
 showTableOfContents: true
