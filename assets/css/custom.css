@@ -7,7 +7,6 @@
   --tw-prose-links: #00c25a;
 }
 
-
 article h1 span:is(.dark *),
 section a div span:is(.dark *) {
   color: #00ff78 !important;
