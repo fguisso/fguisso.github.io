@@ -4,6 +4,7 @@ description: "Threat Modeling Intro"
 date: 2024-09-28T07:29:47-03:00
 showTableOfContents: false
 showDate: true
+hideFeatureImage: true
 tags: ["Threat Modeling", "Security", "DevSecOps"]
 
 ---

@@ -1,9 +1,10 @@
 ---
-title: "Ebpf in Action"
+title: "<span>eBPF</span> in Action"
 description: "In this post, we’ll explore what eBPF is, why it’s ideal for Kubernetes clusters, and how it powers security and observability tools in DevOps."
 date: 2024-11-08T14:12:56-03:00
 showTableOfContents: false
 showDate: true
+hideFeatureImage: true
 tags: ["ebpf", "Security", "DevSecOps","k8s", "kubernetes"]
 ---
 
