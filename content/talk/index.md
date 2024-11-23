@@ -23,6 +23,15 @@ Estes slides fazem parte de um projeto automatizado na pipeline, onde utilizo [S
 ---
 {{< timeline >}}
 
+{{< timelineItem icon="code" header="DevOpsDays NAtal 2024" badge="ebpf" subheader="K8s Sob Controle: eBPF e Kubescape para Segurança Total" >}}
+Eu fiz uma postagem com tudo que foi falado, de uma olhada:
+{{< article link="/posts/ebpf-and-security/" >}}
+</br>
+{{< button href="https://guisso.dev/talks/ebpf-kubescape" target="_self" >}}
+Slides PT-BR
+{{< /button >}}
+{{< /timelineItem >}}
+
 {{< timelineItem icon="fire" header="Meetup OWASP Brasília" badge="threat-modeling" subheader="Threat Modeling Express" >}}
 Eu fiz uma postagem com tudo que foi falado, de uma olhada:
 {{< article link="/posts/threat-modeling-intro/" >}}
