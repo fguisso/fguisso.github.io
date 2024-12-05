@@ -93,6 +93,21 @@ Networking não é sobre falar o tempo todo. Algumas práticas que ajudam a cria
 - **Use Humor com Moderação**: Um pouco de leveza ajuda, mas sem exageros. Seja autêntico e respeitoso.
 - **Não Force Conexões**: Abordar grupos ou pessoas de forma intrusiva pode afastá-los. Seja sutil e estratégico.
 
+### **Dica Extra: Explore os Eventos Paralelos dos Patrocinadores**
+
+Uma oportunidade muitas vezes subestimada são os eventos menores organizados pelos patrocinadores da H2HC. Esses encontros geralmente acontecem em hotéis ou restaurantes próximos ao evento principal e têm como objetivo atrair clientes ou fortalecer parcerias. Além de serem ótimos para networking, costumam incluir comida grátis e um ambiente mais descontraído para conversas.
+
+- **Como descobrir esses eventos?**
+  - Pesquise no LinkedIn usando palavras-chave como "H2HC" ou hashtags como **#h2hc**.
+  - Fique atento às postagens de patrocinadores e participantes. Esses eventos nem sempre são amplamente divulgados, então vale o esforço de investigar.
+
+- **Dica Avançada: Pergunte aos amigos**  
+  Muitas vezes, os patrocinadores distribuem ingressos para seus clientes ou parceiros. Caso você conheça alguém que já tem um relacionamento com as empresas patrocinadoras, peça informações ou até uma indicação para participar.
+
+> **Estratégia:** Retorne ao passo de pesquisar os patrocinadores e entenda quem são os clientes que estarão presentes no evento. Isso pode abrir portas para convites inesperados e ampliar suas conexões.
+
+Networking em eventos paralelos pode ser tão valioso quanto no evento principal — aproveite!
+
 ---
 
 ## Conclusão
