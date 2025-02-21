@@ -11,7 +11,7 @@
 # ordered by weight from lowest to highest.
 
 [[main]]
-  name = "Security"
+  name = "security"
   pageRef = "posts"
   weight = 10
 
@@ -43,19 +43,30 @@
 #  weight = 20
 
 [[main]]
-  name = "Projects"
+  name = "projects"
   pageRef = "projects"
   weight = 20
 
 [[main]]
-  name = "Talks"
+  name = "talks"
   pageRef = "talk"
   weight = 20
 
 [[main]]
-  name = "Misc"
+  name = "misc"
   pageRef = "misc"
   weight = 20
+
+[[main]]
+  name = "books"
+  url = "https://devsec.guisso.dev"
+  weight = 40
+
+[[main]]
+  name = "wiki"
+  url = "https://wiki.guisso.dev"
+  weight = 50
+
 
 # -- Footer Menu --
 # The footer menu is displayed at the bottom of the page, just before

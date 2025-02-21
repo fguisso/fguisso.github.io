@@ -12,6 +12,7 @@
 
 [[main]]
   name = "Segurança"
+  parent = "blog"
   pageRef = "posts"
   weight = 10
 
@@ -25,12 +26,12 @@
 #  pageRef = "posts"
 #  weight = 20
 
-#[[subnavigation]]
+#[[main]]
 #  name = "An interesting topic"
 #  pageRef = "tags/interesting-topic"
 #  weight = 10
 
-#[[subnavigation]]
+#[[main]]
 #  name = "My Awesome Category"
 #  pre = "github"
 #  pageRef = "categories/awesome"
@@ -38,23 +39,37 @@
 
 [[main]]
   name = "Geral"
+  parent = "blog"
   pageRef = "misc"
-  weight = 20
+  weight = 10
 
 [[main]]
   name = "Música"
+  parent = "blog"
   pageRef = "music"
-  weight = 20
+  weight = 10
 
 [[main]]
-  name = "Projetos"
+  name = "projetos"
   pageRef = "projects"
   weight = 20
 
 [[main]]
-  name = "Palestras"
+  name = "palestras"
   pageRef = "talk"
-  weight = 20
+  weight = 30
+
+[[main]]
+  name = "livros"
+  url = "https://devsec.guisso.dev"
+  weight = 40
+
+[[main]]
+  name = "wiki"
+  url = "https://wiki.guisso.dev"
+  weight = 50
+
+
 
 # -- Footer Menu --
 # The footer menu is displayed at the bottom of the page, just before
