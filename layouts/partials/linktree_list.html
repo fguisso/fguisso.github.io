@@ -17,9 +17,17 @@
       {{ range $links := $allLinks }}
         {{ range $name, $url := $links }}
           {{ if or (eq $name "bluesky") (eq $name "mastodon") }}
-            <p>No lugar de Twitter/X:</p>
+            {{ if eq $.Site.Params.isoCode "en" }}
+              <p>Instead of Twitter/X:</p>
+            {{ else }}
+              <p>No lugar de Twitter/X:</p>
+            {{ end }}
           {{ else if eq $name "pixelfed" }}
-            <p>No lugar de Instagram:</p>
+            {{ if eq $.Site.Params.isoCode "en" }}
+              <p>Instead of Instagram:</p>
+            {{ else }}
+              <p>No lugar de Instagram:</p>
+            {{ end }}
           {{ end }}
           <a class="text-center justify-center flex w-full h-24 mb-6 fold-bold relative inline-flex items-center justify-center rounded border-2 border-black bg-white px-3 py-2 text-base font-bold text-black transition duration-100 hover:bg-primary-400 hover:text-primary-900" href="{{ $url }}" target="_blank" rel="noopener">
             {{ $icon := resources.Get (print "icons/" $name ".svg") }}
