@@ -43,8 +43,15 @@
 #  weight = 20
 
 [[main]]
-  name = "projects"
+  name = "git"
+  parent = "projects"
   pageRef = "projects"
+  weight = 10
+
+[[main]]
+  name = "apps"
+  parent = "projects"
+  pageRef = "git-pages"
   weight = 20
 
 [[main]]

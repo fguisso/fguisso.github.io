@@ -11,7 +11,7 @@
 # ordered by weight from lowest to highest.
 
 [[main]]
-  name = "Segurança"
+  name = "segurança"
   parent = "blog"
   pageRef = "posts"
   weight = 10
@@ -38,20 +38,27 @@
 #  weight = 20
 
 [[main]]
-  name = "Geral"
+  name = "geral"
   parent = "blog"
   pageRef = "misc"
   weight = 10
 
 [[main]]
-  name = "Música"
+  name = "música"
   parent = "blog"
   pageRef = "music"
   weight = 10
 
 [[main]]
-  name = "projetos"
+  name = "git"
+  parent = "projetos"
   pageRef = "projects"
+  weight = 10
+
+[[main]]
+  name = "apps"
+  parent = "projetos"
+  pageRef = "git-pages"
   weight = 20
 
 [[main]]
@@ -77,11 +84,11 @@
 
 
 [[footer]]
-  name = "Tags"
+  name = "tags"
   pageRef = "tags"
   weight = 10
 
 [[footer]]
-  name = "Categorias"
+  name = "categorias"
   pageRef = "categories"
   weight = 20
