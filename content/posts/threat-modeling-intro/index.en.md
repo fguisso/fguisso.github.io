@@ -19,6 +19,11 @@ In this article, we’ll go through the practical application of Threat Modeling
 
 If you’d like to follow this article as a presentation, check out my interactive slides [here](https://guisso.dev/talks/threat-modeling) and the video of this talk at the OWASP Brasília Chapter [here](https://www.youtube.com/watch?v=3TVmFqaAA1o).
 
+{{< alert icon="fire" cardColor="#e63946" iconColor="#1d3557" textColor="#f1faee" >}}
+Now we have a game to test your skills after reading this article. [mini game](https://guisso.dev/tme-game/)
+{{< /alert >}}
+
+
 ## What is Threat Modeling?
 
 **Threat Modeling** is the process of identifying threats, vulnerabilities, and countermeasures in systems with the aim of minimizing risks and strengthening security. It involves thinking like attackers to anticipate potential security failures. Unlike security tools that typically detect only technical vulnerabilities, Threat Modeling allows for a clearer understanding of the direct impact of threats on the business.

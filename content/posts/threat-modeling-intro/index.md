@@ -19,6 +19,10 @@ Neste artigo, veremos a aplicação prática do Threat Modeling Express, explora
 
 Caso queira acompanhar este artigo como uma palestra, você pode acessar meus slides interativos <a href="https://guisso.dev/talks/threat-modeling" target="_blank">aqui</a> e o video desta palestra no Capítulo OWASP Brasília <a href="https://www.youtube.com/watch?v=3TVmFqaAA1o" target="_blank">aqui</a>.
 
+{{< alert icon="fire" cardColor="#e63946" iconColor="#1d3557" textColor="#f1faee" >}}
+Agora temos um jogo interativo para você testar seu conhecimento ao final da leitura. [mini game](https://guisso.dev/tme-game/)
+{{< /alert >}}
+
 ## O que é Threat Modeling?
 
 **Threat Modeling** é o processo de identificar ameaças, vulnerabilidades e contramedidas em sistemas, com o objetivo de minimizar os riscos e fortalecer a segurança. Ele exige que pensemos como atacantes para antecipar possíveis falhas de segurança. Ao contrário de ferramentas de segurança que geralmente detectam apenas vulnerabilidades técnicas, o Threat Modeling permite enxergar o impacto direto de ameaças no negócio.

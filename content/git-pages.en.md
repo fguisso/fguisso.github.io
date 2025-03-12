@@ -45,6 +45,7 @@ Collection of slides created with Slidev and automated via GitHub Actions:
 
 - [OWASPrdle](https://guisso.dev/OWASPrdle) - Wordle-like game to learn about OWASP vulnerabilities
 - [Rock Paper WASP](https://guisso.dev/rock-paper-wasp) - Information security themed rock, paper, scissors game
+- [**Threat Modeling Express Game**](https://guisso.dev/tme-game) - Game to test your skills after the [*threat modeling express*](https://guisso.dev/en/posts/threat-modeling-intro/) workshops
 - [Masters of Pwnage Deck Builder](https://masters-of-pwnage.github.io/mop-playable/) - Deck builder for the security card game
 
 ## Digital Art
