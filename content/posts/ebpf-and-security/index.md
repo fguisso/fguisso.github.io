@@ -4,7 +4,6 @@ date: 2024-11-08T14:12:56-03:00
 description: "Neste post, vamos explorar o que é o eBPF, por que ele é ideal para clusters Kubernetes e como ele impulsiona ferramentas de segurança e observabilidade no DevOps."
 showTableOfContents: false
 showDate: true
-hideFeatureImage: true
 tags: ["ebpf", "Security", "DevSecOps","k8s", "kubernetes"]
 ---
 

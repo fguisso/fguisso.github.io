@@ -4,7 +4,6 @@ description: "In this post, we’ll explore what eBPF is, why it’s ideal for K
 date: 2024-11-08T14:12:56-03:00
 showTableOfContents: false
 showDate: true
-hideFeatureImage: true
 tags: ["ebpf", "Security", "DevSecOps","k8s", "kubernetes"]
 ---
 
