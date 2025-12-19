@@ -17,9 +17,10 @@ interface Props {
 	locale?: LocaleCode;
 	pathname?: string;
 	search?: string;
+	availableLocales?: LocaleCode[];
 }
 
-const { locale: forcedLocale, pathname, search } = Astro.props as Props;
+const { locale: forcedLocale, pathname, search, availableLocales } = Astro.props as Props;
 const locale = forcedLocale ?? getRequestLocale(Astro);
 const currentPath = pathname ?? Astro.url?.pathname ?? '/';
 const currentSearch = search ?? Astro.url?.search ?? '';
@@ -37,7 +38,11 @@ const navLinks = [
 ];
 
 const toggleLocale = SUPPORTED_LOCALES.find((code) => code !== locale) ?? DEFAULT_LOCALE;
-const localeSwitchHref = buildLocaleToggleHref(currentPath, currentSearch, locale, toggleLocale);
+const availableLocaleSet = new Set(availableLocales ?? SUPPORTED_LOCALES);
+const isToggleLocaleAvailable = availableLocaleSet.has(toggleLocale);
+const localeSwitchHref = isToggleLocaleAvailable
+	? buildLocaleToggleHref(currentPath, currentSearch, locale, toggleLocale)
+	: undefined;
 const switchLabel = t(locale, `nav.switchTo.${toggleLocale}.label`);
 const switchAria = t(locale, `nav.switchTo.${toggleLocale}.aria`);
 const localeMenuLabel = t(locale, 'nav.localeMenu');
@@ -47,6 +52,7 @@ const localeOptions = SUPPORTED_LOCALES.map((code) => ({
 	aria: t(locale, `nav.switchTo.${code}.aria`),
 	href: buildLocaleToggleHref(currentPath, currentSearch, locale, code),
 	isActive: code === locale,
+	isAvailable: availableLocaleSet.has(code),
 }));
 ---
 
@@ -95,11 +101,16 @@ const localeOptions = SUPPORTED_LOCALES.map((code) => ({
 										<span class="locale-option__dot" aria-hidden="true"></span>
 										<span class="locale-option__text">{option.label}</span>
 									</span>
-								) : (
+								) : option.isAvailable ? (
 									<a class="locale-option" href={option.href} aria-label={option.aria}>
 										<span class="locale-option__dot" aria-hidden="true"></span>
 										<span class="locale-option__text">{option.label}</span>
 									</a>
+								) : (
+									<span class="locale-option is-unavailable" aria-disabled="true">
+										<span class="locale-option__dot" aria-hidden="true"></span>
+										<span class="locale-option__text">{option.label}</span>
+									</span>
 								)
 							)}
 						</div>
@@ -125,11 +136,13 @@ const localeOptions = SUPPORTED_LOCALES.map((code) => ({
 								))}
 							</div>
 							<GlowButton
-								class="mobile-menu__lang"
+								class:list={['mobile-menu__lang', { 'is-disabled': !isToggleLocaleAvailable }]}
 								href={localeSwitchHref}
 								variant="ghost"
 								size="sm"
 								aria-label={switchAria}
+								aria-disabled={!isToggleLocaleAvailable}
+								disabled={!isToggleLocaleAvailable}
 							>
 								<span aria-hidden="true" class="locale-toggle__icon locale-toggle__icon--inline">
 									<svg viewBox="0 0 24 24" role="img" aria-hidden="true">
@@ -151,7 +164,7 @@ const localeOptions = SUPPORTED_LOCALES.map((code) => ({
 										<path d="M4 9.5h16m-16 5h16" stroke="url(#locale-glow-mobile)" stroke-width="1.15" stroke-linecap="round" />
 									</svg>
 								</span>
-								{switchLabel}
+								<span class="mobile-menu__lang-text">{switchLabel}</span>
 							</GlowButton>
 						</div>
 					</details>
@@ -162,7 +175,31 @@ const localeOptions = SUPPORTED_LOCALES.map((code) => ({
 
 <script>
 	if (typeof window !== 'undefined') {
+		const localeDropdown = document.querySelector<HTMLElement>('.locale-dropdown');
 		const mobileMenu = document.querySelector<HTMLElement>('.mobile-menu');
+
+		if (localeDropdown) {
+			const closeLocaleDropdown = () => localeDropdown.removeAttribute('open');
+			const handleLocaleOutsideClick = (event: MouseEvent) => {
+				const target = event.target as Node | null;
+				if (localeDropdown.hasAttribute('open') && target && !localeDropdown.contains(target)) {
+					closeLocaleDropdown();
+				}
+			};
+			const localeInteractiveItems = Array.from(
+				localeDropdown.querySelectorAll<HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement>(
+					'.locale-option',
+				),
+			);
+
+			document.addEventListener('click', handleLocaleOutsideClick);
+			localeInteractiveItems.forEach((item) => item.addEventListener('click', closeLocaleDropdown));
+
+			document.addEventListener('astro:before-swap', () => {
+				document.removeEventListener('click', handleLocaleOutsideClick);
+				localeInteractiveItems.forEach((item) => item.removeEventListener('click', closeLocaleDropdown));
+			});
+		}
 
 		if (mobileMenu) {
 			const closeMobileMenu = () => mobileMenu.removeAttribute('open');
@@ -417,6 +454,30 @@ const localeOptions = SUPPORTED_LOCALES.map((code) => ({
 		border-color: rgba(0, 255, 127, 0.6);
 		background: linear-gradient(120deg, rgba(0, 255, 127, 0.15), rgba(154, 26, 255, 0.12));
 		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+	}
+
+	.locale-option.is-unavailable {
+		cursor: not-allowed;
+		opacity: 0.55;
+		border-color: rgba(255, 255, 255, 0.08);
+		background: rgba(255, 255, 255, 0.04);
+		box-shadow: none;
+	}
+
+	.locale-option.is-unavailable:hover {
+		transform: none;
+		border-color: rgba(255, 255, 255, 0.08);
+		background: rgba(255, 255, 255, 0.04);
+		box-shadow: none;
+	}
+
+	.locale-option.is-unavailable .locale-option__dot {
+		background: rgba(255, 255, 255, 0.2);
+		box-shadow: none;
+	}
+
+	.locale-option.is-unavailable .locale-option__text {
+		color: var(--color-muted);
 	}
 
 	.locale-option__dot {

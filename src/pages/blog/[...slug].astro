@@ -2,22 +2,41 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
-import { getLocaleFromRoutePattern, getRequestLocale, type LocaleCode } from '../../i18n/config';
+import { getLocaleFromRoutePattern, type LocaleCode } from '../../i18n/config';
 
 export async function getStaticPaths({ routePattern }: { routePattern: string }) {
 	const locale = getLocaleFromRoutePattern(routePattern);
 	const posts = await getCollection('blog');
+	const availableLocalesByCanonical = new Map<string, LocaleCode[]>();
+
+	for (const post of posts) {
+		const canonicalSlug = post.data.canonicalSlug ?? post.slug;
+		const locales = availableLocalesByCanonical.get(canonicalSlug) ?? [];
+		if (!locales.includes(post.data.lang as LocaleCode)) {
+			locales.push(post.data.lang as LocaleCode);
+		}
+		availableLocalesByCanonical.set(canonicalSlug, locales);
+	}
+
 	return posts
 		.filter((post) => post.data.lang === locale)
 		.map((post) => ({
 			params: { slug: post.data.canonicalSlug ?? post.slug },
-			props: { post },
+			props: {
+				post,
+				availableLocales: availableLocalesByCanonical.get(post.data.canonicalSlug ?? post.slug) ?? [
+					post.data.lang as LocaleCode,
+				],
+			},
 		}));
 }
 
-type Props = { post: CollectionEntry<'blog'> };
+type Props = {
+	post: CollectionEntry<'blog'>;
+	availableLocales: LocaleCode[];
+};
 
-const { post } = Astro.props as Props;
+const { post, availableLocales } = Astro.props as Props;
 const locale = post.data.lang as LocaleCode;
 const totalWords = post.body ? post.body.trim().split(/\s+/).filter(Boolean).length : 0;
 const readingTimeMinutes = Math.max(1, Math.ceil(totalWords / 200));
@@ -30,6 +49,7 @@ const { Content } = await render(post);
 	locale={locale}
 	wordCount={totalWords}
 	readingTimeMinutes={readingTimeMinutes}
+	availableLocales={availableLocales}
 >
 	<Content />
 </BlogPost>

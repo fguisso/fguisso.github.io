@@ -16,10 +16,21 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	wordCount?: number;
 	readingTimeMinutes?: number;
 	locale?: LocaleCode;
+	availableLocales?: LocaleCode[];
 };
 
-const { title, description, pubDate, heroImage, tags = [], wordCount, readingTimeMinutes, slug, locale: forcedLocale } =
-	Astro.props as Props;
+const {
+	title,
+	description,
+	pubDate,
+	heroImage,
+	tags = [],
+	wordCount,
+	readingTimeMinutes,
+	slug,
+	locale: forcedLocale,
+	availableLocales,
+} = Astro.props as Props;
 const locale = forcedLocale ?? getRequestLocale(Astro);
 const currentPath = Astro.url?.pathname ?? '/';
 const currentSearch = Astro.url?.search ?? '';
@@ -45,7 +56,12 @@ const backCtaLabel = t(locale, 'post.backCta');
 	</head>
 
 	<body>
-		<Header locale={locale} pathname={currentPath} search={currentSearch} />
+		<Header
+			locale={locale}
+			pathname={currentPath}
+			search={currentSearch}
+			availableLocales={availableLocales}
+		/>
 		<main class="page-shell post-shell">
 				<article class="post-article" aria-labelledby="post-title">
 					<header class="post-header">
