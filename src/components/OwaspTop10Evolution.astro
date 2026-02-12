@@ -1,0 +1,583 @@
+---
+import GlowButton from './GlowButton.astro';
+
+interface Props {
+	autoPlay?: boolean;
+	lineDurationMs?: number;
+	replayDelayMs?: number;
+	class?: string;
+}
+
+const { autoPlay = false, lineDurationMs = 420, replayDelayMs = 520, class: className } = Astro.props as Props;
+
+type Item = { code: string; label: string };
+type RowKind = 'new' | 'down' | 'merge';
+type ItemWithBadge = Item & {
+	rowKind?: RowKind;
+};
+
+const left2021: ItemWithBadge[] = [
+	{ code: 'A01', label: 'Broken Access Control' },
+	{ code: 'A02', label: 'Cryptographic Failures', rowKind: 'down' },
+	{ code: 'A03', label: 'Injection', rowKind: 'down' },
+	{ code: 'A04', label: 'Insecure Design', rowKind: 'down' },
+	{ code: 'A05', label: 'Security Misconfiguration' },
+	{ code: 'A06', label: 'Vulnerable and Outdated Components', rowKind: 'merge' },
+	{ code: 'A07', label: 'Identification and Authentication Failures' },
+	{ code: 'A08', label: 'Software and Data Integrity Failures' },
+	{ code: 'A09', label: 'Security Logging and Monitoring Failures' },
+	{
+		code: 'A10',
+		label: 'Server-Side Request Forgery (SSRF)',
+		rowKind: 'merge',
+	},
+];
+
+const right2025: ItemWithBadge[] = [
+	{ code: 'A01', label: 'Broken Access Control', rowKind: 'merge' },
+	{ code: 'A02', label: 'Security Misconfiguration' },
+	{ code: 'A03', label: 'Software Supply Chain Failures', rowKind: 'new' },
+	{ code: 'A04', label: 'Cryptographic Failures' },
+	{ code: 'A05', label: 'Injection' },
+	{ code: 'A06', label: 'Insecure Design' },
+	{ code: 'A07', label: 'Authentication Failures' },
+	{ code: 'A08', label: 'Software or Data Integrity Failures' },
+	{ code: 'A09', label: 'Security Logging & Alerting Failures' },
+	{ code: 'A10', label: 'Mishandling of Exceptional Conditions', rowKind: 'new' },
+];
+
+---
+
+<div
+	class:list={['top10-map', className]}
+	data-autoplay={autoPlay ? 'true' : 'false'}
+	data-line-duration={String(lineDurationMs)}
+	data-replay-delay={String(replayDelayMs)}
+>
+	<div class="top10-map__actions">
+		<GlowButton
+			variant="accent"
+			size="sm"
+			data-start-anim
+			aria-label="Iniciar animacoes"
+			title="Iniciar animacoes"
+			class="top10-map__play-btn"
+		>
+			<svg viewBox="0 0 24 24" aria-hidden="true">
+				<path d="M8 6v12l10-6-10-6z" fill="currentColor"></path>
+			</svg>
+		</GlowButton>
+	</div>
+	<div class="top10-map__canvas" data-canvas>
+		<div class="top10-map__table-wrap" data-side="left" aria-label="OWASP Top 10 2021">
+			<div class="top10-map__table-shell">
+				<table class="top10-map__table" aria-label="OWASP Top 10 2021 table">
+					<thead>
+						<tr>
+							<th scope="col" class="top10-map__head-cell top10-map__head-cell--code">2021</th>
+							<th scope="col" class="top10-map__head-cell">Categoria</th>
+						</tr>
+					</thead>
+					<tbody>
+						{left2021.map((item) => (
+							<tr
+								class="top10-map__row"
+								data-node={`2021-${item.code}`}
+								id={`2021-${item.code}`}
+								data-row-kind={item.rowKind ?? ''}
+							>
+								<td class="top10-map__code">{item.code}</td>
+								<td class="top10-map__label-cell">
+									<span class="top10-map__label">{item.label}</span>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="top10-map__lane" aria-hidden="true"></div>
+
+		<div class="top10-map__table-wrap" data-side="right" aria-label="OWASP Top 10 2025">
+			<div class="top10-map__table-shell">
+				<table class="top10-map__table" aria-label="OWASP Top 10 2025 table">
+					<thead>
+						<tr>
+							<th scope="col" class="top10-map__head-cell top10-map__head-cell--code">2025</th>
+							<th scope="col" class="top10-map__head-cell">Categoria</th>
+						</tr>
+					</thead>
+					<tbody>
+						{right2025.map((item) => (
+							<tr
+								class="top10-map__row"
+								data-node={`2025-${item.code}`}
+								id={`2025-${item.code}`}
+								data-row-kind={item.rowKind ?? ''}
+							>
+								<td class="top10-map__code">{item.code}</td>
+								<td class="top10-map__label-cell">
+									<span class="top10-map__label">{item.label}</span>
+									{item.rowKind === 'new' && <span class="top10-map__new-pill">new</span>}
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<svg class="top10-map__arrows" data-arrows viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+			<defs>
+				<marker id="arrow-green" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+					<path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(88, 204, 146, 0.92)" />
+				</marker>
+				<marker id="arrow-red" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+					<path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(219, 90, 90, 0.9)" />
+				</marker>
+				<marker id="arrow-orange" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+					<path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(241, 160, 83, 0.92)" />
+				</marker>
+			</defs>
+		</svg>
+	</div>
+</div>
+
+<script is:inline>
+	(() => {
+		const root = document.currentScript?.previousElementSibling;
+		if (!(root instanceof HTMLElement)) return;
+
+		const canvas = root.querySelector('[data-canvas]');
+		const svg = root.querySelector('[data-arrows]');
+		if (!(canvas instanceof HTMLElement) || !(svg instanceof SVGSVGElement)) return;
+
+		const autoPlay = root.dataset.autoplay === 'true';
+		const lineDuration = Math.max(180, Number(root.dataset.lineDuration || '420') || 420);
+		const lineStagger = Math.floor(lineDuration * 0.78);
+		const replayDelay = Math.max(0, Number(root.dataset.replayDelay || '520') || 520);
+		const startButton = root.querySelector('[data-start-anim]');
+		let hasStarted = false;
+		let isCooldown = false;
+		const arrowTimers = [];
+		const litRows = new Set();
+
+		const LINKS = [
+			{ from: '2021-A10', to: '2025-A01', kind: 'merge' },
+			{ from: '2021-A05', to: '2025-A02', kind: 'same' },
+			{ from: '2021-A06', to: '2025-A03', kind: 'merge' },
+			{ from: '2021-A02', to: '2025-A04', kind: 'down' },
+			{ from: '2021-A03', to: '2025-A05', kind: 'down' },
+			{ from: '2021-A04', to: '2025-A06', kind: 'down' },
+			{ from: '2021-A07', to: '2025-A07', kind: 'same' },
+			{ from: '2021-A08', to: '2025-A08', kind: 'same' },
+			{ from: '2021-A09', to: '2025-A09', kind: 'same' },
+		];
+
+		const getMarker = (kind) => {
+			if (kind === 'merge') return 'url(#arrow-orange)';
+			if (kind === 'down') return 'url(#arrow-red)';
+			return 'url(#arrow-green)';
+		};
+
+		const getStroke = (kind) => {
+			if (kind === 'merge') return 'rgba(241, 160, 83, 0.75)';
+			if (kind === 'down') return 'rgba(219, 90, 90, 0.72)';
+			return 'rgba(88, 204, 146, 0.72)';
+		};
+
+		const clear = () => {
+			while (arrowTimers.length > 0) {
+				const timer = arrowTimers.pop();
+				window.clearTimeout(timer);
+			}
+			while (svg.lastChild && svg.lastChild.nodeName.toLowerCase() !== 'defs') {
+				svg.removeChild(svg.lastChild);
+			}
+		};
+
+		const getRightRows = () => Array.from(canvas.querySelectorAll('[data-side="right"] tbody .top10-map__row'));
+
+		const applyLitState = () => {
+			const rightRows = getRightRows();
+			rightRows.forEach((row) => {
+				if (!(row instanceof HTMLElement)) return;
+				if (litRows.has(row.id)) {
+					row.setAttribute('data-lit', 'true');
+				} else {
+					row.removeAttribute('data-lit');
+				}
+			});
+		};
+
+		const resetLitState = () => {
+			litRows.clear();
+			applyLitState();
+		};
+
+		const lightRow = (rowId) => {
+			litRows.add(rowId);
+			applyLitState();
+		};
+
+		const startAnimation = (delayMs = 0) => {
+			clear();
+			resetLitState();
+			const run = () => {
+				isCooldown = false;
+				hasStarted = true;
+				draw(true);
+			};
+			if (delayMs > 0) {
+				isCooldown = true;
+				const timer = window.setTimeout(run, delayMs);
+				arrowTimers.push(timer);
+				return;
+			}
+			run();
+		};
+
+		const point = (el, side) => {
+			const rCanvas = canvas.getBoundingClientRect();
+			const r = el.getBoundingClientRect();
+			const x = side === 'left' ? r.right - rCanvas.left : r.left - rCanvas.left;
+			const y = r.top - rCanvas.top + r.height * 0.5;
+			return { x, y };
+		};
+
+		const draw = (animate = false) => {
+			const rCanvas = canvas.getBoundingClientRect();
+			const w = Math.max(1, rCanvas.width);
+			const h = Math.max(1, rCanvas.height);
+			svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+			clear();
+			applyLitState();
+
+			LINKS.forEach((link, idx) => {
+				const fromEl = canvas.querySelector(`#${CSS.escape(link.from)}`);
+				const toEl = canvas.querySelector(`#${CSS.escape(link.to)}`);
+				if (!(fromEl instanceof HTMLElement) || !(toEl instanceof HTMLElement)) return;
+
+				const a = point(fromEl, 'left');
+				const b = point(toEl, 'right');
+
+				const dx = Math.max(60, Math.abs(b.x - a.x) * 0.5);
+				const c1x = a.x + dx;
+				const c2x = b.x - dx;
+				const d = `M ${a.x} ${a.y} C ${c1x} ${a.y}, ${c2x} ${b.y}, ${b.x} ${b.y}`;
+
+				const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+				p.setAttribute('d', d);
+				p.setAttribute('fill', 'none');
+				p.setAttribute('stroke', getStroke(link.kind));
+				p.setAttribute('stroke-width', link.kind === 'merge' ? '2.6' : '2.2');
+				p.setAttribute('stroke-linecap', 'round');
+
+				// Animation: draw the line using dash offset.
+				const len = 1200; // good enough; we only need consistent dash animation
+				if (animate) {
+					const delay = idx * lineStagger;
+					p.style.strokeDasharray = String(len);
+					p.style.strokeDashoffset = String(len);
+					p.style.animation = `top10-draw ${lineDuration}ms ease forwards ${delay}ms`;
+					const timer = window.setTimeout(() => {
+						p.setAttribute('marker-end', getMarker(link.kind));
+					}, delay + Math.floor(lineDuration * 0.86));
+					arrowTimers.push(timer);
+					const lightTimer = window.setTimeout(() => {
+						lightRow(link.to);
+					}, delay + Math.floor(lineDuration * 0.92));
+					arrowTimers.push(lightTimer);
+				} else {
+					p.style.strokeDasharray = 'none';
+					p.style.strokeDashoffset = '0';
+					p.style.animation = 'none';
+					p.setAttribute('marker-end', getMarker(link.kind));
+				}
+
+				svg.appendChild(p);
+			});
+
+			if (animate) {
+				const linkedTargets = new Set(LINKS.map((link) => link.to));
+				const rightRows = getRightRows();
+				const unlinkedRows = rightRows
+					.filter((row) => row instanceof HTMLElement)
+					.map((row) => row.id)
+					.filter((id) => !linkedTargets.has(id));
+				const totalAnimMs =
+					Math.floor((LINKS.length - 1) * lineStagger) + Math.floor(lineDuration * 0.92);
+				unlinkedRows.forEach((rowId, index) => {
+					const timer = window.setTimeout(() => {
+						lightRow(rowId);
+					}, totalAnimMs + 140 + index * 90);
+					arrowTimers.push(timer);
+				});
+			}
+		};
+
+		const ro = new ResizeObserver(() => {
+			if ((!hasStarted && !autoPlay) || isCooldown) return;
+			draw(false);
+		});
+		ro.observe(canvas);
+		window.addEventListener(
+			'resize',
+			() => {
+				if ((!hasStarted && !autoPlay) || isCooldown) return;
+				draw(false);
+			},
+			{ passive: true },
+		);
+
+		if (startButton instanceof HTMLElement) {
+			startButton.addEventListener('click', () => {
+				if (!hasStarted) {
+					startAnimation(0);
+					return;
+				}
+				startAnimation(replayDelay);
+			});
+		}
+
+		if (autoPlay) {
+			requestAnimationFrame(() => startAnimation(0));
+		}
+
+		if (!autoPlay) {
+			resetLitState();
+		}
+	})();
+</script>
+
+<style>
+	.top10-map {
+		display: grid;
+		gap: 0.7rem;
+	}
+
+	.top10-map__actions {
+		display: grid;
+		justify-items: start;
+	}
+
+	.top10-map__play-btn {
+		width: 2.1rem;
+		min-width: 2.1rem;
+		height: 2.1rem;
+		padding: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.top10-map__play-btn svg {
+		width: 1rem;
+		height: 1rem;
+		margin-left: 0.04rem;
+	}
+
+	.top10-map__canvas {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) clamp(4.6rem, 8vw, 7.6rem) minmax(0, 1fr);
+		gap: 0.7rem;
+		align-items: start;
+		padding: 0.25rem 0.1rem;
+	}
+
+	.top10-map__table-wrap {
+		display: grid;
+		gap: 0;
+		min-width: 0;
+	}
+
+	.top10-map__table-shell {
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		border-radius: 0.95rem;
+		overflow: hidden;
+		background: rgba(2, 2, 4, 0.35);
+		box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+	}
+
+	.top10-map__table {
+		width: 100%;
+		table-layout: fixed;
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+
+	.top10-map__head-cell {
+		text-align: left;
+		padding: 0.34rem 0.44rem;
+		font-size: 0.65rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+		background: rgba(255, 255, 255, 0.04);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.top10-map__head-cell--code {
+		width: 2.85rem;
+		text-align: center;
+	}
+
+	.top10-map__row td {
+		padding: 0.28rem 0.44rem;
+		height: 2.45rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		vertical-align: middle;
+		background: rgba(255, 255, 255, 0.015);
+	}
+
+	.top10-map__row:last-child td {
+		border-bottom: none;
+	}
+
+	.top10-map__row td:first-child {
+		border-right: 1px solid rgba(255, 255, 255, 0.08);
+	}
+
+	.top10-map__row[data-row-kind='new'] td {
+		background: linear-gradient(90deg, rgba(88, 204, 146, 0.12), rgba(88, 204, 146, 0.03));
+	}
+
+	.top10-map__row[data-row-kind='down'] td {
+		background: linear-gradient(90deg, rgba(219, 90, 90, 0.11), rgba(219, 90, 90, 0.03));
+	}
+
+	.top10-map__row[data-row-kind='merge'] td {
+		background: linear-gradient(90deg, rgba(241, 160, 83, 0.13), rgba(241, 160, 83, 0.03));
+	}
+
+	/* Right table starts dimmed and rows light up as animation marks them as lit. */
+	.top10-map__table-wrap[data-side='right'] .top10-map__row td {
+		opacity: 0.34;
+		filter: saturate(0.72) brightness(0.82);
+		transition:
+			opacity 220ms ease,
+			filter 220ms ease,
+			background-color 220ms ease,
+			border-color 220ms ease;
+	}
+
+	.top10-map__table-wrap[data-side='right'] .top10-map__row[data-lit='true'] td {
+		opacity: 1;
+		filter: none;
+	}
+
+	.top10-map__label {
+		color: var(--color-muted-strong);
+		font-weight: 610;
+		font-size: 0.69rem;
+		line-height: 1.13;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		max-height: calc(2 * 1.13em);
+		white-space: normal;
+	}
+
+	.top10-map__label-cell {
+		padding-right: 0.25rem;
+		overflow: hidden;
+	}
+
+	.top10-map__table-wrap[data-side='right'] .top10-map__label-cell {
+		position: relative;
+		padding-right: 2.2rem;
+		overflow: visible;
+	}
+
+	.top10-map__new-pill {
+		position: absolute;
+		top: 50%;
+		right: 0.42rem;
+		transform: translateY(-50%) scale(0.9);
+		z-index: 2;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.14rem 0.42rem 0.16rem;
+		border-radius: 999px;
+		border: 1px solid rgba(104, 223, 161, 0.48);
+		background: rgba(54, 165, 111, 0.28);
+		color: rgba(235, 250, 243, 0.94);
+		font-size: 0.5rem;
+		font-weight: 760;
+		line-height: 1;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		opacity: 0;
+		pointer-events: none;
+		transition:
+			opacity 150ms ease,
+			transform 150ms ease;
+	}
+
+	.top10-map__table-wrap[data-side='right'] .top10-map__row[data-row-kind='new'][data-lit='true'] .top10-map__new-pill {
+		opacity: 1;
+		transform: translateY(-50%) scale(1);
+		transition-delay: 220ms;
+	}
+
+	.top10-map__code {
+		color: var(--color-fg);
+		font-weight: 730;
+		font-size: 0.67rem;
+		letter-spacing: 0.04em;
+		text-align: center;
+		white-space: nowrap;
+	}
+
+	.top10-map__lane {
+		align-self: stretch;
+	}
+
+	.top10-map__arrows {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	@keyframes top10-draw {
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
+
+	@media (max-width: 980px) {
+		.top10-map__canvas {
+			grid-template-columns: 1fr;
+		}
+		.top10-map__lane {
+			display: none;
+		}
+		.top10-map__table {
+			font-size: 0.76rem;
+		}
+		.top10-map__head-cell--code {
+			width: 3.05rem;
+		}
+		.top10-map__row td {
+			height: 2.45rem;
+		}
+		.top10-map__arrows {
+			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.top10-map__arrows path {
+			animation: none !important;
+			stroke-dashoffset: 0 !important;
+		}
+	}
+</style>

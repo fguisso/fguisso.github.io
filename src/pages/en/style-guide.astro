@@ -11,6 +11,7 @@ import Timeline from '../../components/Timeline.astro';
 import LogoWordmark from '../../components/LogoWordmark.astro';
 import PostCard from '../../components/PostCard.astro';
 import Chip from '../../components/Chip.astro';
+import OwaspTop10Evolution from '../../components/OwaspTop10Evolution.astro';
 import { getHtmlLang, type LocaleCode } from '../../i18n/config';
 import { getSiteMeta, themeConfig } from '../../theme.config';
 import { routes } from '../../utils/routes';
@@ -354,6 +355,44 @@ const samplePostHref = routes.blogPost('exemplo', locale);
 							<code>.pill-green</code> , <code>.pill-purple</code>.
 							Example: <code>&lt;span class="pill pill-red"&gt;T2&lt;/span&gt;</code>.
 						</p>
+					</GlowBox>
+				</section>
+
+				<section class="style-guide__section" id="owasp-top10-evolution">
+					<div class="style-guide__section-head">
+						<p class="eyebrow">visual</p>
+						<h2>OWASP Top 10 Evolution</h2>
+						<p>
+							Component built to quickly illustrate ranking and category changes between Top 10 editions.
+						</p>
+					</div>
+					<OwaspTop10Evolution />
+				</section>
+
+				<section class="style-guide__section" id="owasp-post-components">
+					<div class="style-guide__section-head">
+						<p class="eyebrow">post samples</p>
+						<h2>OWASP 2025 post components</h2>
+						<p>Preview of the article pattern: category chips in headings and pills in body text.</p>
+					</div>
+					<GlowBox accent="secondary" class="style-guide__panel owasp-post-panel">
+						<div class="prose owasp-post-preview">
+							<h3>
+								<Chip class="owasp-code-chip">A03</Chip>
+								Software Supply Chain Failures
+								<Chip variant="solid">NEW</Chip>
+							</h3>
+							<p>
+								<span class="pill pill-blue">A03:2025</span>
+								Software Supply Chain Failures
+								<span class="pill pill-green">NEW</span>
+								expands vulnerable-components guidance to the entire software supply chain.
+							</p>
+							<p>
+								<span class="pill pill-blue">A02:2025</span>
+								Security Misconfiguration moved up to #2 in the official list.
+							</p>
+						</div>
 					</GlowBox>
 				</section>
 
@@ -857,6 +896,21 @@ const samplePostHref = routes.blogPost('exemplo', locale);
 	.gradient-card__description {
 		margin: 0;
 		color: var(--color-muted);
+	}
+
+	.owasp-post-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.owasp-post-preview {
+		max-width: 68ch;
+		margin: 0;
+	}
+
+	.owasp-post-preview :is(h3, p) {
+		margin-top: 0;
 	}
 	.gradient-panel {
 		padding: 1.5rem;

@@ -1,0 +1,284 @@
+---
+title: "OWASP Top 10 Update"
+lang: 'en'
+canonicalSlug: 'owasp-top10-2025-details'
+description: "Top 10:2025 is not just a list. It reflects how misconfigurations, supply chain, exception handling, and operational failures are breaking real businesses."
+pubDate: 2026-02-10T12:00:00-03:00
+showDate: true
+tags: ["owasp", "top10", "appsec"]
+categories:
+- AppSec
+- OWASP
+---
+
+import Chip from '../../components/Chip.astro';
+import OwaspTop10Evolution from '../../components/OwaspTop10Evolution.astro';
+
+The industry is not losing only to "bugs". It is losing to engineering and operations: configuration, pipelines, dependencies, API access control, poorly handled exceptions, and systems that fail in unsafe ways.
+
+<OwaspTop10Evolution />
+
+## What changed in 2025
+
+### Two new categories + one consolidation
+
+The focus is more on root cause than symptom.
+
+- <span class="pill pill-blue">A03:2025</span> Software Supply Chain Failures <span class="pill pill-green">NEW</span>: expands the old "vulnerable/outdated components" scope to the entire ecosystem (dependencies, build, distribution, updates, CI/CD, IDEs, and more).
+- <span class="pill pill-blue">A10:2025</span> Mishandling of Exceptional Conditions <span class="pill pill-green">NEW</span>: puts a spotlight on what engineering often pushes into generic "quality" work: **fail-open flows, bad rollbacks, inconsistent states, data leakage in errors/logs, and broken recovery paths**.
+- SSRF was absorbed into <span class="pill pill-blue">A01:2025</span> Broken Access Control: instead of treating SSRF as an isolated bug class, Top 10 emphasizes the SSRF scenarios that **cross trust boundaries and become unauthorized access**.
+
+### Misconfiguration is now Top 2, and this is the most interesting change
+
+<span class="pill pill-blue">A02:2025</span> Security Misconfiguration moved up to #2 in the official list.
+
+My read: OWASP is saying clearly that the easiest/default path is still insecure in many technologies.
+
+With AI and agile software delivery, standing up systems got faster. But:
+
+- If the framework/library ships with insecure defaults, AI only scales the damage.
+- If hardening is complex, verbose, and not visual (for example Kubernetes + endless YAML), teams will "just make it work" and move on.
+
+The risk here is not developer ignorance. It is ecosystem design. If delivery speed keeps increasing, "shift left" alone is not enough. The whole ecosystem must move toward _Secure by Design_.
+
+### Top 10:2025 is closer to an operating model than a vulnerability list
+
+Look at the signals:
+
+- `Supply Chain` became a dedicated category and ranked high.
+- `Exceptional Conditions` became a dedicated category.
+- `Logging & Alerting` remains, but the text doubles down on a chronic issue: **alert fatigue** and weak playbooks.
+
+This is OWASP talking directly to dev and AppSec: scanner + backlog is not enough; you have to change how software is produced.
+
+## My opinionated read with examples and countermeasures
+
+I will cover each category with:
+
+- **What it is**
+- **How it appears in the real world**
+- **1-2 examples (CVE / well-known attacks)**
+- **What I would do in fintech**, which is my current context.
+
+### <Chip class="owasp-code-chip">A01</Chip> Broken Access Control
+
+**What it is:** any flaw that lets a user/service act outside what it should do: read, change, delete, transact, or call functions without proper authorization.
+
+**How it appears:** BOLA/IDOR in APIs, forced browsing, inconsistent authorization rules, frontend-only checks, unprotected admin endpoints, permissive CORS, long-lived JWTs, and more.
+
+**Examples:**
+
+- Facebook "View As" (2018): a bug chain led to stolen access tokens, and tokens are session keys. https://about.fb.com/news/2018/09/security-update/
+- Apache HTTP Server path traversal (CVE-2021-41773): traversal flaw that, depending on configuration, can expose files and evolve to RCE. https://nvd.nist.gov/vuln/detail/CVE-2021-41773
+
+**What I would do in fintech:**
+
+- Centralized and reusable authorization (internal standard/library/middleware).
+- **Business rules as domain boundaries**, not scattered `if` statements in controllers.
+- Rate limiting per identity and per sensitive operation.
+- Threat modeling for authn/authz and critical flows (payments/transfers/withdrawals) with a lightweight and repeatable process. Suggestion: [Threat Modeling Express](/en/blog/threat-modeling-intro/)
+
+### <Chip class="owasp-code-chip">A02</Chip> Security Misconfiguration
+
+**What it is:** the stack is running, but insecurely: open permissions, no hardening, unnecessary features enabled, weak defaults, missing headers, verbose errors, public cloud shares, etc.
+
+**How it appears:** Kubernetes/Ingress/NetworkPolicy YAML mistakes, over-permissive IAM to "avoid blockers", public storage, debug mode in production, exposed admin consoles, and rapid-enable features.
+
+**Examples:**
+
+- Capital One (2019): DOJ describes intrusion via **misconfigured WAF**, exposing data from millions of credit applications. https://www.justice.gov/usao-wdwa/pr/seattle-tech-worker-arrested-data-theft-involving-large-financial-services-company
+- Microsoft Power Apps (2021): massive exposure driven by **default/incorrect portal configuration**, affecting tens of millions of records. https://www.wired.com/story/microsoft-power-apps-data-exposed
+
+**What I would do in fintech (where teams gain speed with security):**
+
+- Golden paths and internal templates so the default path starts secure.
+- Policy-as-code for IaC to block obvious bad patterns at PR time.
+- Repeatable and automated hardening (not manual checklists).
+- For developer maturity, hands-on training like **Dojo Shield**: https://github.com/topics/dojo-shield
+
+### <Chip class="owasp-code-chip">A03</Chip> Software Supply Chain Failures <Chip variant="solid">NEW</Chip>
+
+**What it is:** failure in how software is built, distributed, or updated.
+
+This is where one of the biggest modern nightmares lives. Developers are trapped between:
+
+- endless Dependabot/SCA backlog,
+- increasing malicious packages (npm, PyPI, etc.),
+- and increasingly complex CI/CD chains.
+
+**Examples:**
+
+- SolarWinds Orion (2020): compromised supply chain that became a global crisis. https://www.cisa.gov/emergency-directive-21-01
+- Shai-Hulud (2025): CISA describes a self-propagating npm worm with token theft and cloud key theft. https://www.cisa.gov/news-events/alerts/2025/09/23/widespread-supply-chain-compromise-impacting-npm-ecosystem
+
+Other references worth reading (because they show waves, not isolated cases):
+
+- Codecov Bash Uploader (2021) official post-mortem: https://about.codecov.io/apr-2021-post-mortem/
+- 3CX DesktopApp (2023) CISA alert: https://www.cisa.gov/news-events/alerts/2023/03/30/supply-chain-attack-against-3cxdesktopapp
+- XZ Utils backdoor (CVE-2024-3094): a textbook example of how compromised maintainer trust almost became systemic disaster. https://advisories.checkpoint.com/defense/advisories/public/2024/cpai-2024-0162.html
+
+**What I would do in fintech (and what I would not do):**
+
+- I would **not** treat supply chain as a ticket queue.
+- I would treat it as a **system**:
+  - Centralized and consumable SBOM.
+  - Provenance/signing where it makes sense.
+  - Strong duty segregation and CI/CD control.
+  - Short-lived tokens, minimum scope, and OIDC where possible (less static secret exposure).
+
+To frame the current wave: recent reports show strong growth in open-source ecosystem malware.
+
+- Sonatype (2024) reports large growth in malicious packages and increasingly industrialized attacks. https://www.sonatype.com/state-of-the-software-supply-chain/2024/introduction
+
+### <Chip class="owasp-code-chip">A04</Chip> Cryptographic Failures
+
+**What it is:** failures in crypto usage/implementation, key management, weak TLS, weak password hashing, and unprotected sensitive data.
+
+**Examples:**
+
+- POODLE (CVE-2014-3566): SSLv3 downgrade plus padding oracle attack on legacy connections. https://www.cisco.com/c/en/us/support/docs/csa/cisco-sa-20141015-poodle.html
+- Debian OpenSSL (CVE-2008-0166): predictable RNG generated weak keys due to an incorrect patch. https://lists.debian.org/debian-security-announce/2008/msg00152.html
+
+**What I would do in fintech:**
+
+- Modern TLS (>= 1.2, and 1.3 where possible), HSTS.
+- Passwords with Argon2/scrypt/bcrypt and strong parameters.
+- Key rotation, KMS/HSM where needed, no keys in plain config.
+- Specialized review for unusual crypto. Custom protocols often become incidents.
+
+### <Chip class="owasp-code-chip">A05</Chip> Injection
+
+**What it is:** SQLi, command injection, LDAP injection, SSTI, XSS, and similar classes. Classic and still very alive.
+
+**Examples:**
+
+- Log4Shell (CVE-2021-44228): logging injection with RCE impact in many scenarios. https://advisories.gitlab.com/pkg/maven/org.apache.logging.log4j/log4j-core/CVE-2021-44228/
+- MOVEit Transfer (CVE-2023-34362): SQL injection heavily exploited by ransomware and data-theft groups. https://www.cisa.gov/news-events/alerts/2023/06/01/progress-software-releases-security-advisory-moveit-transfer
+
+**What I would do in fintech:**
+
+- Strong typing where possible.
+- Parameterize every query.
+- WAF helps, but it is not the primary control.
+- SAST/DAST focused on critical routes (not only score dashboards).
+- Security testing on exposed flows (uploads, templates, integrations).
+
+### <Chip class="owasp-code-chip">A06</Chip> Insecure Design
+
+**What it is:** missing or poorly designed controls. This is not an implementation bug; it is a **requirements and defensive architecture** gap.
+
+Why this hurts dev teams: product, scalability, and availability concerns naturally dominate implementation work. Attacker mindset and protection patterns are usually stronger in security teams. That mindset can be taught and significantly improve requirement definition and architecture design quality.
+
+**Examples:**
+
+- Account recovery based on security questions (weak identity proofing).
+- Abusable business logic (discount/deposit rules), scalper bots, and unexpected state abuse.
+
+OWASP already provides very realistic scenarios (cinema, e-commerce, bots): https://owasp.org/Top10/2025/A06_2025-Insecure_Design/
+
+**What I would do in fintech:**
+
+- Lightweight iterative threat modeling during refinement with focus on critical flows and failure states. Preferably together with product teams, as in [Threat Modeling Express](/en/blog/threat-modeling-intro/).
+- Secure pattern catalog (paved road) for common flows: login, reset, transfer, limits, anti-fraud.
+- Misuse cases turned into automated tests (not only documents).
+- Hands-on dojos/training to raise maturity, including [Dojo Shield](https://github.com/topics/dojo-shield).
+
+### <Chip class="owasp-code-chip">A07</Chip> Authentication Failures
+
+**What it is:** weak authentication, missing MFA, poor session expiration, insecure recovery, brute force without rate limit, hardcoded credentials, bypasses, etc.
+
+**Examples:**
+
+- Fortinet auth bypass (CVE-2022-40684): admin-interface bypass via specific crafted requests. https://nvd.nist.gov/vuln/detail/cve-2022-40684
+- Credential stuffing (recurring attack class): no single CVE, but an entire industry abusing reused passwords and weak protections. A good overview: https://www.akamai.com/resources/research-papers/credential-stuffing-attacks
+
+**What I would do in fintech:**
+
+- MFA for all admin surfaces, preferably phishing-resistant where appropriate.
+- Consistent session management (timeouts, real logout, short tokens).
+- Rate limiting + anomaly detection + progressive challenge flows.
+
+### <Chip class="owasp-code-chip">A08</Chip> Software or Data Integrity Failures
+
+**What it is:** treating artifacts, updates, plugins, serialized data, or externally loaded code as trusted without verification.
+
+<span class="pill pill-blue">A03</span> covers the whole chain. <span class="pill pill-blue">A08</span> covers integrity and trust boundaries of what you consume, run, and accept.
+
+**Examples:**
+
+- Struts REST plugin (CVE-2017-9805): RCE through XML deserialization without type filtering. https://www.kb.cert.org/vuls/id/112992/
+- Codecov Bash Uploader compromise (2021): malicious modification leaked CI variables and secrets. https://about.codecov.io/apr-2021-post-mortem/
+
+**What I would do in fintech:**
+
+- SLSA plus artifact signing/provenance where possible.
+- Internal "known-good" repository for critical dependencies and strict CI/CD segregation (builder is not sole deployer).
+- Pipeline telemetry and audit as first-class security products.
+
+### <Chip class="owasp-code-chip">A09</Chip> Security Logging and Alerting Failures
+
+**What it is:** missing critical logs, bad logging quality, too much noise, no playbooks, or no effective response capability.
+
+This is the least glamorous Top 10 item and often one of the most expensive when it fails.
+
+**Examples:**
+
+- Incidents that remain undetected for months/years because effective logging/monitoring was missing.
+- Target (2013): a well-known case showing alerts can exist and still fail to trigger action due to process and triage gaps. https://krebsonsecurity.com/2014/02/target-hackers-broke-in-via-hvac-company/
+- Logging PII/tokens/stack traces can become direct attacker shortcuts.
+
+OWASP highlights large-leak scenarios, late notification, and alert fatigue. https://owasp.org/Top10/2025/A09_2025-Security_Logging_and_Alerting_Failures/
+
+**What I would do in fintech:**
+
+- Transaction audit with integrity guarantees (append-only where needed).
+- Structured logs with context, without secrets.
+- Fewer alerts, more actionable alerts (playbooks and ownership). Product teams must understand these cases and escalate appropriately to security teams.
+
+### <Chip class="owasp-code-chip">A10</Chip> Mishandling of Exceptional Conditions <Chip variant="solid">NEW</Chip>
+
+**What it is:** when systems hit abnormal conditions and fail unsafely: fail-open paths, incomplete rollbacks, inconsistent state, data leaks in errors, or exception-driven bypasses.
+
+This is the most expensive new category for fintech because it touches:
+
+- multi-step transactions,
+- messaging,
+- idempotency,
+- compensation logic,
+- and the nightmare of "it failed in the middle, now what?".
+
+**Examples (representative):**
+
+- Rollback failure in transactions can produce corrupted state and fraud.
+- Feature flag or external service becomes critical dependency, then someone proposes permissive fallback "to keep business running".
+- Cloudflare outage (2019): great example of exceptional condition handling (heavy regex in WAF rules) becoming operational DoS, and why engineering must design limits and failure modes. https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/
+
+OWASP provides realistic scenarios here as well (resource-leak DoS, error data leaks, state corruption in transactions). https://owasp.org/Top10/2025/A10_2025-Mishandling_of_Exceptional_Conditions/
+
+**What I would do in fintech:**
+
+- Define secure failure as a requirement (fail-closed by default for sensitive flows).
+- Chaos testing with security assertions: "when X fails, Y does not open".
+- Observability that can detect error patterns as attack signals.
+- Threat modeling for both happy paths and failure paths.
+- Disaster recovery modeling with explicit attacker mindset.
+
+## Recommended reading (evidence behind this opinion)
+
+OWASP:
+
+- Top 10:2025 list: https://owasp.org/Top10/2025/
+- <span class="pill pill-blue">A03</span> Supply Chain: https://owasp.org/Top10/2025/A03_2025-Software_Supply_Chain_Failures/
+- <span class="pill pill-blue">A10</span> Exceptional Conditions: https://owasp.org/Top10/2025/A10_2025-Mishandling_of_Exceptional_Conditions/
+
+Supply chain and ecosystem malware waves:
+
+- CISA: Shai-Hulud (npm worm): https://www.cisa.gov/news-events/alerts/2025/09/23/widespread-supply-chain-compromise-impacting-npm-ecosystem
+- CISA: SolarWinds Emergency Directive: https://www.cisa.gov/emergency-directive-21-01
+- Codecov post-mortem: https://about.codecov.io/apr-2021-post-mortem/
+- Sonatype 2024 report (OSS malware): https://www.sonatype.com/state-of-the-software-supply-chain/2024/introduction
+
+Practical internal execution:
+
+- [Threat Modeling Express (practical guide)](/en/blog/threat-modeling-intro/)
+- Dojo Shield (hands-on devsec maturity): https://github.com/topics/dojo-shield
