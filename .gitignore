@@ -24,4 +24,4 @@ pnpm-debug.log*
 .idea/
 
 # generated Open Graph cards
-public/og/*.png
+public/og/**/*.png
