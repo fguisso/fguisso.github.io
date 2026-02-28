@@ -1,0 +1,183 @@
+---
+interface Props {
+	num?: string | number;
+	type?: 'add' | 'remove' | 'context' | 'hunk';
+	code: string;
+	annotation?: string;
+}
+
+const { num = '', type = 'context', code, annotation } = Astro.props;
+const hasAnn = !!annotation;
+const sym = type === 'add' ? '+' : type === 'remove' ? '−' : type === 'hunk' ? '' : ' ';
+---
+
+<div
+	class:list={['diff-line', `diff-line--${type}`, { 'diff-line--annotatable': hasAnn }]}
+	role={hasAnn ? 'button' : undefined}
+	tabindex={hasAnn ? 0 : undefined}
+	aria-expanded={hasAnn ? 'false' : undefined}
+>
+	<div class="diff-line-inner">
+		<span class="diff-num">{type !== 'hunk' ? num : ''}</span>
+		<span class="diff-sym">{sym}</span>
+		<code class="diff-code">{code}</code>
+		{hasAnn && <span class="diff-dot" aria-hidden="true" title="Clique para ver anotação">·</span>}
+	</div>
+	{hasAnn && (
+		<div class="diff-ann" hidden>
+			↳ {annotation}
+		</div>
+	)}
+</div>
+
+<script>
+	function initDiffLines() {
+		document.querySelectorAll<HTMLElement>('.diff-line--annotatable').forEach((el) => {
+			function toggle() {
+				const isOpen = el.getAttribute('aria-expanded') === 'true';
+				el.setAttribute('aria-expanded', String(!isOpen));
+				const ann = el.querySelector<HTMLElement>('.diff-ann');
+				if (ann) {
+					if (isOpen) ann.setAttribute('hidden', '');
+					else ann.removeAttribute('hidden');
+				}
+			}
+
+			el.addEventListener('click', toggle);
+			el.addEventListener('keydown', (e: KeyboardEvent) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					toggle();
+				}
+			});
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initDiffLines);
+	} else {
+		initDiffLines();
+	}
+</script>
+
+<style>
+	.diff-line {
+		transition: background 0.12s;
+	}
+
+	.diff-line--annotatable {
+		cursor: pointer;
+	}
+
+	.diff-line--annotatable:hover > .diff-line-inner {
+		background: rgba(255, 255, 255, 0.022);
+	}
+
+	.diff-line-inner {
+		display: flex;
+		align-items: stretch;
+	}
+
+	.diff-num {
+		width: 3.5rem;
+		text-align: right;
+		padding: 0 0.55rem;
+		color: rgba(255, 255, 255, 0.2);
+		flex-shrink: 0;
+		font-size: 0.65rem;
+		border-right: 1px solid rgba(255, 255, 255, 0.05);
+		user-select: none;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
+
+	.diff-sym {
+		width: 1.4rem;
+		text-align: center;
+		flex-shrink: 0;
+		user-select: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 0.75rem;
+	}
+
+	.diff-code {
+		flex: 1;
+		padding: 0.15rem 0.75rem;
+		white-space: pre;
+		overflow-x: auto;
+		color: #cdd6f4;
+		font-family: inherit;
+		font-size: inherit;
+		background: none;
+		border: none;
+		border-radius: 0;
+		display: flex;
+		align-items: center;
+	}
+
+	.diff-dot {
+		padding: 0 0.5rem;
+		color: rgba(154, 26, 255, 0.45);
+		font-size: 0.7rem;
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+	}
+
+	/* Line type colours */
+	.diff-line--add > .diff-line-inner {
+		background: rgba(34, 197, 94, 0.06);
+	}
+	.diff-line--add .diff-sym {
+		color: #22c55e;
+	}
+	.diff-line--add .diff-code {
+		color: #b9f5c8;
+	}
+
+	.diff-line--remove > .diff-line-inner {
+		background: rgba(255, 77, 109, 0.07);
+	}
+	.diff-line--remove .diff-sym {
+		color: #ff4d6d;
+	}
+	.diff-line--remove .diff-code {
+		color: #ffc0cc;
+	}
+
+	.diff-line--context .diff-code {
+		color: #4a4a6a;
+	}
+
+	.diff-line--hunk > .diff-line-inner {
+		background: rgba(6, 182, 212, 0.05);
+	}
+	.diff-line--hunk .diff-code {
+		color: #06b6d4;
+		font-style: italic;
+	}
+
+	/* Annotation */
+	.diff-ann {
+		padding: 0.35rem 0.75rem 0.35rem calc(3.5rem + 1.4rem + 0.75rem);
+		background: rgba(154, 26, 255, 0.07);
+		border-top: 1px dashed rgba(154, 26, 255, 0.18);
+		font-size: 0.72rem;
+		color: #a78bfa;
+		font-style: italic;
+		line-height: 1.55;
+		font-family: 'Inter', sans-serif;
+	}
+
+	.diff-ann[hidden] {
+		display: none;
+	}
+
+	.diff-line--annotatable:focus-visible {
+		outline: 1px solid rgba(154, 26, 255, 0.55);
+		outline-offset: -1px;
+	}
+</style>

@@ -1,0 +1,104 @@
+---
+interface Props {
+	filename?: string;
+	tag?: string;
+	tagVariant?: 'danger' | 'success' | 'warning' | 'info';
+}
+
+const { filename, tag, tagVariant = 'info' } = Astro.props;
+const hasHeader = !!(filename || tag);
+---
+
+<div class="diff-block">
+	{hasHeader && (
+		<div class="diff-header">
+			{filename && <span class="diff-fname">{filename}</span>}
+			{tag && <span class:list={['diff-tag', `diff-tag--${tagVariant}`]}>{tag}</span>}
+		</div>
+	)}
+	<div class="diff-body">
+		<slot />
+	</div>
+	<p class="diff-hint">clique em uma linha com · para ver a anotação</p>
+</div>
+
+<style>
+	.diff-block {
+		background: #09090f;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 12px;
+		overflow: hidden;
+		margin: 1.25rem 0;
+		font-size: 0;
+	}
+
+	.diff-header {
+		background: rgba(255, 255, 255, 0.025);
+		padding: 0.5rem 1rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		font-size: 1rem;
+	}
+
+	.diff-fname {
+		font-family: 'JetBrains Mono', 'Fira Code', monospace;
+		font-size: 0.65rem;
+		color: var(--color-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+
+	.diff-tag {
+		font-family: 'JetBrains Mono', 'Fira Code', monospace;
+		font-size: 0.6rem;
+		font-weight: 700;
+		padding: 0.15rem 0.5rem;
+		border-radius: 4px;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		flex-shrink: 0;
+	}
+
+	.diff-tag--danger {
+		background: rgba(255, 77, 109, 0.15);
+		color: #ff4d6d;
+		border: 1px solid rgba(255, 77, 109, 0.3);
+	}
+
+	.diff-tag--success {
+		background: rgba(34, 197, 94, 0.15);
+		color: #22c55e;
+		border: 1px solid rgba(34, 197, 94, 0.3);
+	}
+
+	.diff-tag--warning {
+		background: rgba(245, 158, 11, 0.15);
+		color: #f59e0b;
+		border: 1px solid rgba(245, 158, 11, 0.3);
+	}
+
+	.diff-tag--info {
+		background: rgba(6, 182, 212, 0.15);
+		color: #06b6d4;
+		border: 1px solid rgba(6, 182, 212, 0.3);
+	}
+
+	.diff-body {
+		font-family: 'JetBrains Mono', 'Fira Code', monospace;
+		font-size: 0.79rem;
+		line-height: 1.7;
+	}
+
+	.diff-hint {
+		padding: 0.35rem 1rem;
+		font-family: 'Inter', sans-serif;
+		font-size: 0.65rem;
+		color: rgba(154, 26, 255, 0.4);
+		text-align: right;
+		margin: 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.04);
+	}
+</style>

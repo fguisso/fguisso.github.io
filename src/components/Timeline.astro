@@ -1,7 +1,12 @@
 ---
+// Timeline.astro
+// When items carry a `variant` field (warning | danger | success), renders the
+// reference-style visual: vertical line + colored absolute dot + monospace tag badge.
+// Without variant, falls back to the original card-grid style.
 interface TimelineItem {
 	meta: string;
 	role: string;
+	variant?: 'warning' | 'danger' | 'success';
 }
 
 interface Props {
@@ -12,25 +17,39 @@ interface Props {
 const { items = [], class: className } = Astro.props as Props;
 const hasSlot = Astro.slots?.has('default');
 const hasItems = items.length > 0;
+const hasVariants = items.some((i) => i.variant);
 ---
 
-<div class:list={['timeline-root', className]}>
-	<ol class="timeline-list">
+<div class:list={['timeline-root', hasVariants && 'timeline-root--styled', className]}>
+	<ol class:list={['timeline-list', hasVariants && 'timeline-list--styled']}>
 		{hasItems
 			? items.map((item) => (
-					<li>
-						<div class="dot" aria-hidden="true"></div>
-						<div class="entry">
-							<p class="meta">{item.meta}</p>
-							<p class="role">{item.role}</p>
-						</div>
-					</li>
+					item.variant
+						? (
+							<li class="tli">
+								<div class:list={['tldot', `tldot--${item.variant}`]} aria-hidden="true"></div>
+								<span class:list={['tltag', `tltag--${item.variant}`]}>{item.meta}</span>
+								<p class="tli-role">{item.role}</p>
+							</li>
+						)
+						: (
+							<li>
+								<div class="dot" aria-hidden="true"></div>
+								<div class="entry">
+									<p class="meta">{item.meta}</p>
+									<p class="role">{item.role}</p>
+								</div>
+							</li>
+						)
 			  ))
 			: hasSlot && <slot />}
 	</ol>
 </div>
 
 <style>
+	/* ═══════════════════════════════════════════════════════════
+	   DEFAULT (card-grid) style — no variant
+	═══════════════════════════════════════════════════════════ */
 	.timeline-root {
 		display: grid;
 		gap: 0.75rem;
@@ -67,13 +86,8 @@ const hasItems = items.length > 0;
 		opacity: 0.6;
 	}
 
-	.timeline-list li:first-child::before {
-		top: 1.25rem;
-	}
-
-	.timeline-list li:last-child::before {
-		bottom: 1.25rem;
-	}
+	.timeline-list li:first-child::before { top: 1.25rem; }
+	.timeline-list li:last-child::before  { bottom: 1.25rem; }
 
 	.dot {
 		width: 14px;
@@ -84,21 +98,86 @@ const hasItems = items.length > 0;
 		margin: 2px auto 0;
 	}
 
-	.entry {
-		display: grid;
-		gap: 0.25rem;
+	.entry { display: grid; gap: 0.25rem; }
+	.meta  { margin: 0; font-size: 0.95rem; color: var(--color-muted); font-weight: 600; }
+	.role  { margin: 0; color: var(--color-fg); font-weight: 650; }
+
+	/* ═══════════════════════════════════════════════════════════
+	   STYLED (reference) style — items with variant
+	   Ported from HTML reference; colors mapped to blog tokens:
+	     --color-secondary #9a1aff purple
+	     --color-highlight  #6e6eff blue
+	   Semantic security colors kept:
+	     warning #f59e0b | danger #ff4d6d | success #22c55e
+	═══════════════════════════════════════════════════════════ */
+	.timeline-list--styled {
+		position: relative;
+		padding-left: 1.9rem;
+		gap: 0;
 	}
 
-	.meta {
+	/* the vertical spine */
+	.timeline-list--styled::before {
+		content: '';
+		position: absolute;
+		left: 7px;
+		top: 0;
+		bottom: 0;
+		width: 2px;
+		background: #222236;
+	}
+
+	/* reset the card styles for styled list items */
+	.timeline-list--styled .tli {
+		display: block;
+		position: relative;
+		margin-bottom: 1.4rem;
+		padding: 0;
+		border-radius: 0;
+		background: transparent;
+		border: none;
+		grid-template-columns: none;
+		gap: 0;
+	}
+	.timeline-list--styled .tli:last-child { margin-bottom: 0; }
+
+	/* no connecting line on styled items (spine is on the parent) */
+	.timeline-list--styled .tli::before { display: none; }
+
+	/* ── Dot ── */
+	.tldot {
+		position: absolute;
+		left: -1.9rem;
+		top: 0.32rem;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		border: 2px solid;
+		background: var(--color-bg);
+	}
+	.tldot--warning { border-color: #f59e0b; background: rgba(245,158,11,.2); }
+	.tldot--danger  { border-color: #ff4d6d; background: rgba(255,77,109,.2); }
+	.tldot--success { border-color: #22c55e; background: rgba(34,197,94,.2);  }
+
+	/* ── Tag badge ── */
+	.tltag {
+		display: inline-block;
+		font-family: 'JetBrains Mono', 'Fira Code', monospace;
+		font-size: .62rem;
+		font-weight: 700;
+		padding: .13rem .48rem;
+		border-radius: 3px;
+		margin-bottom: .35rem;
+	}
+	.tltag--warning { background: rgba(245,158,11,.15); color: #f59e0b; border: 1px solid rgba(245,158,11,.3); }
+	.tltag--danger  { background: rgba(255,77,109,.15); color: #ff4d6d; border: 1px solid rgba(255,77,109,.3); }
+	.tltag--success { background: rgba(34,197,94,.15);  color: #22c55e; border: 1px solid rgba(34,197,94,.3);  }
+
+	/* ── Body text ── */
+	.tli-role {
 		margin: 0;
-		font-size: 0.95rem;
+		font-size: .81rem;
 		color: var(--color-muted);
-		font-weight: 600;
-	}
-
-	.role {
-		margin: 0;
-		color: var(--color-fg);
-		font-weight: 650;
+		line-height: 1.7;
 	}
 </style>

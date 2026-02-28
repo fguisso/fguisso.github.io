@@ -1,0 +1,103 @@
+---
+// Breakdown.astro
+// Displays any string broken into labeled, colored segments.
+// Works for URLs, commands, regex, schemas, or any string anatomy.
+//
+// Usage:
+// <Breakdown parts={[
+//   { text: 'http://', label: 'protocol', color: '#c084fc' },
+//   { text: 'google.com', label: 'host', sub: 'domínio', color: '#00ff7f' },
+// ]} />
+
+interface Part {
+  text:   string;
+  label:  string;
+  sub?:   string;
+  color:  string;
+}
+
+interface Props {
+  parts: Part[];
+}
+
+const { parts } = Astro.props;
+---
+
+<div class="bd-row">
+  {parts.map((p) => (
+    <div class="bd-seg" style={`--c:${p.color};--bg:color-mix(in srgb,${p.color} 13%,transparent)`}>
+      <div class="bd-text">{p.text}</div>
+      <div class="bd-line" aria-hidden="true"></div>
+      <div class="bd-meta">
+        <span class="bd-label">{p.label}</span>
+        {p.sub && <span class="bd-sub">{p.sub}</span>}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .bd-row {
+    display: flex;
+    align-items: flex-start;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .bd-seg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
+  }
+
+  .bd-text {
+    background: var(--bg);
+    color: var(--c);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .9rem;
+    font-weight: 500;
+    padding: .35rem .55rem;
+    border-radius: 5px 5px 0 0;
+    border-bottom: 2px solid var(--c);
+    white-space: nowrap;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+    transition: box-shadow .18s;
+  }
+  .bd-seg:hover .bd-text {
+    box-shadow: 0 0 14px var(--c), inset 0 0 0 1px rgba(255,255,255,.04);
+  }
+
+  .bd-line {
+    width: 1px;
+    height: .9rem;
+    background: var(--c);
+    opacity: .35;
+    flex-shrink: 0;
+  }
+
+  .bd-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .1rem;
+  }
+
+  .bd-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--c);
+    white-space: nowrap;
+  }
+
+  .bd-sub {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: .57rem;
+    font-style: italic;
+    color: #4a5568;
+    white-space: nowrap;
+  }
+</style>

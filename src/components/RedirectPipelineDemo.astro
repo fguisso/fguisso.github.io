@@ -1,0 +1,523 @@
+---
+// RedirectPipelineDemo.astro
+// CSS is split into two blocks:
+//   <style>          — scoped, for static template elements (gets Astro data-attr)
+//   <style is:global> — for JS-created elements (no Astro attr), all scoped
+//                       under .demo-shell to avoid leaking and to win over
+//                       BlogPost.astro's .post-flow :global(td/table) rules.
+---
+
+<div class="demo-shell">
+	<div class="demo-tbar">
+		<div class="demo-dots" aria-hidden="true">
+			<span style="background:#ff5f57"></span>
+			<span style="background:#febc2e"></span>
+			<span style="background:#28c840"></span>
+		</div>
+		<span class="demo-label">Pipeline de processamento — CVE-2024-29041</span>
+		<span class="demo-sev"><span class="demo-sev-dot" aria-hidden="true"></span>MODERATE 6.1</span>
+	</div>
+
+	<div class="demo-body">
+		<div class="demo-group">
+			<div class="demo-group-label">Payloads prontos</div>
+			<div class="presets" id="rp-presets">
+				<button class="prbtn" data-preset="0">google.com\@evil.com</button>
+				<button class="prbtn" data-preset="1">google.com (legítimo)</button>
+				<button class="prbtn" data-preset="2">evil.com (bloqueado)</button>
+			</div>
+		</div>
+
+		<div class="irow">
+			<div class="ig ig--wide">
+				<label for="rp-url-input">URL do redirect (input do atacante)</label>
+				<input type="text" id="rp-url-input" placeholder="http://..." autocomplete="off" spellcheck="false" />
+			</div>
+			<div class="ig">
+				<label for="rp-allow-input">Host permitido (allowlist)</label>
+				<input type="text" id="rp-allow-input" value="google.com" placeholder="google.com" autocomplete="off" spellcheck="false" />
+			</div>
+		</div>
+
+		<button class="rbtn" id="rp-run-btn">▶ Simular fluxo</button>
+
+		<div class="pipeline" id="rp-pipeline" aria-live="polite" aria-atomic="true"></div>
+	</div>
+</div>
+
+<script>
+	// Preset URLs defined in JS so backslashes are preserved as proper escape
+	// sequences — Astro's HTML parser strips \ from attribute values at build time.
+	const PRESETS = [
+		{ url: 'http://google.com\\@evil.com', kind: 'bad',  allowlist: 'google.com' },
+		{ url: 'http://google.com',            kind: 'safe', allowlist: 'google.com' },
+		{ url: 'http://evil.com',              kind: 'safe', allowlist: 'google.com' },
+	] as const;
+
+	function esc(s: string) {
+		return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	}
+
+	function encSim(s: string) {
+		return s.replace(/\\/g, '%5C').replace(/ /g, '%20').replace(/</g, '%3C').replace(/>/g, '%3E');
+	}
+
+	function legacyHost(url: string): string | null {
+		try {
+			if (!/^https?:\/\//i.test(url)) return null;
+			const noSchema = url.replace(/^https?:\/\//i, '');
+			const stops = [noSchema.indexOf('\\'), noSchema.indexOf('/'), noSchema.indexOf('?')].filter(
+				(n) => n !== -1
+			);
+			const end = stops.length ? Math.min(...stops) : noSchema.length;
+			let h = noSchema.slice(0, end);
+			const at = h.lastIndexOf('@');
+			if (at !== -1) h = h.slice(at + 1);
+			return h.split(':')[0].toLowerCase() || null;
+		} catch { return null; }
+	}
+
+	function browserHost(encoded: string): string | null {
+		try { return new URL(encoded).hostname.toLowerCase() || null; }
+		catch { return null; }
+	}
+
+	function getProto(url: string) {
+		try { return new URL(url).protocol; } catch { return 'http:'; }
+	}
+
+	function runDemo() {
+		const urlVal = (document.getElementById('rp-url-input') as HTMLInputElement)?.value.trim();
+		const allowHost = (document.getElementById('rp-allow-input') as HTMLInputElement)?.value.trim().toLowerCase();
+		const pipeEl = document.getElementById('rp-pipeline');
+		if (!urlVal || !pipeEl) return;
+
+		pipeEl.classList.add('visible');
+		pipeEl.innerHTML = '';
+
+		const isAbs = /^https?:\/\//i.test(urlVal);
+		const lh = legacyHost(urlVal);
+		const encoded = encSim(urlVal);
+		const bh = browserHost(encoded);
+		const proto = getProto(urlVal);
+		const passes = lh === allowHost;
+		const isBlocked = isAbs && !passes;
+		const isBypass = isAbs && passes && bh !== null && bh !== allowHost;
+
+		type Row = { cls: string; step: string; key: string; val: string; note: string };
+		const rows: Row[] = [];
+
+		rows.push({
+			cls: 'pr-input', step: 'INPUT', key: 'req.query.url', val: urlVal,
+			note: 'URL recebida do parâmetro HTTP',
+		});
+		if (isAbs) {
+			if (isBlocked) {
+				rows.push({ cls: 'pr-allow-block', step: 'ALLOWLIST', key: 'url.parse().hostname', val: lh ?? '(erro)',
+					note: `"${lh}" não está na allowlist → 403, nenhum redirect` });
+			} else {
+				rows.push({ cls: 'pr-allow-pass', step: 'ALLOWLIST', key: 'url.parse().hostname', val: lh ?? '(erro)',
+					note: isBypass
+						? 'url.parse() ignora o caractere especial e pega o primeiro host'
+						: `"${lh}" está na allowlist → aprovado` });
+			}
+		}
+		if (!isBlocked) {
+			rows.push({ cls: 'pr-encode', step: 'encodeUrl()', key: 'resultado', val: encoded,
+				note: urlVal !== encoded ? '\\ convertido para %5C no header' : 'sem alteração' });
+			rows.push({ cls: 'pr-header', step: 'HTTP 302', key: 'Location:', val: encoded,
+				note: 'Header enviado' });
+			const fh = bh ?? allowHost;
+			rows.push({ cls: isBypass ? 'pr-browser-bad' : 'pr-browser-safe',
+				step: 'BROWSER', key: 'navega para', val: `${proto}//${fh}`,
+				note: isBypass
+					? `decodifica %5C → \\ → trata como / → host real = ${bh}`
+					: `decodifica header normalmente → ${bh}` });
+		}
+
+		const tbl = document.createElement('table');
+		tbl.className = 'pipe-table';
+		tbl.innerHTML = rows.map((r) =>
+			`<tr class="${r.cls}">` +
+			`<td class="pt-step"><span class="step-badge">${r.step}</span></td>` +
+			`<td class="pt-key">${esc(r.key)}</td>` +
+			`<td class="pt-val">${esc(r.val)}</td>` +
+			`<td class="pt-note">${esc(r.note)}</td>` +
+			`</tr>`
+		).join('');
+		pipeEl.appendChild(tbl);
+
+		tbl.querySelectorAll<HTMLElement>('tr').forEach((tr, i) =>
+			setTimeout(() => tr.classList.add('show'), i * 180 + 60)
+		);
+		const delay = rows.length * 180 + 120;
+
+		const fh = bh ?? allowHost;
+		const finalUrl = `${proto}//${fh}`;
+
+		const vs = document.createElement('div');
+		if (isBlocked) {
+			vs.className = 'verdict-strip v-safe';
+			vs.innerHTML = `🛡️ <strong>Bloqueado</strong><span class="vs-sub">"${lh}" não está na allowlist — nenhum redirect</span>`;
+		} else if (isBypass) {
+			vs.className = 'verdict-strip v-danger';
+			vs.innerHTML = `🚨 <strong>BYPASS CONFIRMADO</strong><span class="vs-sub">allowlist viu "${lh}", browser navegou para "${bh}"</span>`;
+		} else {
+			vs.className = 'verdict-strip v-safe';
+			vs.innerHTML = `✅ <strong>Legítimo</strong><span class="vs-sub">allowlist e browser concordam — host "${bh}"</span>`;
+		}
+		pipeEl.appendChild(vs);
+		setTimeout(() => vs.classList.add('show'), delay);
+
+		if (!isBlocked) {
+			const bsim = document.createElement('div');
+			bsim.className = 'bsim';
+			bsim.innerHTML =
+				`<div class="bchrome">` +
+				`<div class="bbtns" aria-hidden="true">` +
+				`<span style="background:#ff5f57"></span>` +
+				`<span style="background:#febc2e"></span>` +
+				`<span style="background:#28c840"></span>` +
+				`</div>` +
+				`<div class="bbar ${isBypass ? 'danger' : 'safe'}">${esc(finalUrl)}</div>` +
+				`</div>` +
+				`<div class="bbody">` +
+				`<div class="bsite-icon">${isBypass ? '☠️' : '🏠'}</div>` +
+				`<div>` +
+				`<div class="bsite-name" style="color:${isBypass ? '#ff4d6d' : '#22c55e'}">${esc(isBypass ? fh + ' — phishing' : fh)}</div>` +
+				`<div class="bsite-sub">${esc(isBypass ? `allowlist aprovou "${lh}" mas o browser foi para "${bh}"` : 'browser chegou no destino correto')}</div>` +
+				`</div></div>`;
+			pipeEl.appendChild(bsim);
+			setTimeout(() => bsim.classList.add('show'), delay + 200);
+		}
+	}
+
+	function init() {
+		const runBtn   = document.getElementById('rp-run-btn');
+		const urlInput   = document.getElementById('rp-url-input')   as HTMLInputElement | null;
+		const allowInput = document.getElementById('rp-allow-input') as HTMLInputElement | null;
+
+		// Set initial values via JS — backslash in HTML attr values gets stripped by Astro
+		if (urlInput)   urlInput.value   = PRESETS[0].url;
+		if (allowInput) allowInput.value = PRESETS[0].allowlist;
+
+		runBtn?.addEventListener('click', runDemo);
+		urlInput?.addEventListener('keydown', (e) => e.key === 'Enter' && runDemo());
+
+		document.querySelectorAll<HTMLButtonElement>('.prbtn[data-preset]').forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const idx    = parseInt(btn.dataset.preset ?? '0', 10);
+				const preset = PRESETS[idx] ?? PRESETS[0];
+				if (urlInput)   urlInput.value   = preset.url;
+				if (allowInput) allowInput.value = preset.allowlist;
+				document.querySelectorAll('.prbtn').forEach((b) => b.removeAttribute('data-active'));
+				btn.setAttribute('data-active', preset.kind);
+				runDemo();
+			});
+		});
+
+		setTimeout(runDemo, 400);
+	}
+
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+	else init();
+</script>
+
+<!-- ─────────────────────────────────────────────────────────────────
+     SCOPED styles — only for elements that exist in the static
+     template above (they get the Astro data-cid attribute).
+──────────────────────────────────────────────────────────────────── -->
+<style>
+	/* ── CSS vars (local to this component) ── */
+	.demo-shell {
+		--ds-surface:  #0f0f1a;
+		--ds-surface2: #161624;
+		--ds-border:   #222236;
+		--ds-border2:  #2e2e48;
+		--ds-code:     #09090f;
+		--ds-text:     #f5f5ff;
+		--ds-text2:    #a8a9bb;
+		--ds-muted:    #4a5568;
+		--ds-acc:      #ff4d6d;
+		--ds-acc2:     #9a1aff;
+		--ds-acc3:     #6e6eff;
+		--ds-green:    #22c55e;
+		--ds-yellow:   #f59e0b;
+		--ds-mono: 'JetBrains Mono', monospace;
+		--ds-sans: 'Space Grotesk', sans-serif;
+
+		background: var(--ds-surface);
+		border: 1px solid var(--ds-border);
+		border-radius: 10px;
+		overflow: hidden;
+		margin: 1.4rem 0;
+	}
+
+	/* ── Titlebar ── */
+	.demo-tbar {
+		background: var(--ds-surface2);
+		padding: .55rem 1rem;
+		border-bottom: 1px solid var(--ds-border);
+		display: flex;
+		align-items: center;
+		gap: .7rem;
+	}
+	.demo-dots            { display: flex; gap: 5px; flex-shrink: 0; }
+	.demo-dots span       { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+	.demo-label {
+		font-family: var(--ds-mono);
+		font-size: .68rem;
+		color: var(--ds-muted);
+		flex: 1;
+	}
+	.demo-sev {
+		font-family: var(--ds-mono);
+		font-size: .75rem;
+		color: var(--ds-yellow);
+		display: flex;
+		align-items: center;
+		gap: .5rem;
+	}
+	.demo-sev-dot {
+		width: 8px; height: 8px;
+		border-radius: 50%;
+		background: var(--ds-yellow);
+		box-shadow: 0 0 6px var(--ds-yellow);
+		animation: ds-blink 2s infinite;
+	}
+	@keyframes ds-blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+	/* ── Body ── */
+	.demo-body           { padding: 1.4rem; }
+	.demo-group          { margin-bottom: 1.1rem; }
+	.demo-group-label {
+		font-size: .65rem;
+		font-family: var(--ds-mono);
+		color: var(--ds-muted);
+		text-transform: uppercase;
+		letter-spacing: .1em;
+		margin-bottom: .45rem;
+	}
+
+	/* ── Preset buttons ── */
+	.presets { display: flex; flex-wrap: wrap; gap: .45rem; }
+	.prbtn {
+		font-family: var(--ds-mono);
+		font-size: .7rem;
+		padding: .27rem .65rem;
+		border-radius: 5px;
+		cursor: pointer;
+		border: 1px solid var(--ds-border2);
+		background: var(--ds-surface2);
+		color: var(--ds-text2);
+		transition: all .15s;
+		text-align: left;
+		line-height: 1.4;
+	}
+	.prbtn:hover                  { border-color: var(--ds-acc2); color: var(--ds-text); }
+	.prbtn[data-active='bad']  { border-color: var(--ds-acc);   color: var(--ds-acc);   background: rgba(255,77,109,.1); }
+	.prbtn[data-active='safe'] { border-color: var(--ds-green); color: var(--ds-green); background: rgba(34,197,94,.1);  }
+
+	/* ── Inputs ── */
+	.irow                { display: flex; gap: .9rem; margin-bottom: .9rem; flex-wrap: wrap; }
+	.ig                  { flex: 1; min-width: 150px; }
+	.ig--wide            { flex: 2; }
+	.ig label {
+		display: block;
+		font-size: .65rem;
+		font-family: var(--ds-mono);
+		color: var(--ds-muted);
+		text-transform: uppercase;
+		letter-spacing: .1em;
+		margin-bottom: .3rem;
+	}
+	.ig input {
+		width: 100%;
+		background: var(--ds-code);
+		border: 1px solid var(--ds-border);
+		border-radius: 6px;
+		padding: .52rem .85rem;
+		color: var(--ds-text);
+		font-family: var(--ds-mono);
+		font-size: .8rem;
+		outline: none;           /* reset global green outline */
+		transition: border-color .2s;
+		box-shadow: none;
+	}
+	.ig input:focus { border-color: var(--ds-acc2); outline: none; }
+
+	/* ── Run button — accent green following blog style guide ── */
+	.rbtn {
+		background: rgba(0,255,127,.12);
+		color: #00ff7f;
+		border: 1px solid rgba(0,255,127,.35);
+		border-radius: 7px;
+		padding: .52rem 1.4rem;
+		font-family: var(--ds-sans);
+		font-size: .84rem;
+		font-weight: 700;
+		cursor: pointer;
+		transition: background .15s, box-shadow .15s, transform .1s;
+	}
+	.rbtn:hover  { background: rgba(0,255,127,.2); box-shadow: 0 0 12px rgba(0,255,127,.25); transform: translateY(-1px); }
+	.rbtn:active { transform: translateY(0); }
+
+	/* ── Pipeline container (static, toggled by JS) ── */
+	.pipeline         { margin-top: 1.2rem; display: none; }
+	.pipeline.visible { display: block; }
+
+	@media (max-width: 640px) {
+		.irow { flex-direction: column; }
+	}
+</style>
+
+<!-- ─────────────────────────────────────────────────────────────────
+     GLOBAL styles — for elements created dynamically by JS.
+     All prefixed with .demo-shell so they:
+       a) don't leak to the rest of the page
+       b) have specificity 0,2,1+ which beats BlogPost.astro's
+          .post-flow :global(td) at specificity 0,1,1
+──────────────────────────────────────────────────────────────────── -->
+<style is:global>
+	/* ── Pipeline table ── */
+	.demo-shell .pipe-table {
+		width: 100%;
+		border-collapse: collapse;
+		background: #09090f;
+		border: 1px solid #222236;
+		border-radius: 8px;
+		overflow: hidden;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: .76rem;
+		margin: 0;             /* override global table margin-bottom:2rem */
+	}
+	.demo-shell .pipe-table tr {
+		opacity: 0;
+		transform: translateX(-6px);
+		transition: opacity .25s, transform .25s;
+	}
+	.demo-shell .pipe-table tr.show { opacity: 1; transform: translateX(0); }
+	.demo-shell .pipe-table td {
+		padding: .48rem .85rem;
+		border: none;                              /* kill global td border */
+		border-bottom: 1px solid #222236;
+		vertical-align: top;
+		line-height: 1.55;
+		background: transparent;                   /* kill any inherited bg */
+		color: #f5f5ff;
+		font-size: .76rem;
+	}
+	.demo-shell .pipe-table tr:last-child td { border-bottom: none; }
+
+	/* Cols 1 & 2: shrink to content width */
+	.demo-shell .pt-step  { width: 1px; white-space: nowrap; }
+	.demo-shell .step-badge {
+		font-size: .6rem;
+		font-weight: 700;
+		padding: .1rem .4rem;
+		border-radius: 3px;
+		display: inline-block;
+	}
+	.demo-shell .pipe-table .pt-key  { width: 1px; white-space: nowrap; color: #3d4463; font-size: .7rem; padding-right: .85rem; }
+	/* Col 3 gets the majority of remaining space; col 4 takes what's left */
+	.demo-shell .pt-val  { color: #f5f5ff; word-break: break-all; width: 35%; }
+	/* separator: higher specificity than .pipe-table td { border: none } */
+	.demo-shell .pipe-table .pt-note {
+		color: #a8a9bb;
+		font-family: 'Space Grotesk', sans-serif;
+		font-size: .75rem;
+		padding-left: .75rem;
+		border-left: 1px solid #2a2a40;
+	}
+
+	/* Row accent colors */
+	.demo-shell .pr-input       td { background: rgba(154,26,255,.04) !important; }
+	.demo-shell .pr-input       .step-badge { background: rgba(154,26,255,.2);  color: #c084fc; }
+	.demo-shell .pr-allow-pass  td { background: rgba(245,158,11,.04) !important; }
+	.demo-shell .pr-allow-pass  .step-badge { background: rgba(245,158,11,.2);  color: #f59e0b; }
+	.demo-shell .pr-allow-block td { background: rgba(34,197,94,.04) !important;  }
+	.demo-shell .pr-allow-block .step-badge { background: rgba(34,197,94,.2);   color: #22c55e; }
+	.demo-shell .pr-encode      td { background: rgba(110,110,255,.04) !important; }
+	.demo-shell .pr-encode      .step-badge { background: rgba(110,110,255,.2); color: #6e6eff; }
+	.demo-shell .pr-header      td { background: rgba(255,77,109,.04) !important;  }
+	.demo-shell .pr-header      .step-badge { background: rgba(255,77,109,.2);  color: #ff4d6d; }
+	.demo-shell .pr-browser-safe td { background: rgba(34,197,94,.04) !important;  }
+	.demo-shell .pr-browser-safe .step-badge { background: rgba(34,197,94,.2);  color: #22c55e; }
+	.demo-shell .pr-browser-bad  td { background: rgba(255,77,109,.06) !important;  }
+	.demo-shell .pr-browser-bad  .step-badge { background: rgba(255,77,109,.25); color: #ff4d6d; }
+
+	/* hover on rows (override BlogPost .post-flow tbody tr:hover td) */
+	.demo-shell .pipe-table tbody tr:hover td {
+		background: rgba(255,255,255,.025) !important;
+	}
+
+	/* ── Verdict strip ── */
+	.demo-shell .verdict-strip {
+		display: flex;
+		align-items: center;
+		gap: .75rem;
+		padding: .75rem 1rem;
+		margin-top: .6rem;
+		border-radius: 6px;
+		font-size: .84rem;
+		font-weight: 700;
+		font-family: 'Space Grotesk', sans-serif;
+		opacity: 0;
+		transition: opacity .3s;
+	}
+	.demo-shell .verdict-strip.show { opacity: 1; }
+	.demo-shell .v-danger { background: rgba(255,77,109,.12); border: 1px solid rgba(255,77,109,.3); color: #ff4d6d; }
+	.demo-shell .v-safe   { background: rgba(34,197,94,.12);  border: 1px solid rgba(34,197,94,.3);  color: #22c55e; }
+	.demo-shell .vs-sub   { font-weight: 400; font-size: .74rem; color: #a8a9bb; margin-left: .3rem; }
+
+	/* ── Browser sim ── */
+	.demo-shell .bsim {
+		background: #09090f;
+		border: 1px solid #222236;
+		border-radius: 8px;
+		overflow: hidden;
+		margin-top: .75rem;
+		opacity: 0;
+		transform: translateY(5px);
+		transition: all .35s;
+	}
+	.demo-shell .bsim.show { opacity: 1; transform: translateY(0); }
+	.demo-shell .bchrome {
+		background: #1a1a2e;
+		padding: .42rem .85rem;
+		display: flex;
+		align-items: center;
+		gap: .65rem;
+		border-bottom: 1px solid #222236;
+	}
+	.demo-shell .bbtns        { display: flex; gap: 4px; }
+	.demo-shell .bbtns span   { width: 9px; height: 9px; border-radius: 50%; }
+	.demo-shell .bbar {
+		flex: 1;
+		background: #0f0f1a;
+		border-radius: 4px;
+		padding: .2rem .65rem;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: .7rem;
+		color: #a8a9bb;
+		word-break: break-all;
+		border: 1px solid #222236;
+	}
+	.demo-shell .bbar.danger { border-color: rgba(255,77,109,.5); color: #ffc0cc; }
+	.demo-shell .bbar.safe   { border-color: rgba(34,197,94,.4);  color: #b9f5c8; }
+	.demo-shell .bbody {
+		padding: .9rem 1.2rem;
+		display: flex;
+		align-items: center;
+		gap: 1.2rem;
+	}
+	.demo-shell .bsite-icon { font-size: 1.8rem; flex-shrink: 0; }
+	.demo-shell .bsite-name { font-size: .95rem; font-weight: 800; margin-bottom: .1rem; font-family: 'Space Grotesk', sans-serif; }
+	.demo-shell .bsite-sub  { font-size: .72rem; color: #a8a9bb; }
+
+	/* ── Mobile ── */
+	@media (max-width: 640px) {
+		.demo-shell .pt-key,
+		.demo-shell .pt-note { display: none; }
+	}
+</style>
