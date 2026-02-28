@@ -12,6 +12,10 @@ import LogoWordmark from '../../components/LogoWordmark.astro';
 import PostCard from '../../components/PostCard.astro';
 import Chip from '../../components/Chip.astro';
 import OwaspTop10Evolution from '../../components/OwaspTop10Evolution.astro';
+import DiffBlock from '../../components/DiffBlock.astro';
+import DiffLine from '../../components/DiffLine.astro';
+import RedirectPipelineDemo from '../../components/RedirectPipelineDemo.astro';
+import Breakdown from '../../components/Breakdown.astro';
 import { getHtmlLang, type LocaleCode } from '../../i18n/config';
 import { getSiteMeta, themeConfig } from '../../theme.config';
 import { routes } from '../../utils/routes';
@@ -645,6 +649,75 @@ const samplePostHref = routes.blogPost('exemplo', locale);
 						</div>
 					))}
 				</div>
+			</section>
+
+			<section class="style-guide__section" id="diff-block">
+				<div class="style-guide__section-head">
+					<p class="eyebrow">code</p>
+					<h2>DiffBlock + DiffLine</h2>
+					<p>
+						Annotated diff viewer for security articles and code analysis. Each line can have
+						a collapsible annotation — click a line with <code>·</code> to reveal the explanation.
+						Use <code>tagVariant</code> to color the badge: <code>danger</code> (vulnerable),
+						<code>success</code> (fixed), <code>warning</code> (partial patch), <code>info</code> (neutral).
+					</p>
+				</div>
+				<GlowBox accent="secondary" class="style-guide__panel sg-diff-panel">
+					<DiffBlock filename="example/response.js — commit abc1234" tag="vulnerable" tagVariant="danger">
+						<DiffLine num="911" type="context" code="res.location = function location(url) {" />
+						<DiffLine num="912" type="context" code="  var loc = url;" />
+						<DiffLine num="913" type="remove" code="  return this.set('Location', encodeUrl(loc));" annotation="BEFORE: always encoded everything with no checks — the original vulnerable line" />
+						<DiffLine num="913" type="add" code="  var encoded = encodeUrl(loc);" annotation="AFTER: stores the result for comparison before returning" />
+						<DiffLine num="914" type="add" code="  return this.set('Location', encoded);" />
+						<DiffLine num="915" type="context" code="};" />
+					</DiffBlock>
+					<p class="sg-diff-note">
+						<code>DiffBlock</code> props: <code>filename</code>, <code>tag</code>, <code>tagVariant</code> (danger / success / warning / info).<br />
+						<code>DiffLine</code> props: <code>num</code>, <code>type</code> (add / remove / context / hunk), <code>code</code>, <code>annotation</code> (optional — enables click-to-expand).
+					</p>
+				</GlowBox>
+			</section>
+
+			<section class="style-guide__section" id="redirect-pipeline-demo">
+				<div class="style-guide__section-head">
+					<p class="eyebrow">interactive</p>
+					<h2>RedirectPipelineDemo</h2>
+					<p>
+						Interactive simulator for the CVE-2024-29041 pipeline. Demonstrates how a URL with a backslash
+						bypasses a <code>url.parse()</code>-based allowlist and causes the browser to navigate to a different host.
+						Self-contained component — no props, no external dependencies.
+					</p>
+				</div>
+				<RedirectPipelineDemo />
+			</section>
+
+			<section class="style-guide__section" id="breakdown">
+				<div class="style-guide__section-head">
+					<p class="eyebrow">components</p>
+					<h2>Breakdown</h2>
+					<p>
+						Displays any string split into colored segments with labels. Works for URLs,
+						terminal commands, schemas, regex, or any string that needs a visual anatomy.
+					</p>
+					<p>
+						Props: <code>parts[]</code> — array of <code>{"{ text, label, sub?, color }"}</code>.
+					</p>
+				</div>
+				<Breakdown parts={[
+					{ text: 'http://',      label: 'protocol', color: '#c084fc' },
+					{ text: 'user:pass@',  label: 'userinfo',  sub: 'credentials', color: '#f59e0b' },
+					{ text: 'google.com',  label: 'host',      sub: 'domain',      color: '#00ff7f' },
+					{ text: ':8080',       label: 'port',      color: '#6e6eff' },
+					{ text: '/path',       label: 'path',      color: '#ff6b8a' },
+					{ text: '?q=search',   label: 'query',     color: '#4ade80' },
+					{ text: '#anchor',     label: 'hash',      color: '#94a3b8' },
+				]} />
+				<Breakdown parts={[
+					{ text: 'git',          label: 'command',   color: '#c084fc' },
+					{ text: ' log',         label: 'sub-cmd',   color: '#00ff7f' },
+					{ text: ' --oneline',   label: 'flag',      color: '#6e6eff' },
+					{ text: ' origin/main', label: 'ref',       sub: 'remote branch', color: '#f59e0b' },
+				]} />
 			</section>
 
 		</main>
@@ -1281,6 +1354,19 @@ const samplePostHref = routes.blogPost('exemplo', locale);
 
 	.logo-mark--tuner {
 		color: var(--color-highlight);
+	}
+
+	.sg-diff-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.sg-diff-note {
+		margin: 0;
+		color: var(--color-muted);
+		font-size: 0.9rem;
+		line-height: 1.65;
 	}
 
 	@media (max-width: 640px) {

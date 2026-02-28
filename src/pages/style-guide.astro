@@ -12,6 +12,10 @@ import PostCard from '../components/PostCard.astro';
 import Chip from '../components/Chip.astro';
 import Timeline from '../components/Timeline.astro';
 import OwaspTop10Evolution from '../components/OwaspTop10Evolution.astro';
+import DiffBlock from '../components/DiffBlock.astro';
+import DiffLine from '../components/DiffLine.astro';
+import RedirectPipelineDemo from '../components/RedirectPipelineDemo.astro';
+import Breakdown from '../components/Breakdown.astro';
 import { getHtmlLang, getRequestLocale } from '../i18n/config';
 import { getSiteMeta, themeConfig } from '../theme.config';
 import { routes } from '../utils/routes';
@@ -650,6 +654,75 @@ const samplePostHref = routes.blogPost('exemplo', locale);
 				</div>
 			</section>
 
+			<section class="style-guide__section" id="diff-block">
+				<div class="style-guide__section-head">
+					<p class="eyebrow">código</p>
+					<h2>DiffBlock + DiffLine</h2>
+					<p>
+						Visualizador de diff anotado para artigos de segurança e análises de código. Cada linha pode ter
+						uma anotação expansível — clique numa linha com <code>·</code> para revelar a explicação.
+						Use <code>tagVariant</code> para colorir o badge: <code>danger</code> (vulnerável),
+						<code>success</code> (corrigido), <code>warning</code> (patch parcial), <code>info</code> (neutro).
+					</p>
+				</div>
+				<GlowBox accent="secondary" class="style-guide__panel sg-diff-panel">
+					<DiffBlock filename="exemplo/response.js — commit abc1234" tag="vulnerável" tagVariant="danger">
+						<DiffLine num="911" type="context" code="res.location = function location(url) {" />
+						<DiffLine num="912" type="context" code="  var loc = url;" />
+						<DiffLine num="913" type="remove" code="  return this.set('Location', encodeUrl(loc));" annotation="ANTES: sempre encodava tudo sem nenhuma verificação — linha original e vulnerável" />
+						<DiffLine num="913" type="add" code="  var encoded = encodeUrl(loc);" annotation="DEPOIS: guarda o resultado para comparação antes de retornar" />
+						<DiffLine num="914" type="add" code="  return this.set('Location', encoded);" />
+						<DiffLine num="915" type="context" code="};" />
+					</DiffBlock>
+					<p class="sg-diff-note">
+						Props de <code>DiffBlock</code>: <code>filename</code>, <code>tag</code>, <code>tagVariant</code> (danger / success / warning / info).<br />
+						Props de <code>DiffLine</code>: <code>num</code>, <code>type</code> (add / remove / context / hunk), <code>code</code>, <code>annotation</code> (opcional — ativa o clique).
+					</p>
+				</GlowBox>
+			</section>
+
+			<section class="style-guide__section" id="redirect-pipeline-demo">
+				<div class="style-guide__section-head">
+					<p class="eyebrow">interativo</p>
+					<h2>RedirectPipelineDemo</h2>
+					<p>
+						Simulador interativo do pipeline CVE-2024-29041. Demonstra como uma URL com barra invertida
+						bypassa uma allowlist baseada em <code>url.parse()</code> e faz o browser navegar para um host diferente.
+						Componente auto-contido — sem props, sem dependências externas.
+					</p>
+				</div>
+				<RedirectPipelineDemo />
+			</section>
+
+			<section class="style-guide__section" id="breakdown">
+				<div class="style-guide__section-head">
+					<p class="eyebrow">componentes</p>
+					<h2>Breakdown</h2>
+					<p>
+						Exibe qualquer string dividida em segmentos coloridos com labels. Funciona para URLs,
+						comandos de terminal, schemas, regex ou qualquer string que precise de anatomia visual.
+					</p>
+					<p>
+						Props: <code>parts[]</code> — array de <code>{"{ text, label, sub?, color }"}</code>.
+					</p>
+				</div>
+				<Breakdown parts={[
+					{ text: 'http://',        label: 'protocol', color: '#c084fc' },
+					{ text: 'usuario:senha@', label: 'userinfo', sub: 'credenciais', color: '#f59e0b' },
+					{ text: 'google.com',     label: 'host',     sub: 'domínio',    color: '#00ff7f' },
+					{ text: ':8080',          label: 'porta',    color: '#6e6eff' },
+					{ text: '/caminho',       label: 'path',     color: '#ff6b8a' },
+					{ text: '?q=busca',       label: 'query',    color: '#4ade80' },
+					{ text: '#ancora',        label: 'hash',     color: '#94a3b8' },
+				]} />
+				<Breakdown parts={[
+					{ text: 'git',    label: 'comando',  color: '#c084fc' },
+					{ text: ' log',   label: 'sub-cmd',  color: '#00ff7f' },
+					{ text: ' --oneline', label: 'flag', color: '#6e6eff' },
+					{ text: ' origin/main', label: 'ref', sub: 'branch remoto', color: '#f59e0b' },
+				]} />
+			</section>
+
 		</main>
 		<Footer locale={locale} />
 	</body>
@@ -1283,6 +1356,19 @@ const samplePostHref = routes.blogPost('exemplo', locale);
 
 	.logo-mark--tuner {
 		color: var(--color-highlight);
+	}
+
+	.sg-diff-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.sg-diff-note {
+		margin: 0;
+		color: var(--color-muted);
+		font-size: 0.9rem;
+		line-height: 1.65;
 	}
 
 	@media (max-width: 640px) {
