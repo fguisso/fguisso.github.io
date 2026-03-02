@@ -10,6 +10,7 @@ import Header from '../components/Header.astro';
 import { t } from '../i18n';
 import { getHtmlLang, getRequestLocale, type LocaleCode } from '../i18n/config';
 import { routes } from '../utils/routes';
+import SeriesNav from '../components/SeriesNav.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
 	slug: string;
@@ -30,6 +31,7 @@ const {
 	slug,
 	locale: forcedLocale,
 	availableLocales,
+	series,
 } = Astro.props as Props;
 const locale = forcedLocale ?? getRequestLocale(Astro);
 const currentPath = Astro.url?.pathname ?? '/';
@@ -119,6 +121,17 @@ const backCtaLabel = t(locale, 'post.backCta');
 						)
 					}
 				</header>
+
+				{
+					series && (
+						<SeriesNav
+							seriesSlug={series.slug}
+							seriesTitle={series.title}
+							currentPart={series.part}
+							locale={locale}
+						/>
+					)
+				}
 
 				{
 					heroImage && (

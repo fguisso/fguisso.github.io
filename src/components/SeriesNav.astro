@@ -1,0 +1,223 @@
+---
+import { getCollection } from 'astro:content';
+import { routes } from '../utils/routes';
+import { t } from '../i18n';
+import type { LocaleCode } from '../i18n/config';
+
+interface Props {
+	seriesSlug: string;
+	seriesTitle: string;
+	currentPart: number;
+	locale: LocaleCode;
+}
+
+const { seriesSlug, seriesTitle, currentPart, locale } = Astro.props;
+
+const allPosts = await getCollection(
+	'blog',
+	(post) => post.data.series?.slug === seriesSlug && post.data.lang === locale,
+);
+
+const parts = allPosts
+	.filter((p) => p.data.series != null)
+	.sort((a, b) => a.data.series!.part - b.data.series!.part)
+	.map((p) => ({
+		part: p.data.series!.part,
+		title: p.data.title,
+		href: routes.blogPost(p.data.canonicalSlug, locale),
+		isCurrent: p.data.series!.part === currentPart,
+	}));
+
+const badgeLabel = t(locale, 'series.badge');
+const currentLabel = t(locale, 'series.currentLabel');
+---
+
+<nav class="series-nav" aria-label={`${badgeLabel}: ${seriesTitle}`}>
+	<button class="series-toggle" aria-expanded="false" aria-controls="series-list">
+		<div class="series-header">
+			<span class="series-badge">{badgeLabel}</span>
+			<span class="series-title">{seriesTitle}</span>
+		</div>
+		<span class="series-toggle-icon" aria-hidden="true">
+			<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M4 6l4 4 4-4" />
+			</svg>
+		</span>
+	</button>
+	<ol class="series-list" id="series-list" hidden>
+		{
+			parts.map((p) => (
+				<li class:list={['series-item', { 'series-item--current': p.isCurrent }]}>
+					<span class="series-num" aria-hidden="true">
+						{p.part}
+					</span>
+					{p.isCurrent ? (
+						<span class="series-post-title">
+							{p.title}
+							<span class="series-current-label">— {currentLabel}</span>
+						</span>
+					) : (
+						<a href={p.href} class="series-post-title">
+							{p.title}
+						</a>
+					)}
+				</li>
+			))
+		}
+	</ol>
+</nav>
+
+<script>
+	document.querySelectorAll<HTMLElement>('.series-toggle').forEach((btn) => {
+		btn.addEventListener('click', () => {
+			const expanded = btn.getAttribute('aria-expanded') === 'true';
+			const list = document.getElementById(btn.getAttribute('aria-controls')!);
+			btn.setAttribute('aria-expanded', String(!expanded));
+			if (list) list.hidden = expanded;
+			btn.classList.toggle('is-open', !expanded);
+		});
+	});
+</script>
+
+<style>
+	.series-nav {
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-left: 3px solid var(--color-accent);
+		border-radius: var(--border-radius, 12px);
+		background: rgba(0, 255, 127, 0.04);
+		overflow: hidden;
+	}
+
+	.series-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		width: 100%;
+		padding: 0.85rem 1.25rem;
+		background: none;
+		border: none;
+		cursor: pointer;
+		text-align: left;
+		color: inherit;
+	}
+
+	.series-toggle:hover .series-title {
+		color: var(--color-fg);
+	}
+
+	.series-header {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		min-width: 0;
+	}
+
+	.series-badge {
+		font-family: 'JetBrains Mono', 'Fira Code', monospace;
+		font-size: 0.6rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.15em;
+		color: var(--color-accent);
+		background: rgba(0, 255, 127, 0.1);
+		border: 1px solid rgba(0, 255, 127, 0.25);
+		border-radius: 4px;
+		padding: 0.15em 0.5em;
+		white-space: nowrap;
+		flex-shrink: 0;
+	}
+
+	.series-title {
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--color-muted);
+		transition: color 0.15s;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.series-toggle-icon {
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+		width: 1rem;
+		height: 1rem;
+		color: var(--color-muted);
+		transition: transform 0.2s ease;
+	}
+
+	.series-toggle-icon svg {
+		width: 100%;
+		height: 100%;
+	}
+
+	.series-toggle.is-open .series-toggle-icon {
+		transform: rotate(180deg);
+	}
+
+	.series-list {
+		list-style: none;
+		margin: 0;
+		padding: 0.25rem 1.25rem 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	/* author display: flex overrides UA [hidden] { display: none } — restore it */
+	.series-list[hidden] {
+		display: none;
+	}
+
+	.series-item {
+		display: flex;
+		align-items: baseline;
+		gap: 0.6rem;
+		font-size: 0.875rem;
+		color: var(--color-muted);
+		padding-top: 0.35rem;
+	}
+
+	.series-num {
+		font-family: 'JetBrains Mono', 'Fira Code', monospace;
+		font-size: 0.7rem;
+		font-weight: 700;
+		color: var(--color-muted);
+		min-width: 1.2rem;
+		text-align: right;
+		opacity: 0.6;
+		flex-shrink: 0;
+	}
+
+	.series-item--current .series-num {
+		color: var(--color-accent);
+		opacity: 1;
+	}
+
+	.series-post-title {
+		color: var(--color-muted);
+		text-decoration: none;
+		line-height: 1.4;
+	}
+
+	a.series-post-title:hover {
+		color: var(--color-fg);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.series-item--current .series-post-title {
+		color: var(--color-fg);
+		font-weight: 500;
+	}
+
+	.series-current-label {
+		font-size: 0.75rem;
+		color: var(--color-accent);
+		font-weight: 400;
+		margin-left: 0.25rem;
+	}
+</style>

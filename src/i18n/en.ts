@@ -49,6 +49,11 @@ const en = {
 		wordsLabel: 'words',
 		minutesLabel: 'min',
 	},
+	series: {
+		badge: 'Series',
+		partLabel: 'Part',
+		currentLabel: 'you are here',
+	},
 };
 
 export default en;

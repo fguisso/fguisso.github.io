@@ -50,6 +50,11 @@ const pt = {
 		wordsLabel: 'palavras',
 		minutesLabel: 'min',
 	},
+	series: {
+		badge: 'Série',
+		partLabel: 'Parte',
+		currentLabel: 'você está aqui',
+	},
 };
 
 export default pt;

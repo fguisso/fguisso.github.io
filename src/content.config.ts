@@ -17,6 +17,13 @@ const blog = defineCollection({
 			tags: z.array(z.string()).default([]),
 			lang: z.enum(SUPPORTED_LOCALES),
 			canonicalSlug: z.string(),
+			series: z
+				.object({
+					slug: z.string(),
+					title: z.string(),
+					part: z.number().int().positive(),
+				})
+				.optional(),
 		}),
 });
 
