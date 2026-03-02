@@ -6,8 +6,10 @@ description: "Interesting links on the topic of secure development."
 pubDate: 2023-04-01T09:45:33-03:00
 tags: ["DevSec", "AppSec", "Links", "oauth", "oidc", "passwordless", "iam", "terraform"]
 categories: ["DevSec"]
-series: ["DevSec Links"]
-series_order: 2
+series:
+  slug: 'devsec-links'
+  title: 'DevSec Links'
+  part: 2
 ---
 
 Written by [Geovana](https://www.linkedin.com/in/geovana-silva/) & Guisso

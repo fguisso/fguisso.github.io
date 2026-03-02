@@ -6,8 +6,10 @@ description: "Interesting links on the topic of secure development."
 pubDate: 2023-07-01T09:45:33-03:00
 tags: ["DevSec", "AppSec", "Links", "slsa", "supply chain", "api", "auth", "terraform"]
 categories: ["DevSec"]
-series: ["DevSec Links"]
-series_order: 5
+series:
+  slug: 'devsec-links'
+  title: 'DevSec Links'
+  part: 5
 ---
 
 Written by [Geovana](https://www.linkedin.com/in/geovana-silva/) & Guisso

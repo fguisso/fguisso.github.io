@@ -6,8 +6,10 @@ description: "Interesting links on the topic of secure development."
 pubDate: 2023-06-01T09:45:33-03:00
 tags: ["DevSec", "AppSec", "Links", "keycloak", "gcp", "s3", "redos", "ransomware"]
 categories: ["DevSec"]
-series: ["DevSec Links"]
-series_order: 4
+series:
+  slug: 'devsec-links'
+  title: 'DevSec Links'
+  part: 4
 ---
 
 Written by [Geovana](https://www.linkedin.com/in/geovana-silva/) & Guisso

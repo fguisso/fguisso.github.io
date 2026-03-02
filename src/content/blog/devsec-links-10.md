@@ -6,8 +6,10 @@ description: "Links interessantes no tema de desenvolvimento seguro."
 pubDate: 2023-11-01T09:45:33-03:00
 tags: ["DevSec", "AppSec", "Links", "oauth", "postman", "okta", "git"]
 categories: ["DevSec"]
-series: ["DevSec Links"]
-series_order: 9
+series:
+  slug: 'devsec-links'
+  title: 'DevSec Links'
+  part: 9
 ---
 
 Escrito por [Geovana](https://www.linkedin.com/in/geovana-silva/) & Guisso

@@ -6,8 +6,10 @@ description: "Links interessantes no tema de desenvolvimento seguro."
 pubDate: 2023-03-01T09:45:33-03:00
 tags: ["DevSec", "AppSec", "Links", "chagpt", "api", "cors", "tls", "git", "secrets"]
 categories: ["DevSec"]
-series: ["DevSec Links"]
-series_order: 1
+series:
+  slug: 'devsec-links'
+  title: 'DevSec Links'
+  part: 1
 ---
 
 Escrito por [Geovana](https://www.linkedin.com/in/geovana-silva/) & Guisso

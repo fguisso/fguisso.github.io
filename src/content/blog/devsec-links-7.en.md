@@ -6,8 +6,10 @@ description: "Interesting links on the topic of secure development."
 pubDate: 2023-08-01T09:45:33-03:00
 tags: ["DevSec", "AppSec", "Links", "slsa", "csrf", "cors", "api", "csp"]
 categories: ["DevSec"]
-series: ["DevSec Links"]
-series_order: 6
+series:
+  slug: 'devsec-links'
+  title: 'DevSec Links'
+  part: 6
 ---
 
 Written by [Geovana](https://www.linkedin.com/in/geovana-silva/) & Guisso

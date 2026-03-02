@@ -6,8 +6,10 @@ description: "Links interessantes no tema de desenvolvimento seguro."
 pubDate: 2023-12-01T09:45:33-03:00
 tags: ["DevSec", "AppSec", "Links", "secrets", "ci/cd", "chatgpt", "copilot"]
 categories: ["DevSec"]
-series: ["DevSec Links"]
-series_order: 10
+series:
+  slug: 'devsec-links'
+  title: 'DevSec Links'
+  part: 10
 ---
 
 Escrito por [Geovana](https://www.linkedin.com/in/geovana-silva/) & Guisso
