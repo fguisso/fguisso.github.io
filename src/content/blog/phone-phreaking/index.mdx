@@ -1,0 +1,880 @@
+---
+title: 'Phone Phreaking'
+lang: 'pt'
+canonicalSlug: 'phone-phreaking'
+description: 'Antes da internet existir, uma rede gigantesca já conectava o mundo. Do assobio de 2600 Hz aos ataques SS7 e antenas clandestinas em apartamentos paulistas: o manual técnico do phreaking, do clássico ao moderno.'
+pubDate: 2026-05-02T10:00:00-03:00
+tags: ['História', 'Hacking', 'Telecom']
+customTemplate: 'interactive'
+---
+
+import { Image } from 'astro:assets';
+import lockedPhone from './rotary-locked-phone.jpeg';
+import Shell from '../../../components/interactive/phone-phreaking/Shell.astro';
+import SectionDivider from '../../../components/interactive/phone-phreaking/SectionDivider.astro';
+import RotaryDial from '../../../components/interactive/phone-phreaking/RotaryDial.astro';
+import TapDialer from '../../../components/interactive/phone-phreaking/TapDialer.astro';
+import FrequencySimulator from '../../../components/interactive/phone-phreaking/FrequencySimulator.astro';
+import WhistleViewer from '../../../components/interactive/phone-phreaking/WhistleViewer.astro';
+import BlueBox from '../../../components/interactive/phone-phreaking/BlueBox.astro';
+import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCarousel.astro';
+
+<Shell locale="pt">
+
+<section class="ph-intro">
+	<div class="ph-eyebrow">▸ TRANSMISSÃO INICIADA · 02:14 AM</div>
+	<div class="ph-construction-tag">⚠ EM CONSTRUÇÃO</div>
+	<h1 class="ph-title">PHONE<br/>PHREAKING<span class="ph-dot">.</span></h1>
+	<p>
+		Antes da internet existir, uma rede gigantesca já conectava o mundo: a rede telefônica
+		analógica da AT&T. Ela usava <em>tons de áudio audíveis</em> para
+		controlar suas próprias chamadas internacionais, e isso foi sua maior fraqueza.
+	</p>
+	<p>
+		Um grupo de jovens curiosos, cegos e engenheiros amadores descobriu que, com o assobio certo,
+		podiam viajar pela rede como fantasmas. Cinco décadas depois, os fantasmas mudaram de
+		instrumento, mas continuam circulando.
+	</p>
+</section>
+
+<section class="ph-summary">
+	<div class="ph-summary-box">
+		<div class="ph-summary-title">▸ TL;DR</div>
+		<p>
+			Este relatório explora em profundidade tanto as <strong>técnicas clássicas de phreaking</strong>
+			(caixas azul, vermelha, preta etc.) quanto as <strong>ameaças modernas</strong> a redes de
+			telefonia e mobilidade (2018–2025). Também investiga casos em que comunidades sob regimes
+			autoritários montaram redes próprias (GSM caseiro, conexão via discada, malhas mesh,
+			LoRaWAN, rádio HF, satélite/Starlink) para contornar censura.
+		</p>
+		<p>
+			As descobertas estão organizadas por tipo de ameaça e região, com tabelas de incidentes
+			históricos, quadros comparativos de dispositivos e cronologias detalhadas. Dados e exemplos
+			brasileiros recentes, incluindo esquemas de fraude descobertos em São Paulo (antenas
+			clandestinas em apartamento, carro-antena de SMS fraudulento), são destacados.
+		</p>
+	</div>
+</section>
+
+<SectionDivider label="01 // ORIGENS · A REDE QUE FALAVA" />
+
+<section class="ph-section">
+	<div style="max-width:900px">
+		<h2>Quando a <span class="ph-accent-blue">rede</span> falava em voz alta</h2>
+		<p>
+			Até os anos 1990, o sistema telefônico mundial era dominado pela <strong>AT&T</strong> e seus
+			equivalentes nacionais. Era o maior projeto de engenharia do século XX antes da internet:
+			uma rede de chaveamento eletromecânico (depois eletrônico, com os ESS, <em>Electronic
+			Switching Systems</em>), cobrindo continentes inteiros sobre cabo de cobre e centrais com
+			relés.
+		</p>
+		<p>
+			O ponto-chave, e a falha fatal, era a <strong class="ph-accent-orange">sinalização
+			in-band</strong>: os comandos que controlavam a chamada (estabelecer, derrubar, rotear) eram
+			tons de áudio transmitidos <em>na mesma frequência da voz humana</em>. A central não tinha
+			um canal de controle separado; ela ouvia o mesmo fio que carregava sua conversa.
+		</p>
+		<p>
+			Um tronco interurbano ocioso emitia continuamente um tom de <strong>2600 Hz</strong>. Quando
+			alguém ligava, o tom parava, sinalizando "linha em uso". Quando a chamada terminava, o tom
+			voltava, sinalizando "tronco livre, próximo cliente". A consequência era simples e
+			devastadora: <em>se você conseguisse gerar 2600 Hz no fone, a central acreditava que sua
+			chamada havia terminado, sem desligar do seu lado.</em>
+		</p>
+		<p>
+			A AT&T publicou todos os detalhes técnicos no <strong>Bell System Technical Journal</strong>
+			(novembro de 1960, <em>"Signaling Systems for Control of Telephone Switching"</em>). A
+			premissa era ingênua mas honesta: nenhum cliente comum teria geradores de tom calibrados, e
+			os técnicos da Bell eram homens de confiança. Bastou uma geração para essa confiança virar
+			um furo de bilhões.
+		</p>
+	</div>
+</section>
+
+<SectionDivider label="02 // JOYBUBBLES · O OUVIDO PERFEITO" />
+
+<section class="ph-section">
+	<div style="max-width:900px">
+		<h2><span class="ph-accent-orange">Joybubbles</span>, o menino que conversava com a rede</h2>
+		<p>
+			<a href="https://en.wikipedia.org/wiki/Joybubbles" target="_blank" rel="noopener"><strong>Josef
+			Carl Engressia Jr.</strong></a>, nascido em 25 de maio de 1949 em Richmond, Virgínia, foi o
+			primeiro phreaker que a história registra. Era cego de nascença e tinha
+			<strong>ouvido absoluto</strong>.
+		</p>
+		<div class="ph-howbox">
+			<div class="ph-howbox-title">▸ O QUE É OUVIDO ABSOLUTO?</div>
+			<div>
+				Capacidade rara (estima-se 1 em 10.000 pessoas) de identificar e reproduzir qualquer
+				nota musical sem usar uma referência. Quem tem ouvido absoluto escuta um som e
+				reconhece na hora se é Lá-440Hz, Mi-330Hz ou Sol#-415Hz, do mesmo jeito que a maioria
+				das pessoas reconhece cores. No caso de Joybubbles, a habilidade era ainda mais rara:
+				ele conseguia <em>assobiar</em> qualquer frequência específica que pedissem, com
+				precisão de poucos hertz. Para um sistema telefônico que controlava chamadas com tons
+				calibrados, era como entregar a chave do cofre.
+			</div>
+		</div>
+		<p>
+			Aos 4 anos já passava horas no telefone. Aos 7, em 1956, assobiou por acaso em uma chamada
+			de longa distância e a linha caiu, mas o tom de discagem voltou. Tinha encontrado os 2600
+			Hz por acidente, <strong>treze anos antes</strong> de Captain Crunch e do apito do cereal.
+			Antes mesmo do assobio, ainda criança, Joe descobriu que podia replicar com o gancho do
+			telefone os pulsos do disco rotativo, burlando o cadeado que a babá colocava no telefone:
+			a primeira documentação prática de tap dialing.
+		</p>
+		<p>
+			Em 1968, estudante na <strong>University of South Florida</strong>, Joe foi tema de uma
+			matéria no jornal universitário que o apelidou de <em>"The Whistler"</em>. A AT&T processou
+			a universidade. Em 1971, Ron Rosenbaum o entrevistou para o artigo
+			<a href="https://www.slate.com/articles/technology/the_spectator/2011/10/the_article_that_inspired_steve_jobs_secrets_of_the_little_blue_.html" target="_blank" rel="noopener"><em>"Secrets of the Little Blue Box"</em></a>
+			da Esquire, o mesmo texto que inspiraria
+			<a href="https://en.wikipedia.org/wiki/Steve_Wozniak" target="_blank" rel="noopener">Steve Wozniak</a>
+			a montar a primeira Blue Box.
+		</p>
+		<div class="ph-trivia">
+			<div class="ph-trivia-title">▸ ELE NUNCA QUIS GANHAR DINHEIRO</div>
+			Joe nunca usou suas habilidades para fraude: queria <em>entender a rede</em>. Em 1975,
+			depois de anos de fricção com o FBI, foi contratado pela <strong>Mountain Bell</strong> em
+			Denver como técnico de troubleshooting, função que ocupou por sete anos, até se mudar para
+			Minneapolis em 1982. Em maio de 1988 "reverteu para a infância" como forma de processar
+			abusos sexuais sofridos na infância, declarando-se eternamente com 5 anos. Em 1991,
+			formalizou a transformação em corte e adotou legalmente o nome
+			<strong class="ph-accent-orange">"Joybubbles"</strong>. Morreu em 8 de agosto de 2007, em
+			Minneapolis, de insuficiência cardíaca congestiva.
+			<div style="margin-top:14px;font-size:13px;opacity:0.85">
+				▸ Vale ouvir o obituário da NPR:
+				<a href="https://www.npr.org/transcripts/13764518" target="_blank" rel="noopener">"Joe
+				Engressia, Expert 'Phone Phreak,' Dies"</a> (2007).
+			</div>
+		</div>
+	</div>
+</section>
+
+<SectionDivider label="03 // O TAP · DISCAGEM PELO GANCHO" />
+
+<section class="ph-section">
+	<div class="ph-grid-2" style="margin-bottom:40px">
+		<div>
+			<h2>O <span class="ph-accent-orange">tap</span>: discagem pelo gancho</h2>
+			<p>
+				A técnica mais antiga do phreaking não usava tons especiais nem assobios, só um dedo
+				bem coordenado. Chamada de <strong>tapping</strong> ou <em>switch-hook dialing</em>,
+				transformava o gancho do telefone em um disco improvisado. Joybubbles aprendeu o
+				truque ainda criança, antes mesmo de descobrir o assobio mágico.
+			</p>
+			<p>
+				Para entender por que o truque funciona, vale ver o que ele imitava: o telefone de
+				disco rotativo (ao lado). Cada dígito girava o disco até um batente; ao retornar,
+				uma came interna rotacionava e seus dentes empurravam uma paleta de cobre, gerando
+				os pulsos elétricos que a central contava.
+			</p>
+		</div>
+		<RotaryDial locale="pt" />
+	</div>
+
+	<div class="ph-grid-2">
+		<div>
+			<h3>Como o tapping vence o disco</h3>
+			<p>
+				Discar "5" era enviar 5 pulsos a uma cadência de <strong>10 pulsos por segundo</strong>
+				(60ms aberto / 40ms fechado). Phreakers descobriram o atalho: <em>tocar repetidamente
+				no gancho</em> abre e fecha o mesmo circuito. Mesma lógica do disco, sem disco.
+				Telefones com o disco trancado a cadeado? Bypass via gancho. Orelhão de hotel sem
+				disco? Toque o gancho. Era o truque mais democrático do phreaking, qualquer dedo
+				aprendia em meia hora.
+			</p>
+			<div class="ph-howbox">
+				<div class="ph-howbox-title">▸ COMO FUNCIONAVA</div>
+				<div>
+					1. Levante o fone (linha fica fechada → tom de discagem)<br/>
+					2. Para discar o "3", aperte o gancho 3 vezes (60ms cada)<br/>
+					3. Espere ~700ms, a central registra "3"<br/>
+					4. Repita para os outros dígitos. "0" são 10 toques.
+				</div>
+			</div>
+			<div class="ph-trivia">
+				<div class="ph-trivia-title">▸ POP CULTURE</div>
+				A cena clássica do prisioneiro que precisa fazer uma ligação proibida, desliga o
+				telefone público da cadeia e <em>tappeia o gancho</em> pra discar fora da lista
+				autorizada, é uma referência direta a essa técnica. Aparece no filme
+				<a href="https://en.wikipedia.org/wiki/Hackers_(film)" target="_blank" rel="noopener"><strong>Hackers (1995)</strong></a>,
+				em <a href="https://en.wikipedia.org/wiki/WarGames" target="_blank" rel="noopener"><em>WarGames (1983)</em></a>,
+				e em uma dúzia de thrillers de prisão dos anos 80–90. Não é truque de roteiro: era a
+				única coisa que realmente funcionava num telefone com disco bloqueado.
+			</div>
+		</div>
+		<div>
+			<TapDialer locale="pt" />
+			<figure class="ph-figure" style="margin-top:16px">
+				<Image src={lockedPhone} alt="Telefone de disco com cadeado físico no centro" widths={[400, 800]} sizes="(max-width: 768px) 90vw, 420px" />
+				<figcaption>O cenário em que o tap se tornava a única saída: um cadeado físico passado pelo disco do telefone, bloqueando a discagem comum.</figcaption>
+			</figure>
+		</div>
+	</div>
+</section>
+
+<SectionDivider label="04 // O ASSOBIO DE 2600 Hz" />
+
+<section class="ph-section">
+	<div class="ph-grid-2">
+		<div>
+			<h2>O assobio de <span class="ph-accent-orange">2600 Hz</span></h2>
+			<p>
+				Joybubbles foi o primeiro a perceber, mas não o único. Em 1968, o engenheiro
+				<a href="https://en.wikipedia.org/wiki/John_Draper" target="_blank" rel="noopener"><strong class="ph-accent-orange">John Draper</strong></a>
+				conheceu um marinheiro cego que lhe passou a dica: o apito de plástico que vinha de
+				brinde no cereal
+				<a href="https://en.wikipedia.org/wiki/Cap%27n_Crunch" target="_blank" rel="noopener">Cap'n Crunch</a>
+				tocava exatamente 2600 Hz. Bastava soprá-lo no bocal e o tronco interurbano se rendia. O
+				mundo ganhou um <em>Captain Crunch</em>; a AT&T perdeu o controle.
+			</p>
+			<WhistleViewer locale="pt" />
+			<p>
+				Quando o assobio entrava no fone, a central acreditava que a chamada havia terminado,
+				mas a linha continuava aberta. Você ainda estava conectado a um tronco interurbano vivo,
+				só que agora <em>como se fosse a própria central</em>, com permissão para enviar
+				comandos diretos.
+			</p>
+			<div class="ph-howbox">
+				<div class="ph-howbox-title">▸ COMO FUNCIONAVA</div>
+				<div>
+					1. Disque um número 0800 (gratuito, mas usa tronco interurbano)<br/>
+					2. Após conectar, sopre 2600 Hz no bocal<br/>
+					3. A central remota desconecta o destino mas mantém o tronco<br/>
+					4. Você agora tem acesso direto à rede de troncos
+				</div>
+			</div>
+		</div>
+		<FrequencySimulator locale="pt" />
+	</div>
+</section>
+
+<SectionDivider label="05 // BLUE BOX & CCITT5" />
+
+<section class="ph-section">
+	<div style="margin-bottom:40px;max-width:800px">
+		<h2>A <span class="ph-accent-blue">Blue Box</span> e os tons MF</h2>
+		<p>
+			Após o assobio de 2600 Hz "abrir" o tronco, era preciso <em>dizer à rede</em> para onde discar.
+			A AT&T usava um sistema de sinalização chamado <strong class="ph-accent-blue">CCITT5 / Multi-Frequency (MF)</strong>:
+			cada dígito é representado por <strong>dois tons simultâneos</strong>, escolhidos de uma matriz
+			de 6 frequências (700, 900, 1100, 1300, 1500 e 1700 Hz).
+		</p>
+		<p>
+			A <strong class="ph-accent-blue">Blue Box</strong>, popularizada por
+			<a href="https://en.wikipedia.org/wiki/Steve_Wozniak" target="_blank" rel="noopener">Steve Wozniak</a>
+			e <a href="https://en.wikipedia.org/wiki/Steve_Jobs" target="_blank" rel="noopener">Steve Jobs</a>
+			antes de fundarem a Apple, era um aparelho que gerava esses pares de tons. O artigo
+			<a href="https://www.slate.com/articles/technology/the_spectator/2011/10/the_article_that_inspired_steve_jobs_secrets_of_the_little_blue_.html" target="_blank" rel="noopener"><em>"Secrets of the Little Blue Box"</em></a>,
+			publicado na Esquire em 1971 por Ron Rosenbaum, detonou a popularização do hobby.
+		</p>
+		<div class="ph-howbox">
+			<div class="ph-howbox-title">▸ ANTES DE TOCAR: KP E ST</div>
+			<div>
+				Além dos 10 dígitos, o protocolo MF tem dois tons de <em>controle</em> que dizem
+				"começou" e "acabou" para a central remota. Sem eles, a sequência de números é só
+				ruído.<br/><br/>
+				• <strong class="ph-accent-blue">KP</strong> (<em>Key Pulse</em>, tons
+				<span class="ph-mono">1100 + 1700 Hz</span>) abre o pacote: avisa
+				"<em>atenção, vão chegar dígitos</em>". Sempre o primeiro tom enviado.<br/>
+				• <strong class="ph-accent-blue">ST</strong> (<em>Start</em>, tons
+				<span class="ph-mono">1500 + 1700 Hz</span>) fecha o pacote: avisa "<em>terminei,
+				pode rotear</em>". Sempre o último.<br/><br/>
+				A sequência completa de uma chamada é <span class="ph-mono">KP · dígitos · ST</span>.
+				No simulador abaixo, comece pelo KP, toque os dígitos do destino e termine no ST.
+			</div>
+		</div>
+	</div>
+	<BlueBox locale="pt" />
+</section>
+
+<SectionDivider label="06 // O ARSENAL DE CAIXAS COLORIDAS" />
+
+<section class="ph-section">
+	<div style="max-width:900px;margin-bottom:24px">
+		<h2>Não foi só a <span class="ph-accent-blue">Blue Box</span></h2>
+		<p>
+			Entre as décadas de 1960 e 1980, phreakers desenvolveram dezenas de <em>color boxes</em>,
+			cada uma explorando uma característica diferente de protocolos de sinalização não criptografados.
+			O hardware era simples: geradores de tom, resistores, capacitores, telefones modificados ou,
+			mais tarde, PCs com placas de áudio. Cada cor atacava um vetor: cobrança, autenticação,
+			conferência, sinalização de moeda.
+		</p>
+	</div>
+
+	<BoxCarousel locale="pt" />
+
+	<div class="ph-table-wrap">
+		<table class="ph-table">
+			<thead>
+				<tr>
+					<th>Caixa</th>
+					<th>Sinal explorado</th>
+					<th>Função</th>
+					<th>Era / Contexto</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong class="ph-cell-blue">Azul</strong></td>
+					<td class="ph-mono">2600 Hz + MF (CCITT #5)</td>
+					<td>Liberar tronco interurbano e discar gratuitamente em rotas de longa distância.</td>
+					<td>1970s · Draper / Wozniak / Jobs</td>
+				</tr>
+				<tr>
+					<td><strong class="ph-cell-cmd">Vermelha</strong></td>
+					<td class="ph-mono">1700 + 2200 Hz (moeda)</td>
+					<td>Emular sinal de inserção de moeda em orelhões, ganhando crédito sem pagar.</td>
+					<td>1970s–80s · orelhões americanos</td>
+				</tr>
+				<tr>
+					<td><strong>Preta</strong></td>
+					<td class="ph-mono">Resistor + capacitor em série</td>
+					<td>Bloquear o pulso de cobrança da chamada recebida; central pensa que ainda está tocando.</td>
+					<td>1970s · centrais eletromecânicas</td>
+				</tr>
+				<tr>
+					<td><strong class="ph-cell-blue">Verde</strong></td>
+					<td class="ph-mono">Tons de aceita / devolve moeda</td>
+					<td>Comandar remotamente cabines automáticas em links internacionais (coin-control signaling).</td>
+					<td>1970s–80s · payphones DDD</td>
+				</tr>
+				<tr>
+					<td><strong>Transparente</strong></td>
+					<td class="ph-mono">Microfone + amp indutivo</td>
+					<td>Ouvir o lado mudo de orelhões que silenciavam o áudio até a inserção da moeda.</td>
+					<td>1970s · modelos raros</td>
+				</tr>
+				<tr>
+					<td><strong>Violeta</strong></td>
+					<td class="ph-mono">Resistor em série</td>
+					<td>Manter a linha em "fora de gancho" simulado, inibindo toques.</td>
+					<td>1970s · variante doméstica</td>
+				</tr>
+				<tr>
+					<td><strong class="ph-cell-cmd">Laranja</strong></td>
+					<td class="ph-mono">FSK CallerID 1200 baud</td>
+					<td>Injetar Caller ID falso na linha do destinatário antes do toque.</td>
+					<td>1980s–90s · engenharia social</td>
+				</tr>
+				<tr>
+					<td><strong>Bege</strong></td>
+					<td class="ph-mono">Test phone com clipes</td>
+					<td>"Lineman handset" caseiro: ligar direto na caixa de junção da rua.</td>
+					<td>1980s · uso técnico/clandestino</td>
+				</tr>
+				<tr>
+					<td><strong>Branca</strong></td>
+					<td class="ph-mono">CCITT R2 via Amiga</td>
+					<td>Variante australiana usando computador para gerar sinalização R2 internacional.</td>
+					<td>1990s · Oceania</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<p style="max-width:900px;margin-top:24px">
+		Todas exploravam o mesmo pecado original: <strong>sinalização in-band sem autenticação</strong>.
+		O áudio que controlava a rede era o mesmo áudio que o usuário podia injetar.
+	</p>
+</section>
+
+<SectionDivider label="07 // ATAQUES MODERNOS · 2018–2025" />
+
+<section class="ph-section">
+	<div style="max-width:900px;margin-bottom:16px">
+		<h2>Os <span class="ph-accent-orange">fantasmas</span> mudaram de instrumento</h2>
+		<p>
+			A telefonia digital matou o phreaking analógico, mas trocou um conjunto de protocolos
+			frágeis por outro. SS7, Diameter, GTP, SIGTRAN, IMS: pilhas projetadas nos anos 1970–1990,
+			quando a rede era um clube fechado de operadoras confiáveis. Hoje, qualquer ator com acesso
+			a um <em>roaming hub</em> ou um SDR de US$ 500 entra como par autorizado.
+		</p>
+	</div>
+
+	<h3><span class="ph-tag">05.1</span> SS7 / SIGTRAN</h3>
+	<p style="max-width:900px">
+		O protocolo <a href="https://en.wikipedia.org/wiki/Signalling_System_No._7" target="_blank" rel="noopener">SS7</a>
+		(1975) e sua versão IP, SIGTRAN, são a sinalização base de 2G/3G no mundo inteiro.
+		<strong>Sem autenticação</strong>, sem criptografia. Quem entra na rede pode pedir a localização
+		de qualquer assinante, redirecionar SMS ou interceptar chamadas. Em 2019, fraudadores
+		<a href="https://www.vice.com/en/article/criminals-hackers-ss7-uk-banks-metro-bank/" target="_blank" rel="noopener">exploraram SS7 no Reino Unido</a>
+		para interceptar códigos 2FA e esvaziar contas do <strong>Metro Bank</strong>. No Brasil,
+		fraudes do tipo já eram conhecidas desde 2016. O
+		<a href="https://www.enisa.europa.eu/publications/signalling-security-in-telecom-ss7-diameter-5g" target="_blank" rel="noopener">relatório ENISA 2018</a>
+		reconhece formalmente o débito técnico: 2G/3G dependem de SS7 sem "considerações de segurança
+		modernas", e o 4G (Diameter) herdou o problema.
+	</p>
+
+	<h3><span class="ph-tag">05.2</span> Femtocells e BTS falsas</h3>
+	<p style="max-width:900px">
+		Em 2013, <strong>Doug DePerry</strong> e <strong>Tom Ritter</strong> mostraram, na
+		<a href="https://www.defcon.org/images/defcon-21/dc-21-presentations/DePerry-Ritter/DEFCON-21-DePerry-Ritter-Femtocell-Updated.pdf" target="_blank" rel="noopener">DEF CON 21</a>,
+		como modificar uma <a href="https://en.wikipedia.org/wiki/Femtocell" target="_blank" rel="noopener">femtocell</a>
+		da Verizon (US$ 250) e um Raspberry Pi (US$ 50) para escutar todas as chamadas e SMS dos
+		celulares vizinhos. O dispositivo cabia numa mochila. Doze anos depois, a mesma técnica voltou
+		em escala: equipamentos comerciais como
+		<a href="https://en.wikipedia.org/wiki/Stingray_phone_tracker" target="_blank" rel="noopener"><strong>StingRay</strong></a>
+		(Harris Corp.) e variantes caseiras com <strong>USRP +
+		<a href="https://openbts.org/" target="_blank" rel="noopener">OpenBTS</a> /
+		<a href="https://osmocom.org/" target="_blank" rel="noopener">Osmocom</a></strong> são usados
+		por governos, quadrilhas e pesquisadores. Os celulares se conectam ao sinal mais forte, quando
+		o mais forte é hostil, é hostil que ganha.
+	</p>
+
+	<h3><span class="ph-tag">05.3</span> SIM Swap e portabilidade</h3>
+	<p style="max-width:900px">
+		Um operador de telemarketing convencido por engenharia social transfere a linha da vítima para
+		um SIM controlado pelo atacante. Em segundos, todo SMS de 2FA, banco, e-mail, exchange, vai
+		para o telefone errado. O <a href="https://en.wikipedia.org/wiki/SIM_swap_scam" target="_blank" rel="noopener"><strong>SIM swap</strong></a>
+		não explora protocolo: explora pessoas. Mas as métricas sobem com 2FA-por-SMS. FBI e ANATEL
+		emitiram alertas no início dos anos 2020.
+	</p>
+
+	<h3><span class="ph-tag">05.4</span> VoLTE / IMS / SMS Blasting</h3>
+	<p style="max-width:900px">
+		Voz sobre LTE (VoLTE) trouxe IMS, uma pilha SIP completa dentro da operadora. Pesquisadores
+		demonstraram, em 2021, ataques de downgrade e interceptação em chamadas VoLTE. Em paralelo,
+		<strong>SIM Boxes</strong>, racks com centenas de chips SIM operando em paralelo, disparam
+		dezenas de milhares de SMS por hora para fraudes financeiras. É a mesma ideia da Blue Box,
+		mas industrializada (ver Seção 08).
+	</p>
+
+	<h3><span class="ph-tag">05.5</span> Fraude em PBX e VoIP</h3>
+	<p style="max-width:900px">
+		PBX corporativos mal configurados continuam discando números premium internacionais durante a
+		noite. Adaptadores ATA hackeados, contas SIP com senha fraca, gateways VoIP expostos, cada um
+		desses é uma <em>blue box</em> moderna, gerando faturas de cinco dígitos para a vítima e
+		dividendos para o atacante.
+	</p>
+</section>
+
+<SectionDivider label="08 // CLÁSSICO vs MODERNO" />
+
+<section class="ph-section">
+	<div class="ph-table-wrap">
+		<table class="ph-table">
+			<thead>
+				<tr>
+					<th>Eixo</th>
+					<th>Phreaking clássico</th>
+					<th>Phreaking moderno</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>Mídia explorada</strong></td>
+					<td>Sinalização in-band analógica, pulsos elétricos</td>
+					<td>SS7 / Diameter / GTP, infra IP, falhas de software</td>
+				</tr>
+				<tr>
+					<td><strong>Alvo</strong></td>
+					<td>Cobrança, longa distância gratuita</td>
+					<td>Dados pessoais, 2FA bancário, vigilância</td>
+				</tr>
+				<tr>
+					<td><strong>Ferramenta</strong></td>
+					<td>Hardware discreto (apito, resistor, gerador de tom)</td>
+					<td>SDR (USRP, HackRF), femtocells modificadas, scripts</td>
+				</tr>
+				<tr>
+					<td><strong>Ator</strong></td>
+					<td>Entusiasta independente, hacker contracultural</td>
+					<td>Crime organizado, Estado, espionagem corporativa</td>
+				</tr>
+				<tr>
+					<td><strong>Escala</strong></td>
+					<td>Uma chamada por vez</td>
+					<td>Milhões de assinantes simultâneos via roaming hub</td>
+				</tr>
+				<tr>
+					<td><strong>Custo de entrada</strong></td>
+					<td>US$ 5 (apito) · US$ 200 (Blue Box)</td>
+					<td>US$ 500 (HackRF) · US$ 50.000 (StingRay)</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<SectionDivider label="09 // FÓRUNS ABANDONADOS · 2000–2015" />
+
+<section class="ph-section">
+	<div style="max-width:900px">
+		<h2>O <span class="ph-accent-blue">underground</span> migra para o digital</h2>
+		<p>
+			Entre 2000 e 2015, o que sobrou do phreaking analógico se misturou com o nascente
+			<em>"digital phreaking"</em> em fóruns como <span class="ph-mono" style="color:var(--ph-yellow)">alt.phone.phreaking</span>,
+			listas privadas de Telnet, FTPs abandonados e blogs de pesquisadores. As fontes primárias
+			daquela era são frágeis: muitos arquivos só existem hoje no
+			<a href="https://archive.org/" target="_blank" rel="noopener">Internet Archive</a> ou em
+			mirrors de comunidades como o <a href="https://en.wikipedia.org/wiki/Hack_Canada" target="_blank" rel="noopener"><strong>Hack Canada</strong></a> e a
+			<a href="https://2600.com/" target="_blank" rel="noopener"><strong>2600 Magazine</strong></a>.
+		</p>
+		<p>
+			Projetos como o <a href="http://www.projectmf.org/" target="_blank" rel="noopener"><span class="ph-mono" style="color:var(--ph-yellow)">Project MF</span></a> (reconstrução de
+			Blue Box em Arduino, com servidor Asterisk simulando uma Class 4 dos anos 1970), o
+			<a href="https://openbts.org/" target="_blank" rel="noopener"><strong>OpenBTS</strong></a>
+			(estação base GSM em software) e o
+			<a href="https://osmocom.org/" target="_blank" rel="noopener"><strong>Osmocom</strong></a>
+			mostram como o conhecimento migrou de "audio hacking" para engenharia reversa de protocolos.
+			Talks da <a href="https://defcon.org/" target="_blank" rel="noopener">DEF CON</a>, ToorCon,
+			CCC e da própria HOPE documentaram a transição em vídeo. A maior parte da literatura
+			acadêmica chega só depois de 2015, antes disso, os dados estavam em fóruns que iam fechando
+			ano a ano.
+		</p>
+	</div>
+</section>
+
+<SectionDivider label="10 // RESISTÊNCIA EM REGIMES AUTORITÁRIOS" />
+
+<section class="ph-section">
+	<div style="max-width:900px;margin-bottom:24px">
+		<h2>Quando o Estado <span class="ph-accent-orange">desliga</span> a rede</h2>
+		<p>
+			Quando o governo corta internet móvel ou fixa para silenciar protestos, comunidades
+			improvisam. O resultado é um catálogo improvável: rádio amador, modems V.92 atravessando
+			uma fronteira, redes mesh, LoRaWAN, satélite. A rede oficial cai; outras emergem.
+		</p>
+	</div>
+
+	<div class="ph-cards-grid">
+		<div class="ph-case-card is-orange">
+			<div class="ph-case-meta"><span>2020</span><span>BIELORRÚSSIA</span></div>
+			<div class="ph-case-title">Modems atravessando fronteiras</div>
+			<p>
+				Durante os <a href="https://www.hrw.org/news/2020/08/28/belarus-internet-disruptions-online-censorship" target="_blank" rel="noopener">protestos contra Lukashenko</a>,
+				o governo cortou internet e celular por 61 horas. Ativistas e jornalistas recorreram a
+				modems V.92 via telefone fixo internacional, conectando-se a ISPs estrangeiros como
+				gateway de emergência. <strong>56 kbps é infinitamente melhor que 0 kbps.</strong>
+			</p>
+		</div>
+		<div class="ph-case-card">
+			<div class="ph-case-meta"><span>JAN/2022</span><span>CAZAQUISTÃO</span></div>
+			<div class="ph-case-title">Apagão em Zhanaozen</div>
+			<p>
+				Bloqueio total de internet móvel durante os protestos. Linhas fixas DSL e dial-up V.92
+				foram a única rota para o exterior. ONGs internacionais documentaram o blackout, mas a
+				infraestrutura local não suportou tráfego em escala.
+			</p>
+		</div>
+		<div class="ph-case-card is-orange">
+			<div class="ph-case-meta"><span>AGO/2023</span><span>NAGORNO-KARABAKH</span></div>
+			<div class="ph-case-title">Cabo cortado em Lachin</div>
+			<p>
+				<a href="https://armenpress.am/eng/news/1117619/" target="_blank" rel="noopener">Em 17/08/2023</a>, militares do Azerbaijão cortaram o cabo de fibra que ligava Artsakh,
+				deixando a região offline. Volume residual sobreviveu por <strong>HF e rádio amador</strong>,
+				sob jamming contínuo. Câmeras de paz russas tentaram restabelecer link via rádio.
+			</p>
+		</div>
+		<div class="ph-case-card is-blue">
+			<div class="ph-case-meta"><span>2014–HOJE</span><span>UCRÂNIA OCUPADA</span></div>
+			<div class="ph-case-title">Operadoras-fantasma em Donetsk e Luhansk</div>
+			<p>
+				Zonas separatistas montaram operadoras móveis próprias com equipamento confiscado da
+				<a href="https://en.wikipedia.org/wiki/Lifecell_(Ukraine)" target="_blank" rel="noopener"><strong>Lifecell</strong></a>
+				e da <a href="https://en.wikipedia.org/wiki/Kyivstar" target="_blank" rel="noopener"><strong>Kyivstar</strong></a>:
+				Phoenix (Feniks) em Donetsk; Lugacom (depois MCS) em Luhansk. Mantiveram o MCC
+				ucraniano (255) até 2022, quando começaram a migrar para prefixos +7 russos.
+			</p>
+		</div>
+		<div class="ph-case-card is-blue">
+			<div class="ph-case-meta"><span>2001–2019</span><span>CUBA</span></div>
+			<div class="ph-case-title">
+				<a href="https://en.wikipedia.org/wiki/SNET_(Cuba)" target="_blank" rel="noopener">SNET</a>, a Street Network
+			</div>
+			<p>
+				Rede mesh Wi-Fi comunitária com até <strong>100.000 nós</strong> em Havana. Não dependia
+				de internet pública. Tinha jogos, fóruns, voz local, repositório de arquivos. Foi
+				absorvida pelo Estado em 2019, mas mostrou que uma cidade inteira pode rodar sua própria
+				rede paralela.
+			</p>
+		</div>
+		<div class="ph-case-card">
+			<div class="ph-case-meta"><span>2021–HOJE</span><span>MYANMAR</span></div>
+			<div class="ph-case-title">Pós-golpe: rádio amador e Starlink</div>
+			<p>
+				Após o golpe militar de fev/2021, a junta cortou internet móvel várias vezes. Resistência
+				se apoiou em rádio amador, redes mesh com <strong>LoRaWAN</strong>, e Starlink contrabandeado
+				(parte foi confiscada pelos militares).
+			</p>
+		</div>
+		<div class="ph-case-card is-blue">
+			<div class="ph-case-meta"><span>2019–2022</span><span>HONG KONG / IRÃ</span></div>
+			<div class="ph-case-title">Mesh por bluetooth</div>
+			<p>
+				Apps como <a href="https://en.wikipedia.org/wiki/Bridgefy" target="_blank" rel="noopener"><strong>Bridgefy</strong></a>
+				e <a href="https://briarproject.org/" target="_blank" rel="noopener"><strong>Briar</strong></a>
+				viraram canal de comunicação durante protestos. Mensagens saltavam celular a celular via
+				Bluetooth e Wi-Fi Direct, sem passar pelas operadoras. Vulnerabilidades vieram depois,
+				mas o paradigma se firmou.
+			</p>
+		</div>
+	</div>
+</section>
+
+<SectionDivider label="11 // BRASIL · 2024–2025" />
+
+<section class="ph-section">
+	<div style="max-width:900px;margin-bottom:24px">
+		<h2>Antenas em <span class="ph-accent-orange">apartamentos</span> e carros-fantasma</h2>
+		<p>
+			O Brasil entrou na era do <em>phreaking de quadrilha</em>. Em 2024 e 2025, a Polícia Civil
+			de São Paulo desmantelou três operações sofisticadas usando hardware de telecom clandestino
+			para fraude bancária em massa. O modus operandi é industrial: derrubar o sinal das vítimas,
+			forçar conexão em uma BTS falsa controlada pela quadrilha, e disparar SMS com link de phishing.
+		</p>
+	</div>
+
+	<div class="ph-cards-grid">
+		<div class="ph-case-card is-orange">
+			<div class="ph-case-meta"><span>23/JUL/2024</span><span>SP, AV. FARIA LIMA</span></div>
+			<div class="ph-case-title">
+				<a href="https://www.cnnbrasil.com.br/nacional/carro-do-golpe-veja-equipamentos-encontrados-em-veiculo-para-interceptar-sinal-de-celulares/" target="_blank" rel="noopener">Carro-antena em Faria Lima</a>
+			</div>
+			<p>
+				Motorista preso em flagrante após patrulhamento. O carro alugado circulava 8–12 horas
+				por dia pela Av. Paulista e Av. Faria Lima com transmissores que
+				<strong>derrubavam o 4G</strong> dos celulares próximos. Quando o sinal caía, o
+				equipamento disparava SMS com link bancário falso. Confessou que recebia
+				<strong>R$ 1.000/semana</strong> só pra dirigir.
+			</p>
+		</div>
+		<div class="ph-case-card is-orange">
+			<div class="ph-case-meta"><span>23/JAN/2025</span><span>SP, MORUMBI</span></div>
+			<div class="ph-case-title">
+				<a href="https://sbtnews.sbt.com.br/noticia/policia/esquema-de-sms-falso-e-descoberto-em-predio-na-zona-oeste-de-sao-paulo" target="_blank" rel="noopener">Apartamento com antena na varanda</a>
+			</div>
+			<p>
+				Apartamento no <strong>19º andar</strong> de um prédio no Morumbi (Zona Oeste), com
+				antena montada na varanda apontando para a Marginal Pinheiros. Equipamento 2G que
+				<strong>bloqueava 3G/4G/5G</strong> em raio de 2 km. Uma única antena dispara mais
+				de <strong>100 mil mensagens por dia</strong>. ANATEL e Polícia Civil derrubaram a
+				operação após 6 meses de investigação.
+			</p>
+		</div>
+		<div class="ph-case-card is-orange">
+			<div class="ph-case-meta"><span>10/SET/2025</span><span>SP, ITAQUERA</span></div>
+			<div class="ph-case-title">
+				<a href="https://www.metropoles.com/sao-paulo/policia-descobre-central-movel-do-golpe-do-sms-e-prende-motorista" target="_blank" rel="noopener">Central móvel, femtocell em carro</a>
+			</div>
+			<p>
+				Outra ação policial, outro carro-antena. Homem de 35 anos disparando
+				<strong>~40.000 SMS/hora</strong> de dentro do veículo na Zona Leste, com alvos também
+				na Av. Paulista e Pinheiros. Apreendidos rádio-transmissores e apontadores de sinal.
+				Indiciado por associação criminosa e invasão de dispositivo informático.
+			</p>
+		</div>
+	</div>
+
+	<p style="max-width:900px;margin-top:24px">
+		O denominador comum: hardware de operadora (femtocells originalmente vendidas como repetidoras
+		domésticas), firmware modificado, antenas direcionais e software derivado de OpenBTS / YateBTS.
+		O ecossistema técnico que pesquisadores demonstraram em 2013 chegou ao crime de varejo dez
+		anos depois.
+	</p>
+</section>
+
+<SectionDivider label="12 // CRONOLOGIA" />
+
+<section class="ph-section">
+	<div style="max-width:900px">
+		<ol class="ph-timeline">
+			<li class="is-green">
+				<span class="ph-timeline-date">1930s–50s, PRÉ-PHREAKING</span>
+				<span class="ph-timeline-title">Tap dialing vira folclore</span>
+				<p>
+					Phreakers descobrem que o gancho do telefone replica os pulsos do disco.
+					Cadeados em discos viram inúteis. Joybubbles aprende a discar "tappando" na
+					Virginia antes de aprender a ler.
+				</p>
+			</li>
+			<li class="is-green">
+				<span class="ph-timeline-date">1957, DESCOBERTA</span>
+				<span class="ph-timeline-title">Joe Engressia assobia 2600 Hz aos 7 anos</span>
+				<p>O tom de "tronco livre" da AT&T cabe num assobio humano. Phreaking nasce.</p>
+			</li>
+			<li class="is-green">
+				<span class="ph-timeline-date">1971, POPULARIZAÇÃO</span>
+				<span class="ph-timeline-title">"Secrets of the Little Blue Box" na Esquire</span>
+				<p>O artigo de Ron Rosenbaum apresenta Captain Crunch ao mundo. Wozniak e Jobs leem.</p>
+			</li>
+			<li class="is-green">
+				<span class="ph-timeline-date">1972–75</span>
+				<span class="ph-timeline-title">Wozniak e Jobs vendem Blue Boxes em Berkeley</span>
+				<p>US$ 150 cada. Capital semente da Apple Computer Company.</p>
+			</li>
+			<li>
+				<span class="ph-timeline-date">1980s</span>
+				<span class="ph-timeline-title">CCS7 mata o phreaking analógico</span>
+				<p>AT&T separa sinalização do canal de áudio. Tons audíveis param de funcionar.</p>
+			</li>
+			<li>
+				<span class="ph-timeline-date">1984</span>
+				<span class="ph-timeline-title">Revista 2600 é fundada</span>
+				<p>Nome em homenagem ao tom mágico. Continua circulando até hoje.</p>
+			</li>
+			<li class="is-orange">
+				<span class="ph-timeline-date">2013, DEF CON 21</span>
+				<span class="ph-timeline-title">Femtocell Verizon hackeada por US$ 300</span>
+				<p>Ritter e DePerry: voz e SMS de qualquer celular vizinho, em uma mochila.</p>
+			</li>
+			<li class="is-orange">
+				<span class="ph-timeline-date">2016</span>
+				<span class="ph-timeline-title">Primeiros ataques SS7 públicos no Brasil</span>
+				<p>Fraudadores interceptam SMS de 2FA via brechas de roaming.</p>
+			</li>
+			<li class="is-orange">
+				<span class="ph-timeline-date">FEV/2019</span>
+				<span class="ph-timeline-title">Metro Bank (UK), interceptação 2FA via SS7</span>
+				<p>Contas bancárias esvaziadas. Caso vira referência regulatória.</p>
+			</li>
+			<li class="is-blue">
+				<span class="ph-timeline-date">AGO/2020</span>
+				<span class="ph-timeline-title">Bielorrússia, modems via XS4ALL</span>
+				<p>Internet morre, dial-up via Holanda renasce. 56 kbps é resistência.</p>
+			</li>
+			<li class="is-blue">
+				<span class="ph-timeline-date">AGO/2023</span>
+				<span class="ph-timeline-title">Artsakh, cabo de Lachin cortado</span>
+				<p>Nagorno-Karabakh fica offline. HF e rádio amador absorvem o tráfego residual.</p>
+			</li>
+			<li class="is-orange">
+				<span class="ph-timeline-date">JUL/2024</span>
+				<span class="ph-timeline-title">Brasil, carro-antena em Faria Lima</span>
+				<p>4G derrubado, SMS de phishing, prisão em flagrante no Parque São Lucas.</p>
+			</li>
+			<li class="is-orange">
+				<span class="ph-timeline-date">JAN/2025</span>
+				<span class="ph-timeline-title">Brasil, apartamento BTS no Morumbi</span>
+				<p>Antena na varanda do 19º andar mira a Marginal Pinheiros. 100 mil SMS/dia.</p>
+			</li>
+			<li class="is-orange">
+				<span class="ph-timeline-date">SET/2025</span>
+				<span class="ph-timeline-title">Brasil, femtocell móvel em Itaquera</span>
+				<p>Mesma técnica, mesmo modus operandi, terceiro caso em 14 meses.</p>
+			</li>
+		</ol>
+	</div>
+</section>
+
+<SectionDivider label="13 // ARSENAL MODERNO" />
+
+<section class="ph-section">
+	<div class="ph-table-wrap">
+		<table class="ph-table">
+			<thead>
+				<tr>
+					<th>Ferramenta</th>
+					<th>Uso típico</th>
+					<th>Custo</th>
+					<th>Acesso</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>USRP / HackRF / bladeRF</strong></td>
+					<td>SDR de propósito geral; IMSI catcher caseiro; sniffer SS7</td>
+					<td class="ph-mono">US$ 300–2.000</td>
+					<td>Loja aberta</td>
+				</tr>
+				<tr>
+					<td><strong>Femtocell modificada</strong></td>
+					<td>Espionagem de voz/SMS em raio curto</td>
+					<td class="ph-mono">US$ 100–300</td>
+					<td>Hardware comercial + firmware patch</td>
+				</tr>
+				<tr>
+					<td><strong>StingRay (Harris)</strong></td>
+					<td>IMSI catcher comercial; vigilância em massa</td>
+					<td class="ph-mono">US$ 50.000+</td>
+					<td>Restrito a Estado</td>
+				</tr>
+				<tr>
+					<td><strong>SIM Box</strong></td>
+					<td>Fraude de interconexão; envio massivo de SMS</td>
+					<td class="ph-mono">US$ 500–2.000</td>
+					<td>Comércio eletrônico</td>
+				</tr>
+				<tr>
+					<td><strong>OpenBTS / YateBTS / srsRAN</strong></td>
+					<td>Estação base 2G/3G/LTE em software</td>
+					<td class="ph-mono">US$ 100 + SDR</td>
+					<td>Open source</td>
+				</tr>
+				<tr>
+					<td><strong>Osmocom suite</strong></td>
+					<td>Stack GSM completo (BSC, MSC, HLR) em software</td>
+					<td class="ph-mono">grátis</td>
+					<td>Open source</td>
+				</tr>
+				<tr>
+					<td><strong>Scapy / Python SS7</strong></td>
+					<td>Geração e análise de mensagens SS7 / Diameter</td>
+					<td class="ph-mono">grátis</td>
+					<td>Requer acesso a um operador SS7</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<SectionDivider label="14 // LEGADO E CONSIDERAÇÕES FINAIS" />
+
+<section class="ph-outro">
+	<p>
+		Nos anos 80, a AT&T começou a migrar para o sistema <strong>CCS7
+		(Common Channel Signaling)</strong>, que separa a sinalização do canal de áudio. A partir daí,
+		nenhum tom audível pôde mais controlar a rede, o phreaking analógico morreu.
+	</p>
+	<p>
+		Mas seu legado é imenso. <strong>Wozniak</strong> e <strong>Jobs</strong> venderam blue boxes em
+		dormitórios da UC Berkeley antes de fundar a Apple. <strong>Joybubbles</strong> virou folclore.
+		A revista <em>2600: The Hacker Quarterly</em>, fundada em 1984, leva esse nome em homenagem
+		ao tom mágico. E o ethos, curiosidade radical, engenharia reversa de sistemas fechados, virou
+		DNA da cultura hacker.
+	</p>
+	<p>
+		Cinco décadas depois, o panorama mudou de figura. Os atores agora são crime organizado,
+		serviços de inteligência, mercenários cibernéticos. Os alvos são dados pessoais, autenticação
+		bancária, vigilância política. E do outro lado da mesa, ativistas e comunidades inteiras
+		recriam infraestrutura, mesh, LoRa, dial-up, HF, satélite, para furar bloqueios estatais.
+	</p>
+	<p>
+		Em todos os contextos, a falta de segurança nativa dos protocolos legados (SS7, Diameter,
+		SIP) e a onipresença do celular alimentam tanto a modernização das defesas (firewalls de
+		sinalização, criptografia de ponta a ponta) quanto a sofisticação das ofensivas. O ciclo do
+		phreaking não fechou; só mudou de oitava.
+	</p>
+
+	<div class="ph-disclaimer">
+		<div class="ph-disclaimer-title">⚠ AVISO LEGAL</div>
+		Este artigo é estritamente educacional e histórico. As técnicas analógicas descritas não
+		funcionam em redes modernas há quase 40 anos. As técnicas modernas envolvem crimes graves:
+		fraude, interceptação, invasão, em todas as jurisdições aqui mencionadas. Reproduzir, vender
+		ou operar IMSI catchers, femtocells modificadas ou SIM boxes é crime no Brasil (Lei 9.472/97,
+		Lei 12.737/12 e seguintes). Este texto serve para entender o problema, não para reproduzi-lo.
+	</div>
+</section>
+
+<section class="ph-sources">
+	<h2 style="font-size:18px;color:var(--ph-orange);letter-spacing:0.2em;font-family:inherit;margin:0 0 8px">▸ FONTES</h2>
+	<ul class="ph-sources-list">
+		<li><span class="ph-src-tag">[clássico]</span> Rosenbaum, R., <a href="https://www.slate.com/articles/technology/the_spectator/2011/10/the_article_that_inspired_steve_jobs_secrets_of_the_little_blue_.html" target="_blank" rel="noopener">"Secrets of the Little Blue Box"</a>, Esquire, 1971</li>
+		<li><span class="ph-src-tag">[clássico]</span> Sterling, B., <a href="https://en.wikipedia.org/wiki/The_Hacker_Crackdown" target="_blank" rel="noopener">"The Hacker Crackdown"</a>, 1992</li>
+		<li><span class="ph-src-tag">[clássico]</span> Lapsley, P., <a href="https://en.wikipedia.org/wiki/Exploding_the_Phone" target="_blank" rel="noopener">"Exploding the Phone"</a>, 2013</li>
+		<li><span class="ph-src-tag">[ENISA]</span> <a href="https://www.enisa.europa.eu/publications/signalling-security-in-telecom-ss7-diameter-5g" target="_blank" rel="noopener">"Signalling Security in Telecom SS7/Diameter/5G"</a>, ENISA, 2018</li>
+		<li><span class="ph-src-tag">[SS7]</span> Kaspersky, <a href="https://www.kaspersky.com/blog/ss7-hacked/25529/" target="_blank" rel="noopener">"SS7 vulnerabilities and attacks"</a>, 2019</li>
+		<li><span class="ph-src-tag">[SS7]</span> Metro Bank UK case, <a href="https://www.vice.com/en/article/criminals-hackers-ss7-uk-banks-metro-bank/" target="_blank" rel="noopener">Motherboard</a> / <a href="https://www.itpro.com/security/32898/metro-bank-targeted-with-2fa-bypassing-ss7-attacks" target="_blank" rel="noopener">ITPro</a>, fev/2019</li>
+		<li><span class="ph-src-tag">[femtocell]</span> Ritter & DePerry, <a href="https://www.defcon.org/images/defcon-21/dc-21-presentations/DePerry-Ritter/DEFCON-21-DePerry-Ritter-Femtocell-Updated.pdf" target="_blank" rel="noopener">"I Can Hear You Now"</a>, DEF CON 21, 2013 (<a href="https://www.youtube.com/watch?v=886kXEhE90I" target="_blank" rel="noopener">vídeo</a>)</li>
+		<li><span class="ph-src-tag">[Belarus]</span> <a href="https://www.hrw.org/news/2020/08/28/belarus-internet-disruptions-online-censorship" target="_blank" rel="noopener">Human Rights Watch</a> / <a href="https://netblocks.org/reports/internet-disruption-hits-belarus-on-election-day-YAE2jKB3" target="_blank" rel="noopener">NetBlocks</a>, Belarus blackout, ago/2020</li>
+		<li><span class="ph-src-tag">[Brasil]</span> CNN Brasil, <a href="https://www.cnnbrasil.com.br/nacional/carro-do-golpe-veja-equipamentos-encontrados-em-veiculo-para-interceptar-sinal-de-celulares/" target="_blank" rel="noopener">"Carro do golpe", Faria Lima</a>, jul/2024</li>
+		<li><span class="ph-src-tag">[Brasil]</span> SBT News, <a href="https://sbtnews.sbt.com.br/noticia/policia/esquema-de-sms-falso-e-descoberto-em-predio-na-zona-oeste-de-sao-paulo" target="_blank" rel="noopener">Apartamento Morumbi</a>, jan/2025</li>
+		<li><span class="ph-src-tag">[Brasil]</span> Metrópoles, <a href="https://www.metropoles.com/sao-paulo/policia-descobre-central-movel-do-golpe-do-sms-e-prende-motorista" target="_blank" rel="noopener">Central móvel Itaquera</a>, set/2025</li>
+		<li><span class="ph-src-tag">[Brasil]</span> Tecnoblog, <a href="https://tecnoblog.net/noticias/bandidos-usam-aparelhos-especiais-para-golpe-do-sms/" target="_blank" rel="noopener">"ERB Fake": como funcionam as antenas clandestinas</a></li>
+		<li><span class="ph-src-tag">[DIY]</span> <a href="https://openbts.org/" target="_blank" rel="noopener">OpenBTS</a> · <a href="https://osmocom.org/" target="_blank" rel="noopener">Osmocom</a> · <a href="https://www.srsran.com/" target="_blank" rel="noopener">srsRAN</a> · <a href="http://www.projectmf.org/" target="_blank" rel="noopener">Project MF</a> (Arduino Blue Box)</li>
+		<li><span class="ph-src-tag">[arquivos]</span> <a href="https://2600.com/" target="_blank" rel="noopener">2600 Magazine</a> · <a href="https://archive.org/" target="_blank" rel="noopener">Internet Archive</a> · alt.phone.phreaking · <a href="https://en.wikipedia.org/wiki/Hack_Canada" target="_blank" rel="noopener">Hack Canada</a></li>
+	</ul>
+</section>
+
+</Shell>

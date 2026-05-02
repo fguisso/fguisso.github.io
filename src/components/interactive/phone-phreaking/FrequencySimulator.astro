@@ -1,0 +1,336 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+
+const id = `ph-osc-${Math.random().toString(36).slice(2, 9)}`;
+
+const strings = {
+	pt: {
+		oscLabel: 'OSCILOSCOPE_v2.1',
+		standby: '○ STANDBY',
+		seized: '● TRUNK_SEIZED',
+		freq: 'FREQ_HZ',
+		whistle: '▶ ASSOBIAR',
+		stop: '■ STOP',
+		lockTo: '⌖ TRAVAR EM 2600',
+		mute: '🔊 SOM',
+		muted: '🔇 MUTE',
+		routeLabel: 'ROTA_DA_CHAMADA',
+		stages: ['TELEFONE', 'CENTRAL_LOCAL', 'TRONCO_2600', 'INTERNACIONAL'],
+		seizureBanner: '⚡ TRUNK SEIZURE DETECTED — ACESSO AO BACKBONE INTERNACIONAL OBTIDO',
+	},
+	en: {
+		oscLabel: 'OSCILLOSCOPE_v2.1',
+		standby: '○ STANDBY',
+		seized: '● TRUNK_SEIZED',
+		freq: 'FREQ_HZ',
+		whistle: '▶ WHISTLE',
+		stop: '■ STOP',
+		lockTo: '⌖ LOCK TO 2600',
+		mute: '🔊 SOUND',
+		muted: '🔇 MUTE',
+		routeLabel: 'CALL_ROUTE',
+		stages: ['HANDSET', 'LOCAL_OFFICE', 'TRUNK_2600', 'INTERNATIONAL'],
+		seizureBanner: '⚡ TRUNK SEIZURE DETECTED — INTERNATIONAL BACKBONE ACCESS GRANTED',
+	},
+}[locale];
+---
+
+<div class="ph-osc" data-ph-osc-id={id}>
+	<div class="ph-osc-head">
+		<span>
+			<svg
+				width="11"
+				height="11"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				style="display:inline;vertical-align:middle;margin-right:4px"
+				aria-hidden="true"
+			>
+				<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+			</svg>
+			{strings.oscLabel}
+		</span>
+		<span class="ph-osc-status" data-ph-osc-status>{strings.standby}</span>
+	</div>
+
+	<canvas data-ph-osc-canvas width="460" height="180"></canvas>
+
+	<div class="ph-osc-controls">
+		<div class="ph-osc-freq-row">
+			<span>{strings.freq}</span>
+			<span class="ph-osc-freq-value" data-ph-osc-freq>440 Hz</span>
+		</div>
+		<input type="range" min="100" max="4000" step="1" value="440" data-ph-osc-range />
+		<div class="ph-osc-scale">
+			<span>100</span><span>2000</span><span>4000</span>
+		</div>
+	</div>
+
+	<div class="ph-osc-buttons">
+		<button class="ph-btn ph-btn-green" data-ph-osc-toggle>{strings.whistle}</button>
+		<button class="ph-btn ph-btn-dim" data-ph-osc-lock>{strings.lockTo}</button>
+		<button class="ph-btn ph-btn-dim" data-ph-osc-mute>{strings.mute}</button>
+	</div>
+
+	<div class="ph-route">
+		<div class="ph-route-label">{strings.routeLabel}</div>
+		<div class="ph-route-stages">
+			{
+				strings.stages.map((label, i) => (
+					<>
+						<div class="ph-stage" data-ph-stage={i}>
+							{label}
+						</div>
+						{i < strings.stages.length - 1 && <div class="ph-stage-link" data-ph-stage-link={i} />}
+					</>
+				))
+			}
+		</div>
+		<div class="ph-seizure-banner" data-ph-osc-banner>{strings.seizureBanner}</div>
+	</div>
+</div>
+
+<script define:vars={{ id, strings }}>
+	(() => {
+		const root = document.querySelector(`[data-ph-osc-id="${id}"]`);
+		if (!root) return;
+
+		const canvas = root.querySelector('[data-ph-osc-canvas]');
+		const range = root.querySelector('[data-ph-osc-range]');
+		const freqEl = root.querySelector('[data-ph-osc-freq]');
+		const toggleBtn = root.querySelector('[data-ph-osc-toggle]');
+		const lockBtn = root.querySelector('[data-ph-osc-lock]');
+		const muteBtn = root.querySelector('[data-ph-osc-mute]');
+		const statusEl = root.querySelector('[data-ph-osc-status]');
+		const banner = root.querySelector('[data-ph-osc-banner]');
+		const stages = root.querySelectorAll('[data-ph-stage]');
+		const links = root.querySelectorAll('[data-ph-stage-link]');
+
+		const TARGET = 2600;
+		const TOLERANCE = 30;
+
+		let freq = 440;
+		let playing = false;
+		let muted = false;
+		const VOLUME = 0.08;
+		let trunkSeized = false;
+		let seizeTimer = null;
+		let seizeMs = 0;
+
+		let audioCtx = null;
+		let osc = null;
+		let gain = null;
+
+		const inRange = () => Math.abs(freq - TARGET) <= TOLERANCE;
+
+		const startAudio = () => {
+			if (!audioCtx) {
+				audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+			}
+			if (audioCtx.state === 'suspended') audioCtx.resume();
+			if (osc) {
+				try { osc.stop(); } catch (e) {}
+			}
+			osc = audioCtx.createOscillator();
+			gain = audioCtx.createGain();
+			osc.type = 'sine';
+			osc.frequency.value = freq;
+			gain.gain.value = muted ? 0 : VOLUME;
+			osc.connect(gain).connect(audioCtx.destination);
+			osc.start();
+			playing = true;
+			toggleBtn.textContent = strings.stop;
+			toggleBtn.classList.remove('ph-btn-green');
+			toggleBtn.classList.add('ph-btn-orange');
+		};
+
+		const stopAudio = () => {
+			if (osc) {
+				try { osc.stop(); } catch (e) {}
+				osc = null;
+			}
+			playing = false;
+			toggleBtn.textContent = strings.whistle;
+			toggleBtn.classList.remove('ph-btn-orange');
+			toggleBtn.classList.add('ph-btn-green');
+			seizeMs = 0;
+			trunkSeized = false;
+			if (seizeTimer) {
+				clearInterval(seizeTimer);
+				seizeTimer = null;
+			}
+			updateState();
+		};
+
+		const updateState = () => {
+			const ir = inRange();
+			freqEl.textContent = `${freq} Hz`;
+			freqEl.classList.toggle('in-range', ir);
+			range.classList.toggle('in-range', ir);
+
+			statusEl.textContent = trunkSeized ? strings.seized : strings.standby;
+			statusEl.classList.toggle('is-seized', trunkSeized);
+
+			banner.classList.toggle('show', trunkSeized);
+
+			const active = [
+				true,
+				playing,
+				playing && ir,
+				trunkSeized,
+			];
+			stages.forEach((el, i) => el.classList.toggle('active', active[i]));
+			links.forEach((el, i) => el.classList.toggle('active', active[i] && active[i + 1]));
+		};
+
+		const checkSeize = () => {
+			if (!playing) return;
+			if (inRange()) {
+				seizeMs += 100;
+				if (seizeMs >= 800 && !trunkSeized) {
+					trunkSeized = true;
+					updateState();
+				}
+			} else {
+				seizeMs = 0;
+				if (trunkSeized) {
+					trunkSeized = false;
+					updateState();
+				}
+			}
+		};
+
+		toggleBtn.addEventListener('click', () => {
+			if (playing) {
+				stopAudio();
+			} else {
+				startAudio();
+				if (seizeTimer) clearInterval(seizeTimer);
+				seizeTimer = setInterval(checkSeize, 100);
+			}
+			updateState();
+		});
+
+		lockBtn.addEventListener('click', () => {
+			freq = 2600;
+			range.value = '2600';
+			if (osc) osc.frequency.setValueAtTime(2600, audioCtx.currentTime);
+			updateState();
+		});
+
+		muteBtn.addEventListener('click', () => {
+			muted = !muted;
+			muteBtn.textContent = muted ? strings.muted : strings.mute;
+			muteBtn.classList.toggle('is-muted', muted);
+			if (gain && audioCtx) {
+				gain.gain.setValueAtTime(muted ? 0 : VOLUME, audioCtx.currentTime);
+			}
+		});
+
+		range.addEventListener('input', (e) => {
+			freq = Number(e.target.value);
+			if (osc) osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+			updateState();
+		});
+
+		// ── Canvas drawing ──
+		const ctx = canvas.getContext('2d');
+		const W = canvas.width;
+		const H = canvas.height;
+		let phase = 0;
+		let targetPhase = 0;
+		let raf;
+
+		const draw = () => {
+			ctx.fillStyle = 'rgba(5,15,8,0.2)';
+			ctx.fillRect(0, 0, W, H);
+
+			ctx.strokeStyle = 'rgba(60,120,60,0.15)';
+			ctx.lineWidth = 1;
+			for (let x = 0; x < W; x += 20) {
+				ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+			}
+			for (let y = 0; y < H; y += 20) {
+				ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+			}
+
+			const targetX = (TARGET / 4000) * W;
+			ctx.fillStyle = 'rgba(255,106,61,0.12)';
+			ctx.fillRect(targetX - (TOLERANCE / 4000) * W, 0, (TOLERANCE * 2 / 4000) * W, H);
+			ctx.strokeStyle = '#ff6a3d';
+			ctx.setLineDash([4, 4]);
+			ctx.beginPath(); ctx.moveTo(targetX, 0); ctx.lineTo(targetX, H); ctx.stroke();
+			ctx.setLineDash([]);
+			ctx.fillStyle = '#ff6a3d';
+			ctx.font = "10px 'Courier New', monospace";
+			ctx.fillText('2600 Hz', targetX + 6, 14);
+
+			// Reference wave: 2600 Hz target, faint orange, always animated
+			ctx.strokeStyle = 'rgba(255,106,61,0.32)';
+			ctx.lineWidth = 1.2;
+			ctx.beginPath();
+			const targetCycles = TARGET / 200;
+			for (let x = 0; x < W; x++) {
+				const t = (x / W) * targetCycles * Math.PI * 2 + targetPhase;
+				const y = H / 2 + Math.sin(t) * (H / 2 - 12);
+				if (x === 0) ctx.moveTo(x, y);
+				else ctx.lineTo(x, y);
+			}
+			ctx.stroke();
+			targetPhase += 0.18;
+
+			const ir = inRange();
+			if (playing) {
+				ctx.strokeStyle = ir ? '#7fff7f' : '#ffd45a';
+				ctx.lineWidth = 2;
+				ctx.shadowColor = ir ? '#7fff7f' : '#ffd45a';
+				ctx.shadowBlur = 8;
+				ctx.beginPath();
+				const cyclesVisible = freq / 200;
+				for (let x = 0; x < W; x++) {
+					const t = (x / W) * cyclesVisible * Math.PI * 2 + phase;
+					const y = H / 2 + Math.sin(t) * (H / 2 - 12);
+					if (x === 0) ctx.moveTo(x, y);
+					else ctx.lineTo(x, y);
+				}
+				ctx.stroke();
+				ctx.shadowBlur = 0;
+				phase += 0.18;
+			} else {
+				ctx.strokeStyle = 'rgba(127,255,127,0.3)';
+				ctx.lineWidth = 1;
+				ctx.beginPath();
+				ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2); ctx.stroke();
+			}
+
+			const curX = (freq / 4000) * W;
+			ctx.fillStyle = ir ? '#7fff7f' : '#ffd45a';
+			ctx.beginPath();
+			ctx.moveTo(curX, H - 8);
+			ctx.lineTo(curX - 5, H);
+			ctx.lineTo(curX + 5, H);
+			ctx.closePath();
+			ctx.fill();
+
+			raf = requestAnimationFrame(draw);
+		};
+		draw();
+
+		document.addEventListener('astro:before-swap', () => {
+			cancelAnimationFrame(raf);
+			if (seizeTimer) clearInterval(seizeTimer);
+			if (osc) try { osc.stop(); } catch (e) {}
+			if (audioCtx) audioCtx.close();
+		}, { once: true });
+
+		updateState();
+	})();
+</script>

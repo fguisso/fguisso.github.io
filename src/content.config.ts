@@ -24,6 +24,7 @@ const blog = defineCollection({
 					part: z.number().int().positive(),
 				})
 				.optional(),
+			customTemplate: z.enum(['interactive']).optional(),
 		}),
 });
 

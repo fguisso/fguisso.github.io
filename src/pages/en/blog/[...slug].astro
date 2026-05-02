@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import BlogPost from '../../../layouts/BlogPost.astro';
+import InteractivePost from '../../../layouts/InteractivePost.astro';
 import { type LocaleCode } from '../../../i18n/config';
 
 export async function getStaticPaths() {
@@ -42,13 +43,26 @@ const readingTimeMinutes = Math.max(1, Math.ceil(totalWords / 200));
 const { Content } = await render(post);
 ---
 
-<BlogPost
-	{...post.data}
-	slug={post.data.canonicalSlug ?? post.slug}
-	locale={locale}
-	wordCount={totalWords}
-	readingTimeMinutes={readingTimeMinutes}
-	availableLocales={availableLocales}
->
-	<Content />
-</BlogPost>
+{
+	post.data.customTemplate === 'interactive' ? (
+		<InteractivePost
+			{...post.data}
+			slug={post.data.canonicalSlug ?? post.slug}
+			locale={locale}
+			availableLocales={availableLocales}
+		>
+			<Content />
+		</InteractivePost>
+	) : (
+		<BlogPost
+			{...post.data}
+			slug={post.data.canonicalSlug ?? post.slug}
+			locale={locale}
+			wordCount={totalWords}
+			readingTimeMinutes={readingTimeMinutes}
+			availableLocales={availableLocales}
+		>
+			<Content />
+		</BlogPost>
+	)
+}

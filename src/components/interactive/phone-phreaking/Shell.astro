@@ -1,0 +1,49 @@
+---
+import '../../../styles/phone-phreaking.css';
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+
+const strings = {
+	pt: {
+		signalOk: 'SIGNAL_OK',
+		issue: 'VOL.1 — ISSUE 2600',
+		journal: 'BELL_SYSTEM // TECHNICAL_JOURNAL',
+		eofLeft: 'END_OF_TRANSMISSION',
+		eofMid: '// PHREAK_OR_DIE //',
+		eofRight: 'EOF',
+	},
+	en: {
+		signalOk: 'SIGNAL_OK',
+		issue: 'VOL.1 — ISSUE 2600',
+		journal: 'BELL_SYSTEM // TECHNICAL_JOURNAL',
+		eofLeft: 'END_OF_TRANSMISSION',
+		eofMid: '// PHREAK_OR_DIE //',
+		eofRight: 'EOF',
+	},
+}[locale];
+---
+
+<div class="phreaking-page">
+	<div class="ph-scanlines" aria-hidden="true"></div>
+
+	<div class="ph-strip">
+		<div>{strings.journal}</div>
+		<div class="ph-strip-right">
+			<span><span class="ph-blink-dot" aria-hidden="true"></span>{strings.signalOk}</span>
+			<span>{strings.issue}</span>
+		</div>
+	</div>
+
+	<slot />
+
+	<div class="ph-footer-strip">
+		<span>{strings.eofLeft}</span>
+		<span>{strings.eofMid}</span>
+		<span>{strings.eofRight}</span>
+	</div>
+</div>

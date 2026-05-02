@@ -1,0 +1,246 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const id = `ph-whistle-${Math.random().toString(36).slice(2, 9)}`;
+
+const strings = {
+	pt: {
+		header: '▸ ARTIFACT_001 · BOSUN_WHISTLE.glb',
+		sub: 'QUAKER_OATS_CO. // 1964',
+		idle: '▸ AGUARDANDO SCROLL',
+		loading: '▸ DECODIFICANDO MESH',
+		fail: '✗ MESH LOAD FAILED',
+	},
+	en: {
+		header: '▸ ARTIFACT_001 · BOSUN_WHISTLE.glb',
+		sub: 'QUAKER_OATS_CO. // 1964',
+		idle: '▸ WAITING FOR SCROLL',
+		loading: '▸ DECODING MESH',
+		fail: '✗ MESH LOAD FAILED',
+	},
+}[locale];
+---
+
+<div
+	class="ph-whistle3d"
+	data-ph-whistle3d-id={id}
+	data-glb-url="/whistle.glb"
+	data-text-loading={strings.loading}
+	data-text-fail={strings.fail}
+>
+	<div class="ph-whistle3d-head">
+		<span>{strings.header}</span>
+		<span class="ph-whistle3d-sub">{strings.sub}</span>
+	</div>
+	<div class="ph-whistle3d-mount" data-ph-whistle3d-mount>
+		<div class="ph-whistle3d-loading" data-ph-whistle3d-loading>
+			<span data-ph-whistle3d-loading-text>{strings.idle}</span><span class="ph-whistle3d-dots">...</span>
+		</div>
+	</div>
+</div>
+
+<script>
+	type Box = {
+		root: HTMLElement;
+		mount: HTMLElement;
+		loadingEl: HTMLElement | null;
+		loadingTextEl: HTMLElement | null;
+		glbUrl: string;
+		textLoading: string;
+		textFail: string;
+		started: boolean;
+	};
+
+	const boxes: Box[] = [];
+
+	const queryBoxes = () => {
+		document.querySelectorAll<HTMLElement>('[data-ph-whistle3d-id]').forEach((root) => {
+			if (root.dataset.queued === '1') return;
+			root.dataset.queued = '1';
+			const mount = root.querySelector<HTMLElement>('[data-ph-whistle3d-mount]');
+			const loadingEl = root.querySelector<HTMLElement>('[data-ph-whistle3d-loading]');
+			const loadingTextEl = root.querySelector<HTMLElement>('[data-ph-whistle3d-loading-text]');
+			const glbUrl = root.dataset.glbUrl;
+			const textLoading = root.dataset.textLoading || 'Loading';
+			const textFail = root.dataset.textFail || 'Failed';
+			if (mount && glbUrl) {
+				boxes.push({ root, mount, loadingEl, loadingTextEl, glbUrl, textLoading, textFail, started: false });
+			}
+		});
+	};
+
+	const init = async (box: Box) => {
+		if (box.started) return;
+		box.started = true;
+		if (box.loadingTextEl) box.loadingTextEl.textContent = box.textLoading;
+
+		let THREE: any, GLTFLoader: any;
+		try {
+			[THREE, { GLTFLoader }] = await Promise.all([
+				import('three'),
+				import('three/examples/jsm/loaders/GLTFLoader.js'),
+			]);
+		} catch (err) {
+			console.error('three.js load error:', err);
+			if (box.loadingTextEl) box.loadingTextEl.textContent = box.textFail;
+			return;
+		}
+
+		const H = 240;
+		let W = box.mount.clientWidth || 400;
+
+		const scene = new THREE.Scene();
+		const camera = new THREE.PerspectiveCamera(32, W / H, 0.1, 100);
+		camera.position.set(0, 0.6, 7.5);
+		camera.lookAt(0, 0, 0);
+
+		const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		renderer.setSize(W, H);
+		renderer.shadowMap.enabled = true;
+		renderer.shadowMap.type = THREE.PCFShadowMap;
+		renderer.outputColorSpace = THREE.SRGBColorSpace;
+		box.mount.appendChild(renderer.domElement);
+
+		scene.add(new THREE.AmbientLight(0x224422, 0.5));
+
+		const keyLight = new THREE.DirectionalLight(0x9fffaf, 1.5);
+		keyLight.position.set(4, 6, 5);
+		keyLight.castShadow = true;
+		keyLight.shadow.mapSize.set(1024, 1024);
+		keyLight.shadow.camera.near = 0.5;
+		keyLight.shadow.camera.far = 20;
+		keyLight.shadow.camera.left = -3;
+		keyLight.shadow.camera.right = 3;
+		keyLight.shadow.camera.top = 3;
+		keyLight.shadow.camera.bottom = -3;
+		scene.add(keyLight);
+
+		const rimLight = new THREE.DirectionalLight(0xff6a3d, 0.9);
+		rimLight.position.set(-5, 1, -3);
+		scene.add(rimLight);
+
+		const fillLight = new THREE.PointLight(0x3da5ff, 0.5, 15);
+		fillLight.position.set(0, -3, 4);
+		scene.add(fillLight);
+
+		const plasticMat = new THREE.MeshStandardMaterial({
+			color: 0xf5c443,
+			roughness: 0.4,
+			metalness: 0.05,
+		});
+
+		const whistleGroup = new THREE.Group();
+		scene.add(whistleGroup);
+
+		const loader = new GLTFLoader();
+		loader.load(
+			box.glbUrl,
+			(gltf: any) => {
+				const model = gltf.scene;
+				model.scale.setScalar(1.45);
+				model.traverse((child: any) => {
+					if (child.isMesh) {
+						child.material = plasticMat;
+						child.castShadow = true;
+						child.receiveShadow = true;
+					}
+				});
+				whistleGroup.add(model);
+				if (box.loadingEl) box.loadingEl.style.display = 'none';
+			},
+			undefined,
+			(err: any) => {
+				console.error('GLB load error:', err);
+				if (box.loadingTextEl) box.loadingTextEl.textContent = box.textFail;
+			},
+		);
+
+		const shadowPlane = new THREE.Mesh(
+			new THREE.PlaneGeometry(20, 20),
+			new THREE.ShadowMaterial({ opacity: 0.4 }),
+		);
+		shadowPlane.rotation.x = -Math.PI / 2;
+		shadowPlane.position.y = -1.3;
+		shadowPlane.receiveShadow = true;
+		scene.add(shadowPlane);
+
+		let raf = 0;
+		let time = 0;
+		const animate = () => {
+			time += 0.011;
+			whistleGroup.rotation.y = time;
+			whistleGroup.rotation.x = Math.sin(time * 0.7) * 0.12;
+			whistleGroup.position.y = Math.sin(time * 1.3) * 0.06;
+			renderer.render(scene, camera);
+			raf = requestAnimationFrame(animate);
+		};
+		animate();
+
+		const onResize = () => {
+			W = box.mount.clientWidth || W;
+			camera.aspect = W / H;
+			camera.updateProjectionMatrix();
+			renderer.setSize(W, H);
+		};
+		window.addEventListener('resize', onResize);
+
+		document.addEventListener(
+			'astro:before-swap',
+			() => {
+				cancelAnimationFrame(raf);
+				window.removeEventListener('resize', onResize);
+				scene.traverse((obj: any) => {
+					if (obj.geometry) obj.geometry.dispose();
+					if (obj.material) {
+						if (Array.isArray(obj.material)) obj.material.forEach((m: any) => m.dispose());
+						else obj.material.dispose();
+					}
+				});
+				renderer.dispose();
+				if (renderer.domElement.parentNode === box.mount) {
+					box.mount.removeChild(renderer.domElement);
+				}
+			},
+			{ once: true },
+		);
+	};
+
+	const boot = () => {
+		queryBoxes();
+		if (!boxes.length) return;
+
+		// Lazy: only initialize when the viewer scrolls near the viewport.
+		// 600px rootMargin so the GLB+three chunk start downloading just before the user reaches it.
+		if ('IntersectionObserver' in window) {
+			const obs = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) return;
+						const target = entry.target as HTMLElement;
+						const box = boxes.find((b) => b.root === target);
+						if (box) {
+							init(box);
+							obs.unobserve(target);
+						}
+					});
+				},
+				{ rootMargin: '600px 0px' },
+			);
+			boxes.forEach((b) => obs.observe(b.root));
+		} else {
+			boxes.forEach((b) => init(b));
+		}
+	};
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', boot, { once: true });
+	} else {
+		boot();
+	}
+</script>

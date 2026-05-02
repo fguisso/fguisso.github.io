@@ -1,0 +1,12 @@
+---
+interface Props {
+	label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<div class="ph-divider">
+	<div class="ph-divider-label">{label}</div>
+	<div class="ph-divider-line"></div>
+</div>

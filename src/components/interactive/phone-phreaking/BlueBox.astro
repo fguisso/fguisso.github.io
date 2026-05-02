@@ -1,0 +1,318 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+
+const id = `ph-bb-${Math.random().toString(36).slice(2, 9)}`;
+
+const MF_TONES: Record<string, [number, number]> = {
+	'1': [700, 900],
+	'2': [700, 1100],
+	'3': [900, 1100],
+	'4': [700, 1300],
+	'5': [900, 1300],
+	'6': [1100, 1300],
+	'7': [700, 1500],
+	'8': [900, 1500],
+	'9': [1100, 1500],
+	'0': [1300, 1500],
+	KP: [1100, 1700],
+	ST: [1500, 1700],
+};
+
+const matrixRows = [900, 1100, 1300, 1500, 1700];
+const matrixCols = [700, 900, 1100, 1300, 1500];
+
+const cellFor = (low: number, high: number): string | null => {
+	const found = Object.entries(MF_TONES).find(
+		([, [a, b]]) => (a === low && b === high) || (a === high && b === low),
+	);
+	return found ? found[0] : null;
+};
+
+const strings = {
+	pt: {
+		boxLabel: 'BLUE BOX // MOD-1971',
+		awaiting: 'AWAITING SEIZE',
+		ready: 'READY...',
+		master: '▸ EMIT 2600 Hz',
+		masterSeized: '✓ TRUNK SEIZED',
+		reset: 'RESET // CLEAR',
+		matrixTitle: '▸ CCITT5_MATRIX.dat',
+		legendDigit: 'dígito',
+		legendCmd: 'comando',
+		logTitle: '▸ SIGNAL_LOG.txt',
+		logEmpty: [
+			'Aguardando comandos...',
+			'[1] Pressione "EMIT 2600 Hz" para capturar tronco',
+			'[2] Use KP + dígitos + ST para rotear chamada',
+			'',
+			'Exemplo:  KP 1 8 0 0 5 5 5 1 2 1 2 ST',
+			'         (rota internacional)',
+		],
+		seizeEmit: '→ 2600 Hz emitido por 700ms',
+		seizeOk: '← TRUNK SEIZED — central remota desconectada',
+		errorNotSeized: '✗ ERRO: tronco não capturado. Envie 2600 primeiro.',
+		routeExecuted: (r: string) => `← ROTA EXECUTADA: discando ${r}...`,
+	},
+	en: {
+		boxLabel: 'BLUE BOX // MOD-1971',
+		awaiting: 'AWAITING SEIZE',
+		ready: 'READY...',
+		master: '▸ EMIT 2600 Hz',
+		masterSeized: '✓ TRUNK SEIZED',
+		reset: 'RESET // CLEAR',
+		matrixTitle: '▸ CCITT5_MATRIX.dat',
+		legendDigit: 'digit',
+		legendCmd: 'command',
+		logTitle: '▸ SIGNAL_LOG.txt',
+		logEmpty: [
+			'Awaiting commands...',
+			'[1] Press "EMIT 2600 Hz" to seize trunk',
+			'[2] Use KP + digits + ST to route call',
+			'',
+			'Example:  KP 1 8 0 0 5 5 5 1 2 1 2 ST',
+			'         (international route)',
+		],
+		seizeEmit: '→ 2600 Hz emitted for 700ms',
+		seizeOk: '← TRUNK SEIZED — remote office disconnected',
+		errorNotSeized: '✗ ERROR: trunk not seized. Emit 2600 first.',
+		routeExecuted: (r: string) => `← ROUTE EXECUTED: dialing ${r}...`,
+	},
+}[locale];
+
+const stringsForScript = {
+	awaiting: strings.awaiting,
+	ready: strings.ready,
+	master: strings.master,
+	masterSeized: strings.masterSeized,
+	seizeEmit: strings.seizeEmit,
+	seizeOk: strings.seizeOk,
+	errorNotSeized: strings.errorNotSeized,
+	routeExecuted: locale === 'pt'
+		? '← ROTA EXECUTADA: discando {r}...'
+		: '← ROUTE EXECUTED: dialing {r}...',
+};
+
+const tonesById: Record<string, string> = Object.fromEntries(
+	Object.entries(MF_TONES).map(([k, [a, b]]) => [k, `${a}/${b}`]),
+);
+---
+
+<div class="ph-grid-bluebox" data-ph-bb-id={id}>
+	<div class="ph-bluebox">
+		<div class="ph-bluebox-head">
+			<div class="ph-bluebox-label">{strings.boxLabel}</div>
+			<div class="ph-bluebox-led" data-ph-bb-led></div>
+		</div>
+
+		<div class="ph-bluebox-display" data-ph-bb-display>
+			<span data-ph-bb-display-text>{strings.awaiting}</span><span class="ph-cursor">_</span>
+		</div>
+
+		<div class="ph-bluebox-keys">
+			{
+				['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((d) => (
+					<button class="ph-key" data-ph-bb-key={d} disabled>
+						<div class="ph-key-digit">{d}</div>
+						<div class="ph-key-tones">{tonesById[d]}</div>
+					</button>
+				))
+			}
+		</div>
+		<div class="ph-bluebox-keys-bottom">
+			<button class="ph-key cmd" data-ph-bb-key="KP" disabled>
+				<div class="ph-key-cmd-label">KP</div>
+				<div class="ph-key-tones">{tonesById['KP']}</div>
+			</button>
+			<button class="ph-key" data-ph-bb-key="0" disabled>
+				<div class="ph-key-digit">0</div>
+				<div class="ph-key-tones">{tonesById['0']}</div>
+			</button>
+			<button class="ph-key cmd" data-ph-bb-key="ST" disabled>
+				<div class="ph-key-cmd-label">ST</div>
+				<div class="ph-key-tones">{tonesById['ST']}</div>
+			</button>
+		</div>
+
+		<button class="ph-bluebox-master" data-ph-bb-master>{strings.master}</button>
+		<button class="ph-bluebox-reset" data-ph-bb-reset>{strings.reset}</button>
+	</div>
+
+	<div class="ph-bluebox-side">
+		<div class="ph-matrix">
+			<div class="ph-matrix-title">{strings.matrixTitle}</div>
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						{matrixCols.map((f) => <th>{f}</th>)}
+					</tr>
+				</thead>
+				<tbody>
+					{
+						matrixRows.map((row) => (
+							<tr>
+								<td class="row-label">{row}</td>
+								{matrixCols.map((col) => {
+									if (col >= row) return <td class="empty"></td>;
+									const d = cellFor(col, row);
+									if (!d) return <td></td>;
+									const isCmd = d === 'KP' || d === 'ST';
+									return <td class={`cell${isCmd ? ' cmd' : ''}`}>{d}</td>;
+								})}
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+			<div class="ph-matrix-legend">
+				<span><span class="swatch-blue">■</span> {strings.legendDigit}</span>
+				<span><span class="swatch-orange">■</span> {strings.legendCmd}</span>
+			</div>
+		</div>
+
+		<div class="ph-log" data-ph-bb-log>
+			<div class="ph-log-head">{strings.logTitle}</div>
+			<div class="ph-log-empty" data-ph-bb-log-empty>
+				{strings.logEmpty.map((line) => <div>{line || ' '}</div>)}
+			</div>
+		</div>
+	</div>
+</div>
+
+<script define:vars={{ id, MF_TONES, S: stringsForScript }}>
+	(() => {
+		const root = document.querySelector(`[data-ph-bb-id="${id}"]`);
+		if (!root) return;
+
+		const led = root.querySelector('[data-ph-bb-led]');
+		const displayText = root.querySelector('[data-ph-bb-display-text]');
+		const masterBtn = root.querySelector('[data-ph-bb-master]');
+		const resetBtn = root.querySelector('[data-ph-bb-reset]');
+		const keys = root.querySelectorAll('[data-ph-bb-key]');
+		const log = root.querySelector('[data-ph-bb-log]');
+		const logEmpty = root.querySelector('[data-ph-bb-log-empty]');
+
+		let audioCtx = null;
+		let seized = false;
+		let route = '';
+
+		const ts = () => {
+			const d = new Date();
+			const p = (n) => String(n).padStart(2, '0');
+			return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+		};
+
+		const ensureCtx = () => {
+			if (!audioCtx) {
+				audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+			}
+			if (audioCtx.state === 'suspended') audioCtx.resume();
+			return audioCtx;
+		};
+
+		const beep = (freqs, ms = 90) => {
+			const ctx = ensureCtx();
+			const t = ctx.currentTime;
+			const gain = ctx.createGain();
+			gain.gain.setValueAtTime(0, t);
+			gain.gain.linearRampToValueAtTime(0.12, t + 0.005);
+			gain.gain.linearRampToValueAtTime(0.12, t + ms / 1000 - 0.01);
+			gain.gain.linearRampToValueAtTime(0, t + ms / 1000);
+			gain.connect(ctx.destination);
+			freqs.forEach((f) => {
+				const o = ctx.createOscillator();
+				o.type = 'sine';
+				o.frequency.value = f;
+				o.connect(gain);
+				o.start(t);
+				o.stop(t + ms / 1000);
+			});
+		};
+
+		const addLog = (txt, cls) => {
+			if (logEmpty && logEmpty.parentElement) {
+				logEmpty.remove();
+			}
+			const div = document.createElement('div');
+			div.className = `ph-log-line ${cls || ''}`;
+			const tsSpan = document.createElement('span');
+			tsSpan.className = 'ph-log-ts';
+			tsSpan.textContent = `[${ts()}] `;
+			div.appendChild(tsSpan);
+			div.appendChild(document.createTextNode(txt));
+			log.appendChild(div);
+			log.scrollTop = log.scrollHeight;
+		};
+
+		const cleanRoute = (r) =>
+			r.replace(/\[KP\]|\[ST\]/g, '').replace(/(.{3})/g, '$1 ').trim();
+
+		const setSeized = (val) => {
+			seized = val;
+			led.classList.toggle('on', val);
+			masterBtn.disabled = val;
+			masterBtn.textContent = val ? S.masterSeized : S.master;
+			keys.forEach((k) => (k.disabled = !val));
+			if (!val && !route) {
+				displayText.textContent = S.awaiting;
+			} else if (val && !route) {
+				displayText.textContent = S.ready;
+			}
+		};
+
+		const setRoute = (r) => {
+			route = r;
+			displayText.textContent = r || (seized ? S.ready : S.awaiting);
+		};
+
+		masterBtn.addEventListener('click', () => {
+			beep([2600], 700);
+			setTimeout(() => {
+				setSeized(true);
+				addLog(S.seizeEmit, 'yellow');
+				addLog(S.seizeOk, 'green');
+			}, 700);
+		});
+
+		resetBtn.addEventListener('click', () => {
+			setSeized(false);
+			setRoute('');
+			log.querySelectorAll('.ph-log-line').forEach((el) => el.remove());
+			if (logEmpty && !logEmpty.parentElement) {
+				log.appendChild(logEmpty);
+			}
+		});
+
+		keys.forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const key = btn.getAttribute('data-ph-bb-key');
+				if (!seized) {
+					addLog(S.errorNotSeized, 'orange');
+					return;
+				}
+				const tones = MF_TONES[key];
+				beep(tones, 75);
+				const newRoute = route + (key === 'KP' ? '[KP]' : key === 'ST' ? '[ST]' : key);
+				setRoute(newRoute);
+				const cls = key === 'KP' || key === 'ST' ? 'orange' : 'blue';
+				const padded = key.padEnd(3, ' ');
+				addLog(`→ ${padded} = ${tones.join('+')} Hz`, cls);
+				if (key === 'ST') {
+					setTimeout(() => {
+						addLog(S.routeExecuted.replace('{r}', cleanRoute(newRoute)), 'green');
+					}, 200);
+				}
+			});
+		});
+
+		document.addEventListener('astro:before-swap', () => {
+			if (audioCtx) audioCtx.close();
+		}, { once: true });
+	})();
+</script>

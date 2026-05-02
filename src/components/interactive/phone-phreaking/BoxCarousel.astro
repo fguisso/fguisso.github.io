@@ -1,0 +1,380 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+import { Image } from 'astro:assets';
+import boxBluePhoto from '../../../content/blog/phone-phreaking/box-blue.jpg';
+import boxBlackPhoto from '../../../content/blog/phone-phreaking/box-black.jpg';
+import boxBeigePhoto from '../../../content/blog/phone-phreaking/box-beige.jpg';
+import boxRedPhoto from '../../../content/blog/phone-phreaking/box-red.jpg';
+import boxGreenPhoto from '../../../content/blog/phone-phreaking/box-green.png';
+import boxClearPhoto from '../../../content/blog/phone-phreaking/box-clear.jpg';
+import boxVioletPhoto from '../../../content/blog/phone-phreaking/box-violet.jpg';
+import boxOrangePhoto from '../../../content/blog/phone-phreaking/box-orange.jpg';
+import boxWhitePhoto from '../../../content/blog/phone-phreaking/box-white.jpg';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const id = `ph-carousel-${Math.random().toString(36).slice(2, 9)}`;
+
+type BoxKey =
+	| 'blue'
+	| 'red'
+	| 'black'
+	| 'green'
+	| 'clear'
+	| 'violet'
+	| 'orange'
+	| 'beige'
+	| 'white';
+
+const boxes: Array<{
+	key: BoxKey;
+	color: string;
+	name: { pt: string; en: string };
+	signal: string;
+	function: { pt: string; en: string };
+	era: { pt: string; en: string };
+}> = [
+	{
+		key: 'blue',
+		color: '#3da5ff',
+		name: { pt: 'Blue Box', en: 'Blue Box' },
+		signal: '2600 Hz + MF (CCITT #5)',
+		function: {
+			pt: 'Liberar tronco interurbano e discar gratuitamente em rotas de longa distância.',
+			en: 'Seize a long-distance trunk and dial freely on premium routes.',
+		},
+		era: { pt: '1970s — Draper / Wozniak / Jobs', en: '1970s — Draper / Wozniak / Jobs' },
+	},
+	{
+		key: 'red',
+		color: '#ff4d4d',
+		name: { pt: 'Red Box', en: 'Red Box' },
+		signal: '1700 + 2200 Hz',
+		function: {
+			pt: 'Emular sinal de inserção de moeda em orelhões, ganhando crédito sem pagar.',
+			en: 'Emulate coin-deposit signal in payphones, getting credit without paying.',
+		},
+		era: { pt: '1970s–80s — orelhões americanos', en: '1970s–80s — US payphones' },
+	},
+	{
+		key: 'black',
+		color: '#cfd2dd',
+		name: { pt: 'Black Box', en: 'Black Box' },
+		signal: 'R + C em série',
+		function: {
+			pt: 'Bloquear o pulso de cobrança da chamada recebida; central pensa que ainda está tocando.',
+			en: 'Block the billing pulse on incoming calls; switch thinks the line is still ringing.',
+		},
+		era: { pt: '1970s — centrais eletromecânicas', en: '1970s — electromechanical switches' },
+	},
+	{
+		key: 'green',
+		color: '#7fff7f',
+		name: { pt: 'Green Box', en: 'Green Box' },
+		signal: 'Coin-collect / coin-return',
+		function: {
+			pt: 'Comandar remotamente cabines automáticas em links internacionais (coin-control).',
+			en: 'Remotely command international automated payphones (coin-control signaling).',
+		},
+		era: { pt: '1970s–80s — payphones DDD', en: '1970s–80s — long-distance payphones' },
+	},
+	{
+		key: 'clear',
+		color: '#a8d8ff',
+		name: { pt: 'Clear Box', en: 'Clear Box' },
+		signal: 'Bobina indutiva',
+		function: {
+			pt: 'Ouvir o lado mudo de orelhões que silenciavam o áudio até a inserção da moeda.',
+			en: 'Eavesdrop on the muted side of payphones that silenced audio until coin insertion.',
+		},
+		era: { pt: '1970s — modelos raros', en: '1970s — rare models' },
+	},
+	{
+		key: 'violet',
+		color: '#9a1aff',
+		name: { pt: 'Violet Box', en: 'Violet Box' },
+		signal: 'Resistor em série',
+		function: {
+			pt: 'Manter a linha em "fora de gancho" simulado, inibindo toques.',
+			en: 'Hold the line in fake off-hook state, suppressing rings.',
+		},
+		era: { pt: '1970s — variante doméstica', en: '1970s — domestic variant' },
+	},
+	{
+		key: 'orange',
+		color: '#ff6a3d',
+		name: { pt: 'Orange Box', en: 'Orange Box' },
+		signal: 'FSK CallerID 1200 baud',
+		function: {
+			pt: 'Injetar Caller ID falso na linha do destinatário antes do toque.',
+			en: 'Inject fake Caller ID into the recipient line before the ring.',
+		},
+		era: { pt: '1980s–90s — engenharia social', en: '1980s–90s — social engineering' },
+	},
+	{
+		key: 'beige',
+		color: '#d8b886',
+		name: { pt: 'Beige Box', en: 'Beige Box' },
+		signal: 'Test phone com clipes',
+		function: {
+			pt: '"Lineman handset" caseiro: ligar direto na caixa de junção da rua.',
+			en: 'Homemade lineman handset: tap directly into the street junction box.',
+		},
+		era: { pt: '1980s — uso técnico/clandestino', en: '1980s — technical/clandestine' },
+	},
+	{
+		key: 'white',
+		color: '#f5f5ff',
+		name: { pt: 'White Box', en: 'White Box' },
+		signal: 'CCITT R2 via Amiga',
+		function: {
+			pt: 'Variante australiana usando computador para gerar sinalização R2 internacional.',
+			en: 'Australian variant using a computer to generate international R2 signaling.',
+		},
+		era: { pt: '1990s — Oceania', en: '1990s — Oceania' },
+	},
+];
+
+const labels = {
+	pt: {
+		title: 'BOX_GALLERY.exe',
+		signal: 'SINAL',
+		era: 'ERA',
+		prev: 'Anterior',
+		next: 'Próxima',
+		pause: 'Pausar',
+		play: 'Reproduzir',
+		schematic: '▸ SCHEMATIC',
+		photo: '▸ PHOTO',
+		credit: 'VIA WIKIMEDIA COMMONS',
+	},
+	en: {
+		title: 'BOX_GALLERY.exe',
+		signal: 'SIGNAL',
+		era: 'ERA',
+		prev: 'Previous',
+		next: 'Next',
+		pause: 'Pause',
+		play: 'Play',
+		schematic: '▸ SCHEMATIC',
+		photo: '▸ PHOTO',
+		credit: 'VIA WIKIMEDIA COMMONS',
+	},
+}[locale];
+
+type PhotoMeta = {
+	img: ImageMetadata;
+	alt: { pt: string; en: string };
+	source: string;
+	kind: 'device' | 'context';
+	contextNote?: { pt: string; en: string };
+};
+
+const photos: Partial<Record<BoxKey, PhotoMeta>> = {
+	blue: {
+		img: boxBluePhoto,
+		alt: {
+			pt: 'Blue Box construída por Steve Wozniak, exibida no Powerhouse Museum',
+			en: 'Blue Box built by Steve Wozniak, on display at the Powerhouse Museum',
+		},
+		source: 'POWERHOUSE MUSEUM // CC',
+		kind: 'device',
+	},
+	red: {
+		img: boxRedPhoto,
+		alt: {
+			pt: 'Payphone Western Electric 233G dos anos 70',
+			en: '1970s Western Electric 233G payphone',
+		},
+		source: 'WIKIMEDIA COMMONS // CC',
+		kind: 'context',
+		contextNote: {
+			pt: 'imagem do alvo: payphone que recebia os tons de moeda emulados',
+			en: 'target tech: payphone that received the emulated coin tones',
+		},
+	},
+	black: {
+		img: boxBlackPhoto,
+		alt: {
+			pt: 'Black Box exibida no Telephone Museum, Waltham, MA',
+			en: 'Black Box on display at the Telephone Museum, Waltham, MA',
+		},
+		source: 'TELEPHONE MUSEUM // CC',
+		kind: 'device',
+	},
+	green: {
+		img: boxGreenPhoto,
+		alt: {
+			pt: 'Payphone 1C Bell System (1979) com slot de moedas',
+			en: '1979 Bell System 1C payphone with coin slot',
+		},
+		source: 'WIKIMEDIA COMMONS // CC',
+		kind: 'context',
+		contextNote: {
+			pt: 'imagem do alvo: payphone que respondia ao coin-control',
+			en: 'target tech: payphone that responded to coin-control signals',
+		},
+	},
+	clear: {
+		img: boxClearPhoto,
+		alt: {
+			pt: 'Bell Canada payphone',
+			en: 'Bell Canada payphone',
+		},
+		source: 'WIKIMEDIA COMMONS // CC',
+		kind: 'context',
+		contextNote: {
+			pt: 'imagem do alvo: payphone que silenciava o áudio do bocal',
+			en: 'target tech: payphone that muted the mouthpiece audio',
+		},
+	},
+	violet: {
+		img: boxVioletPhoto,
+		alt: {
+			pt: 'Telefone Western Electric Modelo 500 dos anos 50',
+			en: '1950s Western Electric Model 500 telephone',
+		},
+		source: 'WIKIMEDIA COMMONS // CC',
+		kind: 'context',
+		contextNote: {
+			pt: 'imagem do alvo: telefone residencial em que o resistor era ligado em série',
+			en: 'target tech: residential phone where the resistor was wired in series',
+		},
+	},
+	orange: {
+		img: boxOrangePhoto,
+		alt: {
+			pt: 'Receptor de Caller ID',
+			en: 'Caller ID receiver',
+		},
+		source: 'WIKIMEDIA COMMONS // CC',
+		kind: 'context',
+		contextNote: {
+			pt: 'imagem do alvo: receptor de Caller ID que exibia o ID falso injetado',
+			en: 'target tech: Caller ID receiver that displayed the spoofed ID',
+		},
+	},
+	beige: {
+		img: boxBeigePhoto,
+		alt: {
+			pt: 'Beige Box caseira: handset com clipes jacaré',
+			en: 'Homemade Beige Box: handset with alligator clips',
+		},
+		source: 'WIKIMEDIA COMMONS // CC',
+		kind: 'device',
+	},
+	white: {
+		img: boxWhitePhoto,
+		alt: {
+			pt: 'Commodore Amiga 500 (1987)',
+			en: 'Commodore Amiga 500 (1987)',
+		},
+		source: 'WIKIMEDIA COMMONS // CC',
+		kind: 'context',
+		contextNote: {
+			pt: 'imagem da ferramenta: Amiga 500 era usado para gerar a sinalização R2',
+			en: 'tool: the Amiga 500 was used to generate R2 signaling',
+		},
+	},
+};
+
+// All 9 boxes now have photos (3 of the actual device, 6 contextual).
+const boxesWithPhotos = boxes.filter((b) => photos[b.key]);
+---
+
+<div class="ph-carousel" data-ph-carousel-id={id}>
+	<div class="ph-carousel-head">
+		<span>{labels.title}</span>
+		<span data-ph-carousel-counter>1 / {boxesWithPhotos.length}</span>
+	</div>
+
+	<div class="ph-carousel-stage">
+		<button class="ph-carousel-nav ph-carousel-nav-prev" data-ph-carousel-prev aria-label={labels.prev}>‹</button>
+		<button class="ph-carousel-nav ph-carousel-nav-next" data-ph-carousel-next aria-label={labels.next}>›</button>
+
+		{boxesWithPhotos.map((box, i) => {
+			const photo = photos[box.key]!;
+			return (
+			<article
+				class={`ph-carousel-slide${i === 0 ? ' is-active' : ''}`}
+				data-ph-carousel-slide={i}
+				style={`--box-color: ${box.color}`}
+			>
+				<div class="ph-carousel-illus">
+					<div class="ph-carousel-frame-label">{labels.photo} // {box.name[locale].toUpperCase()} <span class="ph-carousel-credit">// {photo.source}</span></div>
+					<Image src={photo.img} alt={photo.alt[locale]} widths={[400, 800]} sizes="(max-width: 768px) 90vw, 420px" class="ph-carousel-photo" />
+					{photo.kind === 'context' && photo.contextNote && (
+						<div class="ph-carousel-context-note">▸ {photo.contextNote[locale]}</div>
+					)}
+				</div>
+
+				<div class="ph-carousel-info">
+					<h3 class="ph-carousel-name">{box.name[locale]}</h3>
+				</div>
+			</article>
+			);
+		})}
+	</div>
+
+	<div class="ph-carousel-dots" data-ph-carousel-dots>
+		{boxesWithPhotos.map((_, i) => (
+			<button
+				class={`ph-carousel-dot${i === 0 ? ' is-active' : ''}`}
+				data-ph-carousel-dot={i}
+				aria-label={`${i + 1} / ${boxesWithPhotos.length}`}
+			/>
+		))}
+	</div>
+</div>
+
+<script define:vars={{ id, total: boxesWithPhotos.length }}>
+	(() => {
+		const root = document.querySelector(`[data-ph-carousel-id="${id}"]`);
+		if (!root) return;
+
+		const slides = root.querySelectorAll('[data-ph-carousel-slide]');
+		const dots = root.querySelectorAll('[data-ph-carousel-dot]');
+		const counter = root.querySelector('[data-ph-carousel-counter]');
+		const prevBtn = root.querySelector('[data-ph-carousel-prev]');
+		const nextBtn = root.querySelector('[data-ph-carousel-next]');
+
+		let current = 0;
+		let timer = null;
+		const INTERVAL = 5000;
+
+		const go = (i) => {
+			current = ((i % total) + total) % total;
+			slides.forEach((el, idx) => el.classList.toggle('is-active', idx === current));
+			dots.forEach((el, idx) => el.classList.toggle('is-active', idx === current));
+			counter.textContent = `${current + 1} / ${total}`;
+		};
+
+		const stop = () => {
+			if (timer) clearInterval(timer);
+			timer = null;
+		};
+
+		const start = () => {
+			stop();
+			timer = setInterval(() => go(current + 1), INTERVAL);
+		};
+
+		nextBtn.addEventListener('click', () => { go(current + 1); start(); });
+		prevBtn.addEventListener('click', () => { go(current - 1); start(); });
+		dots.forEach((dot, idx) =>
+			dot.addEventListener('click', () => { go(idx); start(); }),
+		);
+
+		root.addEventListener('mouseenter', stop);
+		root.addEventListener('mouseleave', start);
+		root.addEventListener('focusin', stop);
+		root.addEventListener('focusout', start);
+
+		start();
+
+		document.addEventListener('astro:before-swap', () => stop(), { once: true });
+	})();
+</script>

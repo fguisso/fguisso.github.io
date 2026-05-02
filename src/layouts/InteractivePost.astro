@@ -1,0 +1,60 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { getHtmlLang, getRequestLocale, type LocaleCode } from '../i18n/config';
+
+type Props = CollectionEntry<'blog'>['data'] & {
+	slug: string;
+	locale?: LocaleCode;
+	availableLocales?: LocaleCode[];
+};
+
+const {
+	title,
+	description,
+	slug,
+	locale: forcedLocale,
+	availableLocales,
+} = Astro.props as Props;
+const locale = forcedLocale ?? getRequestLocale(Astro);
+const currentPath = Astro.url?.pathname ?? '/';
+const currentSearch = Astro.url?.search ?? '';
+const htmlLang = getHtmlLang(locale);
+const ogImagePath = `/og/${locale}/${slug}.png`;
+---
+
+<html lang={htmlLang}>
+	<head>
+		<BaseHead title={title} description={description} image={ogImagePath} locale={locale} />
+	</head>
+
+	<body class="interactive-post-body">
+		<Header
+			locale={locale}
+			pathname={currentPath}
+			search={currentSearch}
+			availableLocales={availableLocales}
+		/>
+		<main class="interactive-post-main">
+			<slot />
+		</main>
+		<Footer locale={locale} />
+	</body>
+</html>
+
+<style is:global>
+	.interactive-post-body {
+		margin: 0;
+		padding: 0;
+	}
+
+	.interactive-post-main {
+		display: block;
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		padding: 0;
+	}
+</style>

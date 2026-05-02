@@ -1,0 +1,344 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const id = `ph-tap-${Math.random().toString(36).slice(2, 9)}`;
+
+const strings = {
+	pt: {
+		title: 'PULSE_DIALER_v1.0',
+		statusIdle: '○ AGUARDANDO',
+		statusTapping: '● CONTANDO',
+		statusDigit: '◆ DÍGITO OK',
+		statusInvalid: '✗ INVÁLIDO',
+		dialed: 'DISCADO',
+		pulses: 'PULSOS',
+		rate: 'CADÊNCIA',
+		rateUnit: 'pps',
+		tapBtn: '▸ TAP',
+		tapHint: 'ou ESPAÇO',
+		reset: 'LIMPAR',
+		yClosed: 'FECHADO',
+		yOpen: 'ABERTO',
+		legend: '1 tap = 1  •  5 taps = 5  •  10 taps = 0  •  pausa de 700ms entre dígitos',
+		rateGood: 'OK',
+		rateOff: 'FORA',
+		cradleCaption: 'cabinhos do gancho · descem a cada tap, abrindo o circuito',
+	},
+	en: {
+		title: 'PULSE_DIALER_v1.0',
+		statusIdle: '○ STANDBY',
+		statusTapping: '● COUNTING',
+		statusDigit: '◆ DIGIT OK',
+		statusInvalid: '✗ INVALID',
+		dialed: 'DIALED',
+		pulses: 'PULSES',
+		rate: 'RATE',
+		rateUnit: 'pps',
+		tapBtn: '▸ TAP',
+		tapHint: 'or SPACE',
+		reset: 'CLEAR',
+		yClosed: 'CLOSED',
+		yOpen: 'OPEN',
+		legend: '1 tap = 1  •  5 taps = 5  •  10 taps = 0  •  700ms gap between digits',
+		rateGood: 'OK',
+		rateOff: 'OFF',
+		cradleCaption: 'hookswitch prongs · drop on every tap, opening the circuit',
+	},
+}[locale];
+---
+
+<div class="ph-tap" data-ph-tap-id={id}>
+	<div class="ph-tap-head">
+		<span>{strings.title}</span>
+		<span class="ph-tap-status" data-ph-tap-status>{strings.statusIdle}</span>
+	</div>
+
+	<div class="ph-tap-display">
+		<div class="ph-tap-display-label">{strings.dialed}</div>
+		<div class="ph-tap-display-text">
+			<span data-ph-tap-dialed></span><span class="ph-cursor">_</span>
+		</div>
+	</div>
+
+	<div class="ph-tap-cradle-wrap">
+		<svg viewBox="0 0 460 110" xmlns="http://www.w3.org/2000/svg" class="ph-tap-cradle-svg" aria-hidden="true">
+			<!-- Phone body (top section, side view) -->
+			<rect x="40" y="60" width="380" height="40" rx="6" fill="rgba(127,255,127,0.08)" stroke="#7fff7f" stroke-width="1.2" />
+			<!-- Cradle saddle: two recesses where the prongs sit -->
+			<path d="M 130,60 Q 145,45 160,60 Z" fill="#020a02" stroke="#7fff7f" stroke-width="1" />
+			<path d="M 300,60 Q 315,45 330,60 Z" fill="#020a02" stroke="#7fff7f" stroke-width="1" />
+
+			<!-- Cables going down out of frame -->
+			<path d="M 60,100 Q 50,108 60,118 Q 70,128 60,138" stroke="#7fff7f" stroke-width="1.1" fill="none" opacity="0.55" />
+			<path d="M 400,100 Q 410,108 400,118 Q 390,128 400,138" stroke="#7fff7f" stroke-width="1.1" fill="none" opacity="0.55" />
+
+			<!-- Two hookswitch prongs (animated) -->
+			<g class="ph-tap-prong" data-ph-tap-prong>
+				<rect x="138" y="20" width="14" height="42" rx="3" fill="#cd7f32" />
+				<circle cx="145" cy="20" r="6" fill="#ffd75a" />
+				<!-- Wire from prong base into phone body -->
+				<line x1="145" y1="62" x2="145" y2="78" stroke="#7fff7f" stroke-width="1" opacity="0.6" />
+			</g>
+			<g class="ph-tap-prong" data-ph-tap-prong>
+				<rect x="308" y="20" width="14" height="42" rx="3" fill="#cd7f32" />
+				<circle cx="315" cy="20" r="6" fill="#ffd75a" />
+				<line x1="315" y1="62" x2="315" y2="78" stroke="#7fff7f" stroke-width="1" opacity="0.6" />
+			</g>
+
+			<!-- Inner contact line: goes high when prongs are pressed (line CLOSED) -->
+			<g class="ph-tap-contact" data-ph-tap-contact>
+				<line x1="145" y1="80" x2="315" y2="80" stroke="#7fff7f" stroke-width="2" stroke-dasharray="3,3" opacity="0.35" />
+			</g>
+		</svg>
+		<div class="ph-tap-cradle-caption">{strings.cradleCaption}</div>
+	</div>
+
+	<div class="ph-tap-canvas-wrap">
+		<canvas data-ph-tap-canvas width="460" height="120"></canvas>
+		<span class="ph-tap-y ph-tap-y-top">{strings.yClosed}</span>
+		<span class="ph-tap-y ph-tap-y-bot">{strings.yOpen}</span>
+	</div>
+
+	<div class="ph-tap-meters">
+		<div class="ph-tap-meter">
+			<span class="ph-tap-meter-label">{strings.pulses}</span>
+			<span class="ph-tap-meter-value" data-ph-tap-pulse-count>0</span>
+		</div>
+		<div class="ph-tap-meter">
+			<span class="ph-tap-meter-label">{strings.rate}</span>
+			<span class="ph-tap-meter-value" data-ph-tap-rate>—</span>
+			<span class="ph-tap-meter-unit">{strings.rateUnit}</span>
+		</div>
+	</div>
+
+	<div class="ph-tap-buttons">
+		<button class="ph-btn ph-btn-green" data-ph-tap-btn>
+			{strings.tapBtn}
+			<span class="ph-tap-hint">{strings.tapHint}</span>
+		</button>
+		<button class="ph-btn ph-btn-dim" data-ph-tap-reset>{strings.reset}</button>
+	</div>
+
+	<div class="ph-tap-legend">{strings.legend}</div>
+</div>
+
+<script define:vars={{ id, S: strings }}>
+	(() => {
+		const root = document.querySelector(`[data-ph-tap-id="${id}"]`);
+		if (!root) return;
+
+		const canvas = root.querySelector('[data-ph-tap-canvas]');
+		const dialedEl = root.querySelector('[data-ph-tap-dialed]');
+		const statusEl = root.querySelector('[data-ph-tap-status]');
+		const pulseCountEl = root.querySelector('[data-ph-tap-pulse-count]');
+		const rateEl = root.querySelector('[data-ph-tap-rate]');
+		const tapBtn = root.querySelector('[data-ph-tap-btn]');
+		const resetBtn = root.querySelector('[data-ph-tap-reset]');
+		const prongs = root.querySelectorAll('[data-ph-tap-prong]');
+		const contact = root.querySelector('[data-ph-tap-contact]');
+
+		const VISIBLE_MS = 3000;
+		const BREAK_MS = 60;
+		const DIGIT_GAP_MS = 700;
+		const RATE_IDEAL_LO = 8;
+		const RATE_IDEAL_HI = 12;
+
+		const taps = []; // performance.now() timestamps
+		let pulseCount = 0;
+		let lastTapAt = 0;
+		let dialed = '';
+		let audioCtx = null;
+
+		const click = () => {
+			if (!audioCtx) {
+				audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+			}
+			if (audioCtx.state === 'suspended') audioCtx.resume();
+			const t = audioCtx.currentTime;
+			const osc = audioCtx.createOscillator();
+			const gain = audioCtx.createGain();
+			osc.type = 'square';
+			osc.frequency.value = 180;
+			gain.gain.setValueAtTime(0, t);
+			gain.gain.linearRampToValueAtTime(0.18, t + 0.002);
+			gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+			osc.connect(gain).connect(audioCtx.destination);
+			osc.start(t);
+			osc.stop(t + 0.05);
+		};
+
+		const updateRate = () => {
+			if (taps.length < 2) {
+				rateEl.textContent = '—';
+				rateEl.classList.remove('in-range', 'off-range');
+				return;
+			}
+			const recent = taps.slice(-6);
+			const intervals = [];
+			for (let i = 1; i < recent.length; i++) intervals.push(recent[i] - recent[i - 1]);
+			const avgMs = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+			const pps = 1000 / avgMs;
+			rateEl.textContent = pps.toFixed(1);
+			const ok = pps >= RATE_IDEAL_LO && pps <= RATE_IDEAL_HI;
+			rateEl.classList.toggle('in-range', ok);
+			rateEl.classList.toggle('off-range', !ok);
+		};
+
+		const setStatus = (txt, cls) => {
+			statusEl.textContent = txt;
+			statusEl.classList.remove('is-tapping', 'is-digit', 'is-invalid');
+			if (cls) statusEl.classList.add(cls);
+		};
+
+		const renderDialed = () => {
+			dialedEl.textContent = dialed.split('').join(' ');
+		};
+
+		const finalizeDigit = () => {
+			if (pulseCount === 0) return;
+			let digit;
+			if (pulseCount >= 1 && pulseCount <= 9) {
+				digit = String(pulseCount);
+			} else if (pulseCount === 10) {
+				digit = '0';
+			} else {
+				setStatus(S.statusInvalid, 'is-invalid');
+				pulseCount = 0;
+				pulseCountEl.textContent = '0';
+				return;
+			}
+			dialed += digit;
+			renderDialed();
+			pulseCount = 0;
+			pulseCountEl.textContent = '0';
+			setStatus(S.statusDigit, 'is-digit');
+		};
+
+		const animateProngs = () => {
+			prongs.forEach((p) => p.classList.add('is-pressed'));
+			contact && contact.classList.add('is-pressed');
+			setTimeout(() => {
+				prongs.forEach((p) => p.classList.remove('is-pressed'));
+				contact && contact.classList.remove('is-pressed');
+			}, BREAK_MS);
+		};
+
+		const onTap = () => {
+			const now = performance.now();
+			taps.push(now);
+			while (taps.length > 0 && taps[0] < now - VISIBLE_MS - 500) taps.shift();
+			pulseCount++;
+			lastTapAt = now;
+			pulseCountEl.textContent = String(pulseCount);
+			setStatus(S.statusTapping, 'is-tapping');
+			updateRate();
+			animateProngs();
+			click();
+		};
+
+		tapBtn.addEventListener('click', onTap);
+		resetBtn.addEventListener('click', () => {
+			dialed = '';
+			pulseCount = 0;
+			taps.length = 0;
+			lastTapAt = 0;
+			renderDialed();
+			pulseCountEl.textContent = '0';
+			rateEl.textContent = '—';
+			rateEl.classList.remove('in-range', 'off-range');
+			setStatus(S.statusIdle, null);
+		});
+
+		const onKey = (e) => {
+			if (e.code !== 'Space') return;
+			const target = e.target;
+			if (target && target.matches && target.matches('input, textarea, [contenteditable]')) return;
+			e.preventDefault();
+			onTap();
+		};
+		window.addEventListener('keydown', onKey);
+
+		// Idle digit-finalize tick
+		const idleTick = setInterval(() => {
+			if (pulseCount > 0 && performance.now() - lastTapAt > DIGIT_GAP_MS) {
+				finalizeDigit();
+			}
+		}, 80);
+
+		// Canvas
+		const ctx = canvas.getContext('2d');
+		const W = canvas.width;
+		const H = canvas.height;
+		const yClosed = Math.round(H * 0.3);
+		const yOpen = Math.round(H * 0.75);
+
+		const isOpenAt = (timeMs) => {
+			for (const t of taps) {
+				if (timeMs >= t && timeMs < t + BREAK_MS) return true;
+			}
+			return false;
+		};
+
+		const draw = () => {
+			const now = performance.now();
+			ctx.fillStyle = 'rgba(5,15,8,0.25)';
+			ctx.fillRect(0, 0, W, H);
+
+			// grid
+			ctx.strokeStyle = 'rgba(60,120,60,0.15)';
+			ctx.lineWidth = 1;
+			for (let x = 0; x < W; x += 40) {
+				ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+			}
+			ctx.strokeStyle = 'rgba(60,120,60,0.2)';
+			ctx.beginPath(); ctx.moveTo(0, yClosed); ctx.lineTo(W, yClosed); ctx.stroke();
+			ctx.beginPath(); ctx.moveTo(0, yOpen); ctx.lineTo(W, yOpen); ctx.stroke();
+
+			// trace
+			ctx.strokeStyle = '#7fff7f';
+			ctx.lineWidth = 2;
+			ctx.shadowColor = '#7fff7f';
+			ctx.shadowBlur = 6;
+			ctx.beginPath();
+			const tStart = now - VISIBLE_MS;
+			let prevY = isOpenAt(tStart) ? yOpen : yClosed;
+			ctx.moveTo(0, prevY);
+			for (let x = 0; x <= W; x++) {
+				const t = tStart + (x / W) * VISIBLE_MS;
+				const y = isOpenAt(t) ? yOpen : yClosed;
+				if (y !== prevY) {
+					ctx.lineTo(x, prevY);
+					ctx.lineTo(x, y);
+					prevY = y;
+				} else {
+					ctx.lineTo(x, y);
+				}
+			}
+			ctx.stroke();
+			ctx.shadowBlur = 0;
+
+			// digit-gap marker (last 700ms idle window when counting)
+			if (pulseCount > 0 && lastTapAt > 0) {
+				const sinceTap = now - lastTapAt;
+				const progress = Math.min(1, sinceTap / DIGIT_GAP_MS);
+				ctx.fillStyle = `rgba(255, 212, 90, ${0.15 + 0.25 * progress})`;
+				const xMark = ((lastTapAt - tStart) / VISIBLE_MS) * W;
+				ctx.fillRect(xMark, 0, Math.max(2, (sinceTap / VISIBLE_MS) * W), H);
+			}
+
+			requestAnimationFrame(draw);
+		};
+		draw();
+
+		document.addEventListener('astro:before-swap', () => {
+			window.removeEventListener('keydown', onKey);
+			clearInterval(idleTick);
+			if (audioCtx) audioCtx.close();
+		}, { once: true });
+	})();
+</script>

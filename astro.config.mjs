@@ -46,6 +46,11 @@ export default defineConfig({
 			prefixDefaultLocale: false,
 		},
 	},
+	vite: {
+		optimizeDeps: {
+			include: ['three', 'three/examples/jsm/loaders/GLTFLoader.js'],
+		},
+	},
 });
 
 export { themeConfig };
