@@ -187,6 +187,34 @@
 	margin: 0 0 16px;
 }
 
+.phreaking-page .ph-section .ph-bypass-layout {
+	max-width: 1200px;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 32px;
+	align-items: start;
+	margin-top: 8px;
+}
+
+.phreaking-page .ph-section .ph-bypass-layout p {
+	font-size: 15.5px;
+	line-height: 1.65;
+}
+
+.phreaking-page .ph-section .ph-bypass-layout p:first-child {
+	margin-top: 0;
+}
+
+.phreaking-page .ph-section .ph-bypass-layout > .ph-pcb {
+	margin: 0;
+}
+
+@media (max-width: 860px) {
+	.phreaking-page .ph-section .ph-bypass-layout {
+		grid-template-columns: 1fr;
+	}
+}
+
 .phreaking-page .ph-section strong {
 	color: var(--ph-green);
 }

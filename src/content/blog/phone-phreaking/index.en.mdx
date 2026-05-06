@@ -18,6 +18,8 @@ import FrequencySimulator from '../../../components/interactive/phone-phreaking/
 import WhistleViewer from '../../../components/interactive/phone-phreaking/WhistleViewer.astro';
 import BlueBox from '../../../components/interactive/phone-phreaking/BlueBox.astro';
 import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCarousel.astro';
+import PhoneCardGallery from '../../../components/interactive/phone-phreaking/PhoneCardGallery.astro';
+import PhoneCardBypass from '../../../components/interactive/phone-phreaking/PhoneCardBypass.astro';
 
 <Shell locale="en">
 
@@ -379,7 +381,88 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</p>
 </section>
 
-<SectionDivider label="07 // MODERN ATTACKS · 2018–2025" />
+<SectionDivider label="07 // PHONE CARD · A BRAZILIAN INVENTION" />
+
+<section class="ph-section">
+	<div style="max-width:900px">
+		<h2>The <span class="ph-accent-orange">phone card</span>: Brazil's contribution to phreaking</h2>
+		<p>
+			While Americans hid <em>blue boxes</em> in backpacks, Brazil was writing its own chapter of
+			telephony history with 100% domestic technology. In July 1976, engineer
+			<strong>Nelson Guilherme Bardini</strong> (B.S. Civil Engineering 1962, Electronics 1963 from
+			Mackenzie University) started developing inside TELESP what he called the
+			<em>"Electronic Token"</em>: a PVC card with coils and microfuses that replaced the round
+			metal token used in payphones.
+		</p>
+		<p>
+			The project won the Telebras research-category award and earned the
+			<strong>Landell de Moura Prize</strong>. The invention spread worldwide, but only became
+			commercial in Brazil itself in <strong>1992</strong>: the first card was issued at the
+			Brazilian Formula 1 Grand Prix in Interlagos, and the official rollout came with
+			<strong class="ph-accent-blue">Eco-92</strong>, in Rio. The motivation was practical: metal
+			tokens suffered constant vandalism, and the cost of collecting them from payphones broke the
+			whole model.
+		</p>
+
+		<h3>How the inductive card worked</h3>
+		<p>
+			The principle is <strong>Faraday's law of induction</strong> (1831): an alternating current in
+			one coil generates a magnetic field; a second nearby coil captures that field and returns a
+			proportional voltage. On the back of the card, several inductive <em>cells</em>, small metal
+			tracks in series with microfuses, were read by the terminal:
+		</p>
+		<ul style="max-width:900px;font-size:15px;line-height:1.6;color:var(--color-fg-soft, #dceadc);padding-left:20px;margin:12px 0">
+			<li><strong>Read</strong>: a low current passes through the coil; the terminal measures the impedance and knows whether the cell is open or closed.</li>
+			<li><strong>Charge</strong>: when a unit is consumed, the terminal injects enough current to <em>blow</em> the microfuse for that cell. Open = unit spent.</li>
+			<li><strong>Credit</strong>: the number of intact cells is the balance. When all are blown, the card is discarded.</li>
+		</ul>
+
+		<h3>The graphite bypass</h3>
+	</div>
+
+	<div class="ph-bypass-layout">
+		<div>
+			<p>
+				The inductive card was robust against the obvious attack (cloning a metal token was trivial),
+				but it had a physical weakness: the circuit was <em>visible</em> on the back. Starting in the
+				late 90s, BBSs and mailing lists circulated a trick that became folklore: running a
+				<strong>graphite pencil</strong> over the burned tracks reconnected the circuit. Graphite is
+				electrically conductive (resistivity around 10⁻⁵ Ω·m), and a dense enough layer brought the
+				cell back to a state the terminal would read as intact. Variants applied
+				<em>clear nail polish</em> over the area to prevent the next read from blowing fresh fuses,
+				freezing the balance.
+			</p>
+			<p>
+				The demo on the side is a didactic version: click <strong>INSERT CARD</strong> and watch the
+				tracks burn one by one as the credit drops to zero. Then,
+				<strong class="ph-accent-orange">drag the cursor over the card</strong> as if you were
+				penciling: the tracks reconnect, the balance returns. Later card generations mitigated the
+				problem with cryptographic cells and opaque back coatings, but for a long time, the graphite
+				trick was the most Brazilian way to phreak.
+			</p>
+		</div>
+
+		<PhoneCardBypass locale="en" />
+	</div>
+
+	<div style="max-width:900px;margin-top:32px">
+		<h3>The telecartofilia culture</h3>
+		<p>
+			Low cost, nationwide distribution and visual variety turned the card into a
+			<strong>cultural phenomenon</strong>. From 1994 onward, commemorative series, F1, World Cup,
+			dinosaurs, cartoon characters, landscapes, became collector's items. A new hobby emerged,
+			<strong>telecartofilia</strong>, sister to philately and numismatics, with clubs, catalogs,
+			swap fairs and limited runs commanding small fortunes. Companies, schools and government
+			agencies commissioned their own designs; manufacturing defects became prized rarities. The
+			hobby lasted until around 2010, when prepaid mobile phones retired the payphone and, with
+			it, the card itself.
+		</p>
+	</div>
+
+	<PhoneCardGallery locale="en" />
+</section>
+
+<SectionDivider label="08 // MODERN ATTACKS · 2018–2025" />
 
 <section class="ph-section">
 	<div style="max-width:900px;margin-bottom:16px">
@@ -448,7 +531,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</p>
 </section>
 
-<SectionDivider label="08 // CLASSIC vs MODERN" />
+<SectionDivider label="09 // CLASSIC vs MODERN" />
 
 <section class="ph-section">
 	<div class="ph-table-wrap">
@@ -496,7 +579,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="09 // ABANDONED FORUMS · 2000–2015" />
+<SectionDivider label="10 // ABANDONED FORUMS · 2000–2015" />
 
 <section class="ph-section">
 	<div style="max-width:900px">
@@ -524,7 +607,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="10 // RESISTANCE UNDER AUTHORITARIAN REGIMES" />
+<SectionDivider label="11 // RESISTANCE UNDER AUTHORITARIAN REGIMES" />
 
 <section class="ph-section">
 	<div style="max-width:900px;margin-bottom:24px">
@@ -610,7 +693,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="11 // BRAZIL · 2024–2025" />
+<SectionDivider label="12 // BRAZIL · 2024–2025" />
 
 <section class="ph-section">
 	<div style="max-width:900px;margin-bottom:24px">
@@ -671,7 +754,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</p>
 </section>
 
-<SectionDivider label="12 // TIMELINE" />
+<SectionDivider label="13 // TIMELINE" />
 
 <section class="ph-section">
 	<div style="max-width:900px">
@@ -754,7 +837,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="13 // MODERN ARSENAL" />
+<SectionDivider label="14 // MODERN ARSENAL" />
 
 <section class="ph-section">
 	<div class="ph-table-wrap">
@@ -815,7 +898,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="14 // LEGACY AND FINAL THOUGHTS" />
+<SectionDivider label="15 // LEGACY AND FINAL THOUGHTS" />
 
 <section class="ph-outro">
 	<p>
@@ -870,6 +953,9 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 		<li><span class="ph-src-tag">[Brazil]</span> Tecnoblog, <a href="https://tecnoblog.net/noticias/bandidos-usam-aparelhos-especiais-para-golpe-do-sms/" target="_blank" rel="noopener">"ERB Fake": how clandestine antennas work</a></li>
 		<li><span class="ph-src-tag">[DIY]</span> <a href="https://openbts.org/" target="_blank" rel="noopener">OpenBTS</a> · <a href="https://osmocom.org/" target="_blank" rel="noopener">Osmocom</a> · <a href="https://www.srsran.com/" target="_blank" rel="noopener">srsRAN</a> · <a href="http://www.projectmf.org/" target="_blank" rel="noopener">Project MF</a> (Arduino Blue Box)</li>
 		<li><span class="ph-src-tag">[archives]</span> <a href="https://2600.com/" target="_blank" rel="noopener">2600 Magazine</a> · <a href="https://archive.org/" target="_blank" rel="noopener">Internet Archive</a> · alt.phone.phreaking · <a href="https://en.wikipedia.org/wiki/Hack_Canada" target="_blank" rel="noopener">Hack Canada</a></li>
+		<li><span class="ph-src-tag">[card]</span> <a href="https://pt.wikipedia.org/wiki/Cart%C3%A3o_telef%C3%B4nico" target="_blank" rel="noopener">Wikipedia · Brazilian phone card</a> · <a href="https://pt.wikipedia.org/wiki/Nelson_Guilherme_Bardini" target="_blank" rel="noopener">Nelson Guilherme Bardini</a></li>
+		<li><span class="ph-src-tag">[card]</span> <a href="https://inventores.com.br/cartao-telefonico-indutivo/" target="_blank" rel="noopener">Inventores.com.br · "Inductive Phone Card" — patents and records</a></li>
+		<li><span class="ph-src-tag">[card]</span> <a href="https://oifuturo.org.br/historias/conheca-a-historia-por-tras-dos-cartoes-telefonicos/" target="_blank" rel="noopener">Oi Futuro · history of the phone card</a> · <a href="https://www.telecartofiliafurtado.com.br/blogs/blog-da-telecartofilia/o-primeiro-cartao-telefonico-do-brasil" target="_blank" rel="noopener">Telecartofilia Furtado</a></li>
 	</ul>
 </section>
 

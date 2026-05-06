@@ -18,6 +18,8 @@ import FrequencySimulator from '../../../components/interactive/phone-phreaking/
 import WhistleViewer from '../../../components/interactive/phone-phreaking/WhistleViewer.astro';
 import BlueBox from '../../../components/interactive/phone-phreaking/BlueBox.astro';
 import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCarousel.astro';
+import PhoneCardGallery from '../../../components/interactive/phone-phreaking/PhoneCardGallery.astro';
+import PhoneCardBypass from '../../../components/interactive/phone-phreaking/PhoneCardBypass.astro';
 
 <Shell locale="pt">
 
@@ -383,7 +385,88 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</p>
 </section>
 
-<SectionDivider label="07 // ATAQUES MODERNOS · 2018–2025" />
+<SectionDivider label="07 // CARTÃO TELEFÔNICO · INVENÇÃO BRASILEIRA" />
+
+<section class="ph-section">
+	<div style="max-width:900px">
+		<h2><span class="ph-accent-orange">Cartão telefônico</span>: a contribuição brasileira ao phreaking</h2>
+		<p>
+			Enquanto americanos escondiam <em>blue boxes</em> em mochilas, o Brasil escrevia seu próprio
+			capítulo da história da telefonia, com tecnologia 100% nacional. Em julho de 1976, o engenheiro
+			<strong>Nelson Guilherme Bardini</strong> (formado em Engenharia Civil em 1962 e Eletrônica em
+			1963 pelo Mackenzie) começou a desenvolver, dentro da TELESP, o que ele chamou de
+			<em>"Ficha Eletrônica"</em>: um cartão de PVC com bobinas e microfusíveis que substituía a
+			ficha metálica redonda dos orelhões.
+		</p>
+		<p>
+			O projeto venceu o concurso da Telebras na categoria pesquisador e levou o
+			<strong>Prêmio Landell de Moura</strong>. A invenção rodou o mundo, mas só foi implantada
+			comercialmente no próprio Brasil em <strong>1992</strong>: o primeiro cartão circulou no
+			Grande Prêmio do Brasil de Fórmula 1, em Interlagos, e o uso oficial veio com a
+			<strong class="ph-accent-blue">Eco-92</strong>, no Rio. A motivação era prática: as fichas de
+			metal sofriam vandalismo constante, e o custo de coletá-las dos orelhões inviabilizava o
+			modelo.
+		</p>
+
+		<h3>Como o cartão indutivo funcionava</h3>
+		<p>
+			O princípio é a <strong>Lei da Indução de Faraday</strong> (1831): correntes alternadas em uma
+			bobina geram campo magnético; um segundo enrolamento próximo capta esse campo e devolve uma
+			tensão proporcional. No verso do cartão, várias <em>cells</em> indutivas, pequenas trilhas
+			metálicas em série com microfusíveis, eram lidas pelo terminal:
+		</p>
+		<ul style="max-width:900px;font-size:15px;line-height:1.6;color:var(--color-fg-soft, #dceadc);padding-left:20px;margin:12px 0">
+			<li><strong>Leitura</strong>: corrente baixa atravessa a bobina; o terminal mede a impedância e sabe se a célula está aberta ou fechada.</li>
+			<li><strong>Cobrança</strong>: ao consumir uma unidade, o terminal injeta uma corrente alta o suficiente para <em>queimar</em> o microfusível daquela célula. Aberto = unidade gasta.</li>
+			<li><strong>Crédito</strong>: o número de células intactas restantes é o saldo. Quando todas estão queimadas, o cartão é descartado.</li>
+		</ul>
+
+		<h3>O bypass do grafite</h3>
+	</div>
+
+	<div class="ph-bypass-layout">
+		<div>
+			<p>
+				O cartão indutivo era robusto contra o ataque óbvio (clonar uma ficha metálica era trivial),
+				mas tinha uma fraqueza física: o circuito era <em>visível</em> no verso. A partir do final
+				dos anos 90, circulou nas BBSs e nas listas de discussão um truque que viraria folclore:
+				passar a ponta de um <strong>lápis grafite</strong> sobre as trilhas queimadas reconectava o
+				circuito. O grafite é condutor elétrico (resistividade da ordem de 10⁻⁵ Ω·m), e uma camada
+				densa o bastante religava a célula a ponto do terminal ler como intacta. Variações usavam
+				<em>esmalte transparente</em> sobre a área para impedir que a próxima passada na máquina
+				queimasse novos fusíveis, congelando o saldo.
+			</p>
+			<p>
+				A demo ao lado é uma versão didática: clique em <strong>INSERIR CARTÃO</strong> e veja as
+				trilhas queimando uma a uma com o crédito caindo a zero. Depois,
+				<strong class="ph-accent-orange">arraste o cursor sobre o cartão</strong> como se estivesse
+				passando lápis: as trilhas se religam, o saldo volta. As gerações posteriores do cartão
+				brasileiro mitigaram o problema com células criptográficas e camadas opacas no verso, mas o
+				grafite trick, por um bom tempo, foi o jeito mais brasileiro possível de fazer phreaking.
+			</p>
+		</div>
+
+		<PhoneCardBypass locale="pt" />
+	</div>
+
+	<div style="max-width:900px;margin-top:32px">
+		<h3>A cultura da telecartofilia</h3>
+		<p>
+			A combinação de baixo custo, distribuição nacional e variedade visual transformou o cartão em
+			um <strong>fenômeno cultural</strong>. A partir de 1994, séries comemorativas, F1, Copa do
+			Mundo, dinossauros, personagens infantis, paisagens, viraram objeto de coleção. Surgiu a
+			<strong>telecartofilia</strong>, irmã da filatelia e da numismática, com clubes, catálogos,
+			feiras de troca e tiragens reduzidas valendo fortunas. Empresas, escolas e órgãos públicos
+			encomendavam estampas próprias; defeitos de fabricação viraram joias raras. O hobby resistiu
+			até cerca de 2010, quando a popularização do celular pré-pago aposentou de vez o orelhão e,
+			junto com ele, o cartão.
+		</p>
+	</div>
+
+	<PhoneCardGallery locale="pt" />
+</section>
+
+<SectionDivider label="08 // ATAQUES MODERNOS · 2018–2025" />
 
 <section class="ph-section">
 	<div style="max-width:900px;margin-bottom:16px">
@@ -453,7 +536,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</p>
 </section>
 
-<SectionDivider label="08 // CLÁSSICO vs MODERNO" />
+<SectionDivider label="09 // CLÁSSICO vs MODERNO" />
 
 <section class="ph-section">
 	<div class="ph-table-wrap">
@@ -501,7 +584,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="09 // FÓRUNS ABANDONADOS · 2000–2015" />
+<SectionDivider label="10 // FÓRUNS ABANDONADOS · 2000–2015" />
 
 <section class="ph-section">
 	<div style="max-width:900px">
@@ -530,7 +613,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="10 // RESISTÊNCIA EM REGIMES AUTORITÁRIOS" />
+<SectionDivider label="11 // RESISTÊNCIA EM REGIMES AUTORITÁRIOS" />
 
 <section class="ph-section">
 	<div style="max-width:900px;margin-bottom:24px">
@@ -617,7 +700,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="11 // BRASIL · 2024–2025" />
+<SectionDivider label="12 // BRASIL · 2024–2025" />
 
 <section class="ph-section">
 	<div style="max-width:900px;margin-bottom:24px">
@@ -679,7 +762,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</p>
 </section>
 
-<SectionDivider label="12 // CRONOLOGIA" />
+<SectionDivider label="13 // CRONOLOGIA" />
 
 <section class="ph-section">
 	<div style="max-width:900px">
@@ -762,7 +845,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="13 // ARSENAL MODERNO" />
+<SectionDivider label="14 // ARSENAL MODERNO" />
 
 <section class="ph-section">
 	<div class="ph-table-wrap">
@@ -823,7 +906,7 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 	</div>
 </section>
 
-<SectionDivider label="14 // LEGADO E CONSIDERAÇÕES FINAIS" />
+<SectionDivider label="15 // LEGADO E CONSIDERAÇÕES FINAIS" />
 
 <section class="ph-outro">
 	<p>
@@ -878,6 +961,9 @@ import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCaro
 		<li><span class="ph-src-tag">[Brasil]</span> Tecnoblog, <a href="https://tecnoblog.net/noticias/bandidos-usam-aparelhos-especiais-para-golpe-do-sms/" target="_blank" rel="noopener">"ERB Fake": como funcionam as antenas clandestinas</a></li>
 		<li><span class="ph-src-tag">[DIY]</span> <a href="https://openbts.org/" target="_blank" rel="noopener">OpenBTS</a> · <a href="https://osmocom.org/" target="_blank" rel="noopener">Osmocom</a> · <a href="https://www.srsran.com/" target="_blank" rel="noopener">srsRAN</a> · <a href="http://www.projectmf.org/" target="_blank" rel="noopener">Project MF</a> (Arduino Blue Box)</li>
 		<li><span class="ph-src-tag">[arquivos]</span> <a href="https://2600.com/" target="_blank" rel="noopener">2600 Magazine</a> · <a href="https://archive.org/" target="_blank" rel="noopener">Internet Archive</a> · alt.phone.phreaking · <a href="https://en.wikipedia.org/wiki/Hack_Canada" target="_blank" rel="noopener">Hack Canada</a></li>
+		<li><span class="ph-src-tag">[cartão]</span> <a href="https://pt.wikipedia.org/wiki/Cart%C3%A3o_telef%C3%B4nico" target="_blank" rel="noopener">Wikipédia · Cartão telefônico</a> · <a href="https://pt.wikipedia.org/wiki/Nelson_Guilherme_Bardini" target="_blank" rel="noopener">Nelson Guilherme Bardini</a></li>
+		<li><span class="ph-src-tag">[cartão]</span> <a href="https://inventores.com.br/cartao-telefonico-indutivo/" target="_blank" rel="noopener">Inventores.com.br · "Cartão Telefônico Indutivo" — Registros e Patentes</a></li>
+		<li><span class="ph-src-tag">[cartão]</span> <a href="https://oifuturo.org.br/historias/conheca-a-historia-por-tras-dos-cartoes-telefonicos/" target="_blank" rel="noopener">Oi Futuro · História do cartão telefônico</a> · <a href="https://www.telecartofiliafurtado.com.br/blogs/blog-da-telecartofilia/o-primeiro-cartao-telefonico-do-brasil" target="_blank" rel="noopener">Telecartofilia Furtado</a></li>
 	</ul>
 </section>
 

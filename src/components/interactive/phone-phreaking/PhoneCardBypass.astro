@@ -1,0 +1,760 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const id = `ph-pcb-${Math.random().toString(36).slice(2, 9)}`;
+
+const TRACKS = 4;
+const CELLS_PER_TRACK = 6;
+const SEGMENTS_PER_TRACK = CELLS_PER_TRACK - 1;
+const CELL_X = [50, 90, 130, 170, 210, 250];
+const TRACK_Y_START = 120;
+const TRACK_Y_STEP = 26;
+
+const strings = {
+	pt: {
+		title: 'BYPASS_LAB.exe',
+		hintIdle: 'Insira o cartão. O terminal vai ler as trilhas e queimar uma a uma a cada unidade consumida.',
+		hintBurning: 'Indução de leitura → fusível queima → crédito desconta.',
+		hintEmpty: 'Cartão zerado. Arraste o cursor sobre as trilhas para passar o "lápis" e reconectá-las com grafite.',
+		hintRestoring: 'Grafite condutivo religando as trilhas queimadas.',
+		hintBypassed: 'Bypass aplicado. Terminal lê novamente como se houvesse crédito.',
+		statusIdle: 'INTACTO',
+		statusBurning: 'LENDO · QUEIMANDO',
+		statusEmpty: 'VAZIO',
+		statusRestoring: 'RESTAURANDO',
+		statusBypassed: 'BYPASS APLICADO',
+		credit: 'CRÉDITO',
+		insert: '▸ INSERIR CARTÃO',
+		reset: '↺ RESET',
+		legendIntact: 'trilha indutiva · intacta',
+		legendBurned: 'fusível queimado · circuito aberto',
+		legendRestored: 'grafite condutivo · religada',
+		terminal: 'TERMINAL',
+		terminalBrand: 'TELEBRAZUCA',
+		cardLabel: 'TELEBRAZUCA · 10 UNIDADES',
+		startHere: 'COMECE AQUI',
+		disclaimer: 'Demo educacional. O bypass real do cartão indutivo foi mitigado nas gerações posteriores nos anos 2000.',
+	},
+	en: {
+		title: 'BYPASS_LAB.exe',
+		hintIdle: 'Insert the card. The terminal reads the tracks and blows one fuse per consumed unit.',
+		hintBurning: 'Read induction → fuse blows → credit ticks down.',
+		hintEmpty: 'Card depleted. Drag your cursor across the tracks to "pencil" them back into a circuit with graphite.',
+		hintRestoring: 'Conductive graphite reconnecting the burned tracks.',
+		hintBypassed: 'Bypass applied. The terminal reads it again as if credit were intact.',
+		statusIdle: 'INTACT',
+		statusBurning: 'READING · BURNING',
+		statusEmpty: 'EMPTY',
+		statusRestoring: 'RESTORING',
+		statusBypassed: 'BYPASS APPLIED',
+		credit: 'CREDIT',
+		insert: '▸ INSERT CARD',
+		reset: '↺ RESET',
+		legendIntact: 'inductive track · intact',
+		legendBurned: 'blown fuse · open circuit',
+		legendRestored: 'conductive graphite · reconnected',
+		terminal: 'TERMINAL',
+		terminalBrand: 'TELEBRAZUCA',
+		cardLabel: 'TELEBRAZUCA · 10 UNITS',
+		startHere: 'START HERE',
+		disclaimer: 'Educational demo. The real bypass on inductive cards was mitigated in later card generations in the 2000s.',
+	},
+}[locale];
+---
+
+<div class="ph-pcb" data-ph-pcb-id={id}>
+	<div class="ph-pcb-head">
+		<span>{strings.title}</span>
+		<span class="ph-pcb-status" data-ph-pcb-status>▸ {strings.statusIdle}</span>
+	</div>
+
+	<div class="ph-pcb-body">
+		<div class="ph-pcb-stage">
+			<svg
+				class="ph-pcb-svg"
+				viewBox="0 0 520 260"
+				role="img"
+				aria-label={strings.title}
+				data-ph-pcb-svg
+			>
+				<defs>
+					<linearGradient id={`${id}-cardGrad`} x1="0" y1="0" x2="1" y2="1">
+						<stop offset="0%" stop-color="#cdcfd6" />
+						<stop offset="55%" stop-color="#a8aab2" />
+						<stop offset="100%" stop-color="#7c7e88" />
+					</linearGradient>
+					<linearGradient id={`${id}-headerGrad`} x1="0" y1="0" x2="0" y2="1">
+						<stop offset="0%" stop-color="rgba(20,22,28,0.28)" />
+						<stop offset="100%" stop-color="rgba(20,22,28,0.05)" />
+					</linearGradient>
+					<linearGradient id={`${id}-termGrad`} x1="0" y1="0" x2="0" y2="1">
+						<stop offset="0%" stop-color="#1a1a22" />
+						<stop offset="100%" stop-color="#0a0a10" />
+					</linearGradient>
+					<radialGradient id={`${id}-dot`} cx="0.35" cy="0.35" r="0.7">
+						<stop offset="0%" stop-color="#ffffff" />
+						<stop offset="60%" stop-color="#dcdee4" />
+						<stop offset="100%" stop-color="#9a9da6" />
+					</radialGradient>
+					<filter id={`${id}-glow`} x="-30%" y="-30%" width="160%" height="160%">
+						<feGaussianBlur stdDeviation="1.2" result="blur" />
+						<feMerge>
+							<feMergeNode in="blur" />
+							<feMergeNode in="SourceGraphic" />
+						</feMerge>
+					</filter>
+				</defs>
+
+				{/* Terminal */}
+				<g class="ph-pcb-terminal">
+					<rect x="340" y="30" width="160" height="200" rx="6" fill={`url(#${id}-termGrad)`} stroke="var(--ph-orange, #ff6a3d)" stroke-width="1.2" />
+					<rect x="340" y="100" width="20" height="60" fill="#000" />
+					<text x="420" y="48" text-anchor="middle" fill="var(--ph-orange, #ff6a3d)" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="2">{strings.terminal}</text>
+					<text x="420" y="60" text-anchor="middle" fill="var(--ph-orange, #ff6a3d)" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="2" opacity="0.85">{strings.terminalBrand}</text>
+					<rect x="360" y="75" width="120" height="14" rx="2" fill="#0a1410" stroke="var(--ph-green-deep, #2a4a2a)" stroke-width="0.6" />
+					<text x="420" y="86" text-anchor="middle" fill="var(--ph-green, #7fff7f)" font-family="JetBrains Mono, monospace" font-size="9" data-ph-pcb-display>R$ 10,00</text>
+					<g class="ph-pcb-reader" data-ph-pcb-reader opacity="0">
+						<rect x="345" y="118" width="8" height="20" fill="var(--ph-orange, #ff6a3d)" opacity="0.65" />
+					</g>
+					<text x="420" y="200" text-anchor="middle" fill="var(--ph-green-dim, #5a8a5a)" font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="1.5">▸ INSERT CARD →</text>
+					<text x="420" y="215" text-anchor="middle" fill="var(--ph-green-dim, #5a8a5a)" font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="1.5" data-ph-pcb-byline>SISTEMA TELEBRAZUCA</text>
+				</g>
+
+				{/* Card */}
+				<g class="ph-pcb-card-wrap" data-ph-pcb-card>
+					<rect x="20" y="60" width="280" height="160" rx="8" fill={`url(#${id}-cardGrad)`} stroke="#4a4d57" stroke-width="0.8" />
+					{/* surface texture: subtle horizontal striations */}
+					<g opacity="0.18" stroke="#3a3d47" stroke-width="0.4">
+						<line x1="20" y1="86" x2="300" y2="86" />
+						<line x1="20" y1="206" x2="300" y2="206" />
+					</g>
+					{/* header band */}
+					<rect x="20" y="60" width="280" height="22" fill={`url(#${id}-headerGrad)`} />
+					<text x="32" y="76" fill="#1a1a22" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="2" font-weight="700">TELEBRAZUCA</text>
+					<text x="288" y="76" fill="#1a1a22" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.5" text-anchor="end">10 UNIDADES</text>
+					{/* 4 tracks · cells linked by segments (the segments are the actual fuses) */}
+					<g class="ph-pcb-tracks" data-ph-pcb-tracks>
+						{Array.from({ length: TRACKS }).map((_, t) => {
+							const y = TRACK_Y_START + t * TRACK_Y_STEP;
+							return (
+								<g class="ph-pcb-track" data-ph-pcb-track={t}>
+									{/* segments (live wires) — drawn under the dots */}
+									{Array.from({ length: SEGMENTS_PER_TRACK }).map((_, s) => {
+										const x1 = CELL_X[s] + 7;
+										const x2 = CELL_X[s + 1] - 7;
+										const mx = (CELL_X[s] + CELL_X[s + 1]) / 2;
+										return (
+											<g class="ph-pcb-seg" data-ph-pcb-seg={`${t}-${s}`} data-track-idx={t} data-seg-idx={s}>
+												<line
+													class="ph-pcb-seg-line"
+													x1={x1}
+													y1={y}
+													x2={x2}
+													y2={y}
+													stroke="var(--ph-green, #7fff7f)"
+													stroke-width="1.8"
+													stroke-linecap="round"
+													filter={`url(#${id}-glow)`}
+												/>
+												<path
+													class="ph-pcb-seg-break"
+													d={`M ${mx - 5},${y} L ${mx - 1},${y} l 1.5,-4.5 l 2,9 l 1.5,-4.5 L ${mx + 5},${y}`}
+													stroke="#1a1a22"
+													stroke-width="1.2"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													fill="none"
+												/>
+											</g>
+										);
+									})}
+									{/* cells (dots) on top */}
+									{CELL_X.map((cx) => (
+										<circle
+											class="ph-pcb-dot"
+											cx={cx}
+											cy={y}
+											r="5.6"
+											fill={`url(#${id}-dot)`}
+											stroke="#3a3d47"
+											stroke-width="0.8"
+										/>
+									))}
+								</g>
+							);
+						})}
+					</g>
+					{/* lower-left handwritten-style serial (cosmetic) */}
+					<text x="32" y="214" fill="#3a3d47" font-family="Courier New, monospace" font-size="8" opacity="0.55" font-style="italic">75 · BRA</text>
+					{/* graphite trail layer (populated by JS) */}
+					<g class="ph-pcb-trail" data-ph-pcb-trail></g>
+					{/* spark indicator */}
+					<g class="ph-pcb-spark" data-ph-pcb-spark opacity="0">
+						<circle cx="0" cy="0" r="6" fill="var(--ph-yellow, #ffd45a)" opacity="0.85" />
+						<circle cx="0" cy="0" r="3" fill="#fff" />
+					</g>
+					{/* "start here" arrow — visible only after burn finishes; points to the LAST cell that just went out */}
+					{(() => {
+						const arrowY = TRACK_Y_START + (TRACKS - 1) * TRACK_Y_STEP;
+						const lastX = CELL_X[CELL_X.length - 1];
+						const tipX = lastX + 9;
+						const tailX = lastX + 26;
+						return (
+							<g class="ph-pcb-arrow" data-ph-pcb-arrow opacity="0">
+								<path
+									d={`M ${tailX},${arrowY} L ${tipX},${arrowY} M ${tipX + 4},${arrowY - 4} L ${tipX},${arrowY} L ${tipX + 4},${arrowY + 4}`}
+									stroke="var(--ph-orange, #ff6a3d)"
+									stroke-width="2.2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									fill="none"
+								/>
+								<text
+									x={tailX}
+									y={arrowY - 9}
+									fill="var(--ph-orange, #ff6a3d)"
+									font-family="JetBrains Mono, monospace"
+									font-size="7"
+									letter-spacing="1.5"
+									text-anchor="end"
+								>{strings.startHere}</text>
+							</g>
+						);
+					})()}
+				</g>
+			</svg>
+
+			<div class="ph-pcb-credit">
+				<div class="ph-pcb-credit-label">{strings.credit}</div>
+				<div class="ph-pcb-credit-value" data-ph-pcb-credit>R$ 10,00</div>
+			</div>
+		</div>
+
+		<aside class="ph-pcb-side">
+			<div class="ph-pcb-hint" data-ph-pcb-hint>{strings.hintIdle}</div>
+
+			<div class="ph-pcb-actions">
+				<button class="ph-pcb-btn is-primary" data-ph-pcb-action data-state="idle">
+					{strings.insert}
+				</button>
+				<button class="ph-pcb-btn is-ghost" data-ph-pcb-reset>
+					{strings.reset}
+				</button>
+			</div>
+
+			<dl class="ph-pcb-legend">
+				<div class="ph-pcb-legend-row">
+					<span class="ph-pcb-swatch is-intact"></span>
+					<dt>{strings.legendIntact}</dt>
+				</div>
+				<div class="ph-pcb-legend-row">
+					<span class="ph-pcb-swatch is-burned"></span>
+					<dt>{strings.legendBurned}</dt>
+				</div>
+				<div class="ph-pcb-legend-row">
+					<span class="ph-pcb-swatch is-restored"></span>
+					<dt>{strings.legendRestored}</dt>
+				</div>
+			</dl>
+		</aside>
+	</div>
+
+	<div class="ph-pcb-footer">▸ {strings.disclaimer}</div>
+</div>
+
+<style>
+	.ph-pcb {
+		border: 1px solid var(--ph-green-deep, #2a4a2a);
+		background: rgba(10, 14, 10, 0.6);
+		margin: 0;
+		max-width: 100%;
+		font-family: 'Courier New', 'JetBrains Mono', monospace;
+	}
+
+	.ph-pcb-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px 16px;
+		border-bottom: 1px solid var(--ph-green-deep, #2a4a2a);
+		font-size: 11px;
+		letter-spacing: 0.18em;
+		color: var(--ph-green-dim, #5a8a5a);
+		text-transform: uppercase;
+	}
+
+	.ph-pcb-status {
+		color: var(--ph-orange, #ff6a3d);
+		font-weight: 600;
+	}
+
+	.ph-pcb-body {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+		padding: 20px;
+	}
+
+	.ph-pcb-stage {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: stretch;
+		gap: 14px;
+		min-height: 240px;
+	}
+
+	.ph-pcb-svg {
+		width: 100%;
+		height: auto;
+		max-width: 560px;
+		touch-action: none;
+		user-select: none;
+	}
+
+	/* card insertion translation */
+	.ph-pcb-card-wrap {
+		transition: transform 700ms cubic-bezier(0.5, 0, 0.2, 1);
+	}
+	.ph-pcb-card-wrap.is-inserted {
+		transform: translateX(60px);
+	}
+
+	/* segments (the actual fuses) */
+	.ph-pcb-seg-line {
+		transition: stroke 240ms ease, stroke-dasharray 240ms ease, opacity 240ms ease;
+	}
+	.ph-pcb-seg-break {
+		opacity: 0;
+		transition: opacity 240ms ease;
+	}
+	.ph-pcb-seg.is-burned .ph-pcb-seg-line {
+		stroke: #5a5d68;
+		stroke-dasharray: 2 4;
+		opacity: 0.7;
+		filter: none;
+	}
+	.ph-pcb-seg.is-burned .ph-pcb-seg-break {
+		opacity: 1;
+	}
+	.ph-pcb-seg.is-restored .ph-pcb-seg-line {
+		stroke: #c8c8d4;
+		stroke-dasharray: 1 2;
+		opacity: 1;
+		filter: drop-shadow(0 0 1px rgba(127, 255, 127, 0.45));
+	}
+	.ph-pcb-seg.is-restored .ph-pcb-seg-break {
+		opacity: 0;
+	}
+	.ph-pcb-seg.is-active .ph-pcb-seg-line {
+		stroke: var(--ph-yellow, #ffd45a);
+		filter: drop-shadow(0 0 4px var(--ph-yellow, #ffd45a));
+	}
+
+	/* "start here" arrow */
+	.ph-pcb-arrow {
+		transition: opacity 220ms ease;
+	}
+	.ph-pcb.is-empty .ph-pcb-arrow {
+		opacity: 1;
+		animation: ph-pcb-arrow-pulse 1.4s ease-in-out infinite;
+		transform-box: fill-box;
+		transform-origin: 0 50%;
+	}
+	@keyframes ph-pcb-arrow-pulse {
+		0%, 100% { transform: translateX(0); }
+		50%      { transform: translateX(-4px); }
+	}
+
+	/* card surface drawable */
+	.ph-pcb.is-restoring .ph-pcb-card-wrap,
+	.ph-pcb.is-empty .ph-pcb-card-wrap {
+		cursor: crosshair;
+	}
+
+	/* status colors per state */
+	.ph-pcb.is-empty .ph-pcb-status { color: var(--ph-orange, #ff6a3d); }
+	.ph-pcb.is-bypassed .ph-pcb-status { color: var(--ph-green, #7fff7f); }
+	.ph-pcb.is-burning .ph-pcb-status { color: var(--ph-yellow, #ffd45a); }
+
+	/* side panel */
+	.ph-pcb-side {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.ph-pcb-credit {
+		display: flex;
+		align-items: baseline;
+		justify-content: center;
+		gap: 14px;
+		border: 1px solid var(--ph-green-deep, #2a4a2a);
+		padding: 10px 16px;
+		background: rgba(0, 0, 0, 0.35);
+	}
+
+	.ph-pcb-credit-label {
+		font-size: 10px;
+		letter-spacing: 0.25em;
+		color: var(--ph-green-dim, #5a8a5a);
+	}
+
+	.ph-pcb-credit-value {
+		font-size: 28px;
+		color: var(--ph-green, #7fff7f);
+		text-shadow: 0 0 8px rgba(127, 255, 127, 0.35);
+		letter-spacing: 0.04em;
+		font-variant-numeric: tabular-nums;
+		line-height: 1;
+	}
+
+	.ph-pcb.is-empty .ph-pcb-credit-value {
+		color: var(--ph-orange, #ff6a3d);
+		text-shadow: 0 0 8px rgba(255, 106, 61, 0.35);
+	}
+	.ph-pcb.is-bypassed .ph-pcb-credit-value {
+		color: var(--ph-yellow, #ffd45a);
+		text-shadow: 0 0 8px rgba(255, 212, 90, 0.4);
+	}
+
+	.ph-pcb-hint {
+		font-size: 12px;
+		line-height: 1.55;
+		color: var(--ph-fg-soft, #dceadc);
+		min-height: 64px;
+	}
+
+	.ph-pcb-actions {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+
+	.ph-pcb-btn {
+		font-family: inherit;
+		font-size: 11px;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		padding: 9px 14px;
+		background: transparent;
+		border: 1px solid currentColor;
+		cursor: pointer;
+		transition: background 120ms ease, color 120ms ease;
+	}
+	.ph-pcb-btn.is-primary {
+		color: var(--ph-orange, #ff6a3d);
+	}
+	.ph-pcb-btn.is-primary:hover {
+		background: var(--ph-orange, #ff6a3d);
+		color: #0a0e0a;
+	}
+	.ph-pcb-btn.is-ghost {
+		color: var(--ph-green-dim, #5a8a5a);
+	}
+	.ph-pcb-btn.is-ghost:hover {
+		color: var(--ph-green, #7fff7f);
+		border-color: var(--ph-green, #7fff7f);
+	}
+	.ph-pcb-btn:disabled {
+		opacity: 0.35;
+		cursor: not-allowed;
+	}
+
+	.ph-pcb-legend {
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		font-size: 11px;
+		color: var(--ph-fg-soft, #dceadc);
+	}
+	.ph-pcb-legend-row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.ph-pcb-legend dt {
+		margin: 0;
+	}
+	.ph-pcb-swatch {
+		display: inline-block;
+		width: 22px;
+		height: 4px;
+		border-radius: 2px;
+		flex: 0 0 auto;
+	}
+	.ph-pcb-swatch.is-intact {
+		background: var(--ph-green, #7fff7f);
+		box-shadow: 0 0 5px rgba(127, 255, 127, 0.5);
+	}
+	.ph-pcb-swatch.is-burned {
+		background: repeating-linear-gradient(90deg, #555 0 4px, transparent 4px 9px);
+	}
+	.ph-pcb-swatch.is-restored {
+		background: repeating-linear-gradient(90deg, #c8c8d4 0 1px, transparent 1px 3px);
+	}
+
+	.ph-pcb-footer {
+		padding: 10px 16px;
+		border-top: 1px solid var(--ph-green-deep, #2a4a2a);
+		font-size: 10px;
+		color: var(--ph-green-dim, #5a8a5a);
+		letter-spacing: 0.05em;
+	}
+</style>
+
+<script define:vars={{ id, TRACKS, SEGMENTS_PER_TRACK, CELL_X, TRACK_Y_START, TRACK_Y_STEP, strings }}>
+	(() => {
+		const root = document.querySelector(`[data-ph-pcb-id="${id}"]`);
+		if (!root) return;
+
+		const svg = root.querySelector('[data-ph-pcb-svg]');
+		const cardGroup = root.querySelector('[data-ph-pcb-card]');
+		const trackEls = Array.from(root.querySelectorAll('[data-ph-pcb-track]'));
+		const segMatrix = trackEls.map((t) => Array.from(t.querySelectorAll('[data-ph-pcb-seg]')));
+		const reader = root.querySelector('[data-ph-pcb-reader]');
+		const spark = root.querySelector('[data-ph-pcb-spark]');
+		const trailGroup = root.querySelector('[data-ph-pcb-trail]');
+		const display = root.querySelector('[data-ph-pcb-display]');
+		const creditEl = root.querySelector('[data-ph-pcb-credit]');
+		const hintEl = root.querySelector('[data-ph-pcb-hint]');
+		const statusEl = root.querySelector('[data-ph-pcb-status]');
+		const actionBtn = root.querySelector('[data-ph-pcb-action]');
+		const resetBtn = root.querySelector('[data-ph-pcb-reset]');
+
+		const UNIT_PRICE = 2.5; // R$10 / 4 tracks
+		const formatCredit = (v) => `R$ ${v.toFixed(2).replace('.', ',')}`;
+
+		const TRACK_Y = (i) => TRACK_Y_START + i * TRACK_Y_STEP;
+		const SEG_MX = (s) => (CELL_X[s] + CELL_X[s + 1]) / 2;
+		const X_FIRST = CELL_X[0];
+		const X_LAST = CELL_X[CELL_X.length - 1];
+
+		let state = 'idle';
+		let burnTimer = null;
+		let burnTrack = 0;
+		let burnSeg = 0;
+		let burnedTracks = 0;
+		const restoredSegs = new Set(); // "t-s"
+		const restoredTracks = new Set();
+		let drawing = false;
+
+		const setState = (next) => {
+			state = next;
+			root.classList.remove('is-idle', 'is-burning', 'is-empty', 'is-restoring', 'is-bypassed');
+			root.classList.add(`is-${next}`);
+			const labels = {
+				idle: strings.statusIdle,
+				burning: strings.statusBurning,
+				empty: strings.statusEmpty,
+				restoring: strings.statusRestoring,
+				bypassed: strings.statusBypassed,
+			};
+			statusEl.textContent = `▸ ${labels[next]}`;
+			const hints = {
+				idle: strings.hintIdle,
+				burning: strings.hintBurning,
+				empty: strings.hintEmpty,
+				restoring: strings.hintRestoring,
+				bypassed: strings.hintBypassed,
+			};
+			hintEl.textContent = hints[next];
+			actionBtn.disabled = next !== 'idle';
+			if (next === 'idle') actionBtn.textContent = strings.insert;
+		};
+
+		const setSparkAt = (t, s) => {
+			spark.setAttribute('transform', `translate(${SEG_MX(s)}, ${TRACK_Y(t)})`);
+			spark.setAttribute('opacity', '1');
+		};
+		const hideSpark = () => spark.setAttribute('opacity', '0');
+
+		const setReaderAt = (t) => {
+			const y = TRACK_Y(t);
+			reader.setAttribute('transform', `translate(0, ${y - 128})`);
+			reader.setAttribute('opacity', '1');
+		};
+
+		const updateCredit = (units) => {
+			const v = units * UNIT_PRICE;
+			creditEl.textContent = formatCredit(v);
+			display.textContent = formatCredit(v);
+		};
+
+		const burnNext = () => {
+			if (burnTrack >= TRACKS) {
+				clearInterval(burnTimer);
+				burnTimer = null;
+				hideSpark();
+				reader.setAttribute('opacity', '0');
+				updateCredit(0);
+				setState('empty');
+				return;
+			}
+			if (burnSeg >= SEGMENTS_PER_TRACK) {
+				// finalize this track: mark whole track burned, advance credit
+				trackEls[burnTrack].classList.add('is-burned');
+				burnedTracks += 1;
+				updateCredit(TRACKS - burnedTracks);
+				burnTrack += 1;
+				burnSeg = 0;
+				return;
+			}
+			const seg = segMatrix[burnTrack][burnSeg];
+			seg.classList.add('is-active');
+			setSparkAt(burnTrack, burnSeg);
+			setReaderAt(burnTrack);
+			setTimeout(() => {
+				seg.classList.remove('is-active');
+				seg.classList.add('is-burned');
+			}, 140);
+			burnSeg += 1;
+		};
+
+		const insertCard = () => {
+			if (state !== 'idle') return;
+			cardGroup.classList.add('is-inserted');
+			setState('burning');
+			setTimeout(() => {
+				burnTimer = setInterval(burnNext, 230);
+				burnNext();
+			}, 700);
+		};
+
+		// Pointer drag → graphite restore (per segment)
+		const svgPoint = (evt) => {
+			const pt = svg.createSVGPoint();
+			pt.x = evt.clientX;
+			pt.y = evt.clientY;
+			const ctm = svg.getScreenCTM();
+			if (!ctm) return null;
+			const p = pt.matrixTransform(ctm.inverse());
+			if (cardGroup.classList.contains('is-inserted')) p.x -= 60;
+			return p;
+		};
+
+		const findSegmentAt = (p) => {
+			if (p.x < X_FIRST - 4 || p.x > X_LAST + 4) return null;
+			const t = Math.round((p.y - TRACK_Y(0)) / TRACK_Y_STEP);
+			if (t < 0 || t >= TRACKS) return null;
+			if (Math.abs(p.y - TRACK_Y(t)) > 10) return null;
+			for (let s = 0; s < SEGMENTS_PER_TRACK; s++) {
+				if (p.x >= CELL_X[s] && p.x <= CELL_X[s + 1]) {
+					if (segMatrix[t][s].classList.contains('is-burned')) return { t, s };
+					return null;
+				}
+			}
+			return null;
+		};
+
+		const drawTrailDot = (p) => {
+			const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+			dot.setAttribute('cx', String(p.x));
+			dot.setAttribute('cy', String(p.y));
+			dot.setAttribute('r', '1.4');
+			dot.setAttribute('fill', '#7a7c84');
+			dot.setAttribute('opacity', '0.55');
+			trailGroup.appendChild(dot);
+		};
+
+		const TOTAL_SEGS = TRACKS * SEGMENTS_PER_TRACK;
+		const SEG_VALUE = (TRACKS * UNIT_PRICE) / TOTAL_SEGS; // R$ por segmento
+		const updateCreditFromRestored = () => {
+			const v = restoredSegs.size * SEG_VALUE;
+			creditEl.textContent = formatCredit(v);
+			display.textContent = formatCredit(v);
+		};
+
+		const restoreSegment = (t, s) => {
+			const key = `${t}-${s}`;
+			if (restoredSegs.has(key)) return;
+			restoredSegs.add(key);
+			const seg = segMatrix[t][s];
+			seg.classList.remove('is-burned');
+			seg.classList.add('is-restored');
+			updateCreditFromRestored();
+			// check if track is fully restored
+			let allOk = true;
+			for (let ss = 0; ss < SEGMENTS_PER_TRACK; ss++) {
+				if (!restoredSegs.has(`${t}-${ss}`)) { allOk = false; break; }
+			}
+			if (allOk && !restoredTracks.has(t)) {
+				restoredTracks.add(t);
+				trackEls[t].classList.remove('is-burned');
+				trackEls[t].classList.add('is-restored');
+				if (restoredTracks.size === TRACKS) {
+					setState('bypassed');
+				}
+			}
+		};
+
+		const onPointerDown = (evt) => {
+			if (state !== 'empty' && state !== 'restoring') return;
+			drawing = true;
+			if (state === 'empty') setState('restoring');
+			svg.setPointerCapture?.(evt.pointerId);
+			handlePointer(evt);
+		};
+		const onPointerMove = (evt) => {
+			if (!drawing) return;
+			handlePointer(evt);
+		};
+		const onPointerUp = (evt) => {
+			drawing = false;
+			try { svg.releasePointerCapture?.(evt.pointerId); } catch {}
+		};
+		const handlePointer = (evt) => {
+			const p = svgPoint(evt);
+			if (!p) return;
+			drawTrailDot(p);
+			const hit = findSegmentAt(p);
+			if (hit) restoreSegment(hit.t, hit.s);
+		};
+
+		const reset = () => {
+			if (burnTimer) {
+				clearInterval(burnTimer);
+				burnTimer = null;
+			}
+			burnTrack = 0;
+			burnSeg = 0;
+			burnedTracks = 0;
+			restoredSegs.clear();
+			restoredTracks.clear();
+			cardGroup.classList.remove('is-inserted');
+			trackEls.forEach((t) => t.classList.remove('is-burned', 'is-restored', 'is-active'));
+			segMatrix.forEach((row) =>
+				row.forEach((seg) => seg.classList.remove('is-burned', 'is-restored', 'is-active')),
+			);
+			while (trailGroup.firstChild) trailGroup.removeChild(trailGroup.firstChild);
+			hideSpark();
+			reader.setAttribute('opacity', '0');
+			updateCredit(TRACKS);
+			setState('idle');
+		};
+
+		actionBtn.addEventListener('click', insertCard);
+		resetBtn.addEventListener('click', reset);
+		svg.addEventListener('pointerdown', onPointerDown);
+		svg.addEventListener('pointermove', onPointerMove);
+		svg.addEventListener('pointerup', onPointerUp);
+		svg.addEventListener('pointercancel', onPointerUp);
+		svg.addEventListener('pointerleave', onPointerUp);
+
+		// init
+		setState('idle');
+		updateCredit(TRACKS);
+
+		document.addEventListener('astro:before-swap', () => {
+			if (burnTimer) clearInterval(burnTimer);
+		}, { once: true });
+	})();
+</script>

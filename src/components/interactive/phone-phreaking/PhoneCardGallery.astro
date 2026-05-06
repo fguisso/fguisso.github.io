@@ -1,0 +1,174 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+import { Image } from 'astro:assets';
+import cartaoZagatti from '../../../content/blog/phone-phreaking/cartao-zagatti.jpg';
+import cartaoColegio from '../../../content/blog/phone-phreaking/cartao-colegio-biotecnico.jpg';
+import trilhasCartao from '../../../content/blog/phone-phreaking/trilhas-cartao-indutivo.png';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const id = `ph-cards-${Math.random().toString(36).slice(2, 9)}`;
+
+type Slide = {
+	img: ImageMetadata;
+	alt: { pt: string; en: string };
+	title: { pt: string; en: string };
+	caption: { pt: string; en: string };
+	credit: string;
+};
+
+const slides: Slide[] = [
+	{
+		img: cartaoZagatti,
+		alt: {
+			pt: 'Cartão telefônico brasileiro Telebras dos anos 90 com estampa colorida',
+			en: '1990s Brazilian Telebras phone card with colorful artwork',
+		},
+		title: {
+			pt: 'Cartão Telebras · anos 90',
+			en: 'Telebras card · 1990s',
+		},
+		caption: {
+			pt: 'Os cartões eram suporte publicitário e cultural: estampas comemorativas, paisagens, personagens e séries temáticas alimentaram a telecartofilia.',
+			en: 'Cards doubled as cultural/advertising surfaces: commemoratives, landscapes, characters and themed series fueled the telecartofilia hobby.',
+		},
+		credit: 'ZAGATTI ARCHIVE // WEB.ARCHIVE',
+	},
+	{
+		img: cartaoColegio,
+		alt: {
+			pt: 'Cartão telefônico comemorativo do Colégio Biotécnico',
+			en: 'Commemorative phone card from Colégio Biotécnico',
+		},
+		title: {
+			pt: 'Série comemorativa · institucional',
+			en: 'Institutional commemorative series',
+		},
+		caption: {
+			pt: 'Empresas, escolas e órgãos públicos encomendavam tiragens próprias — pequenas e específicas, viraram alvos cobiçados de colecionador.',
+			en: 'Companies, schools and public agencies ordered short, specific runs — they became prized collector targets.',
+		},
+		credit: 'ENJOEI // ARQUIVO PÚBLICO',
+	},
+	{
+		img: trilhasCartao,
+		alt: {
+			pt: 'Verso de cartão telefônico indutivo mostrando as trilhas e bobinas',
+			en: 'Back of an inductive phone card showing the tracks and coils',
+		},
+		title: {
+			pt: 'Trilhas indutivas · o lado técnico',
+			en: 'Inductive tracks · the technical side',
+		},
+		caption: {
+			pt: 'No verso, as trilhas metálicas funcionam como bobinas: o terminal lê uma cell por indução e queima o microfusível correspondente para descontar o crédito.',
+			en: 'On the back, metal tracks act as coils: the terminal reads each cell by induction and blows the matching microfuse to debit the credit.',
+		},
+		credit: 'PHOTO // ARQUIVO',
+	},
+];
+
+const labels = {
+	pt: {
+		title: 'PHONE_CARDS.exe',
+		prev: 'Anterior',
+		next: 'Próxima',
+	},
+	en: {
+		title: 'PHONE_CARDS.exe',
+		prev: 'Previous',
+		next: 'Next',
+	},
+}[locale];
+---
+
+<div class="ph-carousel" data-ph-cards-id={id}>
+	<div class="ph-carousel-head">
+		<span>{labels.title}</span>
+		<span data-ph-cards-counter>1 / {slides.length}</span>
+	</div>
+
+	<div class="ph-carousel-stage">
+		<button class="ph-carousel-nav ph-carousel-nav-prev" data-ph-cards-prev aria-label={labels.prev}>‹</button>
+		<button class="ph-carousel-nav ph-carousel-nav-next" data-ph-cards-next aria-label={labels.next}>›</button>
+
+		{slides.map((s, i) => (
+			<article
+				class={`ph-carousel-slide${i === 0 ? ' is-active' : ''}`}
+				data-ph-cards-slide={i}
+			>
+				<div class="ph-carousel-illus">
+					<div class="ph-carousel-frame-label">▸ PHOTO // {s.title[locale].toUpperCase()} <span class="ph-carousel-credit">// {s.credit}</span></div>
+					<Image src={s.img} alt={s.alt[locale]} widths={[400, 800]} sizes="(max-width: 768px) 90vw, 420px" class="ph-carousel-photo" />
+					<div class="ph-carousel-context-note">▸ {s.caption[locale]}</div>
+				</div>
+
+				<div class="ph-carousel-info">
+					<h3 class="ph-carousel-name">{s.title[locale]}</h3>
+				</div>
+			</article>
+		))}
+	</div>
+
+	<div class="ph-carousel-dots" data-ph-cards-dots>
+		{slides.map((_, i) => (
+			<button
+				class={`ph-carousel-dot${i === 0 ? ' is-active' : ''}`}
+				data-ph-cards-dot={i}
+				aria-label={`${i + 1} / ${slides.length}`}
+			/>
+		))}
+	</div>
+</div>
+
+<script define:vars={{ id, total: slides.length }}>
+	(() => {
+		const root = document.querySelector(`[data-ph-cards-id="${id}"]`);
+		if (!root) return;
+
+		const slides = root.querySelectorAll('[data-ph-cards-slide]');
+		const dots = root.querySelectorAll('[data-ph-cards-dot]');
+		const counter = root.querySelector('[data-ph-cards-counter]');
+		const prevBtn = root.querySelector('[data-ph-cards-prev]');
+		const nextBtn = root.querySelector('[data-ph-cards-next]');
+
+		let current = 0;
+		let timer = null;
+		const INTERVAL = 6000;
+
+		const go = (i) => {
+			current = ((i % total) + total) % total;
+			slides.forEach((el, idx) => el.classList.toggle('is-active', idx === current));
+			dots.forEach((el, idx) => el.classList.toggle('is-active', idx === current));
+			if (counter) counter.textContent = `${current + 1} / ${total}`;
+		};
+
+		const stop = () => {
+			if (timer) clearInterval(timer);
+			timer = null;
+		};
+
+		const start = () => {
+			stop();
+			timer = setInterval(() => go(current + 1), INTERVAL);
+		};
+
+		nextBtn.addEventListener('click', () => { go(current + 1); start(); });
+		prevBtn.addEventListener('click', () => { go(current - 1); start(); });
+		dots.forEach((dot, idx) =>
+			dot.addEventListener('click', () => { go(idx); start(); }),
+		);
+
+		root.addEventListener('mouseenter', stop);
+		root.addEventListener('mouseleave', start);
+		root.addEventListener('focusin', stop);
+		root.addEventListener('focusout', start);
+
+		start();
+
+		document.addEventListener('astro:before-swap', () => stop(), { once: true });
+	})();
+</script>
