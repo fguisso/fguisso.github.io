@@ -15,6 +15,7 @@ const strings = {
 		standby: '○ STANDBY',
 		seized: '● TRUNK_SEIZED',
 		freq: 'FREQ_HZ',
+		noteLabel: 'NOTA',
 		whistle: '▶ ASSOBIAR',
 		stop: '■ STOP',
 		lockTo: '⌖ TRAVAR EM 2600',
@@ -23,12 +24,15 @@ const strings = {
 		routeLabel: 'ROTA_DA_CHAMADA',
 		stages: ['TELEFONE', 'CENTRAL_LOCAL', 'TRONCO_2600', 'INTERNACIONAL'],
 		seizureBanner: '⚡ TRUNK SEIZURE DETECTED — ACESSO AO BACKBONE INTERNACIONAL OBTIDO',
+		noteNamesPt: ['Dó', 'Dó#', 'Ré', 'Ré#', 'Mi', 'Fá', 'Fá#', 'Sol', 'Sol#', 'Lá', 'Lá#', 'Si'],
+		noteNamesEn: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
 	},
 	en: {
 		oscLabel: 'OSCILLOSCOPE_v2.1',
 		standby: '○ STANDBY',
 		seized: '● TRUNK_SEIZED',
 		freq: 'FREQ_HZ',
+		noteLabel: 'NOTE',
 		whistle: '▶ WHISTLE',
 		stop: '■ STOP',
 		lockTo: '⌖ LOCK TO 2600',
@@ -37,6 +41,7 @@ const strings = {
 		routeLabel: 'CALL_ROUTE',
 		stages: ['HANDSET', 'LOCAL_OFFICE', 'TRUNK_2600', 'INTERNATIONAL'],
 		seizureBanner: '⚡ TRUNK SEIZURE DETECTED — INTERNATIONAL BACKBONE ACCESS GRANTED',
+		noteNamesEn: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
 	},
 }[locale];
 ---
@@ -65,8 +70,14 @@ const strings = {
 
 	<div class="ph-osc-controls">
 		<div class="ph-osc-freq-row">
-			<span>{strings.freq}</span>
-			<span class="ph-osc-freq-value" data-ph-osc-freq>440 Hz</span>
+			<span class="ph-osc-freq-pair">
+				<span class="ph-osc-freq-label">{strings.noteLabel}</span>
+				<span class="ph-osc-freq-note" data-ph-osc-note>{locale === 'pt' ? 'Lá4 A4' : 'A4'}</span>
+			</span>
+			<span class="ph-osc-freq-pair">
+				<span class="ph-osc-freq-label">{strings.freq}</span>
+				<span class="ph-osc-freq-value" data-ph-osc-freq>440 Hz</span>
+			</span>
 		</div>
 		<input type="range" min="100" max="4000" step="1" value="440" data-ph-osc-range />
 		<div class="ph-osc-scale">
@@ -106,6 +117,7 @@ const strings = {
 		const canvas = root.querySelector('[data-ph-osc-canvas]');
 		const range = root.querySelector('[data-ph-osc-range]');
 		const freqEl = root.querySelector('[data-ph-osc-freq]');
+		const noteEl = root.querySelector('[data-ph-osc-note]');
 		const toggleBtn = root.querySelector('[data-ph-osc-toggle]');
 		const lockBtn = root.querySelector('[data-ph-osc-lock]');
 		const muteBtn = root.querySelector('[data-ph-osc-mute]');
@@ -130,6 +142,19 @@ const strings = {
 		let gain = null;
 
 		const inRange = () => Math.abs(freq - TARGET) <= TOLERANCE;
+
+		const freqToNote = (f) => {
+			const semis = Math.round(12 * Math.log2(f / 440));
+			const fromC0 = semis + 57;
+			const octave = Math.floor(fromC0 / 12);
+			const idx = ((fromC0 % 12) + 12) % 12;
+			const en = `${strings.noteNamesEn[idx]}${octave}`;
+			return strings.noteNamesPt
+				? `${strings.noteNamesPt[idx]}${octave} ${en}`
+				: en;
+		};
+
+		const TARGET_NOTE = freqToNote(TARGET);
 
 		const startAudio = () => {
 			if (!audioCtx) {
@@ -174,6 +199,8 @@ const strings = {
 			const ir = inRange();
 			freqEl.textContent = `${freq} Hz`;
 			freqEl.classList.toggle('in-range', ir);
+			noteEl.textContent = freqToNote(freq);
+			noteEl.classList.toggle('in-range', ir);
 			range.classList.toggle('in-range', ir);
 
 			statusEl.textContent = trunkSeized ? strings.seized : strings.standby;
@@ -271,7 +298,7 @@ const strings = {
 			ctx.setLineDash([]);
 			ctx.fillStyle = '#ff6a3d';
 			ctx.font = "10px 'Courier New', monospace";
-			ctx.fillText('2600 Hz', targetX + 6, 14);
+			ctx.fillText(`2600 Hz · ${TARGET_NOTE}`, targetX + 6, 14);
 
 			// Reference wave: 2600 Hz target, faint orange, always animated
 			ctx.strokeStyle = 'rgba(255,106,61,0.32)';

@@ -6,7 +6,7 @@
 .phreaking-page {
 	--ph-bg: #0a0e0a;
 	--ph-fg: #e8f5e8;
-	--ph-fg-soft: #c8d8c8;
+	--ph-fg-soft: #dceadc;
 	--ph-green: #7fff7f;
 	--ph-green-dim: #5a8a5a;
 	--ph-green-deep: #2a4a2a;
@@ -181,6 +181,7 @@
 }
 
 .phreaking-page .ph-section p {
+	font-size: 17px;
 	line-height: 1.7;
 	color: var(--ph-fg-soft);
 	margin: 0 0 16px;
@@ -425,18 +426,31 @@
 .phreaking-page .ph-osc-freq-row {
 	display: flex;
 	justify-content: space-between;
+	align-items: baseline;
 	font-size: 12px;
 	margin-bottom: 6px;
 	color: var(--ph-fg-soft);
 }
 
-.phreaking-page .ph-osc-freq-value {
+.phreaking-page .ph-osc-freq-pair {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 8px;
+}
+
+.phreaking-page .ph-osc-freq-label {
+	color: var(--ph-fg-soft);
+}
+
+.phreaking-page .ph-osc-freq-value,
+.phreaking-page .ph-osc-freq-note {
 	color: var(--ph-yellow);
 	font-weight: 700;
 	font-size: 16px;
 }
 
-.phreaking-page .ph-osc-freq-value.in-range {
+.phreaking-page .ph-osc-freq-value.in-range,
+.phreaking-page .ph-osc-freq-note.in-range {
 	color: var(--ph-green);
 	text-shadow: 0 0 8px var(--ph-green);
 }

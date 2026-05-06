@@ -172,10 +172,56 @@ const strings = {
 
 		let raf = 0;
 		let time = 0;
+		let isDragging = false;
+		let userOffsetY = 0;
+		let userOffsetX = 0;
+		let displayRotY = 0;
+		let displayRotX = 0;
+		let dragStartX = 0;
+		let dragStartY = 0;
+		let dragBaselineY = 0;
+		let dragBaselineX = 0;
+
+		const canvasEl = renderer.domElement;
+		canvasEl.style.cursor = 'grab';
+		canvasEl.style.touchAction = 'none';
+
+		const onPointerMove = (e: PointerEvent) => {
+			if (!isDragging) return;
+			const dx = e.clientX - dragStartX;
+			const dy = e.clientY - dragStartY;
+			userOffsetY = dragBaselineY + dx * 0.01;
+			userOffsetX = dragBaselineX + dy * 0.01;
+		};
+		const onPointerDown = (e: PointerEvent) => {
+			isDragging = true;
+			canvasEl.style.cursor = 'grabbing';
+			dragStartX = e.clientX;
+			dragStartY = e.clientY;
+			dragBaselineY = userOffsetY;
+			dragBaselineX = userOffsetX;
+			try { canvasEl.setPointerCapture(e.pointerId); } catch {}
+		};
+		const onPointerUp = (e: PointerEvent) => {
+			if (!isDragging) return;
+			isDragging = false;
+			canvasEl.style.cursor = 'grab';
+			try { canvasEl.releasePointerCapture(e.pointerId); } catch {}
+		};
+
+		canvasEl.addEventListener('pointermove', onPointerMove);
+		canvasEl.addEventListener('pointerdown', onPointerDown);
+		canvasEl.addEventListener('pointerup', onPointerUp);
+		canvasEl.addEventListener('pointercancel', onPointerUp);
+
 		const animate = () => {
-			time += 0.011;
-			whistleGroup.rotation.y = time;
-			whistleGroup.rotation.x = Math.sin(time * 0.7) * 0.12;
+			if (!isDragging) time += 0.011;
+			const targetY = time + userOffsetY;
+			const targetX = userOffsetX + Math.sin(time * 0.7) * 0.12;
+			displayRotY += (targetY - displayRotY) * 0.18;
+			displayRotX += (targetX - displayRotX) * 0.18;
+			whistleGroup.rotation.y = displayRotY;
+			whistleGroup.rotation.x = displayRotX;
 			whistleGroup.position.y = Math.sin(time * 1.3) * 0.06;
 			renderer.render(scene, camera);
 			raf = requestAnimationFrame(animate);
