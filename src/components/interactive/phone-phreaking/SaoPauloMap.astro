@@ -1,0 +1,359 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const id = `ph-spmap-${Math.random().toString(36).slice(2, 9)}`;
+
+const t = {
+	pt: {
+		title: 'São Paulo · Phreaking de quadrilha · 2024–2025',
+		hint: 'Clique nos pinos para ler o caso',
+		mapAlt: 'Mapa de São Paulo: rios, vias principais e áreas verdes',
+		offMap: 'segue a leste',
+		pins: [
+			{
+				key: 'farialima',
+				x: 38,
+				y: 56,
+				offMap: false,
+				date: '23/JUL/2024',
+				neighborhood: 'AV. FARIA LIMA',
+				title: 'Carro-antena em Faria Lima',
+				body: 'Carro alugado circulava 8 a 12 h/dia pela Paulista e Faria Lima com transmissores que derrubavam o 4G dos celulares próximos. Quando o sinal caía, o equipamento disparava SMS bancário falso. Motorista preso em flagrante. Recebia R$ 1.000/semana só pra dirigir.',
+				link: 'https://www.cnnbrasil.com.br/nacional/carro-do-golpe-veja-equipamentos-encontrados-em-veiculo-para-interceptar-sinal-de-celulares/',
+			},
+			{
+				key: 'morumbi',
+				x: 30,
+				y: 68,
+				offMap: false,
+				date: '23/JAN/2025',
+				neighborhood: 'MORUMBI',
+				title: 'Apartamento com antena na varanda',
+				body: 'Apartamento no 19º andar com antena montada na varanda apontando para a Marginal Pinheiros. Equipamento 2G que bloqueava 3G/4G/5G em raio de 2 km. Uma única antena dispara mais de 100 mil SMS por dia. ANATEL e Polícia Civil derrubaram após 6 meses de investigação.',
+				link: 'https://sbtnews.sbt.com.br/noticia/policia/esquema-de-sms-falso-e-descoberto-em-predio-na-zona-oeste-de-sao-paulo',
+			},
+			{
+				key: 'itaquera',
+				x: 106,
+				y: 40.5,
+				offMap: true,
+				date: '10/SET/2025',
+				neighborhood: 'ITAQUERA · ZONA LESTE',
+				title: 'Central móvel: femtocell em carro',
+				body: 'Outro carro-antena, outra abordagem. Homem de 35 anos disparando ~40.000 SMS/hora de dentro do veículo na Zona Leste, com alvos também na Av. Paulista. Apreendidos rádio-transmissores e apontadores de sinal. Indiciado por associação criminosa e invasão de dispositivo informático.',
+				link: 'https://www.metropoles.com/sao-paulo/policia-descobre-central-movel-do-golpe-do-sms-e-prende-motorista',
+			},
+		],
+		legendRoads: 'vias / rodovias',
+		legendWater: 'rios / Marginal',
+		legendPin: 'operação policial',
+		fontePrimaria: 'FONTE PRIMÁRIA',
+	},
+	en: {
+		title: 'São Paulo · Crime-syndicate phreaking · 2024–2025',
+		hint: 'Click the pins to read each case',
+		mapAlt: 'São Paulo map: rivers, main roads and green areas',
+		offMap: 'continues east',
+		pins: [
+			{
+				key: 'farialima',
+				x: 38,
+				y: 56,
+				offMap: false,
+				date: '2024-07-23',
+				neighborhood: 'AV. FARIA LIMA',
+				title: 'Antenna car at Faria Lima',
+				body: 'A rented car cruised Paulista and Faria Lima 8 to 12 hours a day with transmitters that knocked nearby phones off 4G. When the signal dropped, the rig blasted fake bank SMS. Driver caught red-handed. He was paid R$ 1,000/week just to drive.',
+				link: 'https://www.cnnbrasil.com.br/nacional/carro-do-golpe-veja-equipamentos-encontrados-em-veiculo-para-interceptar-sinal-de-celulares/',
+			},
+			{
+				key: 'morumbi',
+				x: 30,
+				y: 68,
+				offMap: false,
+				date: '2025-01-23',
+				neighborhood: 'MORUMBI',
+				title: 'Apartment with balcony antenna',
+				body: 'A 19th-floor flat with a balcony antenna pointed at the Marginal Pinheiros. 2G gear that jammed 3G/4G/5G within 2 km. A single antenna fires more than 100,000 SMS/day. ANATEL and State Police took it down after 6 months of investigation.',
+				link: 'https://sbtnews.sbt.com.br/noticia/policia/esquema-de-sms-falso-e-descoberto-em-predio-na-zona-oeste-de-sao-paulo',
+			},
+			{
+				key: 'itaquera',
+				x: 106,
+				y: 40.5,
+				offMap: true,
+				date: '2025-09-10',
+				neighborhood: 'ITAQUERA · EAST ZONE',
+				title: 'Mobile rig: in-car femtocell',
+				body: 'Another antenna-car, another approach. A 35-year-old blasted ~40,000 SMS/h from inside his vehicle in the East Zone, targets reaching as far as Av. Paulista. Radio transmitters and signal pointers seized. Charged with criminal conspiracy and unauthorized device access.',
+				link: 'https://www.metropoles.com/sao-paulo/policia-descobre-central-movel-do-golpe-do-sms-e-prende-motorista',
+			},
+		],
+		legendRoads: 'roads / highways',
+		legendWater: 'rivers / Marginal',
+		legendPin: 'police operation',
+		fontePrimaria: 'PRIMARY SOURCE',
+	},
+}[locale];
+---
+
+<div class={`ph-spmap ${id}`}>
+	<div class="ph-spmap-head">
+		<div class="ph-spmap-title">{t.title}</div>
+		<div class="ph-spmap-hint">{t.hint}</div>
+	</div>
+
+	<div class="ph-spmap-stage">
+		<img class="ph-spmap-base" src="/svg/sao-paulo-map.svg" alt={t.mapAlt} loading="lazy" width="1093" height="914" />
+
+		<svg
+			class="ph-spmap-overlay"
+			viewBox="0 0 109.35 91.45"
+			preserveAspectRatio="xMidYMid meet"
+			aria-hidden="true"
+		>
+			<defs>
+				<filter id={`pin-glow-${id}`} x="-100%" y="-100%" width="300%" height="300%">
+					<feGaussianBlur stdDeviation="0.8" result="b" />
+					<feMerge>
+						<feMergeNode in="b" />
+						<feMergeNode in="SourceGraphic" />
+					</feMerge>
+				</filter>
+			</defs>
+
+			{t.pins.map((pin) => (
+				<g class="ph-spmap-pin" data-pin={pin.key} transform={`translate(${pin.x} ${pin.y})`}>
+					<circle r="1.6" fill="rgba(255,95,115,0)" class="ph-spmap-pin-pulse">
+						<animate attributeName="r" values="1.6;3.4;1.6" dur="2.4s" repeatCount="indefinite" />
+						<animate attributeName="fill-opacity" values="0.5;0;0.5" dur="2.4s" repeatCount="indefinite" />
+					</circle>
+					<circle r="1.6" fill="rgba(255,95,115,0.2)" />
+					<circle r="0.8" fill="#ff5f73" filter={`url(#pin-glow-${id})`} class="ph-spmap-pin-core" />
+					{pin.offMap && (
+						<text x="2" y="0.6" fill="#ff5f73" font-family="monospace" font-size="2.2" font-weight="700">→</text>
+					)}
+				</g>
+			))}
+		</svg>
+
+		<div class="ph-spmap-hotspots">
+			{t.pins.map((pin) => (
+				<button
+					type="button"
+					class="ph-spmap-hotspot"
+					data-pin-btn={pin.key}
+					aria-label={pin.title}
+					style={`left: ${(pin.x / 109.35) * 100}%; top: ${(pin.y / 91.45) * 100}%`}
+				>
+					<span class="ph-spmap-hotspot-label">{pin.neighborhood}{pin.offMap ? ` (${t.offMap})` : ''}</span>
+				</button>
+			))}
+		</div>
+	</div>
+
+	<div class="ph-spmap-cards">
+		{t.pins.map((pin, i) => (
+			<article class={`ph-spmap-card${i === 0 ? ' is-active' : ''}`} data-card={pin.key} aria-hidden={i !== 0}>
+				<div class="ph-spmap-card-head">
+					<span class="ph-spmap-card-date">{pin.date}</span>
+					<span class="ph-spmap-card-neighborhood">{pin.neighborhood}</span>
+				</div>
+				<h3 class="ph-spmap-card-title">{pin.title}</h3>
+				<p class="ph-spmap-card-body">{pin.body}</p>
+				{pin.link && (
+					<a class="ph-spmap-card-link" href={pin.link} target="_blank" rel="noopener">▸ {t.fontePrimaria}</a>
+				)}
+			</article>
+		))}
+	</div>
+</div>
+
+<script define:vars={{ id }}>
+	(function () {
+		const root = document.querySelector('.' + id);
+		if (!root) return;
+		const pins = root.querySelectorAll('.ph-spmap-pin');
+		const hotspots = root.querySelectorAll('[data-pin-btn]');
+		const cards = root.querySelectorAll('.ph-spmap-card');
+
+		function showCard(key) {
+			cards.forEach((c) => {
+				const match = c.dataset.card === key;
+				c.classList.toggle('is-active', match);
+				c.setAttribute('aria-hidden', String(!match));
+			});
+			pins.forEach((p) => p.classList.toggle('is-active', p.dataset.pin === key));
+			hotspots.forEach((h) => h.classList.toggle('is-active', h.dataset.pinBtn === key));
+		}
+
+		hotspots.forEach((btn) => {
+			btn.addEventListener('click', () => showCard(btn.dataset.pinBtn));
+		});
+	})();
+</script>
+
+<style>
+	.ph-spmap {
+		max-width: 980px;
+		margin: 32px auto;
+		padding: 22px;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 10px;
+	}
+	.ph-spmap-head {
+		margin-bottom: 14px;
+	}
+	.ph-spmap-title {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 13px;
+		color: var(--color-accent, #00ff7f);
+		margin-bottom: 4px;
+	}
+	.ph-spmap-hint {
+		font-size: 12px;
+		color: var(--color-muted, #a8a9bb);
+	}
+	.ph-spmap-stage {
+		position: relative;
+		background: #050508;
+		border-radius: 6px;
+		padding: 8px;
+		border: 1px solid rgba(0, 255, 127, 0.15);
+		aspect-ratio: 109.35 / 91.45;
+		overflow: hidden;
+	}
+	.ph-spmap-base {
+		position: absolute;
+		inset: 8px;
+		width: calc(100% - 16px);
+		height: calc(100% - 16px);
+		object-fit: contain;
+		display: block;
+		filter: drop-shadow(0 0 8px rgba(0, 255, 127, 0.05));
+	}
+	.ph-spmap-overlay {
+		position: absolute;
+		inset: 8px;
+		width: calc(100% - 16px);
+		height: calc(100% - 16px);
+		pointer-events: none;
+	}
+	.ph-spmap-hotspots {
+		position: absolute;
+		inset: 8px;
+		width: calc(100% - 16px);
+		height: calc(100% - 16px);
+	}
+	.ph-spmap-hotspot {
+		position: absolute;
+		appearance: none;
+		background: transparent;
+		border: 0;
+		padding: 0;
+		width: 36px;
+		height: 36px;
+		transform: translate(-50%, -50%);
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.ph-spmap-hotspot:focus-visible {
+		outline: 2px solid var(--ph-orange, #ff6a3d);
+		outline-offset: 4px;
+		border-radius: 50%;
+	}
+	.ph-spmap-hotspot-label {
+		position: absolute;
+		top: calc(100% + 6px);
+		left: 50%;
+		transform: translateX(-50%);
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 10px;
+		letter-spacing: 0.08em;
+		color: #ff5f73;
+		background: rgba(5, 5, 8, 0.85);
+		padding: 2px 6px;
+		border: 1px solid rgba(255, 95, 115, 0.4);
+		border-radius: 3px;
+		white-space: nowrap;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.18s ease;
+	}
+	.ph-spmap-hotspot:hover .ph-spmap-hotspot-label,
+	.ph-spmap-hotspot:focus-visible .ph-spmap-hotspot-label,
+	.ph-spmap-hotspot.is-active .ph-spmap-hotspot-label {
+		opacity: 1;
+	}
+	.ph-spmap-pin.is-active .ph-spmap-pin-core,
+	.ph-spmap-hotspot:hover ~ .ph-spmap-hotspot .ph-spmap-pin-core {
+		fill: #00ff7f;
+	}
+	.ph-spmap-cards {
+		margin-top: 14px;
+		min-height: 160px;
+		position: relative;
+	}
+	.ph-spmap-card {
+		display: none;
+		padding: 16px 18px;
+		background: rgba(0, 30, 15, 0.35);
+		border: 1px solid rgba(0, 255, 127, 0.2);
+		border-radius: 6px;
+	}
+	.ph-spmap-card.is-active {
+		display: block;
+		animation: spmap-fade 0.28s ease;
+	}
+	@keyframes spmap-fade {
+		from { opacity: 0; transform: translateY(4px); }
+		to { opacity: 1; transform: none; }
+	}
+	.ph-spmap-card-head {
+		display: flex;
+		gap: 12px;
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 10px;
+		letter-spacing: 0.1em;
+		margin-bottom: 8px;
+	}
+	.ph-spmap-card-date {
+		color: #ffc800;
+	}
+	.ph-spmap-card-neighborhood {
+		color: var(--color-accent, #00ff7f);
+	}
+	.ph-spmap-card-title {
+		font-size: 17px;
+		margin: 0 0 8px;
+		color: var(--color-fg, #f5f5ff);
+	}
+	.ph-spmap-card-body {
+		font-size: 14px;
+		line-height: 1.55;
+		color: var(--color-fg, #dceadc);
+		margin: 0 0 8px;
+	}
+	.ph-spmap-card-link {
+		display: inline-block;
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		color: var(--color-accent, #00ff7f);
+		text-decoration: none;
+		border-bottom: 1px dashed rgba(0, 255, 127, 0.5);
+		padding-bottom: 1px;
+	}
+	.ph-spmap-card-link:hover {
+		color: #ffc800;
+		border-color: #ffc800;
+	}
+</style>

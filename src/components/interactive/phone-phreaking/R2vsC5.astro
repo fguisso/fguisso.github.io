@@ -1,0 +1,465 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const id = `ph-r2c5-${Math.random().toString(36).slice(2, 9)}`;
+
+const t = {
+	pt: {
+		title: 'C5 vs R2/MFC · onde mora a sinalização',
+		hint: 'Clique nas abas para comparar os três cenários',
+		labelC5: 'C5',
+		labelC5Sub: 'in-band · funciona',
+		labelR2: 'R2/MFC',
+		labelR2Sub: 'fora-banda · bloqueia',
+		labelBr: 'BR via 0800',
+		labelBrSub: 'porta dos fundos',
+		caller: 'PHREAKER',
+		callerBrSub: 'BR + Blue Box',
+		callerSub: '+ Blue Box',
+		dest: 'Central remota',
+		destInt: 'Central exterior',
+		gw0800: 'GW 0800',
+		gw0800Sub: 'USADirect · MCI',
+		voiceLane: 'voz',
+		signalLane: 'sinalização',
+		c5Verdict: 'BLUE BOX TOMA O TRONCO',
+		r2Verdict: 'COMANDO NÃO ATINGE O CONTROLE',
+		brVerdict: '0800 É A PORTA',
+		legendTitle: 'LEGENDA',
+		legendVoice: 'voz',
+		legendCommand: 'comando legítimo',
+		legendAttack: 'ataque (Blue Box)',
+		harmless: 'só áudio',
+		hits: 'comando ativo',
+	},
+	en: {
+		title: 'C5 vs R2/MFC · where signaling lives',
+		hint: 'Click the tabs to compare the three scenarios',
+		labelC5: 'C5',
+		labelC5Sub: 'in-band · works',
+		labelR2: 'R2/MFC',
+		labelR2Sub: 'out-of-band · blocks',
+		labelBr: 'BR via 0800',
+		labelBrSub: 'backdoor',
+		caller: 'PHREAKER',
+		callerBrSub: 'BR + Blue Box',
+		callerSub: '+ Blue Box',
+		dest: 'Remote exchange',
+		destInt: 'Foreign exchange',
+		gw0800: 'GW 0800',
+		gw0800Sub: 'USADirect · MCI',
+		voiceLane: 'voice',
+		signalLane: 'signaling',
+		c5Verdict: 'BLUE BOX SEIZES THE TRUNK',
+		r2Verdict: 'COMMAND NEVER REACHES CONTROL',
+		brVerdict: '0800 IS THE DOOR',
+		legendTitle: 'LEGEND',
+		legendVoice: 'voice',
+		legendCommand: 'legit command',
+		legendAttack: 'attack (Blue Box)',
+		harmless: 'audio only',
+		hits: 'live command',
+	},
+}[locale];
+---
+
+<div class={`ph-r2c5 ${id}`}>
+	<div class="ph-r2c5-head">
+		<div class="ph-r2c5-title">{t.title}</div>
+		<div class="ph-r2c5-hint">{t.hint}</div>
+	</div>
+
+	<div class="ph-r2c5-tabs" role="tablist">
+		<button type="button" class="ph-r2c5-tab is-active" data-mode="c5" role="tab" aria-selected="true">
+			<span class="ph-r2c5-tab-key">{t.labelC5}</span>
+			<span class="ph-r2c5-tab-sub">{t.labelC5Sub}</span>
+		</button>
+		<button type="button" class="ph-r2c5-tab" data-mode="r2" role="tab" aria-selected="false">
+			<span class="ph-r2c5-tab-key">{t.labelR2}</span>
+			<span class="ph-r2c5-tab-sub">{t.labelR2Sub}</span>
+		</button>
+		<button type="button" class="ph-r2c5-tab" data-mode="br" role="tab" aria-selected="false">
+			<span class="ph-r2c5-tab-key">{t.labelBr}</span>
+			<span class="ph-r2c5-tab-sub">{t.labelBrSub}</span>
+		</button>
+	</div>
+
+	<div class="ph-r2c5-stage">
+		<svg viewBox="0 0 800 260" class="ph-r2c5-svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label={t.title}>
+			<defs>
+				<linearGradient id={`g-tube-${id}`} x1="0" x2="1">
+					<stop offset="0%" stop-color="#9a1aff" stop-opacity="0.18" />
+					<stop offset="100%" stop-color="#3da5ff" stop-opacity="0.18" />
+				</linearGradient>
+				<filter id={`glow-${id}`} x="-50%" y="-50%" width="200%" height="200%">
+					<feGaussianBlur stdDeviation="2" result="blur" />
+					<feMerge>
+						<feMergeNode in="blur" />
+						<feMergeNode in="SourceGraphic" />
+					</feMerge>
+				</filter>
+			</defs>
+
+			<!-- ===== C5 mode: single shared tube, attack reaches destination ===== -->
+			<g class="ph-r2c5-mode ph-r2c5-c5">
+				<!-- Caller -->
+				<rect x="40" y="100" width="120" height="80" rx="6" fill="#0a0a14" stroke="#3da5ff" stroke-width="1.5" />
+				<text x="100" y="138" text-anchor="middle" fill="#3da5ff" font-family="monospace" font-size="13" font-weight="700">{t.caller}</text>
+				<text x="100" y="158" text-anchor="middle" fill="#dceadc" font-family="monospace" font-size="10">{t.callerSub}</text>
+
+				<!-- Single shared in-band tube -->
+				<rect x="160" y="115" width="480" height="50" rx="3" fill={`url(#g-tube-${id})`} />
+				<rect x="160" y="115" width="480" height="50" rx="3" fill="none" stroke="#9a1aff" stroke-width="1" stroke-dasharray="4 3" opacity="0.6" />
+				<text x="400" y="108" text-anchor="middle" fill="#9a1aff" font-family="monospace" font-size="10">{t.voiceLane} + {t.signalLane} · in-band</text>
+
+				<!-- Green balls (voice) -->
+				<g filter={`url(#glow-${id})`}>
+					<circle r="5" fill="#00ff7f">
+						<animate attributeName="cx" from="170" to="630" dur="3s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="130;128;132;130" dur="3s" repeatCount="indefinite" />
+					</circle>
+					<circle r="5" fill="#00ff7f" opacity="0.85">
+						<animate attributeName="cx" from="170" to="630" dur="3s" begin="1s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="135;133;137;135" dur="3s" begin="1s" repeatCount="indefinite" />
+					</circle>
+				</g>
+				<!-- Yellow balls (legit command) -->
+				<g filter={`url(#glow-${id})`}>
+					<circle r="5" fill="#ffc800">
+						<animate attributeName="cx" from="170" to="630" dur="3s" begin="0.4s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="145;143;147;145" dur="3s" begin="0.4s" repeatCount="indefinite" />
+					</circle>
+				</g>
+				<!-- Red balls (attack) -->
+				<g filter={`url(#glow-${id})`}>
+					<circle r="6" fill="#ff5f73">
+						<animate attributeName="cx" from="170" to="630" dur="3s" begin="0.7s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="150;152;148;150" dur="3s" begin="0.7s" repeatCount="indefinite" />
+					</circle>
+					<circle r="5" fill="#ff5f73" opacity="0.85">
+						<animate attributeName="cx" from="170" to="630" dur="3s" begin="1.6s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="148;150;146;148" dur="3s" begin="1.6s" repeatCount="indefinite" />
+					</circle>
+				</g>
+
+				<!-- Remote exchange (vulnerable) -->
+				<rect x="640" y="100" width="120" height="80" rx="6" fill="#0a0a14" stroke="#ff5f73" stroke-width="2">
+					<animate attributeName="stroke-width" values="2;3;2" dur="1.4s" repeatCount="indefinite" />
+				</rect>
+				<text x="700" y="138" text-anchor="middle" fill="#ff5f73" font-family="monospace" font-size="12" font-weight="700">{t.dest}</text>
+				<text x="700" y="158" text-anchor="middle" fill="#ff5f73" font-family="monospace" font-size="10">▸ {t.hits}</text>
+
+				<text x="400" y="220" text-anchor="middle" fill="#ff5f73" font-family="monospace" font-size="14" font-weight="700">{t.c5Verdict}</text>
+			</g>
+
+			<!-- ===== R2 mode: two separate lanes, attack arrives but as audio only ===== -->
+			<g class="ph-r2c5-mode ph-r2c5-r2" style="display:none">
+				<!-- Caller -->
+				<rect x="40" y="100" width="120" height="80" rx="6" fill="#0a0a14" stroke="#3da5ff" stroke-width="1.5" />
+				<text x="100" y="138" text-anchor="middle" fill="#3da5ff" font-family="monospace" font-size="13" font-weight="700">{t.caller}</text>
+				<text x="100" y="158" text-anchor="middle" fill="#dceadc" font-family="monospace" font-size="10">{t.callerSub}</text>
+
+				<!-- Signaling lane (top, isolated) -->
+				<rect x="160" y="80" width="480" height="22" rx="2" fill="rgba(255,200,0,0.08)" stroke="#ffc800" stroke-width="1" stroke-dasharray="3 3" opacity="0.85" />
+				<text x="160" y="73" fill="#ffc800" font-family="monospace" font-size="9">{t.signalLane} · fora-banda</text>
+				<g filter={`url(#glow-${id})`}>
+					<circle r="4" fill="#ffc800">
+						<animate attributeName="cx" from="170" to="630" dur="3s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="91;91" dur="3s" repeatCount="indefinite" />
+					</circle>
+					<circle r="4" fill="#ffc800" opacity="0.7">
+						<animate attributeName="cx" from="170" to="630" dur="3s" begin="1.4s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="91;91" dur="3s" begin="1.4s" repeatCount="indefinite" />
+					</circle>
+				</g>
+
+				<!-- Voice lane (bottom) -->
+				<rect x="160" y="130" width="480" height="40" rx="3" fill={`url(#g-tube-${id})`} />
+				<rect x="160" y="130" width="480" height="40" rx="3" fill="none" stroke="#9a1aff" stroke-width="1" stroke-dasharray="4 3" opacity="0.6" />
+				<text x="160" y="185" fill="#9a1aff" font-family="monospace" font-size="9">{t.voiceLane} · só áudio · sem controle</text>
+
+				<!-- Green balls (voice) on bottom lane -->
+				<g filter={`url(#glow-${id})`}>
+					<circle r="5" fill="#00ff7f">
+						<animate attributeName="cx" from="170" to="630" dur="3s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="145;143;147;145" dur="3s" repeatCount="indefinite" />
+					</circle>
+					<circle r="4" fill="#00ff7f" opacity="0.8">
+						<animate attributeName="cx" from="170" to="630" dur="3s" begin="1s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="155;153;157;155" dur="3s" begin="1s" repeatCount="indefinite" />
+					</circle>
+				</g>
+				<!-- Red balls (attack), pass through but harmless on voice lane -->
+				<g filter={`url(#glow-${id})`}>
+					<circle r="5" fill="#ff5f73" opacity="0.55">
+						<animate attributeName="cx" from="170" to="630" dur="3s" begin="0.5s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="160;158;162;160" dur="3s" begin="0.5s" repeatCount="indefinite" />
+					</circle>
+					<circle r="4" fill="#ff5f73" opacity="0.5">
+						<animate attributeName="cx" from="170" to="630" dur="3s" begin="2s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="150;148;152;150" dur="3s" begin="2s" repeatCount="indefinite" />
+					</circle>
+				</g>
+
+				<!-- Remote exchange (safe) -->
+				<rect x="640" y="100" width="120" height="80" rx="6" fill="#0a0a14" stroke="#00ff7f" stroke-width="1.5" />
+				<text x="700" y="138" text-anchor="middle" fill="#00ff7f" font-family="monospace" font-size="12" font-weight="700">{t.dest}</text>
+				<text x="700" y="158" text-anchor="middle" fill="#dceadc" font-family="monospace" font-size="10">▸ {t.harmless}</text>
+
+				<text x="400" y="220" text-anchor="middle" fill="#00ff7f" font-family="monospace" font-size="14" font-weight="700">{t.r2Verdict}</text>
+			</g>
+
+			<!-- ===== BR via 0800 mode: red balls harmless locally, weaponized on C5 leg ===== -->
+			<g class="ph-r2c5-mode ph-r2c5-br" style="display:none">
+				<!-- Phreaker BR -->
+				<rect x="20" y="100" width="100" height="80" rx="6" fill="#0a0a14" stroke="#3da5ff" stroke-width="1.5" />
+				<text x="70" y="138" text-anchor="middle" fill="#3da5ff" font-family="monospace" font-size="11" font-weight="700">{t.caller}</text>
+				<text x="70" y="158" text-anchor="middle" fill="#dceadc" font-family="monospace" font-size="9">{t.callerBrSub}</text>
+
+				<!-- BR leg · signaling lane (top, fora-banda) -->
+				<rect x="120" y="80" width="220" height="18" rx="2" fill="rgba(255,200,0,0.08)" stroke="#ffc800" stroke-width="1" stroke-dasharray="3 3" opacity="0.85" />
+				<text x="120" y="73" fill="#ffc800" font-family="monospace" font-size="8">R2 · sinalização fora-banda</text>
+				<g filter={`url(#glow-${id})`}>
+					<circle r="3" fill="#ffc800">
+						<animate attributeName="cx" from="125" to="335" dur="2.6s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="89;89" dur="2.6s" repeatCount="indefinite" />
+					</circle>
+				</g>
+
+				<!-- BR leg · voice lane -->
+				<rect x="120" y="135" width="220" height="30" rx="3" fill={`url(#g-tube-${id})`} />
+				<rect x="120" y="135" width="220" height="30" rx="3" fill="none" stroke="#9a1aff" stroke-width="1" stroke-dasharray="4 3" opacity="0.6" />
+				<text x="230" y="128" text-anchor="middle" fill="#9a1aff" font-family="monospace" font-size="9">R2 · voz</text>
+				<text x="230" y="180" text-anchor="middle" fill="#dceadc" font-family="monospace" font-size="9">vermelho passa, mas inofensivo</text>
+
+				<g filter={`url(#glow-${id})`}>
+					<circle r="4" fill="#00ff7f">
+						<animate attributeName="cx" from="125" to="335" dur="2.4s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="148;146;150;148" dur="2.4s" repeatCount="indefinite" />
+					</circle>
+					<circle r="4" fill="#ff5f73" opacity="0.55">
+						<animate attributeName="cx" from="125" to="335" dur="2.4s" begin="0.7s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="155;153;157;155" dur="2.4s" begin="0.7s" repeatCount="indefinite" />
+					</circle>
+					<circle r="3" fill="#ff5f73" opacity="0.5">
+						<animate attributeName="cx" from="125" to="335" dur="2.4s" begin="1.5s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="150;148;152;150" dur="2.4s" begin="1.5s" repeatCount="indefinite" />
+					</circle>
+				</g>
+
+				<!-- 0800 Gateway -->
+				<rect x="345" y="105" width="105" height="90" rx="6" fill="#0a0a14" stroke="#ffc800" stroke-width="1.5">
+					<animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="1.6s" repeatCount="indefinite" />
+				</rect>
+				<text x="397" y="130" text-anchor="middle" fill="#ffc800" font-family="monospace" font-size="11" font-weight="700">{t.gw0800}</text>
+				<text x="397" y="150" text-anchor="middle" fill="#dceadc" font-family="monospace" font-size="9">{t.gw0800Sub}</text>
+				<text x="397" y="166" text-anchor="middle" fill="#dceadc" font-family="monospace" font-size="9">Sprint Express</text>
+				<text x="397" y="184" text-anchor="middle" fill="#ffc800" font-family="monospace" font-size="9">R2 → C5</text>
+
+				<!-- C5 leg: shared in-band tube, red balls now active -->
+				<rect x="455" y="120" width="180" height="50" rx="3" fill={`url(#g-tube-${id})`} />
+				<rect x="455" y="120" width="180" height="50" rx="3" fill="none" stroke="#9a1aff" stroke-width="1" stroke-dasharray="4 3" opacity="0.7" />
+				<text x="545" y="113" text-anchor="middle" fill="#00ff7f" font-family="monospace" font-size="9">C5 · in-band · vermelho ativo</text>
+
+				<g filter={`url(#glow-${id})`}>
+					<circle r="5" fill="#00ff7f">
+						<animate attributeName="cx" from="460" to="630" dur="2s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="135;133;137;135" dur="2s" repeatCount="indefinite" />
+					</circle>
+					<circle r="5" fill="#ffc800">
+						<animate attributeName="cx" from="460" to="630" dur="2s" begin="0.4s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="145;143;147;145" dur="2s" begin="0.4s" repeatCount="indefinite" />
+					</circle>
+					<circle r="6" fill="#ff5f73">
+						<animate attributeName="cx" from="460" to="630" dur="2s" begin="0.8s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="155;157;153;155" dur="2s" begin="0.8s" repeatCount="indefinite" />
+					</circle>
+					<circle r="5" fill="#ff5f73" opacity="0.85">
+						<animate attributeName="cx" from="460" to="630" dur="2s" begin="1.4s" repeatCount="indefinite" />
+						<animate attributeName="cy" values="150;152;148;150" dur="2s" begin="1.4s" repeatCount="indefinite" />
+					</circle>
+				</g>
+
+				<!-- Foreign exchange (vulnerable!) -->
+				<rect x="640" y="100" width="120" height="80" rx="6" fill="#0a0a14" stroke="#ff5f73" stroke-width="2">
+					<animate attributeName="stroke-width" values="2;3;2" dur="1.4s" repeatCount="indefinite" />
+				</rect>
+				<text x="700" y="138" text-anchor="middle" fill="#ff5f73" font-family="monospace" font-size="11" font-weight="700">{t.destInt}</text>
+				<text x="700" y="158" text-anchor="middle" fill="#ff5f73" font-family="monospace" font-size="10">▸ {t.hits}</text>
+
+				<text x="400" y="220" text-anchor="middle" fill="#00ff7f" font-family="monospace" font-size="14" font-weight="700">{t.brVerdict}</text>
+			</g>
+		</svg>
+	</div>
+
+	<!-- Legend -->
+	<div class="ph-r2c5-legend">
+		<span class="ph-r2c5-legend-title">▸ {t.legendTitle}</span>
+		<span class="ph-r2c5-legend-item">
+			<span class="ph-r2c5-dot is-voice" aria-hidden="true"></span>
+			{t.legendVoice}
+		</span>
+		<span class="ph-r2c5-legend-item">
+			<span class="ph-r2c5-dot is-cmd" aria-hidden="true"></span>
+			{t.legendCommand}
+		</span>
+		<span class="ph-r2c5-legend-item">
+			<span class="ph-r2c5-dot is-attack" aria-hidden="true"></span>
+			{t.legendAttack}
+		</span>
+	</div>
+
+</div>
+
+<script define:vars={{ id }}>
+	(function () {
+		const root = document.querySelector('.' + id);
+		if (!root) return;
+		const tabs = root.querySelectorAll('.ph-r2c5-tab');
+		const modes = {
+			c5: root.querySelector('.ph-r2c5-c5'),
+			r2: root.querySelector('.ph-r2c5-r2'),
+			br: root.querySelector('.ph-r2c5-br'),
+		};
+
+		function setMode(mode) {
+			tabs.forEach((t) => {
+				const active = t.dataset.mode === mode;
+				t.classList.toggle('is-active', active);
+				t.setAttribute('aria-selected', String(active));
+			});
+			Object.entries(modes).forEach(([key, el]) => {
+				if (el) el.style.display = key === mode ? '' : 'none';
+			});
+		}
+
+		tabs.forEach((tab) => {
+			tab.addEventListener('click', () => setMode(tab.dataset.mode));
+		});
+	})();
+</script>
+
+<style>
+	.ph-r2c5 {
+		max-width: 900px;
+		margin: 32px auto;
+		padding: 22px;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 10px;
+	}
+	.ph-r2c5-head {
+		margin-bottom: 16px;
+	}
+	.ph-r2c5-title {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 13px;
+		color: var(--color-accent, #00ff7f);
+		margin-bottom: 4px;
+	}
+	.ph-r2c5-hint {
+		font-size: 12px;
+		color: var(--color-muted, #a8a9bb);
+	}
+	.ph-r2c5-tabs {
+		display: flex;
+		gap: 0;
+		margin-bottom: 12px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	}
+	.ph-r2c5-tab {
+		appearance: none;
+		background: transparent;
+		border: 0;
+		color: var(--color-muted, #a8a9bb);
+		padding: 10px 16px;
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		cursor: pointer;
+		border-bottom: 2px solid transparent;
+		transition: color 0.18s ease, border-color 0.18s ease;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 2px;
+		text-align: left;
+	}
+	.ph-r2c5-tab-key {
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+	}
+	.ph-r2c5-tab-sub {
+		font-size: 10px;
+		opacity: 0.7;
+		letter-spacing: 0.05em;
+	}
+	.ph-r2c5-tab:hover {
+		color: var(--color-fg, #f5f5ff);
+	}
+	.ph-r2c5-tab:focus-visible {
+		outline: 2px solid var(--color-accent, #00ff7f);
+		outline-offset: 2px;
+	}
+	.ph-r2c5-tab.is-active {
+		color: var(--color-accent, #00ff7f);
+		border-bottom-color: var(--color-accent, #00ff7f);
+	}
+	.ph-r2c5-stage {
+		background: #050508;
+		border-radius: 6px;
+		padding: 8px;
+	}
+	.ph-r2c5-svg {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+	.ph-r2c5-legend {
+		margin-top: 10px;
+		padding: 8px 12px;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px 18px;
+		align-items: center;
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 11px;
+		color: var(--color-muted, #a8a9bb);
+		border: 1px solid rgba(0, 255, 127, 0.12);
+		border-radius: 4px;
+		background: rgba(0, 0, 0, 0.3);
+	}
+	.ph-r2c5-legend-title {
+		color: var(--color-accent, #00ff7f);
+		letter-spacing: 0.1em;
+		margin-right: 4px;
+	}
+	.ph-r2c5-legend-item {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.ph-r2c5-dot {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		box-shadow: 0 0 6px currentColor;
+	}
+	.ph-r2c5-dot.is-voice {
+		background: #00ff7f;
+		color: #00ff7f;
+	}
+	.ph-r2c5-dot.is-cmd {
+		background: #ffc800;
+		color: #ffc800;
+	}
+	.ph-r2c5-dot.is-attack {
+		background: #ff5f73;
+		color: #ff5f73;
+	}
+</style>

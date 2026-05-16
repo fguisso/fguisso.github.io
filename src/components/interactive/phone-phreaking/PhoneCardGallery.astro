@@ -4,38 +4,32 @@ import { Image } from 'astro:assets';
 import cartaoZagatti from '../../../content/blog/phone-phreaking/cartao-zagatti.jpg';
 import cartaoColegio from '../../../content/blog/phone-phreaking/cartao-colegio-biotecnico.jpg';
 import trilhasCartao from '../../../content/blog/phone-phreaking/trilhas-cartao-indutivo.png';
+import cartoes500anos from '../../../content/blog/phone-phreaking/cartoes-telemar-500anos.jpg';
+import cartoesAlbum from '../../../content/blog/phone-phreaking/cartoes-album.jpg';
+import cartoesSenna from '../../../content/blog/phone-phreaking/cartoes-senna.jpg';
 
 interface Props {
 	locale: LocaleCode;
 }
 
 const { locale } = Astro.props;
-const id = `ph-cards-${Math.random().toString(36).slice(2, 9)}`;
 
-type Slide = {
+type Card = {
 	img: ImageMetadata;
 	alt: { pt: string; en: string };
 	title: { pt: string; en: string };
-	caption: { pt: string; en: string };
-	credit: string;
+	source: string;
 };
 
-const slides: Slide[] = [
+const cards: Card[] = [
 	{
 		img: cartaoZagatti,
 		alt: {
 			pt: 'Cartão telefônico brasileiro Telebras dos anos 90 com estampa colorida',
 			en: '1990s Brazilian Telebras phone card with colorful artwork',
 		},
-		title: {
-			pt: 'Cartão Telebras · anos 90',
-			en: 'Telebras card · 1990s',
-		},
-		caption: {
-			pt: 'Os cartões eram suporte publicitário e cultural: estampas comemorativas, paisagens, personagens e séries temáticas alimentaram a telecartofilia.',
-			en: 'Cards doubled as cultural/advertising surfaces: commemoratives, landscapes, characters and themed series fueled the telecartofilia hobby.',
-		},
-		credit: 'ZAGATTI ARCHIVE // WEB.ARCHIVE',
+		title: { pt: 'Telebras · anos 90', en: 'Telebras · 1990s' },
+		source: 'ZAGATTI ARCHIVE',
 	},
 	{
 		img: cartaoColegio,
@@ -43,15 +37,8 @@ const slides: Slide[] = [
 			pt: 'Cartão telefônico comemorativo do Colégio Biotécnico',
 			en: 'Commemorative phone card from Colégio Biotécnico',
 		},
-		title: {
-			pt: 'Série comemorativa · institucional',
-			en: 'Institutional commemorative series',
-		},
-		caption: {
-			pt: 'Empresas, escolas e órgãos públicos encomendavam tiragens próprias — pequenas e específicas, viraram alvos cobiçados de colecionador.',
-			en: 'Companies, schools and public agencies ordered short, specific runs — they became prized collector targets.',
-		},
-		credit: 'ENJOEI // ARQUIVO PÚBLICO',
+		title: { pt: 'Comemorativo · institucional', en: 'Commemorative · institutional' },
+		source: 'ARQUIVO PÚBLICO',
 	},
 	{
 		img: trilhasCartao,
@@ -59,116 +46,69 @@ const slides: Slide[] = [
 			pt: 'Verso de cartão telefônico indutivo mostrando as trilhas e bobinas',
 			en: 'Back of an inductive phone card showing the tracks and coils',
 		},
-		title: {
-			pt: 'Trilhas indutivas · o lado técnico',
-			en: 'Inductive tracks · the technical side',
+		title: { pt: 'Trilhas indutivas · verso', en: 'Inductive tracks · back' },
+		source: 'ARQUIVO',
+	},
+	{
+		img: cartoes500anos,
+		alt: {
+			pt: 'Série Telemar Brasil 500 Anos: 12 cartões formando um mosaico do mapa do Brasil',
+			en: 'Telemar Brasil 500 Anos series: 12 cards forming a mosaic of the map of Brazil',
 		},
-		caption: {
-			pt: 'No verso, as trilhas metálicas funcionam como bobinas: o terminal lê uma cell por indução e queima o microfusível correspondente para descontar o crédito.',
-			en: 'On the back, metal tracks act as coils: the terminal reads each cell by induction and blows the matching microfuse to debit the credit.',
+		title: { pt: 'Série Telemar · Brasil 500 Anos', en: 'Telemar series · Brasil 500 Anos' },
+		source: 'COLEÇÃO PESSOAL',
+	},
+	{
+		img: cartoesAlbum,
+		alt: {
+			pt: 'Álbum de colecionador com diversas séries: telefones antigos, paisagens, personagens',
+			en: 'Collector album with various series: vintage phones, landscapes, cartoon characters',
 		},
-		credit: 'PHOTO // ARQUIVO',
+		title: { pt: 'Álbum de colecionador', en: 'Collector album' },
+		source: 'COLEÇÃO PESSOAL',
+	},
+	{
+		img: cartoesSenna,
+		alt: {
+			pt: 'Coleção Sistema Telebrás dedicada a Ayrton Senna, com cartões temáticos da carreira',
+			en: 'Sistema Telebrás collection dedicated to Ayrton Senna, with career-themed cards',
+		},
+		title: { pt: 'Série Senninha · Ayrton Senna', en: 'Senninha series · Ayrton Senna' },
+		source: 'COLEÇÃO PESSOAL',
 	},
 ];
 
 const labels = {
-	pt: {
-		title: 'PHONE_CARDS.exe',
-		prev: 'Anterior',
-		next: 'Próxima',
-	},
-	en: {
-		title: 'PHONE_CARDS.exe',
-		prev: 'Previous',
-		next: 'Next',
-	},
+	pt: { title: 'PHONE_CARDS.exe', count: 'cartões' },
+	en: { title: 'PHONE_CARDS.exe', count: 'cards' },
 }[locale];
 ---
 
-<div class="ph-carousel" data-ph-cards-id={id}>
-	<div class="ph-carousel-head">
+<section class="ph-gallery">
+	<div class="ph-gallery-head">
 		<span>{labels.title}</span>
-		<span data-ph-cards-counter>1 / {slides.length}</span>
+		<span class="ph-gallery-count">{cards.length} {labels.count}</span>
 	</div>
 
-	<div class="ph-carousel-stage">
-		<button class="ph-carousel-nav ph-carousel-nav-prev" data-ph-cards-prev aria-label={labels.prev}>‹</button>
-		<button class="ph-carousel-nav ph-carousel-nav-next" data-ph-cards-next aria-label={labels.next}>›</button>
-
-		{slides.map((s, i) => (
-			<article
-				class={`ph-carousel-slide${i === 0 ? ' is-active' : ''}`}
-				data-ph-cards-slide={i}
-			>
-				<div class="ph-carousel-illus">
-					<div class="ph-carousel-frame-label">▸ PHOTO // {s.title[locale].toUpperCase()} <span class="ph-carousel-credit">// {s.credit}</span></div>
-					<Image src={s.img} alt={s.alt[locale]} widths={[400, 800]} sizes="(max-width: 768px) 90vw, 420px" class="ph-carousel-photo" />
-					<div class="ph-carousel-context-note">▸ {s.caption[locale]}</div>
-				</div>
-
-				<div class="ph-carousel-info">
-					<h3 class="ph-carousel-name">{s.title[locale]}</h3>
-				</div>
-			</article>
+	<div class="ph-gallery-grid is-cards">
+		{cards.map((c) => (
+			<figure class="ph-gallery-item">
+				<button
+					type="button"
+					class="ph-gallery-trigger"
+					data-lightbox-trigger
+					data-fullsrc={c.img.src}
+					data-alt={c.alt[locale]}
+					data-caption={`${c.title[locale]} · ${c.source}`}
+					aria-label={`${locale === 'pt' ? 'Ampliar' : 'Enlarge'}: ${c.title[locale]}`}
+				>
+					<Image src={c.img} alt={c.alt[locale]} widths={[280, 560]} sizes="(max-width: 600px) 45vw, 240px" class="ph-gallery-img" />
+				</button>
+				<figcaption class="ph-gallery-cap">
+					<span class="ph-gallery-name">{c.title[locale]}</span>
+					<span class="ph-gallery-source">{c.source}</span>
+				</figcaption>
+			</figure>
 		))}
 	</div>
-
-	<div class="ph-carousel-dots" data-ph-cards-dots>
-		{slides.map((_, i) => (
-			<button
-				class={`ph-carousel-dot${i === 0 ? ' is-active' : ''}`}
-				data-ph-cards-dot={i}
-				aria-label={`${i + 1} / ${slides.length}`}
-			/>
-		))}
-	</div>
-</div>
-
-<script define:vars={{ id, total: slides.length }}>
-	(() => {
-		const root = document.querySelector(`[data-ph-cards-id="${id}"]`);
-		if (!root) return;
-
-		const slides = root.querySelectorAll('[data-ph-cards-slide]');
-		const dots = root.querySelectorAll('[data-ph-cards-dot]');
-		const counter = root.querySelector('[data-ph-cards-counter]');
-		const prevBtn = root.querySelector('[data-ph-cards-prev]');
-		const nextBtn = root.querySelector('[data-ph-cards-next]');
-
-		let current = 0;
-		let timer = null;
-		const INTERVAL = 6000;
-
-		const go = (i) => {
-			current = ((i % total) + total) % total;
-			slides.forEach((el, idx) => el.classList.toggle('is-active', idx === current));
-			dots.forEach((el, idx) => el.classList.toggle('is-active', idx === current));
-			if (counter) counter.textContent = `${current + 1} / ${total}`;
-		};
-
-		const stop = () => {
-			if (timer) clearInterval(timer);
-			timer = null;
-		};
-
-		const start = () => {
-			stop();
-			timer = setInterval(() => go(current + 1), INTERVAL);
-		};
-
-		nextBtn.addEventListener('click', () => { go(current + 1); start(); });
-		prevBtn.addEventListener('click', () => { go(current - 1); start(); });
-		dots.forEach((dot, idx) =>
-			dot.addEventListener('click', () => { go(idx); start(); }),
-		);
-
-		root.addEventListener('mouseenter', stop);
-		root.addEventListener('mouseleave', start);
-		root.addEventListener('focusin', stop);
-		root.addEventListener('focusout', start);
-
-		start();
-
-		document.addEventListener('astro:before-swap', () => stop(), { once: true });
-	})();
-</script>
+</section>

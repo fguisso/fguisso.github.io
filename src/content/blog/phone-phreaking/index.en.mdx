@@ -10,6 +10,7 @@ customTemplate: 'interactive'
 
 import { Image } from 'astro:assets';
 import lockedPhone from './rotary-locked-phone.jpeg';
+import joybubblesPhoto from './joybubbles-2005.jpg';
 import Shell from '../../../components/interactive/phone-phreaking/Shell.astro';
 import SectionDivider from '../../../components/interactive/phone-phreaking/SectionDivider.astro';
 import RotaryDial from '../../../components/interactive/phone-phreaking/RotaryDial.astro';
@@ -20,6 +21,13 @@ import BlueBox from '../../../components/interactive/phone-phreaking/BlueBox.ast
 import BoxCarousel from '../../../components/interactive/phone-phreaking/BoxCarousel.astro';
 import PhoneCardGallery from '../../../components/interactive/phone-phreaking/PhoneCardGallery.astro';
 import PhoneCardBypass from '../../../components/interactive/phone-phreaking/PhoneCardBypass.astro';
+import R2vsC5 from '../../../components/interactive/phone-phreaking/R2vsC5.astro';
+import TarifaClock from '../../../components/interactive/phone-phreaking/TarifaClock.astro';
+import SaoPauloMap from '../../../components/interactive/phone-phreaking/SaoPauloMap.astro';
+import Glossary from '../../../components/interactive/phone-phreaking/Glossary.astro';
+import CardsStripScript from '../../../components/interactive/phone-phreaking/CardsStripScript.astro';
+import DialToneTelebras from '../../../components/interactive/phone-phreaking/DialToneTelebras.astro';
+import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/YoutubeAudioPlayer.astro';
 
 <Shell locale="en">
 
@@ -41,20 +49,12 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 
 <section class="ph-summary">
 	<div class="ph-summary-box">
-		<div class="ph-summary-title">▸ TL;DR</div>
-		<p>
-			This report explores in depth both the <strong>classic phreaking techniques</strong> (blue,
-			red, black boxes etc.) and <strong>modern threats</strong> against telephony and mobility
-			networks (2018–2025). It also investigates cases where communities under authoritarian
-			regimes built their own networks (homemade GSM, dial-up over PSTN, mesh, LoRaWAN, HF radio,
-			satellite/Starlink) to bypass censorship.
-		</p>
-		<p>
-			Findings are organized by threat type and region, with tables of historical incidents,
-			device comparisons, and detailed timelines. Recent Brazilian data and examples, including
-			fraud rings dismantled in São Paulo (rogue antennas in apartments, SMS-spoofing antenna
-			cars), are highlighted.
-		</p>
+		<div class="ph-summary-title">▸ TL;DR · WHAT YOU'LL LEARN</div>
+		<ul class="ph-tldr-list">
+			<li>How a blind <strong>7-year-old</strong> cracked AT&T's vault by whistling.</li>
+			<li>Why the SMS scam ring dismantled in São Paulo in 2024 runs on, at its core, <strong>the same idea from 1957</strong>.</li>
+			<li>What changes when the network stops being analog and the <em>ghosts</em> trade the whistle for a US$ 500 SDR.</li>
+		</ul>
 	</div>
 </section>
 
@@ -103,17 +103,33 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			Carl Engressia Jr.</strong></a>, born May 25, 1949 in Richmond, Virginia, was the first
 			phreaker recorded by history. He was born blind and had <strong>absolute pitch</strong>.
 		</p>
-		<div class="ph-howbox">
-			<div class="ph-howbox-title">▸ WHAT IS ABSOLUTE PITCH?</div>
-			<div>
-				A rare ability (estimated at 1 in 10,000 people) to identify and reproduce any musical
-				note without a reference. Someone with absolute pitch hears a sound and knows
-				immediately whether it's A-440Hz, E-330Hz or G#-415Hz, the same way most people
-				recognize colors. Joybubbles' gift was even rarer: he could <em>whistle</em> any
-				specific frequency on demand, with just a few hertz of variation. For a phone system that
-				controlled calls with calibrated tones, that was handing him the keys to the vault.
+		<figure class="ph-portrait">
+			<div class="ph-portrait-head">
+				<span class="ph-portrait-tag">▸ PORTRAIT</span>
+				<span class="ph-portrait-meta">JOSEF C. ENGRESSIA · MINNEAPOLIS · 2005</span>
+				<span class="ph-portrait-frame">FRAME 01 // 01</span>
 			</div>
-		</div>
+			<div class="ph-portrait-mat">
+				<button
+					type="button"
+					class="ph-portrait-trigger"
+					data-lightbox-trigger
+					data-fullsrc={joybubblesPhoto.src}
+					data-alt="Joybubbles (Joseph Carl Engressia Jr.) photographed in 2005"
+					data-caption="Joybubbles · 2005 · via Wikipedia"
+					aria-label="Enlarge Joybubbles portrait"
+				>
+					<Image src={joybubblesPhoto} alt="Joybubbles (Joseph Carl Engressia Jr.) photographed in 2005, two years before his death" widths={[272, 544]} sizes="(max-width: 600px) 80vw, 320px" />
+				</button>
+				<div class="ph-portrait-corners" aria-hidden="true">
+					<span></span><span></span><span></span><span></span>
+				</div>
+			</div>
+			<figcaption class="ph-portrait-cap">
+				<span class="ph-portrait-cap-line">Joybubbles in 2005, two years before his death.</span>
+				<a class="ph-portrait-cap-src" href="https://en.wikipedia.org/wiki/Joybubbles" target="_blank" rel="noopener">↗ WIKIPEDIA · JOYBUBBLES</a>
+			</figcaption>
+		</figure>
 		<p>
 			By age 4 he already spent hours on the phone. He soon grew fascinated by the thousands
 			of distinct tones the network produced, and started listening to them for hours every day.
@@ -126,6 +142,17 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			rotary-dial pulses with the hookswitch and bypass the lock his babysitter clamped on the
 			phone: the first practical record of tap dialing.
 		</p>
+		<div class="ph-howbox">
+			<div class="ph-howbox-title">▸ WHAT IS ABSOLUTE PITCH?</div>
+			<div>
+				A rare ability (estimated at 1 in 10,000 people) to identify and reproduce any musical
+				note without a reference. Someone with absolute pitch hears a sound and knows
+				immediately whether it's A-440Hz, E-330Hz or G#-415Hz, the same way most people
+				recognize colors. Joybubbles' gift was even rarer: he could <em>whistle</em> any
+				specific frequency on demand, with just a few hertz of variation. For a phone system that
+				controlled calls with calibrated tones, that was handing him the keys to the vault.
+			</div>
+		</div>
 		<p>
 			In 1968, a student at the <strong>University of South Florida</strong>, Joe was the subject
 			of a campus newspaper article that nicknamed him <em>"The Whistler"</em>. AT&T sued the
@@ -135,8 +162,7 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			<a href="https://en.wikipedia.org/wiki/Steve_Wozniak" target="_blank" rel="noopener">Steve Wozniak</a>
 			to build the first Blue Box.
 		</p>
-		<div class="ph-trivia">
-			<div class="ph-trivia-title">▸ HE NEVER WANTED THE MONEY</div>
+		<p>
 			Joe never used his skills for fraud: he wanted to <em>understand the network</em>. In 1975,
 			after years of friction with the FBI, he was hired by <strong>Mountain Bell</strong> in
 			Denver as a network troubleshooter, a role he held for seven years until moving to
@@ -144,12 +170,20 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			abuse he had suffered as a child, declaring himself permanently 5 years old. In 1991, he
 			formalized the change in court and legally adopted the name
 			<strong class="ph-accent-orange">"Joybubbles"</strong>. He died on August 8, 2007 in
-			Minneapolis of congestive heart failure.
-			<div style="margin-top:14px;font-size:13px;opacity:0.85">
-				▸ Worth listening to NPR's obituary:
-				<a href="https://www.npr.org/transcripts/13764518" target="_blank" rel="noopener">"Joe
-				Engressia, Expert 'Phone Phreak,' Dies"</a> (2007).
-			</div>
+			Minneapolis of congestive heart failure. Worth listening to NPR's obituary:
+			<a href="https://www.npr.org/transcripts/13764518" target="_blank" rel="noopener">"Joe
+			Engressia, Expert 'Phone Phreak,' Dies"</a> (2007).
+		</p>
+		<div class="ph-trivia">
+			<div class="ph-trivia-title">▸ JOYBUBBLES WAS NOT AN ANOMALY · THE BLIND PHREAKER COMMUNITY</div>
+			Popular literature treated Joe as a genius outlier, but Phil Lapsley in
+			<a href="https://en.wikipedia.org/wiki/Exploding_the_Phone" target="_blank" rel="noopener"><em>Exploding the Phone</em></a>
+			(2013) maps out an entire community: <strong>Bill Acker</strong> (New York),
+			<strong>Roy Bates</strong> and <strong>Denny Teresi</strong> (California), all blind,
+			all sharp-eared, all discovering the phone network as a social space at a time when
+			<em>conference lines</em> and idle trunks were accessibility before the term existed.
+			Anyone with free time, a phone against the ear and above-average pitch perception lived
+			phreaking as routine, not feat. Joybubbles was the public face of an invisible network.
 		</div>
 	</div>
 </section>
@@ -196,6 +230,21 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 					4. Repeat for the other digits. "0" is 10 taps.
 				</div>
 			</div>
+			<h3>Cadence: 40/60 (Bell) vs 33/67 (CCITT/Telebrás)</h3>
+			<p>
+				The numbers above describe the <strong>Bell US</strong> cadence: each pulse is
+				<span class="ph-mono">60 ms break / 40 ms make</span> (60% circuit open, 40%
+				closed), at 10 PPS. Under the <strong>CCITT</strong> standard that Telebrás (the
+				Brazilian state telecom monopoly) inherited in 1968, the ratio is different:
+				<span class="ph-mono">67 ms break / 33 ms make</span>. Same frequency (10 pulses
+				per second), different internal distribution.
+			</p>
+			<p>
+				In practice, a trained finger could fool any switch, because relays had wide
+				tolerance for deviation. But the difference explains why imported blue boxes and
+				dialers had to be recalibrated for Brazil, and why BR phreakers ended up designing
+				their own circuits instead of cloning American schematics without adjustment.
+			</p>
 			<div class="ph-trivia">
 				<div class="ph-trivia-title">▸ POP CULTURE</div>
 				The classic scene of a prisoner who needs to make a forbidden call, hangs up the
@@ -208,11 +257,11 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			</div>
 		</div>
 		<div>
-			<TapDialer locale="en" />
-			<figure class="ph-figure" style="margin-top:16px">
+			<figure class="ph-figure" style="margin-bottom:16px">
 				<Image src={lockedPhone} alt="Rotary phone with a physical padlock through the dial" widths={[400, 800]} sizes="(max-width: 768px) 90vw, 420px" />
 				<figcaption>The exact scenario where tapping was the only way out: a physical padlock threaded through the dial, blocking ordinary dialing.</figcaption>
 			</figure>
+			<TapDialer locale="en" />
 		</div>
 	</div>
 </section>
@@ -288,6 +337,41 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 		</div>
 	</div>
 	<BlueBox locale="en" />
+
+	<div style="max-width:900px;margin:32px auto 0">
+		<h3>But Brazil was different: R2/MFC 5C</h3>
+		<p>
+			While AT&T, BT and European carriers ran CCITT5 with in-band MF tones, in 1968 Brazil
+			adopted the <strong class="ph-accent-orange">R2/MFC variant 5C</strong> signaling.
+			The difference is architectural, not cosmetic: in R2, MF tones move between
+			<em>registers</em> (sender/receiver only allocated during setup), never on the voice
+			channel. Supervision runs at <span class="ph-mono">3825 Hz out-of-band</span>, above the
+			PCM codec passband, filtered out before it ever reaches the mouthpiece.
+		</p>
+		<p>
+			Playing <span class="ph-mono">1380 + 1500 Hz</span> into the microphone was just noise.
+			The blue box that seized trunks in New York and London died silent in Brazil.
+		</p>
+		<p>
+			The Brazilian blue box only worked over <strong>international 0800 routes</strong> that
+			terminated on still-live C5 trunks: Mexico, Costa Rica, Guatemala, Hong Kong. AT&T
+			USADirect (<span class="ph-mono">0800-890-0288</span>), MCI WorldPhone
+			(<span class="ph-mono">0800-890-0012</span>) and Sprint Express
+			(<span class="ph-mono">0800-888-8000</span>) were literally the doors BR phreakers used
+			to cross the ocean.
+		</p>
+		<p>
+			The mechanism is the third scenario in the diagram below: on the BR leg, the Blue Box's
+			MF tones travel as plain voice and cause no harm: R2 keeps signaling separate. But the
+			0800 gateway repackages the call onto an international C5 trunk, where voice and commands
+			share the same channel again. Out there, the same tones become commands and seize the
+			trunk. The victim is the foreign carrier, crossed via Telebrás without a billing record.
+			For everything else, R2 was architectural defense. Technical intro to R2:
+			<a href="http://soft-switch.org/unicall/mfcr2/ch02.html" target="_blank" rel="noopener">soft-switch.org/unicall/mfcr2/ch02</a>.
+		</p>
+	</div>
+
+	<R2vsC5 locale="en" />
 </section>
 
 <SectionDivider label="06 // THE ARSENAL OF COLOR BOXES" />
@@ -375,10 +459,49 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 		</table>
 	</div>
 
-	<p style="max-width:900px;margin-top:24px">
-		All of them exploited the same original sin: <strong>in-band signaling without authentication</strong>.
-		The audio that controlled the network was the same audio the user could inject.
-	</p>
+	<div style="max-width:900px;margin-top:40px">
+		<h3>Boxes that never wore <span class="ph-accent-orange">blue or red</span></h3>
+		<p>
+			The international color-box catalog (blue, red, black, green, etc.) lists no Brazilian
+			variants. When the network changed architecture, the tricks changed color, but only some
+			of them ever got documented in foreign zines. Three BR variants belong on the table next
+			to the others:
+		</p>
+		<ul style="font-size:15px;line-height:1.6;padding-left:20px;margin:12px 0">
+			<li><strong>1N4007 diode</strong> (the "<em>Brazilian black box</em>"): diode + 22 kΩ
+				resistor wired into a token-payphone (TUP) line. Blocked the polarity reversal that
+				signaled "call answered". The switch kept thinking the call was still ringing.
+				Worked on electromechanical switches until billing migrated to 12 kHz metering pulses
+				in the 90s.</li>
+			<li><strong>Pencil-traced / nail-polished card</strong> (Generation 1, 1992-95): the
+				Brazilian inductive phone card attack, detailed in interactive form in the next section.
+				Graphite reconnects burned tracks; clear nail polish keeps the next read from blowing
+				new cells.</li>
+			<li><strong>The flour trick</strong>: a wheat-flour paste applied to a token slot. The
+				paste hardened and gummed up the solenoid of the magnetic see-saw mechanism, locking it
+				in the "token accepted" position. Infinite credit until someone smashed the booth. More
+				destructive than effective, but part of the neighborhood repertoire.</li>
+		</ul>
+	</div>
+
+	<div style="max-width:900px;margin-top:32px">
+		<h3>BADISCO · the Brazilian <span class="ph-accent-orange">lineman handset</span></h3>
+		<p>
+			The BR version of the Beige Box has its own name: <strong>badisco</strong>. Not a
+			homemade hack. It's the commercial operator's phone sold to Telebrás technicians, then
+			Telefônica/Embratel, today Claro/Vivo/Oi. <em>Multitoc MU256T</em>, <em>Intelbras
+			TC 20</em>, <em>Solução</em>: compact units with alligator clips ("crocodile") instead of
+			the American <em>bed-of-nails</em>. Connects directly to the twisted pair inside the
+			street's Krone M10 cabinet or the CTA box on the building facade.
+		</p>
+		<p>
+			Sales were never restricted: <strong>Santa Ifigênia</strong> and <strong>Galeria
+			Pajé</strong> in São Paulo, <strong>Saara</strong> in Rio. For the teenage BR phreaker,
+			R$ 30 on a generic badisco or a repurposed dollar-store headset (with 4 wires, of which
+			only two matter) unlocked the entire analog network of the neighborhood. Under every
+			sidewalk, an unencrypted copper pair. Listening was a question of motivation.
+		</p>
+	</div>
 </section>
 
 <SectionDivider label="07 // PHONE CARD · A BRAZILIAN INVENTION" />
@@ -403,6 +526,19 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			tokens suffered constant vandalism, and the cost of collecting them from payphones broke the
 			whole model.
 		</p>
+
+		<div class="ph-trivia">
+			<div class="ph-trivia-title">▸ PATENT PI 7804885 AND THE PASTA MACHINE</div>
+			Bardini filed patent <strong>PI 7804885</strong> on <strong>1978-07-28</strong>; the
+			grant came through at the INPI on <strong>1984-03-27</strong>, almost six years later,
+			long enough for the Brazilian inductive card to debut in 1992 as the first commercial
+			implementation of this technology anywhere in the world. The domestic detail that
+			survives in oral history: the first prototypes of the tin-lead (Sn-Pb) alloy used for
+			the tracks were pressed at home, using a <em>homemade pasta machine</em> adapted as a
+			cold press. The card that would become a collector's item, a generational badge and a
+			phreaking vector was born in a kitchen, before it became industrial engineering. Every
+			invention needs a kitchen.
+		</div>
 
 		<h3>How the inductive card worked</h3>
 		<p>
@@ -462,20 +598,109 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 	<PhoneCardGallery locale="en" />
 </section>
 
-<SectionDivider label="08 // MODERN ATTACKS · 2018–2025" />
+<SectionDivider label="08 // BRAZIL · THE SCENE THAT WHISTLED IN PORTUGUESE" />
+
+<section class="ph-section">
+	<div style="max-width:900px;margin-bottom:24px">
+		<h2>The scene that whistled in <span class="ph-accent-orange">Portuguese</span></h2>
+		<p>
+			Between 1985 and 2005, Brazil had its own phreaker scene. Not a colony of the American
+			one: R2/MFC blocked the classic blue box, per-pulse billing imposed a chronotype, and
+			urban infrastructure (payphones on every corner, Krone cabinets open on the sidewalk,
+			twisted pairs exposed) opened vectors that didn't exist in Manhattan or Berkeley. The
+			international literature skips this chapter. The living sources are fifty years old now
+			and sit in front of the same computer, just with a different job.
+		</p>
+	</div>
+
+	<div style="max-width:900px;margin-bottom:32px">
+		<h3>1998 to 1999 · The <span class="ph-accent-orange">170-meter</span> wiretap</h3>
+		<p>
+			São Paulo periphery, 1998. Four payphones on a single corner. One of them, picked for
+			distance to the home of a 12-year-old named Gutem, got a little plastic sign:
+			<em>"out of order"</em>. Behind the sign, a 170-meter twisted pair running pole to
+			backyard, connecting the payphone to an AMD K6-2 400 MHz and a 28.8 kbps modem. The
+			<em>internet wiretap</em> was the cheapest possible infrastructure for pulling research
+			files at 3 kB/s into the small hours.
+		</p>
+		<div class="ph-trivia">
+			<div class="ph-trivia-title">▸ TESTIMONY · THE NOTE FOR THE TECHNICIAN</div>
+			<blockquote style="border-left:3px solid var(--color-accent);padding-left:14px;margin:12px 0;font-style:italic">
+				"I left some stuff written on the back of the paper specifically for the Telesp
+				operator, you know?
+				Listen man, this is the poor kid who tapped the wire just to stay on the
+				internet. Straight up, do whatever you want. There must have been some guys who
+				left it there because it ran for a good while. But that was a few months, you
+				know? Until I worked out a schedule to get on late at night. I'd already done
+				some serious research on where to find material."
+			</blockquote>
+		</div>
+	</div>
+
+	<div style="max-width:900px;margin-bottom:32px">
+		<h3>The tariff that turned <span class="ph-accent-orange">a generation</span> nocturnal</h3>
+		<p>
+			Telesp charged <strong>1 single pulse</strong> between <span class="ph-mono">00:00 and
+			06:00</span> on weekdays, and from <span class="ph-mono">Saturday 14:00 through Monday
+			06:00</span>. Outside that window, the bill came multiplied by 8. The first afternoon
+			usage bill arrived at <strong>R$ 320</strong> (in 1998 the minimum wage was R$ 130).
+			The result: an entire generation of BR phreakers and nerds inverted their routine:
+			research between 23:00 and 01:00, downloads queued in the manager, sleep between 06:00
+			and 14:00. The BR phreaker chronotype was imposed by the tariff. Not a preference,
+			household accounting.
+		</p>
+		<TarifaClock locale="en" />
+	</div>
+
+	<div style="max-width:900px;margin-bottom:32px">
+		<h3>The zines and <span class="ph-accent-orange">#phreak</span> on BrasNet</h3>
+		<p>
+			The scene barely documented itself, and only among locals. <strong>Barata Elétrica</strong>,
+			started in 1994 by <strong>Derneval "Curupira" Cunha</strong>, was the first
+			Portuguese-language hacker e-zine. Issue 7 (<em>"Os Maníacos por Telefone"</em>)
+			translated and adapted Bruce Sterling's Bell System chapters into the Telebrás context.
+			In parallel, on the <span class="ph-mono">#phreak</span> channel of the
+			<strong>BrasNet</strong> network, Phroide, Dialtone, Psylon and Papillon kept the group
+			<strong>PhreaKhaos</strong> alive. Phroide's line was the manifesto:
+			<em>"Fuck all americans phreakers"</em>, not as an insult, but as a claim: our phreaking
+			is not a copy. Other zines from the era: <strong>Axur 05</strong>,
+			<strong>Unsekurity Magazine</strong>, <strong>Pr0j3kt M4yh3m</strong>. Surviving mirrors:
+			<a href="https://absoluta.org/barata" target="_blank" rel="noopener">absoluta.org/barata</a>
+			and <a href="https://sites.google.com/site/barataeletricafanzine" target="_blank" rel="noopener">sites.google.com/site/barataeletricafanzine</a>.
+			The favorite phreaker software (<a href="https://github.com/Jimvin/BlueBEEP" target="_blank" rel="noopener">BlueBEEP</a>,
+			archived at <a href="https://archive.org/details/bbeep-006" target="_blank" rel="noopener">archive.org/details/bbeep-006</a>)
+			generated MF C5 tones from a PC with a sound card, no analog hack needed.
+		</p>
+	</div>
+
+	<div style="max-width:900px">
+		<h3>The end of Brazilian <span class="ph-accent-orange">analog phreaking</span> · 2006–2010</h3>
+		<p>
+			ADSL broadband reached Gutem's neighborhood in 2006. The migration to prepaid mobile was
+			already underway, and the payphone began to disappear from the landscape. Around 2010,
+			analog BR phreaking had ended for the generation that lived it. Not by repression, by
+			network obsolescence. As he sums it up: <em>"The alternatives were to switch to mobile
+			and I didn't have the money for that yet."</em> When he came back to the hacker scene,
+			it was already 2010, already IP, already something else. The badisco became a museum piece
+			before turning back into a R$ 1 store item.
+		</p>
+	</div>
+</section>
+
+<SectionDivider label="09 // MODERN ATTACKS · 2018–2025" />
 
 <section class="ph-section">
 	<div style="max-width:900px;margin-bottom:16px">
 		<h2>The <span class="ph-accent-orange">ghosts</span> changed instruments</h2>
 		<p>
 			Digital telephony killed analog phreaking, but traded one set of fragile protocols for
-			another. SS7, Diameter, GTP, SIGTRAN, IMS: stacks designed in the 1970s–1990s, when the
-			network was a closed club of trusted carriers. Today, any actor with access to a
-			<em>roaming hub</em> or a US$ 500 SDR enters as an authorized peer.
+			another. <Glossary def="Signaling System #7. The language carriers use to swap commands between themselves: 'give me this number's location', 'this SMS goes to that subscriber'. Designed in 1975 for a closed club of trusted operators, no authentication or encryption.">SS7</Glossary>, <Glossary def="IP successor to SS7, the 4G/LTE standard. Inherited the same original sins: weak inter-carrier validation, critical messages without strong authentication.">Diameter</Glossary>, <Glossary def="GPRS Tunnelling Protocol. Carries data traffic between mobile network nodes. When exposed to the internet without a firewall, it becomes an open door for roaming attacks.">GTP</Glossary>, <Glossary def="Signaling Transport: SS7 over IP. Reduces operational cost but widens the attack surface: any server with a rented SCCP address can inject messages.">SIGTRAN</Glossary>, <Glossary def="IP Multimedia Subsystem. A full SIP stack inside the carrier, the foundation of VoLTE. In 2021 researchers demonstrated downgrade and interception attacks on IMS calls.">IMS</Glossary>: stacks designed
+			in the 1970s–1990s, when the network was a closed club of trusted carriers. Today, any
+			actor with access to a <em>roaming hub</em> or a <Glossary def="Software-Defined Radio. A radio whose modulation lives entirely in software. A US$ 300 HackRF or a US$ 700 USRP transmits in any mobile telephony band; what used to be carrier-grade hardware costs the price of a mid-tier phone.">SDR</Glossary> of US$ 500 enters as an authorized peer.
 		</p>
 	</div>
 
-	<h3><span class="ph-tag">05.1</span> SS7 / SIGTRAN</h3>
+	<h3><span class="ph-tag">09.1</span> SS7 / SIGTRAN</h3>
 	<p style="max-width:900px">
 		The <a href="https://en.wikipedia.org/wiki/Signalling_System_No._7" target="_blank" rel="noopener">SS7 protocol</a>
 		(1975) and its IP version, SIGTRAN, are the baseline signaling for 2G/3G worldwide.
@@ -489,7 +714,7 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 		considerations", and 4G (Diameter) inherited the problem.
 	</p>
 
-	<h3><span class="ph-tag">05.2</span> Femtocells and rogue base stations</h3>
+	<h3><span class="ph-tag">09.2</span> Femtocells and rogue base stations</h3>
 	<p style="max-width:900px">
 		In 2013, <strong>Doug DePerry</strong> and <strong>Tom Ritter</strong> showed at
 		<a href="https://www.defcon.org/images/defcon-21/dc-21-presentations/DePerry-Ritter/DEFCON-21-DePerry-Ritter-Femtocell-Updated.pdf" target="_blank" rel="noopener">DEF CON 21</a>
@@ -497,14 +722,14 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 		(US$ 250) plus a Raspberry Pi (US$ 50) to listen to every call and SMS from nearby phones.
 		The whole rig fit in a backpack. Twelve years later, the same technique came back at scale:
 		commercial gear like <a href="https://en.wikipedia.org/wiki/Stingray_phone_tracker" target="_blank" rel="noopener"><strong>StingRay</strong></a>
-		(Harris Corp.) and homemade variants with <strong>USRP +
+		(Harris Corp.) and homemade variants with <strong><Glossary def="Universal Software Radio Peripheral. High-end SDR (US$ 700–4,000) used in telecom research and sophisticated attacks against mobile networks.">USRP</Glossary> +
 		<a href="https://openbts.org/" target="_blank" rel="noopener">OpenBTS</a> /
 		<a href="https://osmocom.org/" target="_blank" rel="noopener">Osmocom</a></strong> are used
 		by states, gangs and researchers. Phones connect to the strongest signal, and when the
 		strongest signal is hostile, hostile wins.
 	</p>
 
-	<h3><span class="ph-tag">05.3</span> SIM Swap and number portability</h3>
+	<h3><span class="ph-tag">09.3</span> SIM Swap and number portability</h3>
 	<p style="max-width:900px">
 		A telco support agent talked into transferring a victim's line to an attacker-controlled SIM.
 		Within seconds, every 2FA SMS, bank, email, exchange, goes to the wrong phone.
@@ -513,25 +738,25 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 		FBI and Brazil's ANATEL issued public warnings in the early 2020s.
 	</p>
 
-	<h3><span class="ph-tag">05.4</span> VoLTE / IMS / SMS Blasting</h3>
+	<h3><span class="ph-tag">09.4</span> VoLTE / IMS / SMS Blasting</h3>
 	<p style="max-width:900px">
-		Voice over LTE (VoLTE) brought IMS, a full SIP stack inside the carrier. Researchers
+		Voice over LTE (<Glossary def="Voice over LTE. Instead of analog circuit-switched voice, calls become IP packets over the 4G network. Better quality, larger attack surface: signaling becomes SIP.">VoLTE</Glossary>) brought IMS, a full SIP stack inside the carrier. Researchers
 		demonstrated downgrade and interception attacks on VoLTE calls in 2021. In parallel,
-		<strong>SIM Boxes</strong>, racks with hundreds of SIM cards running in parallel, fire tens
+		<strong><Glossary def="Hardware rack with dozens to hundreds of SIM chips running in parallel. Originally used to dodge international tariffs; today it's the infrastructure behind industrialized SMS phishing scams.">SIM Boxes</Glossary></strong>, racks with hundreds of SIM cards running in parallel, fire tens
 		of thousands of SMS per hour for financial fraud. Same idea as the Blue Box, industrialized
-		(see Section 08).
+		(see Section 14).
 	</p>
 
-	<h3><span class="ph-tag">05.5</span> PBX and VoIP fraud</h3>
+	<h3><span class="ph-tag">09.5</span> PBX and VoIP fraud</h3>
 	<p style="max-width:900px">
-		Misconfigured corporate PBXs keep dialing premium-rate international numbers overnight.
-		Hacked ATA adapters, weak SIP credentials, exposed VoIP gateways, each one is a modern
+		Misconfigured corporate <Glossary def="Private Branch Exchange. The corporate phone switch. When poorly configured, it becomes an open door for toll fraud: the attacker dials premium international numbers using the company's line (and its bill).">PBX</Glossary>s keep dialing premium-rate international numbers overnight.
+		Hacked <Glossary def="Analog Telephone Adapter. The little box that connects a regular analog phone to a VoIP line. When hacked, it can route calls through the attacker without the owner noticing.">ATA</Glossary> adapters, weak SIP credentials, exposed VoIP gateways, each one is a modern
 		<em>blue box</em>, generating five-figure invoices for the victim and dividends for the
 		attacker.
 	</p>
 </section>
 
-<SectionDivider label="09 // CLASSIC vs MODERN" />
+<SectionDivider label="10 // CLASSIC vs MODERN" />
 
 <section class="ph-section">
 	<div class="ph-table-wrap">
@@ -579,35 +804,156 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 	</div>
 </section>
 
-<SectionDivider label="10 // ABANDONED FORUMS · 2000–2015" />
+<SectionDivider label="11 // ABANDONED FORUMS · 2000–2015" />
 
 <section class="ph-section">
-	<div style="max-width:900px">
+	<div style="max-width:900px;margin-bottom:24px">
 		<h2>The <span class="ph-accent-blue">underground</span> goes digital</h2>
 		<p>
 			Between 2000 and 2015, what was left of analog phreaking merged with the nascent
 			<em>"digital phreaking"</em> on forums like <span class="ph-mono" style="color:var(--ph-yellow)">alt.phone.phreaking</span>,
 			private Telnet lists, abandoned FTPs and researcher blogs. Primary sources from that era
 			are fragile: many archives only survive today on the
-			<a href="https://archive.org/" target="_blank" rel="noopener">Internet Archive</a> or community
-			mirrors like <a href="https://en.wikipedia.org/wiki/Hack_Canada" target="_blank" rel="noopener"><strong>Hack Canada</strong></a> and
-			<a href="https://2600.com/" target="_blank" rel="noopener"><strong>2600 Magazine</strong></a>.
+			<a href="https://archive.org/" target="_blank" rel="noopener">Internet Archive</a>. Four
+			projects summarize the transition from "audio hacking" to protocol reverse engineering:
 		</p>
+	</div>
+
+	<div class="ph-cards-grid">
+		<div class="ph-case-card is-blue">
+			<div class="ph-case-meta"><span>1984–TODAY</span><span>USA · PRINT + WEB</span></div>
+			<div class="ph-case-title">
+				<a href="https://2600.com/" target="_blank" rel="noopener">2600 Magazine</a>
+			</div>
+			<p>
+				Quarterly founded by Eric Corley (Emmanuel Goldstein) in Long Island. Still printing
+				in 2026. The monthly in-person "2600 meeting" in dozens of cities is the longest-running
+				institutional continuity in the scene.
+			</p>
+		</div>
+		<div class="ph-case-card is-blue">
+			<div class="ph-case-meta"><span>1996–~2010</span><span>CANADA · WEB</span></div>
+			<div class="ph-case-title">
+				<a href="https://en.wikipedia.org/wiki/Hack_Canada" target="_blank" rel="noopener">Hack Canada</a>
+			</div>
+			<p>
+				Canonical mirror of classic North American phreaking texts plus good original work on
+				Bell Canada networks. Offline for years; preserved in Internet Archive snapshots used
+				as a primary source by post-2015 academic researchers.
+			</p>
+		</div>
+		<div class="ph-case-card is-orange">
+			<div class="ph-case-meta"><span>2000s</span><span>OPEN SOURCE</span></div>
+			<div class="ph-case-title">
+				<a href="http://www.projectmf.org/" target="_blank" rel="noopener">Project MF</a>
+			</div>
+			<p>
+				Practical Blue Box reconstruction: Arduino + Asterisk server configured to simulate a
+				1970s Class 4 toll switch. Lets you generate real MF tones and route them as if an
+				original long-distance call. Rare pedagogy: working classic phreaking, in a weekend
+				lab.
+			</p>
+		</div>
+		<div class="ph-case-card is-orange">
+			<div class="ph-case-meta"><span>2007–TODAY</span><span>OPEN SOURCE</span></div>
+			<div class="ph-case-title">
+				<a href="https://openbts.org/" target="_blank" rel="noopener">OpenBTS</a> /
+				<a href="https://osmocom.org/" target="_blank" rel="noopener">Osmocom</a>
+			</div>
+			<p>
+				Software GSM/UMTS base stations running on SDR. They became the foundation of all
+				modern mobile network security research, used at DEF CON, ToorCon, CCC and in real
+				surveillance incidents, from the homemade StingRay to the São Paulo gang BTS.
+			</p>
+		</div>
+	</div>
+
+	<p style="max-width:900px;margin-top:24px;font-size:14px;color:var(--ph-fg-soft)">
+		Talks at <a href="https://defcon.org/" target="_blank" rel="noopener">DEF CON</a>, ToorCon,
+		CCC and HOPE documented the transition on video. Most of the academic literature only arrives
+		after 2015, before that, the data lived in forums that closed, one by one.
+	</p>
+</section>
+
+<SectionDivider label="12 // OPERATORS · THE WOMEN THE SCENE FORGOT" />
+
+<section class="ph-section">
+	<div style="max-width:900px;margin-bottom:24px">
+		<h2>The <span class="ph-accent-orange">women</span> the scene forgot</h2>
 		<p>
-			Projects like <a href="http://www.projectmf.org/" target="_blank" rel="noopener"><span class="ph-mono" style="color:var(--ph-yellow)">Project MF</span></a>
-			(Arduino-based Blue Box reconstruction with an Asterisk server simulating a 1970s Class 4
-			toll switch), <a href="https://openbts.org/" target="_blank" rel="noopener"><strong>OpenBTS</strong></a>
-			(software GSM base station) and
-			<a href="https://osmocom.org/" target="_blank" rel="noopener"><strong>Osmocom</strong></a>
-			show how knowledge migrated from "audio hacking" to protocol reverse engineering. Talks at
-			<a href="https://defcon.org/" target="_blank" rel="noopener">DEF CON</a>, ToorCon, CCC
-			and HOPE documented the transition on video. Most of the academic literature only arrives
-			after 2015, before that, the data lived in forums that closed, one by one.
+			AT&T started out hiring <em>boys</em> as telephone operators in 1878. Within a few years
+			it abandoned the practice. The explanation is in Bruce Sterling, in <em>The Hacker
+			Crackdown</em> (1992), quoted by Derneval in issue 7 of Barata Elétrica:
+		</p>
+		<blockquote style="max-width:760px;border-left:3px solid var(--color-secondary);padding-left:14px;margin:0 0 16px;font-style:italic">
+			"It was the boys who were hired first as operators. Then it turned out women made less
+			noise, were more discreet, and less tempted to prank-call with the phones."
+		</blockquote>
+		<p>
+			The boys did <em>phreaking</em> before the word existed: prank calls, redirects for fun,
+			long conversations with customers. Women were preferred because they <em>didn't</em> do
+			that. Forty years later, the pendulum reversed: some of the best phreakers in history
+			were exactly the women who knew the network from the inside, because they worked in it
+			or lived alongside someone who did. Popular literature didn't record them; two who
+			survived in fragments are below.
+		</p>
+	</div>
+
+	<div style="max-width:900px;margin-bottom:32px">
+		<h3>Susan "Susy Thunder" <span class="ph-accent-orange">Headley</span></h3>
+		<p>
+			Los Angeles, late 70s and 80s. Susan Headley did <em>pretexting</em> against Pacific Bell
+			operators before <em>social engineering</em> entered the hacker vocabulary. She called
+			central offices posing as internal staff, requested routes and codes, got them.
+			<em>Garbology</em>: she went through dumpsters behind PacBell buildings looking for
+			discarded technical manuals. ABC's <em>20/20</em> program interviewed Geraldo Rivera about
+			the scene in 1982; Headley appears in the footage. Her DEF CON 3 keynote (1995) coined a
+			line that could be the epigraph of the rest of this article:
+		</p>
+		<blockquote style="max-width:760px;border-left:3px solid var(--color-secondary);padding-left:14px;margin:0 0 16px;font-style:italic;color:var(--color-fg)">
+			"Being a human being is a vulnerability by itself."
+		</blockquote>
+		<p>
+			The full profile in <em>The Verge</em> (2022,
+			<a href="https://www.theverge.com/c/22889425/susy-thunder-headley-hackers-phone-phreaks-claire-evans" target="_blank" rel="noopener">"Searching for Susy Thunder"</a>,
+			by Claire Evans) is today the best primary source on her. Recommended read.
+		</p>
+	</div>
+
+	<div style="max-width:900px;margin-bottom:32px">
+		<h3>Chanda <span class="ph-accent-orange">Leir</span></h3>
+		<p>
+			January 1989. <em>Phrack #24</em> publishes her <em>Pro-Phile</em>, conducted by
+			<a href="http://www.phrack.org/issues/24/2.html" target="_blank" rel="noopener">Taran King</a>,
+			with an intro that says more about the scene than about the interviewee:
+		</p>
+		<blockquote style="max-width:760px;border-left:3px solid var(--color-secondary);padding-left:14px;margin:0 0 16px;font-style:italic">
+			"one of the more rare sights in the world of phreaking and hacking, a female!"
+		</blockquote>
+		<p>
+			Chanda was the only woman with a Pro-Phile in Phrack until issue 32. She conferenced over
+			<em>loops</em>, knew MF tones, operated on the network with gender-neutral nicks because
+			the safest way to be respected as a phreaker was not to be identified as a woman.
+			Systemic (not aesthetic) pseudonymity erases gender from the historical record. It's hard
+			to count a community that documented itself under nicks. Rather than "there were few
+			women", the honest version is: <em>we don't know how many there were, because the culture
+			didn't let them identify themselves</em>.
+		</p>
+	</div>
+
+	<div style="max-width:900px;margin-bottom:32px">
+		<p style="font-size:15px;font-style:italic;color:var(--color-fg)">
+			The documentation of women's participation in phreaking is structurally short because the
+			culture was structurally hostile. Systemic pseudonymity hid gender. Conferences were
+			<em>boys' clubs</em>. And when a woman did publish, the byline came with an asterisk
+			(<em>(female)</em>, <em>a female!</em>, <em>rare sights</em>), signaling that this was
+			notable precisely because it was exceptional. The documentary invisibility is, in
+			itself, the finding.
 		</p>
 	</div>
 </section>
 
-<SectionDivider label="11 // RESISTANCE UNDER AUTHORITARIAN REGIMES" />
+<SectionDivider label="13 // RESISTANCE UNDER AUTHORITARIAN REGIMES" />
 
 <section class="ph-section">
 	<div style="max-width:900px;margin-bottom:24px">
@@ -619,7 +965,8 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 		</p>
 	</div>
 
-	<div class="ph-cards-grid">
+	<div class="ph-cards-strip-wrap">
+	<div class="ph-cards-strip" data-cards-strip>
 		<div class="ph-case-card is-orange">
 			<div class="ph-case-meta"><span>2020</span><span>BELARUS</span></div>
 			<div class="ph-case-title">Modems crossing borders</div>
@@ -643,7 +990,7 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			<div class="ph-case-meta"><span>AUG/2023</span><span>NAGORNO-KARABAKH</span></div>
 			<div class="ph-case-title">Lachin fiber cut</div>
 			<p>
-				<a href="https://armenpress.am/eng/news/1117619/" target="_blank" rel="noopener">On 17/08/2023</a>, Azerbaijani forces cut the fiber cable connecting Artsakh, leaving the
+				<a href="https://armenpress.am/eng/news/1117619/" target="_blank" rel="noopener">On 2023-08-17</a>, Azerbaijani forces cut the fiber cable connecting Artsakh, leaving the
 				region offline. Residual traffic survived over <strong>HF and amateur radio</strong>,
 				under continuous jamming. Russian peacekeeper cameras tried to restore links via radio.
 			</p>
@@ -691,9 +1038,17 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			</p>
 		</div>
 	</div>
+	<div class="ph-cards-strip-hint">
+		<span>▸ DRAG OR USE THE ARROWS</span>
+		<div class="ph-cards-strip-arrows">
+			<button type="button" data-strip-prev aria-label="Previous">‹</button>
+			<button type="button" data-strip-next aria-label="Next">›</button>
+		</div>
+	</div>
+	</div>
 </section>
 
-<SectionDivider label="12 // BRAZIL · 2024–2025" />
+<SectionDivider label="14 // BRAZIL · 2024–2025" />
 
 <section class="ph-section">
 	<div style="max-width:900px;margin-bottom:24px">
@@ -706,9 +1061,11 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 		</p>
 	</div>
 
+	<SaoPauloMap locale="en" />
+
 	<div class="ph-cards-grid">
 		<div class="ph-case-card is-orange">
-			<div class="ph-case-meta"><span>23/JUL/2024</span><span>SP, AV. FARIA LIMA</span></div>
+			<div class="ph-case-meta"><span>2024-07-23</span><span>SP, AV. FARIA LIMA</span></div>
 			<div class="ph-case-title">
 				<a href="https://www.cnnbrasil.com.br/nacional/carro-do-golpe-veja-equipamentos-encontrados-em-veiculo-para-interceptar-sinal-de-celulares/" target="_blank" rel="noopener">Antenna car along Faria Lima</a>
 			</div>
@@ -721,7 +1078,7 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			</p>
 		</div>
 		<div class="ph-case-card is-orange">
-			<div class="ph-case-meta"><span>23/JAN/2025</span><span>SP, MORUMBI</span></div>
+			<div class="ph-case-meta"><span>2025-01-23</span><span>SP, MORUMBI</span></div>
 			<div class="ph-case-title">
 				<a href="https://sbtnews.sbt.com.br/noticia/policia/esquema-de-sms-falso-e-descoberto-em-predio-na-zona-oeste-de-sao-paulo" target="_blank" rel="noopener">Antenna on a balcony, 19th floor</a>
 			</div>
@@ -734,7 +1091,7 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 			</p>
 		</div>
 		<div class="ph-case-card is-orange">
-			<div class="ph-case-meta"><span>10/SEP/2025</span><span>SP, ITAQUERA</span></div>
+			<div class="ph-case-meta"><span>2025-09-10</span><span>SP, ITAQUERA</span></div>
 			<div class="ph-case-title">
 				<a href="https://www.metropoles.com/sao-paulo/policia-descobre-central-movel-do-golpe-do-sms-e-prende-motorista" target="_blank" rel="noopener">Mobile femtocell, antenna car v2</a>
 			</div>
@@ -754,11 +1111,17 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 	</p>
 </section>
 
-<SectionDivider label="13 // TIMELINE" />
+<SectionDivider label="15 // TIMELINE" />
 
 <section class="ph-section">
-	<div style="max-width:900px">
-		<ol class="ph-timeline">
+	<div class="ph-rail-wrap">
+		<div class="ph-rail-legend">
+			<span class="ph-rail-era is-green">▸ CLASSIC ERA · 1930–1985</span>
+			<span class="ph-rail-era is-orange">▸ TRANSITION · 1985–2020</span>
+			<span class="ph-rail-era is-blue">▸ RESISTANCE + MODERN · 2020–TODAY</span>
+		</div>
+		<div class="ph-rail" data-cards-strip>
+			<ol class="ph-rail-track">
 			<li class="is-green">
 				<span class="ph-timeline-date">1930s–50s, PRE-PHREAKING</span>
 				<span class="ph-timeline-title">Tap dialing becomes folklore</span>
@@ -772,6 +1135,15 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 				<span class="ph-timeline-date">1957, DISCOVERY</span>
 				<span class="ph-timeline-title">Joe Engressia whistles 2600 Hz at age 7</span>
 				<p>AT&T's "trunk idle" tone fits inside a human whistle. Phreaking is born.</p>
+			</li>
+			<li class="is-orange">
+				<span class="ph-timeline-date">1968, BRAZIL</span>
+				<span class="ph-timeline-title">Telebrás adopts R2/MFC variant 5C</span>
+				<p>
+					Register-to-register signaling and out-of-band supervision (3825 Hz). Without
+					knowing it, Brazil builds an architectural barrier against the domestic blue
+					box for 35 years.
+				</p>
 			</li>
 			<li class="is-green">
 				<span class="ph-timeline-date">1971, POPULARIZATION</span>
@@ -792,6 +1164,22 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 				<span class="ph-timeline-date">1984</span>
 				<span class="ph-timeline-title">2600 Magazine is founded</span>
 				<p>Named after the magic tone. Still circulating today.</p>
+			</li>
+			<li class="is-orange">
+				<span class="ph-timeline-date">1992, RIO</span>
+				<span class="ph-timeline-title">Bardini inductive card debuts at Eco-92</span>
+				<p>
+					First commercial deployment of this technology anywhere. Brazil exports telephony
+					engineering for the first time, but the graphite trick follows close behind.
+				</p>
+			</li>
+			<li class="is-orange">
+				<span class="ph-timeline-date">1994, SP</span>
+				<span class="ph-timeline-title">Derneval "Curupira" Cunha founds Barata Elétrica</span>
+				<p>
+					First Portuguese-language hacker e-zine. Distributed via BR and foreign BBSes,
+					translates and adapts American phreaker literature to the R2/Telebrás landscape.
+				</p>
 			</li>
 			<li class="is-orange">
 				<span class="ph-timeline-date">2013, DEF CON 21</span>
@@ -834,10 +1222,20 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 				<p>Same technique, same MO, third case in 14 months.</p>
 			</li>
 		</ol>
+		</div>
+		<div class="ph-cards-strip-hint">
+			<span>▸ DRAG SIDEWAYS TO TRAVEL 95 YEARS</span>
+			<div class="ph-cards-strip-arrows">
+				<button type="button" data-strip-prev aria-label="Previous">‹</button>
+				<button type="button" data-strip-next aria-label="Next">›</button>
+			</div>
+		</div>
 	</div>
 </section>
 
-<SectionDivider label="14 // MODERN ARSENAL" />
+<CardsStripScript />
+
+<SectionDivider label="16 // MODERN ARSENAL" />
 
 <section class="ph-section">
 	<div class="ph-table-wrap">
@@ -898,7 +1296,127 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 	</div>
 </section>
 
-<SectionDivider label="15 // LEGACY AND FINAL THOUGHTS" />
+<SectionDivider label="17 // PAU NO TRUNK · BR PHREAKER DICTIONARY" />
+
+<section class="ph-section">
+	<div style="max-width:900px;margin-bottom:24px">
+		<h2>Pau no <span class="ph-accent-orange">trunk</span> · the vocabulary nobody archived</h2>
+		<p>
+			The BR scene built its own jargon. Some of it is literal translation from American;
+			some is pure invention, born in IRC, BBSes and zines. Much of it is lost because the
+			oral vocabulary was never compiled. The glossary below is fragmentary and partial, drawn
+			from the memory of people who lived it.
+		</p>
+	</div>
+
+	<div class="ph-table-wrap">
+		<table class="ph-table">
+			<thead>
+				<tr>
+					<th>Term</th>
+					<th>Meaning</th>
+					<th>Origin / context</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>Pau</strong> / <strong>PauFree</strong></td>
+					<td>Free international call via US Toll Free + Blue Box on a C5 route.</td>
+					<td>90s BR · local equivalent of "trunk seized"</td>
+				</tr>
+				<tr>
+					<td><strong>Dar pau</strong></td>
+					<td>Successfully seizing an international trunk. Variant: "deu pau no Costa Rica".</td>
+					<td>Verb derived from "pau"</td>
+				</tr>
+				<tr>
+					<td><strong>Tiar</strong></td>
+					<td>Generate MF tones to signal digits to a remote switch.</td>
+					<td>Onomatopoeic, from the sound of MF C5 tones</td>
+				</tr>
+				<tr>
+					<td><strong>Quebra de trunk</strong></td>
+					<td>Trunk seizure after a 2600 Hz whistle/tone.</td>
+					<td>Direct translation of "trunk seizure"</td>
+				</tr>
+				<tr>
+					<td><strong>Telexo</strong></td>
+					<td>Phone sex intercepted by FM-radio eavesdropping on cordless phones.</td>
+					<td>BR apocope · amateur interception, 90s</td>
+				</tr>
+				<tr>
+					<td><strong>Badisco</strong></td>
+					<td>Operator phone / lineman handset. BR equivalent of the Beige Box.</td>
+					<td>Commercial · Multitoc, Intelbras, Solução</td>
+				</tr>
+				<tr>
+					<td><strong>Caiu a ficha</strong></td>
+					<td>Literally: the payphone token dropped = unit billed. Figuratively: the late realization of something obvious.</td>
+					<td>BR generalized · escaped the payphone and became national slang</td>
+				</tr>
+				<tr>
+					<td><strong>Linha cruzada</strong></td>
+					<td>Strangers' conversation leaking onto your line. Usually EM interference, not a physical crossover.</td>
+					<td>Degraded twisted pairs · "ghost wires"</td>
+				</tr>
+				<tr>
+					<td><strong>Fuçador</strong></td>
+					<td>Hacker. Derneval's translation of "hacker" in Estadão, 1994. "Curious one, someone who roots around."</td>
+					<td>Barata Elétrica · proposed BR equivalent</td>
+				</tr>
+				<tr>
+					<td><strong>Rato de laboratório</strong></td>
+					<td>Beginner phreaker, usually based out of a tech center, technical school or university.</td>
+					<td>Oral · BR zines</td>
+				</tr>
+				<tr>
+					<td><strong>IRC contro</strong></td>
+					<td>In-person meetup of IRC users. More social than technical: "BFF, or the Tinder of its day".</td>
+					<td>90s-2000s · BrasNet, EFnet BR, Undernet BR</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+
+<SectionDivider label="18 // AUDIO CAPSULES · THE SCENE THAT SOUNDED" />
+
+<section class="ph-section">
+	<div style="max-width:900px;margin-bottom:24px">
+		<h2>The scene that <span class="ph-accent-orange">sounded</span></h2>
+		<p>
+			Two audio fragments that date Brazilian analog phreaking like an acoustic fossil. Anyone
+			who lived through it recognizes them in 1 second. Anyone who didn't can now hear them.
+		</p>
+	</div>
+
+	<div style="max-width:900px;display:grid;grid-template-columns:1fr;gap:24px">
+		<figure style="margin:0;padding:18px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06)">
+			<figcaption style="font-family:var(--font-mono, monospace);font-size:13px;color:var(--color-accent);margin-bottom:8px">
+				▸ DIAL TONE · TELEBRÁS · continuous 425 Hz
+			</figcaption>
+			<DialToneTelebras locale="en" />
+			<p style="margin:8px 0 0;font-size:13px;color:var(--color-muted)">
+				The Brazilian one was continuous 425 Hz; the American (Bell) was 350+440 Hz double.
+				Travelers used to recognize the country by its dial tone before they saw any landscape.
+			</p>
+		</figure>
+
+		<figure style="margin:0;padding:18px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06)">
+			<figcaption style="font-family:var(--font-mono, monospace);font-size:13px;color:var(--color-accent);margin-bottom:8px">
+				▸ MODEM HANDSHAKE · 28.8 / 56k · V.34 / V.90
+			</figcaption>
+			<YoutubeAudioPlayer locale="en" videoId="xalTFH5ht-k" label="MODEM HANDSHAKE · ANTHOLOGY" />
+			<p style="margin:8px 0 0;font-size:13px;color:var(--color-muted)">
+				The full analog-modem negotiation fit in 20 seconds. Each tone cluster was a
+				stage of the V.34/V.90 protocol. The audio collects handshakes from several
+				generations (300 baud, V.32, V.34, V.90), the most nostalgic sound of the internet.
+			</p>
+		</figure>
+	</div>
+</section>
+
+<SectionDivider label="19 // LEGACY AND FINAL THOUGHTS" />
 
 <section class="ph-outro">
 	<p>
@@ -954,7 +1472,7 @@ import PhoneCardBypass from '../../../components/interactive/phone-phreaking/Pho
 		<li><span class="ph-src-tag">[DIY]</span> <a href="https://openbts.org/" target="_blank" rel="noopener">OpenBTS</a> · <a href="https://osmocom.org/" target="_blank" rel="noopener">Osmocom</a> · <a href="https://www.srsran.com/" target="_blank" rel="noopener">srsRAN</a> · <a href="http://www.projectmf.org/" target="_blank" rel="noopener">Project MF</a> (Arduino Blue Box)</li>
 		<li><span class="ph-src-tag">[archives]</span> <a href="https://2600.com/" target="_blank" rel="noopener">2600 Magazine</a> · <a href="https://archive.org/" target="_blank" rel="noopener">Internet Archive</a> · alt.phone.phreaking · <a href="https://en.wikipedia.org/wiki/Hack_Canada" target="_blank" rel="noopener">Hack Canada</a></li>
 		<li><span class="ph-src-tag">[card]</span> <a href="https://pt.wikipedia.org/wiki/Cart%C3%A3o_telef%C3%B4nico" target="_blank" rel="noopener">Wikipedia · Brazilian phone card</a> · <a href="https://pt.wikipedia.org/wiki/Nelson_Guilherme_Bardini" target="_blank" rel="noopener">Nelson Guilherme Bardini</a></li>
-		<li><span class="ph-src-tag">[card]</span> <a href="https://inventores.com.br/cartao-telefonico-indutivo/" target="_blank" rel="noopener">Inventores.com.br · "Inductive Phone Card" — patents and records</a></li>
+		<li><span class="ph-src-tag">[card]</span> <a href="https://inventores.com.br/cartao-telefonico-indutivo/" target="_blank" rel="noopener">Inventores.com.br · "Inductive Phone Card" · patents and records</a></li>
 		<li><span class="ph-src-tag">[card]</span> <a href="https://oifuturo.org.br/historias/conheca-a-historia-por-tras-dos-cartoes-telefonicos/" target="_blank" rel="noopener">Oi Futuro · history of the phone card</a> · <a href="https://www.telecartofiliafurtado.com.br/blogs/blog-da-telecartofilia/o-primeiro-cartao-telefonico-do-brasil" target="_blank" rel="noopener">Telecartofilia Furtado</a></li>
 	</ul>
 </section>

@@ -4,9 +4,74 @@ interface Props {
 }
 
 const { label } = Astro.props;
+
+const slug = label
+	.toLowerCase()
+	.replace(/^[\d\s/]+/, '')
+	.replace(/[^\w\s-]+/g, '')
+	.trim()
+	.replace(/\s+/g, '-');
+
+const anchorId = `sec-${slug}`;
 ---
 
-<div class="ph-divider">
-	<div class="ph-divider-label">{label}</div>
+<div class="ph-divider" id={anchorId} data-section-label={label}>
+	<a class="ph-divider-label" href={`#${anchorId}`}>{label}</a>
+	<button
+		type="button"
+		class="ph-divider-anchor"
+		data-anchor-id={anchorId}
+		data-section-label={label}
+		aria-label={`Copiar link para ${label}`}
+		title="Copiar link da seção"
+	>
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+			<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+			<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+		</svg>
+		<span class="ph-divider-anchor-toast" data-toast hidden>copiado!</span>
+	</button>
 	<div class="ph-divider-line"></div>
 </div>
+
+<script>
+	(function () {
+		const btns = document.querySelectorAll<HTMLButtonElement>('.ph-divider-anchor');
+		if (!btns.length) return;
+
+		btns.forEach((btn) => {
+			btn.addEventListener('click', async () => {
+				const id = btn.dataset.anchorId;
+				if (!id) return;
+				const url = new URL(window.location.href);
+				url.hash = id;
+				const href = url.toString();
+				try {
+					await navigator.clipboard.writeText(href);
+				} catch (e) {
+					// fallback: temporary input
+					const ta = document.createElement('textarea');
+					ta.value = href;
+					ta.style.position = 'fixed';
+					ta.style.opacity = '0';
+					document.body.appendChild(ta);
+					ta.select();
+					try { document.execCommand('copy'); } catch (_) {}
+					document.body.removeChild(ta);
+				}
+				// Update browser URL so the user can also share via address bar.
+				history.replaceState(null, '', `#${id}`);
+				// Toast feedback
+				const toast = btn.querySelector<HTMLElement>('[data-toast]');
+				if (toast) {
+					toast.hidden = false;
+					btn.classList.add('is-copied');
+					setTimeout(() => {
+						toast.hidden = true;
+						btn.classList.remove('is-copied');
+					}, 1400);
+				}
+			});
+		});
+	})();
+</script>

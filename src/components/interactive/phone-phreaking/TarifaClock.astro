@@ -1,0 +1,205 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+
+const t = {
+	pt: {
+		title: 'Tarifa Telesp · semana inteira',
+		hint: 'Cada quadrado é uma hora. Verde = 1 pulso pela sessão inteira. Laranja = ~20 pulsos por hora.',
+		days: ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB', 'DOM'],
+		legendNight: '1 pulso',
+		legendDay: '20 pulsos / h',
+		ruleTitle: 'A regra que virou cronotipo',
+		rule: 'Dentro das janelas verdes, a Telesp cobrava <strong>1 pulso pela sessão inteira</strong>. Fora delas, ~20 pulsos por hora. O resultado prático: phreaker BR era noturno por contabilidade, não por estética.',
+		hoursLabel: 'h',
+	},
+	en: {
+		title: 'Telesp tariff · full week',
+		hint: 'Each square is one hour. Green = 1 pulse for the whole session. Orange = ~20 pulses per hour.',
+		days: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+		legendNight: '1 pulse',
+		legendDay: '20 pulses / h',
+		ruleTitle: 'The rule that became a chronotype',
+		rule: 'Inside the green windows, Telesp charged <strong>one pulse for the whole session</strong>. Outside them, ~20 pulses per hour. The practical result: the Brazilian phreaker was nocturnal by accounting, not aesthetics.',
+		hoursLabel: 'h',
+	},
+}[locale];
+
+// Telesp 1990s rule:
+// - Mon-Fri: single-pulse window 00h-06h. Outside that = multiplied.
+// - Saturday: single 00h-06h, multiplied 06h-14h, single 14h-24h.
+// - Sunday: single all day.
+// dayIdx: 0=Mon ... 6=Sun
+function isSinglePulse(dayIdx: number, hour: number): boolean {
+	if (dayIdx === 6) return true; // sunday
+	if (hour < 6) return true; // every day starts cheap
+	if (dayIdx === 5 && hour >= 14) return true; // sat afternoon onward
+	return false;
+}
+
+const grid = Array.from({ length: 7 }, (_, d) =>
+	Array.from({ length: 24 }, (_, h) => isSinglePulse(d, h)),
+);
+---
+
+<figure class="ph-tarifa">
+	<figcaption class="ph-tarifa-head">
+		<div class="ph-tarifa-title">{t.title}</div>
+		<div class="ph-tarifa-hint">{t.hint}</div>
+	</figcaption>
+
+	<div class="ph-tarifa-grid" role="img" aria-label={t.title}>
+		<div class="ph-tarifa-corner" aria-hidden="true"></div>
+		{t.days.map((d) => (
+			<div class="ph-tarifa-day-label">{d}</div>
+		))}
+
+		{Array.from({ length: 24 }).map((_, h) => (
+			<>
+				<div class="ph-tarifa-hour-label">{h % 6 === 0 ? `${String(h).padStart(2, '0')}${t.hoursLabel}` : ''}</div>
+				{grid.map((day, di) => {
+					const isSingle = day[h];
+					const dayName = t.days[di];
+					return (
+						<div
+							class={`ph-tarifa-cell ${isSingle ? 'is-single' : 'is-multi'}`}
+							title={`${dayName} · ${String(h).padStart(2, '0')}:00 · ${isSingle ? t.legendNight : t.legendDay}`}
+						/>
+					);
+				})}
+			</>
+		))}
+	</div>
+
+	<div class="ph-tarifa-legend">
+		<span class="ph-tarifa-chip ph-tarifa-chip-night">{t.legendNight}</span>
+		<span class="ph-tarifa-chip ph-tarifa-chip-day">{t.legendDay}</span>
+	</div>
+
+	<div class="ph-tarifa-rule">
+		<div class="ph-tarifa-rule-title">▸ {t.ruleTitle}</div>
+		<div class="ph-tarifa-rule-body" set:html={t.rule}></div>
+	</div>
+</figure>
+
+<style>
+	.ph-tarifa {
+		max-width: 720px;
+		margin: 32px auto;
+		padding: 22px;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 10px;
+	}
+	.ph-tarifa-head {
+		margin-bottom: 16px;
+	}
+	.ph-tarifa-title {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 13px;
+		color: var(--color-accent, #00ff7f);
+		margin-bottom: 4px;
+	}
+	.ph-tarifa-hint {
+		font-size: 12px;
+		color: var(--color-muted, #a8a9bb);
+		line-height: 1.5;
+	}
+	.ph-tarifa-grid {
+		display: grid;
+		grid-template-columns: 36px repeat(7, 1fr);
+		gap: 1px 2px;
+		background: #050508;
+		padding: 10px;
+		border-radius: 6px;
+	}
+	.ph-tarifa-corner {
+		grid-column: 1;
+		grid-row: 1;
+	}
+	.ph-tarifa-day-label,
+	.ph-tarifa-hour-label {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 10px;
+		color: var(--color-muted, #a8a9bb);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		letter-spacing: 0.08em;
+	}
+	.ph-tarifa-day-label {
+		padding-bottom: 4px;
+	}
+	.ph-tarifa-hour-label {
+		justify-content: flex-end;
+		padding-right: 6px;
+		min-height: 11px;
+		font-size: 9px;
+	}
+	.ph-tarifa-cell {
+		height: 10px;
+		border-radius: 1px;
+		transition: transform 0.12s ease, box-shadow 0.12s ease;
+	}
+	.ph-tarifa-cell.is-single {
+		background: linear-gradient(180deg, rgba(0, 255, 127, 0.55), rgba(0, 255, 127, 0.22));
+		box-shadow: inset 0 0 0 1px rgba(0, 255, 127, 0.25);
+	}
+	.ph-tarifa-cell.is-multi {
+		background: linear-gradient(180deg, rgba(255, 138, 0, 0.55), rgba(255, 138, 0, 0.22));
+		box-shadow: inset 0 0 0 1px rgba(255, 138, 0, 0.22);
+	}
+	.ph-tarifa-cell:hover {
+		transform: scaleY(1.6);
+		box-shadow: 0 0 6px currentColor;
+		z-index: 1;
+	}
+	.ph-tarifa-legend {
+		display: flex;
+		gap: 12px;
+		align-items: center;
+		margin-top: 14px;
+	}
+	.ph-tarifa-chip {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 10px;
+		padding: 3px 8px;
+		border-radius: 3px;
+		font-weight: 700;
+		letter-spacing: 0.05em;
+	}
+	.ph-tarifa-chip-night {
+		background: rgba(0, 255, 127, 0.12);
+		color: rgba(0, 255, 127, 0.95);
+		border: 1px solid rgba(0, 255, 127, 0.4);
+	}
+	.ph-tarifa-chip-day {
+		background: rgba(255, 138, 0, 0.12);
+		color: rgba(255, 138, 0, 0.95);
+		border: 1px solid rgba(255, 138, 0, 0.4);
+	}
+	.ph-tarifa-rule {
+		margin-top: 16px;
+		padding: 14px 16px;
+		background: rgba(0, 255, 127, 0.05);
+		border-left: 3px solid var(--color-accent, #00ff7f);
+		border-radius: 4px;
+	}
+	.ph-tarifa-rule-title {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 12px;
+		color: var(--color-accent, #00ff7f);
+		margin-bottom: 6px;
+		letter-spacing: 0.08em;
+	}
+	.ph-tarifa-rule-body {
+		font-size: 14px;
+		line-height: 1.55;
+		color: var(--color-fg, #dceadc);
+	}
+</style>

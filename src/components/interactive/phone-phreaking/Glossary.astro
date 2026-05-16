@@ -1,0 +1,166 @@
+---
+interface Props {
+	def: string;
+	expand?: string;
+}
+
+const { def, expand } = Astro.props;
+const id = `gloss-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<span class="ph-gloss-wrap">
+	<button
+		type="button"
+		class="ph-gloss"
+		aria-expanded="false"
+		aria-controls={id}
+		data-def={def}
+	><slot /></button>
+	<span id={id} class="ph-gloss-popover" role="tooltip" hidden>
+		<span class="ph-gloss-popover-def">{def}</span>
+		{expand && <span class="ph-gloss-popover-expand">{expand}</span>}
+	</span>
+</span>
+
+<script>
+	(function () {
+		const wraps = document.querySelectorAll('.ph-gloss-wrap');
+		if (!wraps.length) return;
+
+		let open: HTMLElement | null = null;
+
+		function close() {
+			if (!open) return;
+			const btn = open.querySelector<HTMLButtonElement>('.ph-gloss');
+			const pop = open.querySelector<HTMLElement>('.ph-gloss-popover');
+			btn?.setAttribute('aria-expanded', 'false');
+			if (pop) pop.hidden = true;
+			open = null;
+		}
+
+		function openWrap(wrap: HTMLElement) {
+			if (open && open !== wrap) close();
+			const btn = wrap.querySelector<HTMLButtonElement>('.ph-gloss');
+			const pop = wrap.querySelector<HTMLElement>('.ph-gloss-popover');
+			if (!btn || !pop) return;
+			btn.setAttribute('aria-expanded', 'true');
+			pop.hidden = false;
+			open = wrap;
+			// Reposition if overflowing right edge
+			pop.style.left = '';
+			pop.style.right = '';
+			const rect = pop.getBoundingClientRect();
+			if (rect.right > window.innerWidth - 8) {
+				pop.style.left = 'auto';
+				pop.style.right = '0';
+			}
+		}
+
+		wraps.forEach((wrap) => {
+			const btn = wrap.querySelector<HTMLButtonElement>('.ph-gloss');
+			if (!btn) return;
+			btn.addEventListener('click', (e) => {
+				e.stopPropagation();
+				if (open === wrap) close();
+				else openWrap(wrap as HTMLElement);
+			});
+			btn.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape') {
+					close();
+					btn.focus();
+				}
+			});
+		});
+
+		document.addEventListener('click', (e) => {
+			if (!open) return;
+			if (!(e.target as HTMLElement).closest('.ph-gloss-wrap')) close();
+		});
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') close();
+		});
+	})();
+</script>
+
+<style>
+	.ph-gloss-wrap {
+		position: relative;
+		display: inline-block;
+	}
+	.ph-gloss {
+		appearance: none;
+		background: transparent;
+		border: 0;
+		padding: 0;
+		font: inherit;
+		color: inherit;
+		cursor: help;
+		border-bottom: 1px dotted var(--ph-orange, #ff6a3d);
+		transition: color 0.18s ease, border-color 0.18s ease;
+	}
+	.ph-gloss:hover,
+	.ph-gloss[aria-expanded='true'] {
+		color: var(--ph-orange, #ff6a3d);
+		border-bottom-color: var(--ph-green, #00ff7f);
+	}
+	.ph-gloss:focus-visible {
+		outline: 2px solid var(--ph-green, #00ff7f);
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+	.ph-gloss::after {
+		content: '?';
+		display: inline-block;
+		margin-left: 3px;
+		font-size: 0.6em;
+		vertical-align: super;
+		color: var(--ph-orange, #ff6a3d);
+		opacity: 0.7;
+	}
+	.ph-gloss-popover {
+		position: absolute;
+		top: calc(100% + 6px);
+		left: 0;
+		min-width: 220px;
+		max-width: 320px;
+		background: #050508;
+		border: 1px solid rgba(0, 255, 127, 0.28);
+		border-radius: 4px;
+		padding: 10px 12px;
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 12px;
+		line-height: 1.5;
+		color: var(--color-fg, #dceadc);
+		z-index: 35;
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+		text-transform: none;
+		letter-spacing: 0;
+		font-weight: 400;
+	}
+	.ph-gloss-popover[hidden] {
+		display: none;
+	}
+	.ph-gloss-popover::before {
+		content: '';
+		position: absolute;
+		top: -5px;
+		left: 14px;
+		width: 8px;
+		height: 8px;
+		background: #050508;
+		border-left: 1px solid rgba(0, 255, 127, 0.28);
+		border-top: 1px solid rgba(0, 255, 127, 0.28);
+		transform: rotate(45deg);
+	}
+	.ph-gloss-popover-def {
+		display: block;
+	}
+	.ph-gloss-popover-expand {
+		display: block;
+		margin-top: 6px;
+		padding-top: 6px;
+		border-top: 1px dashed rgba(0, 255, 127, 0.18);
+		color: var(--color-muted, #a8a9bb);
+		font-size: 11px;
+	}
+</style>

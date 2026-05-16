@@ -110,8 +110,8 @@ const tonesById: Record<string, string> = Object.fromEntries(
 			<div class="ph-bluebox-led" data-ph-bb-led></div>
 		</div>
 
-		<div class="ph-bluebox-display" data-ph-bb-display>
-			<span data-ph-bb-display-text>{strings.awaiting}</span><span class="ph-cursor">_</span>
+		<div class="ph-bluebox-display" data-ph-bb-display role="status" aria-live="polite" aria-atomic="true">
+			<span data-ph-bb-display-text>{strings.awaiting}</span><span class="ph-cursor" aria-hidden="true">_</span>
 		</div>
 
 		<div class="ph-bluebox-keys">
@@ -125,7 +125,7 @@ const tonesById: Record<string, string> = Object.fromEntries(
 			}
 		</div>
 		<div class="ph-bluebox-keys-bottom">
-			<button class="ph-key cmd" data-ph-bb-key="KP" disabled>
+			<button class="ph-key cmd" data-ph-bb-key="KP" disabled aria-label="KP · Key Pulse · marca início da sequência">
 				<div class="ph-key-cmd-label">KP</div>
 				<div class="ph-key-tones">{tonesById['KP']}</div>
 			</button>
@@ -133,7 +133,7 @@ const tonesById: Record<string, string> = Object.fromEntries(
 				<div class="ph-key-digit">0</div>
 				<div class="ph-key-tones">{tonesById['0']}</div>
 			</button>
-			<button class="ph-key cmd" data-ph-bb-key="ST" disabled>
+			<button class="ph-key cmd" data-ph-bb-key="ST" disabled aria-label="ST · Start · finaliza e dispara a chamada">
 				<div class="ph-key-cmd-label">ST</div>
 				<div class="ph-key-tones">{tonesById['ST']}</div>
 			</button>

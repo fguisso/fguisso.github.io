@@ -1,0 +1,151 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+}
+
+const { locale } = Astro.props;
+const id = `ph-dialtone-${Math.random().toString(36).slice(2, 9)}`;
+
+const t = {
+	pt: {
+		play: 'Tocar',
+		stop: 'Parar',
+		liveLabel: 'TOCANDO · 425 Hz',
+		freqLabel: '425 Hz · TELEBRÁS',
+	},
+	en: {
+		play: 'Play',
+		stop: 'Stop',
+		liveLabel: 'PLAYING · 425 Hz',
+		freqLabel: '425 Hz · TELEBRÁS',
+	},
+}[locale];
+---
+
+<div class={`ph-dialtone ${id}`}>
+	<button type="button" class="ph-dialtone-btn" data-play aria-pressed="false">
+		<span class="ph-dialtone-icon" aria-hidden="true">▶</span>
+		<span class="ph-dialtone-label" data-label>{t.play}</span>
+	</button>
+	<div class="ph-dialtone-meta">
+		<span class="ph-dialtone-status" data-status role="status" aria-live="polite">{t.freqLabel}</span>
+	</div>
+</div>
+
+<script define:vars={{ id, playLabel: t.play, stopLabel: t.stop, liveLabel: t.liveLabel, freqLabel: t.freqLabel }}>
+	(function () {
+		const root = document.querySelector('.' + id);
+		if (!root) return;
+		const btn = root.querySelector('[data-play]');
+		const labelEl = root.querySelector('[data-label]');
+		const statusEl = root.querySelector('[data-status]');
+
+		let ctx = null;
+		let osc = null;
+		let gain = null;
+		let playing = false;
+
+		function start() {
+			if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+			if (ctx.state === 'suspended') ctx.resume();
+			osc = ctx.createOscillator();
+			gain = ctx.createGain();
+			osc.type = 'sine';
+			osc.frequency.value = 425;
+			gain.gain.value = 0;
+			osc.connect(gain);
+			gain.connect(ctx.destination);
+			osc.start();
+			gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.02);
+			playing = true;
+			btn.classList.add('is-on');
+			btn.setAttribute('aria-pressed', 'true');
+			labelEl.textContent = stopLabel;
+			statusEl.textContent = liveLabel;
+		}
+
+		function stop() {
+			if (!playing || !osc || !ctx) return;
+			gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.05);
+			const o = osc;
+			setTimeout(() => {
+				try { o.stop(); o.disconnect(); } catch (e) {}
+			}, 80);
+			playing = false;
+			btn.classList.remove('is-on');
+			btn.setAttribute('aria-pressed', 'false');
+			labelEl.textContent = playLabel;
+			statusEl.textContent = freqLabel;
+		}
+
+		btn.addEventListener('click', () => {
+			if (playing) stop();
+			else start();
+		});
+
+		document.addEventListener('astro:before-swap', () => stop(), { once: true });
+	})();
+</script>
+
+<style>
+	.ph-dialtone {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		padding: 10px 12px;
+		background: rgba(0, 0, 0, 0.35);
+		border: 1px solid rgba(0, 255, 127, 0.18);
+		border-radius: 6px;
+	}
+	.ph-dialtone-btn {
+		appearance: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 16px;
+		background: transparent;
+		border: 1px solid rgba(0, 255, 127, 0.4);
+		border-radius: 4px;
+		color: var(--color-accent, #00ff7f);
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 12px;
+		letter-spacing: 0.12em;
+		font-weight: 700;
+		cursor: pointer;
+		transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+	}
+	.ph-dialtone-btn:hover {
+		background: rgba(0, 255, 127, 0.1);
+	}
+	.ph-dialtone-btn:focus-visible {
+		outline: 2px solid var(--ph-orange, #ff6a3d);
+		outline-offset: 2px;
+	}
+	.ph-dialtone-btn.is-on {
+		background: rgba(255, 106, 61, 0.12);
+		border-color: var(--ph-orange, #ff6a3d);
+		color: var(--ph-orange, #ff6a3d);
+		animation: ph-dialtone-pulse 1.2s ease-in-out infinite;
+	}
+	@keyframes ph-dialtone-pulse {
+		0%, 100% { box-shadow: 0 0 0 0 rgba(255, 106, 61, 0.5); }
+		50% { box-shadow: 0 0 0 6px rgba(255, 106, 61, 0); }
+	}
+	.ph-dialtone-icon {
+		font-size: 11px;
+	}
+	.ph-dialtone-meta {
+		flex: 1;
+	}
+	.ph-dialtone-status {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		color: var(--color-muted, #a8a9bb);
+	}
+	.ph-dialtone-btn.is-on ~ .ph-dialtone-meta .ph-dialtone-status {
+		color: var(--ph-orange, #ff6a3d);
+	}
+</style>

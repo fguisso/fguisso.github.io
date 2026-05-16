@@ -1,0 +1,413 @@
+---
+import type { LocaleCode } from '../../../i18n/config';
+
+interface Props {
+	locale: LocaleCode;
+	videoId: string;
+	label?: string;
+	start?: number;
+}
+
+const { locale, videoId, label, start = 0 } = Astro.props;
+const id = `ph-yt-${Math.random().toString(36).slice(2, 9)}`;
+
+const t = {
+	pt: {
+		play: 'Tocar',
+		stop: 'Parar',
+		loading: 'Carregando…',
+		fallback: 'Abrir no YouTube',
+		statusIdle: label || 'YouTube · áudio',
+		statusLive: 'TOCANDO · ÁUDIO YOUTUBE',
+	},
+	en: {
+		play: 'Play',
+		stop: 'Stop',
+		loading: 'Loading…',
+		fallback: 'Open on YouTube',
+		statusIdle: label || 'YouTube · audio',
+		statusLive: 'PLAYING · YOUTUBE AUDIO',
+	},
+}[locale];
+---
+
+<div class={`ph-ytaudio ${id}`} data-video-id={videoId} data-start={String(start)}>
+	<div class="ph-ytaudio-row">
+		<button type="button" class="ph-ytaudio-btn" data-play aria-pressed="false" disabled>
+			<span class="ph-ytaudio-icon" aria-hidden="true">▶</span>
+			<span class="ph-ytaudio-label" data-label>{t.loading}</span>
+		</button>
+		<div class="ph-ytaudio-meta">
+			<span class="ph-ytaudio-status" data-status role="status" aria-live="polite">{t.statusIdle}</span>
+			<a class="ph-ytaudio-fallback" href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener">↗ {t.fallback}</a>
+		</div>
+	</div>
+	<div class="ph-ytaudio-timeline">
+		<button
+			type="button"
+			class="ph-ytaudio-track"
+			data-track
+			aria-label="seek"
+			role="slider"
+			aria-valuemin="0"
+			aria-valuemax="100"
+			aria-valuenow="0"
+			disabled
+		>
+			<span class="ph-ytaudio-fill" data-fill></span>
+			<span class="ph-ytaudio-thumb" data-thumb></span>
+		</button>
+		<span class="ph-ytaudio-time" data-time>0:00 / 0:00</span>
+	</div>
+	<div class="ph-ytaudio-mount" data-mount aria-hidden="true"></div>
+</div>
+
+<script
+	define:vars={{
+		id,
+		playLabel: t.play,
+		stopLabel: t.stop,
+		loadingLabel: t.loading,
+		statusIdle: t.statusIdle,
+		statusLive: t.statusLive,
+	}}
+>
+	(function () {
+		const root = document.querySelector('.' + id);
+		if (!root) return;
+		const btn = root.querySelector('[data-play]');
+		const labelEl = root.querySelector('[data-label]');
+		const statusEl = root.querySelector('[data-status]');
+		const mount = root.querySelector('[data-mount]');
+		const track = root.querySelector('[data-track]');
+		const fill = root.querySelector('[data-fill]');
+		const thumb = root.querySelector('[data-thumb]');
+		const timeEl = root.querySelector('[data-time]');
+		const videoId = root.dataset.videoId;
+		const start = parseInt(root.dataset.start || '0', 10) || 0;
+
+		let player = null;
+		let ready = false;
+		let playing = false;
+		let rafId = null;
+
+		function fmt(s) {
+			s = Math.max(0, Math.floor(s || 0));
+			const m = Math.floor(s / 60);
+			const sec = String(s % 60).padStart(2, '0');
+			return `${m}:${sec}`;
+		}
+
+		function updateProgress() {
+			if (!player || typeof player.getCurrentTime !== 'function') return;
+			const cur = player.getCurrentTime() || 0;
+			const dur = player.getDuration() || 0;
+			const pct = dur > 0 ? Math.min(100, (cur / dur) * 100) : 0;
+			fill.style.width = pct + '%';
+			thumb.style.left = pct + '%';
+			timeEl.textContent = `${fmt(cur)} / ${fmt(dur)}`;
+			track.setAttribute('aria-valuenow', String(Math.round(pct)));
+		}
+
+		function startLoop() {
+			stopLoop();
+			const tick = () => {
+				updateProgress();
+				rafId = requestAnimationFrame(tick);
+			};
+			rafId = requestAnimationFrame(tick);
+		}
+
+		function stopLoop() {
+			if (rafId) cancelAnimationFrame(rafId);
+			rafId = null;
+		}
+
+		// Load the IFrame API once globally; queue per-instance init.
+		function ensureApi() {
+			if (window.YT && window.YT.Player) return Promise.resolve();
+			if (window.__ytApiPromise) return window.__ytApiPromise;
+			window.__ytApiPromise = new Promise((resolve) => {
+				const prev = window.onYouTubeIframeAPIReady;
+				window.onYouTubeIframeAPIReady = function () {
+					if (typeof prev === 'function') prev();
+					resolve();
+				};
+				const tag = document.createElement('script');
+				tag.src = 'https://www.youtube.com/iframe_api';
+				document.head.appendChild(tag);
+			});
+			return window.__ytApiPromise;
+		}
+
+		function initPlayer() {
+			const target = document.createElement('div');
+			mount.appendChild(target);
+			player = new window.YT.Player(target, {
+				videoId,
+				width: '0',
+				height: '0',
+				playerVars: {
+					controls: 0,
+					disablekb: 1,
+					modestbranding: 1,
+					playsinline: 1,
+					rel: 0,
+					start,
+				},
+				events: {
+					onReady: () => {
+						ready = true;
+						btn.disabled = false;
+						track.disabled = false;
+						labelEl.textContent = playLabel;
+						updateProgress();
+					},
+					onStateChange: (e) => {
+						const YT = window.YT;
+						if (!YT) return;
+						if (e.data === YT.PlayerState.PLAYING) {
+							playing = true;
+							btn.classList.add('is-on');
+							btn.setAttribute('aria-pressed', 'true');
+							labelEl.textContent = stopLabel;
+							statusEl.textContent = statusLive;
+							startLoop();
+						} else if (
+							e.data === YT.PlayerState.PAUSED ||
+							e.data === YT.PlayerState.ENDED ||
+							e.data === YT.PlayerState.CUED
+						) {
+							playing = false;
+							btn.classList.remove('is-on');
+							btn.setAttribute('aria-pressed', 'false');
+							labelEl.textContent = playLabel;
+							statusEl.textContent = statusIdle;
+							stopLoop();
+							updateProgress();
+						}
+					},
+				},
+			});
+		}
+
+		btn.addEventListener('click', async () => {
+			if (!ready) {
+				await ensureApi();
+				if (!player) initPlayer();
+				return;
+			}
+			if (playing) player.pauseVideo();
+			else player.playVideo();
+		});
+
+		function seekFromEvent(e) {
+			if (!ready || !player) return;
+			const rect = track.getBoundingClientRect();
+			const x = (e.clientX !== undefined ? e.clientX : e.touches?.[0]?.clientX || 0) - rect.left;
+			const pct = Math.max(0, Math.min(1, x / rect.width));
+			const dur = player.getDuration() || 0;
+			player.seekTo(pct * dur, true);
+			updateProgress();
+		}
+
+		track.addEventListener('click', seekFromEvent);
+		track.addEventListener('keydown', (e) => {
+			if (!ready || !player) return;
+			const dur = player.getDuration() || 0;
+			const cur = player.getCurrentTime() || 0;
+			if (e.key === 'ArrowRight') {
+				e.preventDefault();
+				player.seekTo(Math.min(dur, cur + 5), true);
+				updateProgress();
+			} else if (e.key === 'ArrowLeft') {
+				e.preventDefault();
+				player.seekTo(Math.max(0, cur - 5), true);
+				updateProgress();
+			}
+		});
+
+		// Lazy-load API only when the player scrolls near the viewport.
+		const obs = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((e) => {
+					if (!e.isIntersecting) return;
+					obs.disconnect();
+					ensureApi().then(initPlayer);
+				});
+			},
+			{ rootMargin: '300px' }
+		);
+		obs.observe(root);
+
+		document.addEventListener('astro:before-swap', () => {
+			stopLoop();
+			if (player && typeof player.stopVideo === 'function') {
+				try { player.stopVideo(); } catch (e) {}
+			}
+		}, { once: true });
+	})();
+</script>
+
+<style>
+	.ph-ytaudio {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 10px 12px;
+		background: rgba(0, 0, 0, 0.35);
+		border: 1px solid rgba(255, 106, 61, 0.22);
+		border-radius: 6px;
+		position: relative;
+	}
+	.ph-ytaudio-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 14px;
+	}
+	.ph-ytaudio-timeline {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.ph-ytaudio-track {
+		appearance: none;
+		background: rgba(255, 255, 255, 0.06);
+		border: 0;
+		padding: 0;
+		flex: 1;
+		height: 8px;
+		border-radius: 4px;
+		position: relative;
+		cursor: pointer;
+		overflow: visible;
+	}
+	.ph-ytaudio-track[disabled] {
+		cursor: progress;
+		opacity: 0.5;
+	}
+	.ph-ytaudio-track:hover:not([disabled]) {
+		background: rgba(255, 255, 255, 0.1);
+	}
+	.ph-ytaudio-track:focus-visible {
+		outline: 2px solid var(--ph-orange, #ff6a3d);
+		outline-offset: 3px;
+	}
+	.ph-ytaudio-fill {
+		display: block;
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 0;
+		background: linear-gradient(90deg, var(--ph-orange, #ff6a3d), var(--color-accent, #00ff7f));
+		border-radius: 4px;
+		box-shadow: 0 0 8px rgba(255, 106, 61, 0.4);
+		transition: width 0.06s linear;
+		pointer-events: none;
+	}
+	.ph-ytaudio-thumb {
+		display: block;
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: 10px;
+		height: 10px;
+		background: var(--ph-orange, #ff6a3d);
+		border-radius: 50%;
+		transform: translate(-50%, -50%);
+		box-shadow: 0 0 8px rgba(255, 106, 61, 0.6);
+		opacity: 0;
+		transition: opacity 0.18s ease;
+		pointer-events: none;
+	}
+	.ph-ytaudio-track:hover:not([disabled]) .ph-ytaudio-thumb,
+	.ph-ytaudio-track:focus-visible .ph-ytaudio-thumb {
+		opacity: 1;
+	}
+	.ph-ytaudio-time {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 11px;
+		color: var(--color-muted, #a8a9bb);
+		min-width: 80px;
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+	.ph-ytaudio-btn {
+		appearance: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 16px;
+		background: transparent;
+		border: 1px solid rgba(255, 106, 61, 0.4);
+		border-radius: 4px;
+		color: var(--ph-orange, #ff6a3d);
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 12px;
+		letter-spacing: 0.12em;
+		font-weight: 700;
+		cursor: pointer;
+		transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+	}
+	.ph-ytaudio-btn[disabled] {
+		opacity: 0.5;
+		cursor: progress;
+	}
+	.ph-ytaudio-btn:hover:not([disabled]) {
+		background: rgba(255, 106, 61, 0.12);
+	}
+	.ph-ytaudio-btn:focus-visible {
+		outline: 2px solid var(--ph-orange, #ff6a3d);
+		outline-offset: 2px;
+	}
+	.ph-ytaudio-btn.is-on {
+		background: rgba(255, 106, 61, 0.18);
+		animation: ph-ytaudio-pulse 1.2s ease-in-out infinite;
+	}
+	@keyframes ph-ytaudio-pulse {
+		0%, 100% { box-shadow: 0 0 0 0 rgba(255, 106, 61, 0.5); }
+		50% { box-shadow: 0 0 0 6px rgba(255, 106, 61, 0); }
+	}
+	.ph-ytaudio-icon {
+		font-size: 11px;
+	}
+	.ph-ytaudio-meta {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		flex: 1;
+		min-width: 0;
+	}
+	.ph-ytaudio-status {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 11px;
+		letter-spacing: 0.08em;
+		color: var(--color-muted, #a8a9bb);
+	}
+	.ph-ytaudio-btn.is-on ~ .ph-ytaudio-meta .ph-ytaudio-status {
+		color: var(--ph-orange, #ff6a3d);
+	}
+	.ph-ytaudio-fallback {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 10px;
+		letter-spacing: 0.08em;
+		color: var(--color-muted, #a8a9bb);
+		text-decoration: none;
+		opacity: 0.7;
+		transition: color 0.18s ease, opacity 0.18s ease;
+	}
+	.ph-ytaudio-fallback:hover {
+		color: var(--ph-orange, #ff6a3d);
+		opacity: 1;
+	}
+	.ph-ytaudio-mount {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+		left: -9999px;
+		pointer-events: none;
+	}
+</style>

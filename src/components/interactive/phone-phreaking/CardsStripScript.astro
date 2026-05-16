@@ -1,0 +1,18 @@
+---
+// Wires up [data-cards-strip] containers' arrow buttons.
+// Extracted from MDX because raw braces inside <script> trip MDX's expression parser.
+---
+
+<script>
+	function initCardsStrip(strip: Element) {
+		const wrap = strip.closest('.ph-cards-strip-wrap');
+		if (!wrap) return;
+		const prev = wrap.querySelector<HTMLButtonElement>('[data-strip-prev]');
+		const next = wrap.querySelector<HTMLButtonElement>('[data-strip-next]');
+		const stripEl = strip as HTMLElement;
+		const step = () => Math.max(280, stripEl.clientWidth * 0.7);
+		prev?.addEventListener('click', () => stripEl.scrollBy({ left: -step(), behavior: 'smooth' }));
+		next?.addEventListener('click', () => stripEl.scrollBy({ left: step(), behavior: 'smooth' }));
+	}
+	document.querySelectorAll('[data-cards-strip]').forEach(initCardsStrip);
+</script>

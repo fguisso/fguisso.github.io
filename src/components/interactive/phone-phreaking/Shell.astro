@@ -4,9 +4,11 @@ import type { LocaleCode } from '../../../i18n/config';
 
 interface Props {
 	locale: LocaleCode;
+	readingMinutes?: number;
+	wordCount?: number;
 }
 
-const { locale } = Astro.props;
+const { locale, readingMinutes = 28, wordCount = 6500 } = Astro.props;
 
 const strings = {
 	pt: {
@@ -16,6 +18,12 @@ const strings = {
 		eofLeft: 'END_OF_TRANSMISSION',
 		eofMid: '// PHREAK_OR_DIE //',
 		eofRight: 'EOF',
+		tocTitle: 'SUMÁRIO',
+		readingTime: `${readingMinutes} min`,
+		wordCountLabel: `${wordCount.toLocaleString('pt-BR')} palavras`,
+		openToc: 'Abrir sumário',
+		closeToc: 'Fechar',
+		closeLightbox: 'Fechar imagem',
 	},
 	en: {
 		signalOk: 'SIGNAL_OK',
@@ -24,22 +32,53 @@ const strings = {
 		eofLeft: 'END_OF_TRANSMISSION',
 		eofMid: '// PHREAK_OR_DIE //',
 		eofRight: 'EOF',
+		tocTitle: 'TABLE OF CONTENTS',
+		readingTime: `${readingMinutes} min`,
+		wordCountLabel: `${wordCount.toLocaleString('en-US')} words`,
+		openToc: 'Open table of contents',
+		closeToc: 'Close',
+		closeLightbox: 'Close image',
 	},
 }[locale];
 ---
 
 <div class="phreaking-page">
+	<div class="ph-progress" aria-hidden="true"><div class="ph-progress-bar"></div></div>
 	<div class="ph-scanlines" aria-hidden="true"></div>
 
 	<div class="ph-strip">
 		<div>{strings.journal}</div>
 		<div class="ph-strip-right">
 			<span><span class="ph-blink-dot" aria-hidden="true"></span>{strings.signalOk}</span>
+			<span class="ph-strip-meta">⏱ {strings.readingTime} · {strings.wordCountLabel}</span>
 			<span>{strings.issue}</span>
 		</div>
 	</div>
 
+	<button type="button" class="ph-toc-fab" aria-label={strings.openToc} aria-expanded="false" data-toc-fab>
+		<svg class="ph-toc-fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+			<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+		</svg>
+		<span class="ph-toc-fab-label">{strings.tocTitle}</span>
+	</button>
+
+	<div class="ph-toc-overlay" role="dialog" aria-modal="true" aria-label={strings.tocTitle} data-toc-overlay hidden>
+		<div class="ph-toc-overlay-head">
+			<div class="ph-toc-title">▸ {strings.tocTitle}</div>
+			<button type="button" class="ph-toc-close" aria-label={strings.closeToc} data-toc-close>✕</button>
+		</div>
+		<ol class="ph-toc-list" data-toc-overlay-list></ol>
+	</div>
+
 	<slot />
+
+	<div class="ph-lightbox" role="dialog" aria-modal="true" aria-label={strings.closeLightbox} data-lightbox hidden>
+		<button type="button" class="ph-lightbox-close" aria-label={strings.closeLightbox} data-lightbox-close>✕</button>
+		<figure class="ph-lightbox-figure">
+			<img class="ph-lightbox-img" alt="" data-lightbox-img />
+			<figcaption class="ph-lightbox-caption" data-lightbox-caption></figcaption>
+		</figure>
+	</div>
 
 	<div class="ph-footer-strip">
 		<span>{strings.eofLeft}</span>
@@ -47,3 +86,128 @@ const strings = {
 		<span>{strings.eofRight}</span>
 	</div>
 </div>
+
+<script>
+	(function () {
+		const root = document.querySelector('.phreaking-page');
+		if (!root) return;
+
+		// === Reading progress bar ===
+		const bar = root.querySelector<HTMLElement>('.ph-progress-bar');
+		function updateProgress() {
+			const docEl = document.documentElement;
+			const total = docEl.scrollHeight - docEl.clientHeight;
+			const pct = total > 0 ? Math.min(100, Math.max(0, (docEl.scrollTop / total) * 100)) : 0;
+			if (bar) bar.style.width = pct + '%';
+		}
+		document.addEventListener('scroll', updateProgress, { passive: true });
+		window.addEventListener('resize', updateProgress);
+		updateProgress();
+
+		// === TOC (overlay only) ===
+		const dividers = Array.from(document.querySelectorAll<HTMLElement>('.ph-divider[data-section-label]'));
+		const overlayList = root.querySelector<HTMLOListElement>('[data-toc-overlay-list]');
+		const overlayLinks: HTMLAnchorElement[] = [];
+
+		if (overlayList) {
+			overlayList.innerHTML = '';
+			dividers.forEach((d) => {
+				const id = d.id;
+				const labelRaw = d.dataset.sectionLabel || '';
+				const parts = labelRaw.split('//').map((s) => s.trim());
+				const num = parts[0] || '';
+				const title = parts.slice(1).join(' / ') || labelRaw;
+				const li = document.createElement('li');
+				const a = document.createElement('a');
+				a.href = '#' + id;
+				a.className = 'ph-toc-link';
+				a.dataset.targetId = id;
+				a.innerHTML = `<span class="ph-toc-num">${num}</span><span class="ph-toc-text">${title}</span>`;
+				li.appendChild(a);
+				overlayList.appendChild(li);
+				overlayLinks.push(a);
+			});
+		}
+
+		// Scrollspy still highlights the active section in the overlay list
+		const obs = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						const id = (entry.target as HTMLElement).id;
+						overlayLinks.forEach((link) => {
+							link.classList.toggle('is-active', link.dataset.targetId === id);
+						});
+					}
+				});
+			},
+			{ rootMargin: '-30% 0px -60% 0px', threshold: 0 }
+		);
+		dividers.forEach((d) => obs.observe(d));
+
+		// === FAB / overlay ===
+		const fab = root.querySelector<HTMLButtonElement>('[data-toc-fab]');
+		const overlay = root.querySelector<HTMLElement>('[data-toc-overlay]');
+		const closeBtn = root.querySelector<HTMLButtonElement>('[data-toc-close]');
+
+		function openOverlay() {
+			if (!overlay || !fab) return;
+			overlay.hidden = false;
+			fab.setAttribute('aria-expanded', 'true');
+			document.documentElement.classList.add('ph-toc-open');
+		}
+		function closeOverlay() {
+			if (!overlay || !fab) return;
+			overlay.hidden = true;
+			fab.setAttribute('aria-expanded', 'false');
+			document.documentElement.classList.remove('ph-toc-open');
+		}
+		fab?.addEventListener('click', () => {
+			if (overlay?.hidden) openOverlay();
+			else closeOverlay();
+		});
+		closeBtn?.addEventListener('click', closeOverlay);
+		overlay?.addEventListener('click', (e) => {
+			if (e.target === overlay) closeOverlay();
+		});
+		overlayLinks.forEach((link) => link.addEventListener('click', () => closeOverlay()));
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && overlay && !overlay.hidden) closeOverlay();
+		});
+
+		// === Lightbox for gallery images ===
+		const lightbox = root.querySelector<HTMLElement>('[data-lightbox]');
+		const lightboxImg = root.querySelector<HTMLImageElement>('[data-lightbox-img]');
+		const lightboxCap = root.querySelector<HTMLElement>('[data-lightbox-caption]');
+		const lightboxClose = root.querySelector<HTMLButtonElement>('[data-lightbox-close]');
+
+		function openLightbox(src: string, alt: string, caption: string) {
+			if (!lightbox || !lightboxImg) return;
+			lightboxImg.src = src;
+			lightboxImg.alt = alt;
+			if (lightboxCap) lightboxCap.textContent = caption;
+			lightbox.hidden = false;
+			document.documentElement.classList.add('ph-lightbox-open');
+		}
+		function closeLightbox() {
+			if (!lightbox) return;
+			lightbox.hidden = true;
+			document.documentElement.classList.remove('ph-lightbox-open');
+		}
+		document.addEventListener('click', (e) => {
+			const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-lightbox-trigger]');
+			if (!trigger) return;
+			const src = trigger.dataset.fullsrc || '';
+			const alt = trigger.dataset.alt || '';
+			const caption = trigger.dataset.caption || '';
+			if (src) openLightbox(src, alt, caption);
+		});
+		lightboxClose?.addEventListener('click', closeLightbox);
+		lightbox?.addEventListener('click', (e) => {
+			if (e.target === lightbox) closeLightbox();
+		});
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && lightbox && !lightbox.hidden) closeLightbox();
+		});
+	})();
+</script>
