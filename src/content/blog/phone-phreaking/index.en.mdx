@@ -33,7 +33,6 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 
 <section class="ph-intro">
 	<div class="ph-eyebrow">▸ TRANSMISSION OPENED · 02:14 AM</div>
-	<div class="ph-construction-tag">⚠ UNDER CONSTRUCTION</div>
 	<h1 class="ph-title">PHONE<br/>PHREAKING<span class="ph-dot">.</span></h1>
 	<p>
 		Before the internet existed, a massive network already connected the world: AT&T's analog
@@ -61,7 +60,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="01 // ORIGINS · THE NETWORK THAT TALKED" />
 
 <section class="ph-section">
-	<div style="max-width:900px">
+	<div class="ph-prose">
 		<h2>When the <span class="ph-accent-blue">network</span> still spoke out loud</h2>
 		<p>
 			Until the 1990s, the global phone system was dominated by <strong>AT&T</strong> and its
@@ -96,7 +95,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="02 // JOYBUBBLES · THE PERFECT EAR" />
 
 <section class="ph-section">
-	<div style="max-width:900px">
+	<div class="ph-prose">
 		<h2><span class="ph-accent-orange">Joybubbles</span>, the boy who talked to the network</h2>
 		<p>
 			<a href="https://en.wikipedia.org/wiki/Joybubbles" target="_blank" rel="noopener"><strong>Josef
@@ -191,7 +190,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="03 // THE TAP · HOOKSWITCH DIALING" />
 
 <section class="ph-section">
-	<div class="ph-grid-2" style="margin-bottom:40px">
+	<div class="ph-grid-2 ph-mb-xl">
 		<div>
 			<h2>The <span class="ph-accent-orange">tap</span>: hookswitch dialing</h2>
 			<p>
@@ -257,7 +256,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 			</div>
 		</div>
 		<div>
-			<figure class="ph-figure" style="margin-bottom:16px">
+			<figure class="ph-figure ph-mb-sm">
 				<Image src={lockedPhone} alt="Rotary phone with a physical padlock through the dial" widths={[400, 800]} sizes="(max-width: 768px) 90vw, 420px" />
 				<figcaption>The exact scenario where tapping was the only way out: a physical padlock threaded through the dial, blocking ordinary dialing.</figcaption>
 			</figure>
@@ -303,7 +302,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="05 // BLUE BOX & CCITT5" />
 
 <section class="ph-section">
-	<div style="margin-bottom:40px;max-width:800px">
+	<div class="ph-prose ph-mb-xl">
 		<h2>The <span class="ph-accent-blue">Blue Box</span> and MF tones</h2>
 		<p>
 			Once the 2600 Hz whistle "opened" the trunk, you had to <em>tell the network</em> where to
@@ -338,7 +337,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 	</div>
 	<BlueBox locale="en" />
 
-	<div style="max-width:900px;margin:32px auto 0">
+	<div class="ph-prose ph-mt-lg">
 		<h3>But Brazil was different: R2/MFC 5C</h3>
 		<p>
 			While AT&T, BT and European carriers ran CCITT5 with in-band MF tones, in 1968 Brazil
@@ -377,7 +376,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="06 // THE ARSENAL OF COLOR BOXES" />
 
 <section class="ph-section">
-	<div style="max-width:900px;margin-bottom:24px">
+	<div class="ph-prose ph-mb-md">
 		<h2>It wasn't just the <span class="ph-accent-blue">Blue Box</span></h2>
 		<p>
 			Between the 1960s and 1980s, phreakers built dozens of <em>color boxes</em>, each
@@ -459,7 +458,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</table>
 	</div>
 
-	<div style="max-width:900px;margin-top:40px">
+	<div class="ph-prose ph-mt-xl">
 		<h3>Boxes that never wore <span class="ph-accent-orange">blue or red</span></h3>
 		<p>
 			The international color-box catalog (blue, red, black, green, etc.) lists no Brazilian
@@ -467,7 +466,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 			of them ever got documented in foreign zines. Three BR variants belong on the table next
 			to the others:
 		</p>
-		<ul style="font-size:15px;line-height:1.6;padding-left:20px;margin:12px 0">
+		<ul class="ph-list">
 			<li><strong>1N4007 diode</strong> (the "<em>Brazilian black box</em>"): diode + 22 kΩ
 				resistor wired into a token-payphone (TUP) line. Blocked the polarity reversal that
 				signaled "call answered". The switch kept thinking the call was still ringing.
@@ -484,7 +483,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</ul>
 	</div>
 
-	<div style="max-width:900px;margin-top:32px">
+	<div class="ph-prose ph-mt-lg">
 		<h3>BADISCO · the Brazilian <span class="ph-accent-orange">lineman handset</span></h3>
 		<p>
 			The BR version of the Beige Box has its own name: <strong>badisco</strong>. Not a
@@ -507,7 +506,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="07 // PHONE CARD · A BRAZILIAN INVENTION" />
 
 <section class="ph-section">
-	<div style="max-width:900px">
+	<div class="ph-prose">
 		<h2>The <span class="ph-accent-orange">phone card</span>: Brazil's contribution to phreaking</h2>
 		<p>
 			While Americans hid <em>blue boxes</em> in backpacks, Brazil was writing its own chapter of
@@ -547,7 +546,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 			proportional voltage. On the back of the card, several inductive <em>cells</em>, small metal
 			tracks in series with microfuses, were read by the terminal:
 		</p>
-		<ul style="max-width:900px;font-size:15px;line-height:1.6;color:var(--color-fg-soft, #dceadc);padding-left:20px;margin:12px 0">
+		<ul class="ph-list">
 			<li><strong>Read</strong>: a low current passes through the coil; the terminal measures the impedance and knows whether the cell is open or closed.</li>
 			<li><strong>Charge</strong>: when a unit is consumed, the terminal injects enough current to <em>blow</em> the microfuse for that cell. Open = unit spent.</li>
 			<li><strong>Credit</strong>: the number of intact cells is the balance. When all are blown, the card is discarded.</li>
@@ -581,7 +580,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		<PhoneCardBypass locale="en" />
 	</div>
 
-	<div style="max-width:900px;margin-top:32px">
+	<div class="ph-prose ph-mt-lg">
 		<h3>The telecartofilia culture</h3>
 		<p>
 			Low cost, nationwide distribution and visual variety turned the card into a
@@ -601,7 +600,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="08 // BRAZIL · THE SCENE THAT WHISTLED IN PORTUGUESE" />
 
 <section class="ph-section">
-	<div style="max-width:900px;margin-bottom:24px">
+	<div class="ph-prose ph-mb-md">
 		<h2>The scene that whistled in <span class="ph-accent-orange">Portuguese</span></h2>
 		<p>
 			Between 1985 and 2005, Brazil had its own phreaker scene. Not a colony of the American
@@ -613,7 +612,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</p>
 	</div>
 
-	<div style="max-width:900px;margin-bottom:32px">
+	<div class="ph-prose ph-mb-lg">
 		<h3>1998 to 1999 · The <span class="ph-accent-orange">170-meter</span> wiretap</h3>
 		<p>
 			São Paulo periphery, 1998. Four payphones on a single corner. One of them, picked for
@@ -625,7 +624,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</p>
 		<div class="ph-trivia">
 			<div class="ph-trivia-title">▸ TESTIMONY · THE NOTE FOR THE TECHNICIAN</div>
-			<blockquote style="border-left:3px solid var(--color-accent);padding-left:14px;margin:12px 0;font-style:italic">
+			<blockquote class="ph-quote ph-quote--accent ph-quote--block">
 				"I left some stuff written on the back of the paper specifically for the Telesp
 				operator, you know?
 				Listen man, this is the poor kid who tapped the wire just to stay on the
@@ -637,7 +636,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</div>
 	</div>
 
-	<div style="max-width:900px;margin-bottom:32px">
+	<div class="ph-prose ph-mb-lg">
 		<h3>The tariff that turned <span class="ph-accent-orange">a generation</span> nocturnal</h3>
 		<p>
 			Telesp charged <strong>1 single pulse</strong> between <span class="ph-mono">00:00 and
@@ -652,7 +651,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		<TarifaClock locale="en" />
 	</div>
 
-	<div style="max-width:900px;margin-bottom:32px">
+	<div class="ph-prose ph-mb-lg">
 		<h3>The zines and <span class="ph-accent-orange">#phreak</span> on BrasNet</h3>
 		<p>
 			The scene barely documented itself, and only among locals. <strong>Barata Elétrica</strong>,
@@ -673,7 +672,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</p>
 	</div>
 
-	<div style="max-width:900px">
+	<div class="ph-prose">
 		<h3>The end of Brazilian <span class="ph-accent-orange">analog phreaking</span> · 2006–2010</h3>
 		<p>
 			ADSL broadband reached Gutem's neighborhood in 2006. The migration to prepaid mobile was
@@ -690,7 +689,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="09 // MODERN ATTACKS · 2018–2025" />
 
 <section class="ph-section">
-	<div style="max-width:900px;margin-bottom:16px">
+	<div class="ph-prose ph-mb-sm">
 		<h2>The <span class="ph-accent-orange">ghosts</span> changed instruments</h2>
 		<p>
 			Digital telephony killed analog phreaking, but traded one set of fragile protocols for
@@ -701,7 +700,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 	</div>
 
 	<h3><span class="ph-tag">09.1</span> SS7 / SIGTRAN</h3>
-	<p style="max-width:900px">
+	<p class="ph-prose">
 		The <a href="https://en.wikipedia.org/wiki/Signalling_System_No._7" target="_blank" rel="noopener">SS7 protocol</a>
 		(1975) and its IP version, SIGTRAN, are the baseline signaling for 2G/3G worldwide.
 		<strong>No authentication</strong>, no encryption. Anyone inside the network can query a
@@ -715,7 +714,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 	</p>
 
 	<h3><span class="ph-tag">09.2</span> Femtocells and rogue base stations</h3>
-	<p style="max-width:900px">
+	<p class="ph-prose">
 		In 2013, <strong>Doug DePerry</strong> and <strong>Tom Ritter</strong> showed at
 		<a href="https://www.defcon.org/images/defcon-21/dc-21-presentations/DePerry-Ritter/DEFCON-21-DePerry-Ritter-Femtocell-Updated.pdf" target="_blank" rel="noopener">DEF CON 21</a>
 		how to modify a Verizon <a href="https://en.wikipedia.org/wiki/Femtocell" target="_blank" rel="noopener">femtocell</a>
@@ -730,7 +729,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 	</p>
 
 	<h3><span class="ph-tag">09.3</span> SIM Swap and number portability</h3>
-	<p style="max-width:900px">
+	<p class="ph-prose">
 		A telco support agent talked into transferring a victim's line to an attacker-controlled SIM.
 		Within seconds, every 2FA SMS, bank, email, exchange, goes to the wrong phone.
 		<a href="https://en.wikipedia.org/wiki/SIM_swap_scam" target="_blank" rel="noopener"><strong>SIM swap</strong></a>
@@ -739,7 +738,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 	</p>
 
 	<h3><span class="ph-tag">09.4</span> VoLTE / IMS / SMS Blasting</h3>
-	<p style="max-width:900px">
+	<p class="ph-prose">
 		Voice over LTE (<Glossary def="Voice over LTE. Instead of analog circuit-switched voice, calls become IP packets over the 4G network. Better quality, larger attack surface: signaling becomes SIP.">VoLTE</Glossary>) brought IMS, a full SIP stack inside the carrier. Researchers
 		demonstrated downgrade and interception attacks on VoLTE calls in 2021. In parallel,
 		<strong><Glossary def="Hardware rack with dozens to hundreds of SIM chips running in parallel. Originally used to dodge international tariffs; today it's the infrastructure behind industrialized SMS phishing scams.">SIM Boxes</Glossary></strong>, racks with hundreds of SIM cards running in parallel, fire tens
@@ -748,7 +747,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 	</p>
 
 	<h3><span class="ph-tag">09.5</span> PBX and VoIP fraud</h3>
-	<p style="max-width:900px">
+	<p class="ph-prose">
 		Misconfigured corporate <Glossary def="Private Branch Exchange. The corporate phone switch. When poorly configured, it becomes an open door for toll fraud: the attacker dials premium international numbers using the company's line (and its bill).">PBX</Glossary>s keep dialing premium-rate international numbers overnight.
 		Hacked <Glossary def="Analog Telephone Adapter. The little box that connects a regular analog phone to a VoIP line. When hacked, it can route calls through the attacker without the owner noticing.">ATA</Glossary> adapters, weak SIP credentials, exposed VoIP gateways, each one is a modern
 		<em>blue box</em>, generating five-figure invoices for the victim and dividends for the
@@ -807,11 +806,11 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="11 // ABANDONED FORUMS · 2000–2015" />
 
 <section class="ph-section">
-	<div style="max-width:900px;margin-bottom:24px">
+	<div class="ph-prose ph-mb-md">
 		<h2>The <span class="ph-accent-blue">underground</span> goes digital</h2>
 		<p>
 			Between 2000 and 2015, what was left of analog phreaking merged with the nascent
-			<em>"digital phreaking"</em> on forums like <span class="ph-mono" style="color:var(--ph-yellow)">alt.phone.phreaking</span>,
+			<em>"digital phreaking"</em> on forums like <span class="ph-mono ph-mono--yellow">alt.phone.phreaking</span>,
 			private Telnet lists, abandoned FTPs and researcher blogs. Primary sources from that era
 			are fragile: many archives only survive today on the
 			<a href="https://archive.org/" target="_blank" rel="noopener">Internet Archive</a>. Four
@@ -868,7 +867,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</div>
 	</div>
 
-	<p style="max-width:900px;margin-top:24px;font-size:14px;color:var(--ph-fg-soft)">
+	<p class="ph-prose-footnote">
 		Talks at <a href="https://defcon.org/" target="_blank" rel="noopener">DEF CON</a>, ToorCon,
 		CCC and HOPE documented the transition on video. Most of the academic literature only arrives
 		after 2015, before that, the data lived in forums that closed, one by one.
@@ -878,14 +877,14 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="12 // OPERATORS · THE WOMEN THE SCENE FORGOT" />
 
 <section class="ph-section">
-	<div style="max-width:900px;margin-bottom:24px">
+	<div class="ph-prose ph-mb-md">
 		<h2>The <span class="ph-accent-orange">women</span> the scene forgot</h2>
 		<p>
 			AT&T started out hiring <em>boys</em> as telephone operators in 1878. Within a few years
 			it abandoned the practice. The explanation is in Bruce Sterling, in <em>The Hacker
 			Crackdown</em> (1992), quoted by Derneval in issue 7 of Barata Elétrica:
 		</p>
-		<blockquote style="max-width:760px;border-left:3px solid var(--color-secondary);padding-left:14px;margin:0 0 16px;font-style:italic">
+		<blockquote class="ph-quote">
 			"It was the boys who were hired first as operators. Then it turned out women made less
 			noise, were more discreet, and less tempted to prank-call with the phones."
 		</blockquote>
@@ -899,7 +898,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</p>
 	</div>
 
-	<div style="max-width:900px;margin-bottom:32px">
+	<div class="ph-prose ph-mb-lg">
 		<h3>Susan "Susy Thunder" <span class="ph-accent-orange">Headley</span></h3>
 		<p>
 			Los Angeles, late 70s and 80s. Susan Headley did <em>pretexting</em> against Pacific Bell
@@ -910,7 +909,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 			the scene in 1982; Headley appears in the footage. Her DEF CON 3 keynote (1995) coined a
 			line that could be the epigraph of the rest of this article:
 		</p>
-		<blockquote style="max-width:760px;border-left:3px solid var(--color-secondary);padding-left:14px;margin:0 0 16px;font-style:italic;color:var(--color-fg)">
+		<blockquote class="ph-quote ph-quote--fg">
 			"Being a human being is a vulnerability by itself."
 		</blockquote>
 		<p>
@@ -920,14 +919,14 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</p>
 	</div>
 
-	<div style="max-width:900px;margin-bottom:32px">
+	<div class="ph-prose ph-mb-lg">
 		<h3>Chanda <span class="ph-accent-orange">Leir</span></h3>
 		<p>
 			January 1989. <em>Phrack #24</em> publishes her <em>Pro-Phile</em>, conducted by
 			<a href="http://www.phrack.org/issues/24/2.html" target="_blank" rel="noopener">Taran King</a>,
 			with an intro that says more about the scene than about the interviewee:
 		</p>
-		<blockquote style="max-width:760px;border-left:3px solid var(--color-secondary);padding-left:14px;margin:0 0 16px;font-style:italic">
+		<blockquote class="ph-quote">
 			"one of the more rare sights in the world of phreaking and hacking, a female!"
 		</blockquote>
 		<p>
@@ -941,8 +940,8 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</p>
 	</div>
 
-	<div style="max-width:900px;margin-bottom:32px">
-		<p style="font-size:15px;font-style:italic;color:var(--color-fg)">
+	<div class="ph-prose ph-mb-lg">
+		<p class="ph-prose-note">
 			The documentation of women's participation in phreaking is structurally short because the
 			culture was structurally hostile. Systemic pseudonymity hid gender. Conferences were
 			<em>boys' clubs</em>. And when a woman did publish, the byline came with an asterisk
@@ -956,7 +955,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="13 // RESISTANCE UNDER AUTHORITARIAN REGIMES" />
 
 <section class="ph-section">
-	<div style="max-width:900px;margin-bottom:24px">
+	<div class="ph-prose ph-mb-md">
 		<h2>When the state <span class="ph-accent-orange">switches off</span> the network</h2>
 		<p>
 			When governments cut mobile or fixed internet to silence protests, communities improvise.
@@ -1051,7 +1050,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="14 // BRAZIL · 2024–2025" />
 
 <section class="ph-section">
-	<div style="max-width:900px;margin-bottom:24px">
+	<div class="ph-prose ph-mb-md">
 		<h2>Antennas in <span class="ph-accent-orange">apartments</span> and ghost cars</h2>
 		<p>
 			Brazil entered the era of <em>gang phreaking</em>. Across 2024 and 2025, São Paulo state
@@ -1104,7 +1103,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</div>
 	</div>
 
-	<p style="max-width:900px;margin-top:24px">
+	<p class="ph-prose ph-mt-md">
 		The common denominator: carrier-grade hardware (femtocells originally sold as residential
 		repeaters), patched firmware, directional antennas, and software derived from OpenBTS / YateBTS.
 		The technical ecosystem researchers demoed in 2013 reached retail crime ten years later.
@@ -1299,7 +1298,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="17 // PAU NO TRUNK · BR PHREAKER DICTIONARY" />
 
 <section class="ph-section">
-	<div style="max-width:900px;margin-bottom:24px">
+	<div class="ph-prose ph-mb-md">
 		<h2>Pau no <span class="ph-accent-orange">trunk</span> · the vocabulary nobody archived</h2>
 		<p>
 			The BR scene built its own jargon. Some of it is literal translation from American;
@@ -1382,7 +1381,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 <SectionDivider label="18 // AUDIO CAPSULES · THE SCENE THAT SOUNDED" />
 
 <section class="ph-section">
-	<div style="max-width:900px;margin-bottom:24px">
+	<div class="ph-prose ph-mb-md">
 		<h2>The scene that <span class="ph-accent-orange">sounded</span></h2>
 		<p>
 			Two audio fragments that date Brazilian analog phreaking like an acoustic fossil. Anyone
@@ -1390,24 +1389,20 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 		</p>
 	</div>
 
-	<div style="max-width:900px;display:grid;grid-template-columns:1fr;gap:24px">
-		<figure style="margin:0;padding:18px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06)">
-			<figcaption style="font-family:var(--font-mono, monospace);font-size:13px;color:var(--color-accent);margin-bottom:8px">
-				▸ DIAL TONE · TELEBRÁS · continuous 425 Hz
-			</figcaption>
+	<div class="ph-audio-grid">
+		<figure>
+			<figcaption>▸ DIAL TONE · TELEBRÁS · continuous 425 Hz</figcaption>
 			<DialToneTelebras locale="en" />
-			<p style="margin:8px 0 0;font-size:13px;color:var(--color-muted)">
+			<p>
 				The Brazilian one was continuous 425 Hz; the American (Bell) was 350+440 Hz double.
 				Travelers used to recognize the country by its dial tone before they saw any landscape.
 			</p>
 		</figure>
 
-		<figure style="margin:0;padding:18px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06)">
-			<figcaption style="font-family:var(--font-mono, monospace);font-size:13px;color:var(--color-accent);margin-bottom:8px">
-				▸ MODEM HANDSHAKE · 28.8 / 56k · V.34 / V.90
-			</figcaption>
+		<figure>
+			<figcaption>▸ MODEM HANDSHAKE · 28.8 / 56k · V.34 / V.90</figcaption>
 			<YoutubeAudioPlayer locale="en" videoId="xalTFH5ht-k" label="MODEM HANDSHAKE · ANTHOLOGY" />
-			<p style="margin:8px 0 0;font-size:13px;color:var(--color-muted)">
+			<p>
 				The full analog-modem negotiation fit in 20 seconds. Each tone cluster was a
 				stage of the V.34/V.90 protocol. The audio collects handshakes from several
 				generations (300 baud, V.32, V.34, V.90), the most nostalgic sound of the internet.
@@ -1455,7 +1450,7 @@ import YoutubeAudioPlayer from '../../../components/interactive/phone-phreaking/
 </section>
 
 <section class="ph-sources">
-	<h2 style="font-size:18px;color:var(--ph-orange);letter-spacing:0.2em;font-family:inherit;margin:0 0 8px">▸ SOURCES</h2>
+	<h2 class="ph-sources-title">▸ SOURCES</h2>
 	<ul class="ph-sources-list">
 		<li><span class="ph-src-tag">[classic]</span> Rosenbaum, R., <a href="https://www.slate.com/articles/technology/the_spectator/2011/10/the_article_that_inspired_steve_jobs_secrets_of_the_little_blue_.html" target="_blank" rel="noopener">"Secrets of the Little Blue Box"</a>, Esquire, 1971</li>
 		<li><span class="ph-src-tag">[classic]</span> Sterling, B., <a href="https://en.wikipedia.org/wiki/The_Hacker_Crackdown" target="_blank" rel="noopener">"The Hacker Crackdown"</a>, 1992</li>
