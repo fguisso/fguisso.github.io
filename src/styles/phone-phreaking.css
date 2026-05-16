@@ -734,22 +734,27 @@ html:has(.phreaking-page) {
 /* ── Layout grids inside sections ── */
 .phreaking-page .ph-grid-2 {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 	gap: 40px;
 	align-items: start;
 }
 
 .phreaking-page .ph-grid-bluebox {
 	display: grid;
-	grid-template-columns: 1.1fr 1fr;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
 	gap: 24px;
 }
 
 @media (max-width: 768px) {
 	.phreaking-page .ph-grid-2,
 	.phreaking-page .ph-grid-bluebox {
-		grid-template-columns: 1fr;
+		grid-template-columns: minmax(0, 1fr);
 	}
+}
+
+.phreaking-page .ph-grid-2 > *,
+.phreaking-page .ph-grid-bluebox > * {
+	min-width: 0;
 }
 
 /* ── "Como funcionava" callout box ── */
@@ -884,6 +889,8 @@ html:has(.phreaking-page) {
 
 .phreaking-page .ph-osc canvas {
 	width: 100%;
+	max-width: 100%;
+	min-width: 0;
 	background: #050f08;
 	border: 1px solid var(--ph-green-deeper);
 	display: block;
@@ -1268,6 +1275,8 @@ html:has(.phreaking-page) {
 
 .phreaking-page .ph-tap canvas {
 	width: 100%;
+	max-width: 100%;
+	min-width: 0;
 	background: #050f08;
 	border: 1px solid var(--ph-green-deeper);
 	display: block;
@@ -1460,6 +1469,8 @@ html:has(.phreaking-page) {
 	transition: all 0.1s;
 	text-shadow: 0 0 6px var(--ph-blue);
 	text-align: center;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
 }
 
 .phreaking-page .ph-key.cmd {
@@ -1516,6 +1527,8 @@ html:has(.phreaking-page) {
 	cursor: pointer;
 	margin-bottom: 8px;
 	box-shadow: 0 0 20px rgba(255, 212, 90, 0.4);
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
 }
 
 .phreaking-page .ph-bluebox-master:disabled {
@@ -1535,6 +1548,8 @@ html:has(.phreaking-page) {
 	font-size: 10px;
 	letter-spacing: 0.2em;
 	cursor: pointer;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
 }
 
 /* ── Right column: matrix + log ── */
