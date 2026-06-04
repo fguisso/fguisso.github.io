@@ -278,8 +278,8 @@ select:focus {
 	   layout. Com background-clip: text o gradiente so pinta dentro da caixa,
 	   entao a sobra da ultima letra fica sem cor e parece cortada. O padding
 	   estende a area do gradiente; a margem negativa compensa o espaco extra. */
-	padding-right: 0.12em;
-	margin-right: -0.12em;
+	padding-right: 0.32em;
+	margin-right: -0.32em;
 }
 
 .display-headline {
