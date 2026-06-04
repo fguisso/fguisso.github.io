@@ -274,6 +274,12 @@ select:focus {
 .display-special {
 	font-family: 'Oferta do Dia', 'Space Grotesk', 'Inter', sans-serif;
 	letter-spacing: -0.03em;
+	/* A "Oferta do Dia" e bem inclinada: o ultimo glifo transborda a caixa de
+	   layout. Com background-clip: text o gradiente so pinta dentro da caixa,
+	   entao a sobra da ultima letra fica sem cor e parece cortada. O padding
+	   estende a area do gradiente; a margem negativa compensa o espaco extra. */
+	padding-right: 0.12em;
+	margin-right: -0.12em;
 }
 
 .display-headline {
