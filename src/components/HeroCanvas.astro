@@ -94,23 +94,60 @@
 	const group = new THREE.Group();
 	scene.add(group);
 
+	// reflective environment so the metal surfaces have something to reflect:
+	// without this, metalness ~1 + low roughness just renders as flat black and
+	// the per-face roughness patterns are invisible.
+	const buildEnvironment = () => {
+		const c = document.createElement('canvas');
+		c.width = 1024;
+		c.height = 512;
+		const ctx = c.getContext('2d');
+		// lighter base "sky" so the black metal always reflects something and never
+		// sinks into the dark page background
+		ctx.fillStyle = '#222230';
+		ctx.fillRect(0, 0, c.width, c.height);
+		const glow = (x, y, r, color) => {
+			const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+			g.addColorStop(0, color);
+			g.addColorStop(1, 'rgba(0,0,0,0)');
+			ctx.fillStyle = g;
+			ctx.fillRect(0, 0, c.width, c.height);
+		};
+		glow(220, 170, 320, 'rgba(0,255,127,0.85)'); // accent green
+		glow(720, 140, 340, 'rgba(154,26,255,0.8)'); // secondary purple
+		glow(500, 410, 380, 'rgba(110,110,255,0.8)'); // highlight blue
+		glow(900, 350, 260, 'rgba(255,255,255,0.6)'); // white spec
+		glow(60, 430, 240, 'rgba(255,255,255,0.5)');
+		glow(500, 90, 300, 'rgba(200,210,255,0.45)'); // top fill
+		const equirect = new THREE.CanvasTexture(c);
+		equirect.mapping = THREE.EquirectangularReflectionMapping;
+		equirect.colorSpace = THREE.SRGBColorSpace;
+		const pmrem = new THREE.PMREMGenerator(renderer);
+		const env = pmrem.fromEquirectangular(equirect).texture;
+		equirect.dispose();
+		pmrem.dispose();
+		return env;
+	};
+	scene.environment = buildEnvironment();
+
 	const accentColor = new THREE.Color('#00FF7F');
 	const secondaryColor = new THREE.Color('#9A1AFF');
 	const highlightColor = new THREE.Color('#6E6EFF');
 	const whiteColor = new THREE.Color('#fefefe');
+	const darkColor = new THREE.Color('#0e0e16');
 	const blendColor = new THREE.Color();
 	const emissiveColor = new THREE.Color();
 
 	const material = new THREE.MeshStandardMaterial({
-		color: 0xffffff,
-		metalness: 0.97,
-		roughness: 0.12,
-		map: metalTexture,
-		envMapIntensity: 1.2,
-		emissive: 0xffffff,
-		emissiveIntensity: 0.08,
+		color: 0x0e0e16,
+		metalness: 1.0,
+		roughness: 0.18,
+		roughnessMap: metalTexture,
+		envMapIntensity: 1.7,
+		emissive: 0x000000,
+		emissiveIntensity: 0.0,
 		transparent: true,
-		opacity: 0.98,
+		opacity: 0.84,
 	});
 
 	const ring = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.18, 48, 140), material);
@@ -120,17 +157,295 @@
 	pyramidGroup.scale.set(0.8, 0.8, 0.8);
 	group.add(pyramidGroup);
 
-	const geometry = new THREE.ConeGeometry(1.5, 2, 4);
-	geometry.computeVertexNormals();
-	geometry.rotateX(Math.PI);
-	const pyramid = new THREE.Mesh(geometry, material);
-	pyramidGroup.add(pyramid);
+	// ----- Rubik's pyramid (Pyraminx) -----
+	const TET_SCALE = 1.45;
+	const SUBDIV = 2; // tiles per edge -> SUBDIV^2 tiles per face (2 = classic Rubik's Pyramid)
 
-	const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+	// regular tetrahedron, apex up, centered at origin (circumradius = TET_SCALE)
+	const tetVerts = [
+		new THREE.Vector3(0, 1, 0),
+		new THREE.Vector3(Math.sqrt(8 / 9), -1 / 3, 0),
+		new THREE.Vector3(-Math.sqrt(2 / 9), -1 / 3, Math.sqrt(2 / 3)),
+		new THREE.Vector3(-Math.sqrt(2 / 9), -1 / 3, -Math.sqrt(2 / 3)),
+	].map((v) => v.multiplyScalar(TET_SCALE));
+
+	// all four faces are black; each gets a distinct finish/pattern instead of a color
+	const tetFaces = [
+		{ idx: [0, 1, 2] },
+		{ idx: [0, 2, 3] },
+		{ idx: [0, 3, 1] },
+		{ idx: [1, 3, 2] }, // base
+	];
+
+	const tetCentroid = new THREE.Vector3();
+	tetVerts.forEach((v) => tetCentroid.add(v));
+	tetCentroid.multiplyScalar(0.25);
+
+	// order a triangle so its geometric normal points away from the centroid (outward)
+	const orientOutward = (a, b, c) => {
+		const normal = new THREE.Vector3()
+			.subVectors(b, a)
+			.cross(new THREE.Vector3().subVectors(c, a));
+		const dir = new THREE.Vector3().subVectors(a, tetCentroid);
+		return normal.dot(dir) < 0 ? [a, c, b] : [a, b, c];
+	};
+
+	const triPositions = (a, b, c) => [a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z];
+
+	// --- procedural grayscale patterns (used as roughness maps) ---
+	const makePattern = (draw) => {
+		const c = document.createElement('canvas');
+		c.width = c.height = 256;
+		const ctx = c.getContext('2d');
+		draw(ctx, 256);
+		const tex = new THREE.CanvasTexture(c);
+		tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+		tex.anisotropy = renderer.capabilities.getMaxAnisotropy?.() ?? 4;
+		return tex;
+	};
+
+	// carbon-fiber weave: alternating diagonal-shaded cells
+	const weavePattern = makePattern((ctx, s) => {
+		ctx.fillStyle = '#1a1a1a';
+		ctx.fillRect(0, 0, s, s);
+		const n = 8;
+		const cell = s / n;
+		for (let yy = 0; yy < n; yy++) {
+			for (let xx = 0; xx < n; xx++) {
+				const x = xx * cell;
+				const y = yy * cell;
+				const flip = (xx + yy) % 2 === 0;
+				const g = ctx.createLinearGradient(x, y, flip ? x + cell : x, flip ? y : y + cell);
+				g.addColorStop(0, '#dcdcdc');
+				g.addColorStop(0.5, '#2a2a2a');
+				g.addColorStop(1, '#dcdcdc');
+				ctx.fillStyle = g;
+				ctx.fillRect(x, y, cell, cell);
+			}
+		}
+	});
+
+	// honeycomb / dot grid
+	const dotPattern = makePattern((ctx, s) => {
+		ctx.fillStyle = '#cfcfcf';
+		ctx.fillRect(0, 0, s, s);
+		const n = 6;
+		const step = s / n;
+		ctx.fillStyle = '#171717';
+		for (let yy = 0; yy < n; yy++) {
+			for (let xx = 0; xx < n; xx++) {
+				const cx = xx * step + step / 2 + (yy % 2 ? step / 2 : 0);
+				const cy = yy * step + step / 2;
+				ctx.beginPath();
+				ctx.arc(cx, cy, step * 0.32, 0, Math.PI * 2);
+				ctx.fill();
+			}
+		}
+	});
+
+	// brushed-metal diagonal streaks
+	const brushedPattern = makePattern((ctx, s) => {
+		ctx.fillStyle = '#202020';
+		ctx.fillRect(0, 0, s, s);
+		ctx.save();
+		ctx.translate(s / 2, s / 2);
+		ctx.rotate(Math.PI / 4);
+		ctx.translate(-s, -s);
+		for (let i = 0; i < 220; i++) {
+			const x = (i / 220) * (s * 2);
+			const shade = 90 + ((i * 53) % 110);
+			ctx.strokeStyle = `rgb(${shade},${shade},${shade})`;
+			ctx.lineWidth = 0.8 + ((i * 7) % 3) * 0.6;
+			ctx.beginPath();
+			ctx.moveTo(x, 0);
+			ctx.lineTo(x, s * 2);
+			ctx.stroke();
+		}
+		ctx.restore();
+	});
+
+	// faint speckle for the polished mirror face (mostly smooth)
+	const speckPattern = makePattern((ctx, s) => {
+		ctx.fillStyle = '#080808';
+		ctx.fillRect(0, 0, s, s);
+		const img = ctx.getImageData(0, 0, s, s);
+		for (let i = 0; i < img.data.length; i += 4) {
+			const n = Math.random() < 0.04 ? 60 + Math.random() * 80 : 8;
+			img.data[i] = img.data[i + 1] = img.data[i + 2] = n;
+		}
+		ctx.putImageData(img, 0, 0);
+	});
+
+	const BLACK = 0x17171e; // very dark grey (reads black) but catches light so it never vanishes
+	const faceMaterials = [
+		// polished mirror black
+		new THREE.MeshStandardMaterial({
+			color: BLACK,
+			emissive: 0x0d0d16,
+			emissiveIntensity: 0.6,
+			metalness: 1.0,
+			roughness: 0.06,
+			roughnessMap: speckPattern,
+			envMapIntensity: 2.2,
+			side: THREE.DoubleSide,
+		}),
+		// carbon-fiber weave
+		new THREE.MeshStandardMaterial({
+			color: BLACK,
+			emissive: 0x0d0d16,
+			emissiveIntensity: 0.6,
+			metalness: 0.6,
+			roughness: 0.85,
+			roughnessMap: weavePattern,
+			envMapIntensity: 1.6,
+			side: THREE.DoubleSide,
+		}),
+		// honeycomb dots
+		new THREE.MeshStandardMaterial({
+			color: BLACK,
+			emissive: 0x0d0d16,
+			emissiveIntensity: 0.6,
+			metalness: 0.8,
+			roughness: 0.8,
+			roughnessMap: dotPattern,
+			envMapIntensity: 1.8,
+			side: THREE.DoubleSide,
+		}),
+		// brushed metal
+		new THREE.MeshStandardMaterial({
+			color: BLACK,
+			emissive: 0x0d0d16,
+			emissiveIntensity: 0.6,
+			metalness: 0.95,
+			roughness: 0.75,
+			roughnessMap: brushedPattern,
+			envMapIntensity: 1.9,
+			side: THREE.DoubleSide,
+		}),
+	];
+
+	// black matte plastic for the bevel/sides/back of each chip (the "grout").
+	// kept opaque so every chip has a solid depth-writing body: this prevents the
+	// alpha-sorting glitches (chips vanishing / showing through each other).
+	const shellMaterial = new THREE.MeshStandardMaterial({
+		color: 0x010101,
+		metalness: 0.2,
+		roughness: 0.95,
+		side: THREE.DoubleSide,
+	});
+
+	// each tile is a solid chip (colored front + beveled black sides/back) so it
+	// moves entirely with its piece: no static body is left behind during a turn
+	const TILE_SHRINK = 0.86;
+	const TILE_LIFT = 0.02 * TET_SCALE;
+	const TILE_BACK_SCALE = 0.32; // back face pulled in toward the centroid (wedge -> fills the body)
+	const TILE_BEVEL_DEPTH = 0.03 * TET_SCALE; // small rounded-ish edge
+	const TILE_BEVEL_INSET = 0.16; // how far the bevel pulls in toward the tile center
+	const UV_SCALE = 0.6; // pattern repeats per world unit across a face
+
+	// every tile lives directly in pyramidGroup with its geometry in absolute
+	// (centroid-origin) coords and mesh.position = 0, so a subset can be rotated
+	// rigidly about the puzzle centroid just by setting their .quaternion.
+	const tiles = [];
+
+	tetFaces.forEach(({ idx }, faceIndex) => {
+		const [A, B, C] = orientOutward(tetVerts[idx[0]], tetVerts[idx[1]], tetVerts[idx[2]]);
+		const faceNormal = new THREE.Vector3()
+			.subVectors(B, A)
+			.cross(new THREE.Vector3().subVectors(C, A))
+			.normalize();
+
+		// planar UV basis on the face, so the pattern is continuous across its tiles
+		const uAxis = new THREE.Vector3().subVectors(B, A).normalize();
+		const vAxis = new THREE.Vector3().crossVectors(faceNormal, uAxis).normalize();
+		const uvOf = (p) => {
+			const d = new THREE.Vector3().subVectors(p, A);
+			return [d.dot(uAxis) * UV_SCALE, d.dot(vAxis) * UV_SCALE];
+		};
+
+		// barycentric grid point: ((N-i-j)A + iB + jC) / N
+		const point = (i, j) =>
+			new THREE.Vector3()
+				.addScaledVector(A, (SUBDIV - i - j) / SUBDIV)
+				.addScaledVector(B, i / SUBDIV)
+				.addScaledVector(C, j / SUBDIV);
+
+		const tris = [];
+		for (let i = 0; i < SUBDIV; i++) {
+			for (let j = 0; j < SUBDIV - i; j++) {
+				tris.push([point(i, j), point(i + 1, j), point(i, j + 1)]); // upward
+				if (i + j < SUBDIV - 1) {
+					tris.push([point(i + 1, j), point(i + 1, j + 1), point(i, j + 1)]); // downward
+				}
+			}
+		}
+
+		const tileMaterial = faceMaterials[faceIndex];
+
+		const quad = (p0, p1, p2, p3) => [...triPositions(p0, p1, p2), ...triPositions(p0, p2, p3)];
+
+		tris.forEach((tri) => {
+			const center = new THREE.Vector3()
+				.add(tri[0])
+				.add(tri[1])
+				.add(tri[2])
+				.multiplyScalar(1 / 3);
+			// colored top face (lifted slightly off the tetra surface)
+			const top = tri.map((p) =>
+				new THREE.Vector3()
+					.lerpVectors(center, p, TILE_SHRINK)
+					.addScaledVector(faceNormal, TILE_LIFT),
+			);
+			const cV = new THREE.Vector3().add(top[0]).add(top[1]).add(top[2]).multiplyScalar(1 / 3);
+			// bevel ring: pulled slightly inward and down -> softens the top edge
+			const bevel = top.map((p) =>
+				new THREE.Vector3()
+					.lerpVectors(p, cV, TILE_BEVEL_INSET)
+					.addScaledVector(faceNormal, -TILE_BEVEL_DEPTH),
+			);
+			// back ring: bevel pulled toward the centroid (origin) so the chip is a
+			// wedge reaching deep into the body -> the pieces fill the volume with no
+			// hollow gap, and the inner overlap stays hidden inside the dark core
+			const back = bevel.map((p) => p.clone().multiplyScalar(TILE_BACK_SCALE));
+
+			const frontGeo = new THREE.BufferGeometry();
+			frontGeo.setAttribute('position', new THREE.Float32BufferAttribute(triPositions(top[0], top[1], top[2]), 3));
+			frontGeo.setAttribute(
+				'uv',
+				new THREE.Float32BufferAttribute([...uvOf(top[0]), ...uvOf(top[1]), ...uvOf(top[2])], 2),
+			);
+			frontGeo.computeVertexNormals();
+
+			// shell = bevel strip + side walls + back (DoubleSide, so winding is moot)
+			const shellPos = [...triPositions(back[0], back[2], back[1])];
+			for (let e = 0; e < 3; e++) {
+				const n = (e + 1) % 3;
+				shellPos.push(...quad(top[e], top[n], bevel[n], bevel[e])); // rounded edge strip
+				shellPos.push(...quad(bevel[e], bevel[n], back[n], back[e])); // side wall
+			}
+			const shellGeo = new THREE.BufferGeometry();
+			shellGeo.setAttribute('position', new THREE.Float32BufferAttribute(shellPos, 3));
+			shellGeo.computeVertexNormals();
+
+			const chip = new THREE.Group();
+			const frontMesh = new THREE.Mesh(frontGeo, tileMaterial);
+			const shellMesh = new THREE.Mesh(shellGeo, shellMaterial);
+			// opaque pieces never need culling; disabling it rules out the chips
+			// popping out of view at certain rotations
+			frontMesh.frustumCulled = false;
+			shellMesh.frustumCulled = false;
+			chip.add(frontMesh, shellMesh);
+			pyramidGroup.add(chip);
+
+			tiles.push({ mesh: chip, centroid: cV.clone(), baseQ: new THREE.Quaternion() });
+		});
+	});
+
+	const ambientLight = new THREE.AmbientLight(0x4a4a5a, 0.5);
 	scene.add(ambientLight);
 
 	const mainLight = new THREE.PointLight(0xaaaaaa, 1.5, 100);
-	mainLight.position.set(0, -5, 0);
+	mainLight.position.set(2, 5, 3);
 	scene.add(mainLight);
 
 	const topLight = new THREE.PointLight(0xbbbbbb, 1.0, 100);
@@ -165,6 +480,13 @@
 	blurLight2.position.set(-3, -3, 3);
 	scene.add(blurLight2);
 
+	// bright orbiting specular lights: their highlights sweep across the faces
+	// and trace the roughness patterns, making each material distinguishable
+	const orbitLightA = new THREE.PointLight(0xffffff, 2.4, 40);
+	scene.add(orbitLightA);
+	const orbitLightB = new THREE.PointLight(0xeaf0ff, 2.0, 40);
+	scene.add(orbitLightB);
+
 	const fluidMaterial = new THREE.MeshPhysicalMaterial({
 		color: accentColor.clone().lerp(highlightColor, 0.5),
 		metalness: 0.2,
@@ -198,144 +520,6 @@
 	fluidTrail.material.transparent = true;
 	scene.add(fluidTrail);
 
-	const renderTargetParams = {
-		minFilter: THREE.LinearFilter,
-		magFilter: THREE.LinearFilter,
-		format: THREE.RGBAFormat,
-		type: THREE.UnsignedByteType,
-		depthBuffer: true,
-		stencilBuffer: false,
-	};
-
-	const renderTarget = new THREE.WebGLRenderTarget(
-		Math.max(1, Math.floor(canvas.clientWidth * pixelRatio)),
-		Math.max(1, Math.floor(canvas.clientHeight * pixelRatio)),
-		renderTargetParams,
-	);
-
-	const postScene = new THREE.Scene();
-	const postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-	const postUniforms = {
-		uScene: { value: renderTarget.texture },
-		uTime: { value: 0 },
-		uMorph: { value: 0 },
-		uResolution: { value: new THREE.Vector2(canvas.clientWidth, canvas.clientHeight) },
-		uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-		uAccent: { value: new THREE.Color('#00FF7F') },
-		uSecondary: { value: new THREE.Color('#9A1AFF') },
-		uHighlight: { value: new THREE.Color('#6E6EFF') },
-	};
-
-	const postMaterial = new THREE.ShaderMaterial({
-		transparent: true,
-		uniforms: postUniforms,
-		vertexShader: /* glsl */ `
-			varying vec2 vUv;
-			void main() {
-				vUv = uv;
-				gl_Position = vec4(position.xy, 0.0, 1.0);
-			}
-		`,
-		fragmentShader: /* glsl */ `
-			precision highp float;
-
-			uniform sampler2D uScene;
-			uniform float uTime;
-			uniform float uMorph;
-			uniform vec2 uResolution;
-			uniform vec2 uMouse;
-			uniform vec3 uAccent;
-			uniform vec3 uSecondary;
-			uniform vec3 uHighlight;
-
-			varying vec2 vUv;
-
-			vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
-			float snoise(vec2 v){
-				const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-				vec2 i  = floor(v + dot(v, C.yy));
-				vec2 x0 = v - i + dot(i, C.xx);
-				vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-				vec4 x12 = x0.xyxy + C.xxzz;
-				x12.xy -= i1;
-				i = mod(i, 289.0);
-				vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0))
-					+ i.x + vec3(0.0, i1.x, 1.0));
-				vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-				m = m*m; m = m*m;
-				vec3 x = 2.0 * fract(p * C.www) - 1.0;
-				vec3 h = abs(x) - 0.5;
-				vec3 ox = floor(x + 0.5);
-				vec3 a0 = x - ox;
-				m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-				vec3 g;
-				g.x = a0.x * x0.x + h.x * x0.y;
-				g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-				return 130.0 * dot(m, g);
-			}
-
-			vec2 flowField(vec2 uv, float t) {
-				float n1 = snoise(uv * 2.4 + vec2(t * 0.55, t * 0.32));
-				float n2 = snoise(uv * 4.6 + vec2(-t * 0.41, t * 0.62));
-				float n3 = snoise(uv * 8.1 + vec2(t * 0.28, -t * 0.37)) * 0.45;
-				return vec2(n1 + n3 * 0.5, n2 - n3 * 0.5);
-			}
-
-			void main() {
-				vec2 uv = vUv;
-				float t = uTime * 0.35;
-
-				vec2 toMouse = uv - uMouse;
-				float mouseDist = length(toMouse);
-				float mouseInfluence = smoothstep(0.55, 0.0, mouseDist);
-
-				vec2 flow = flowField(uv, t);
-				float morphAmt = uMorph * (0.75 + mouseInfluence * 0.85);
-
-				vec2 distort = flow * 0.022 * morphAmt;
-				vec2 dUv = uv + distort;
-
-				vec2 dispDir = normalize(flow + vec2(1e-5));
-				float disp = 0.006 * morphAmt;
-
-				vec4 cR = texture2D(uScene, dUv + dispDir * disp);
-				vec4 cG = texture2D(uScene, dUv);
-				vec4 cB = texture2D(uScene, dUv - dispDir * disp);
-
-				float aR = cR.a;
-				float aG = cG.a;
-				float aB = cB.a;
-				float alpha = max(aG, max(aR, aB));
-
-				vec3 col = vec3(cR.r, cG.g, cB.b);
-
-				float gradient = length(flow);
-				float band = smoothstep(0.55, 1.15, gradient);
-				float bandHue = sin(t * 0.8 + flow.x * 2.0 + flow.y * 1.3) * 0.5 + 0.5;
-				vec3 bandColor = mix(uAccent, uHighlight, bandHue);
-				bandColor = mix(bandColor, uSecondary, smoothstep(0.7, 1.2, gradient) * 0.6);
-				col += band * bandColor * 0.16 * alpha * morphAmt;
-
-				float edgeR = smoothstep(0.05, 0.55, abs(aR - aG));
-				float edgeB = smoothstep(0.05, 0.55, abs(aB - aG));
-				float edge = max(edgeR, edgeB);
-				vec3 edgeColor = mix(uAccent, uSecondary, fract(t * 0.2 + flow.y * 0.4));
-				col += edge * edgeColor * 0.45;
-				alpha = max(alpha, edge * 0.5);
-
-				float caustic = snoise(uv * 6.0 + flow * 1.4 + vec2(t * 0.7));
-				caustic = smoothstep(0.55, 0.95, caustic);
-				col += caustic * uHighlight * 0.08 * alpha * morphAmt;
-
-				gl_FragColor = vec4(col, alpha);
-			}
-		`,
-	});
-
-	const postQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), postMaterial);
-	postScene.add(postQuad);
-
 	const timeline = gsap.timeline({ repeat: -1 });
 	timeline
 		.to(
@@ -343,7 +527,7 @@
 			{
 				z: '+=6.28319',
 				x: '+=6.28319',
-				duration: 8,
+				duration: 18,
 				ease: 'power1.inOut',
 			},
 			0,
@@ -352,7 +536,7 @@
 			group.rotation,
 			{
 				y: 6.28319,
-				duration: 8,
+				duration: 18,
 				ease: 'power1.inOut',
 			},
 			0,
@@ -362,32 +546,65 @@
 			{
 				z: '-=6.28319',
 				x: '-=6.28319',
-				duration: 8,
+				duration: 18,
 				ease: 'power1.inOut',
 			},
 			0,
 		);
 
-	const morphTimeline = gsap.timeline({ repeat: -1, delay: 0.4 });
-	morphTimeline
-		.to(postUniforms.uMorph, {
-			value: 0,
-			duration: 2.0,
-		})
-		.to(postUniforms.uMorph, {
-			value: 0.9,
-			duration: 2.8,
-			ease: 'sine.inOut',
-		})
-		.to(postUniforms.uMorph, {
-			value: 0.9,
-			duration: 1.6,
-		})
-		.to(postUniforms.uMorph, {
-			value: 0,
-			duration: 2.6,
-			ease: 'sine.inOut',
-		});
+	// Rubik's Pyramid moves: a move rotates HALF the puzzle (the 4 pieces on one
+	// side of the centroid: 2 corner pieces + 2 center pieces) by 180deg about an
+	// opposite-edge-midpoint axis. That axis-rotation is a symmetry of the regular
+	// tetrahedron, so the puzzle bulges into a star at the 90deg midpoint and then
+	// re-forms a tetrahedron, exactly the shape-shift shown in the solution guide.
+	const HALF_TURN = Math.PI;
+	const moveAxisV = new THREE.Vector3();
+	const moveDeltaQ = new THREE.Quaternion();
+	const moveTmpV = new THREE.Vector3();
+
+	// each move is the pair of vertices that make up the rotating half
+	const moveSequence = [
+		[0, 1],
+		[0, 2],
+		[1, 3],
+		[0, 3],
+		[1, 2],
+	];
+
+	const addMove = (tl, pair, position) => {
+		const axis = new THREE.Vector3()
+			.addVectors(tetVerts[pair[0]], tetVerts[pair[1]])
+			.normalize();
+		const proxy = { a: 0 };
+		let movers = [];
+		tl.to(
+			proxy,
+			{
+				a: HALF_TURN,
+				duration: 2.8,
+				ease: 'power2.inOut',
+				onStart: () => {
+					// pick the tiles currently on the rotating side, using their live
+					// (already-rotated) centroid so moves compose like a real puzzle
+					movers = tiles.filter((t) => {
+						moveTmpV.copy(t.centroid).applyQuaternion(t.mesh.quaternion);
+						return moveTmpV.dot(axis) > 0.02;
+					});
+					movers.forEach((t) => t.baseQ.copy(t.mesh.quaternion));
+				},
+				onUpdate: () => {
+					moveDeltaQ.setFromAxisAngle(moveAxisV.copy(axis), proxy.a);
+					movers.forEach((t) => t.mesh.quaternion.copy(moveDeltaQ).multiply(t.baseQ));
+				},
+			},
+			position,
+		);
+	};
+
+	const moveTimeline = gsap.timeline({ repeat: -1, repeatDelay: 1.4, delay: 1.5 });
+	moveSequence.forEach((pair, i) => {
+		addMove(moveTimeline, pair, i === 0 ? 0 : '+=1.1'); // pause between moves
+	});
 
 	let mouseX = 0;
 	let mouseY = 0;
@@ -414,8 +631,6 @@
 
 		targetRotationX = (mouseY - 0.5) * 0.5;
 		targetRotationY = (mouseX - 0.5) * 0.5;
-
-		postUniforms.uMouse.value.set(mouseX, 1.0 - mouseY);
 	});
 
 	const handleResize = () => {
@@ -426,12 +641,6 @@
 		camera.aspect = width / height;
 		camera.updateProjectionMatrix();
 
-		renderTarget.setSize(
-			Math.max(1, Math.floor(width * pixelRatio)),
-			Math.max(1, Math.floor(height * pixelRatio)),
-		);
-		postUniforms.uResolution.value.set(width, height);
-
 		if (width > height) {
 			camera.position.z = 5;
 		} else {
@@ -441,8 +650,6 @@
 
 	window.addEventListener('resize', handleResize);
 	handleResize();
-
-	const clock = new THREE.Clock();
 
 	function animate() {
 		requestAnimationFrame(animate);
@@ -456,6 +663,9 @@
 		const time = Date.now() * 0.001;
 		blurLight1.position.y = 2 + Math.sin(time) * 0.02;
 		blurLight2.position.y = -2 + Math.cos(time) * 0.02;
+
+		orbitLightA.position.set(Math.cos(time * 0.8) * 4.5, Math.sin(time * 1.05) * 3.5, Math.sin(time * 0.8) * 4.5);
+		orbitLightB.position.set(Math.cos(time * 0.55 + 2.1) * -4.5, Math.cos(time * 0.7) * 3.0, Math.sin(time * 0.55 + 2.1) * -4.5);
 
 		const offsetSpeed = 0.02;
 		metalTexture.offset.x = THREE.MathUtils.damp(metalTexture.offset.x, (metalTexture.offset.x + offsetSpeed * 0.01) % 1, 6, 0.016);
@@ -472,19 +682,11 @@
 			.lerp(secondaryColor, paletteMixB * 0.6)
 			.offsetHSL((pyramidHue - 0.5) * 0.2, 0, 0);
 		emissiveColor.copy(blendColor).lerp(highlightColor, 0.5);
-		material.color.copy(whiteColor).lerp(blendColor, 0.45);
-		material.emissive.copy(emissiveColor).multiplyScalar(0.6);
+		// keep the ring as dark chrome (like the faces): just a faint shifting tint + glow
+		material.color.copy(darkColor).lerp(blendColor, 0.16);
+		material.emissive.copy(emissiveColor).multiplyScalar(0.12);
 
-		postUniforms.uTime.value = clock.getElapsedTime();
-
-		renderer.setRenderTarget(renderTarget);
-		renderer.setClearColor(0x000000, 0);
-		renderer.clear();
 		renderer.render(scene, camera);
-
-		renderer.setRenderTarget(null);
-		renderer.clear();
-		renderer.render(postScene, postCamera);
 	}
 
 	animate();
