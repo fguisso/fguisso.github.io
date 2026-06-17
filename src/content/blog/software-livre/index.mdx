@@ -1,0 +1,237 @@
+---
+title: "Software Livre, Comunidade e Soberania"
+lang: 'pt'
+canonicalSlug: 'software-livre-potilivre'
+description: "Software livre não é categoria técnica, é prática de comunidade, instrumento de autonomia e disputa política. Das 4 liberdades à captura corporativa, do ODF ao hardware aberto: por que essa luta ainda importa, contada a partir do RN."
+pubDate: 2026-06-16T10:00:00-03:00
+showDate: true
+showTableOfContents: true
+tags: ["software livre", "comunidade", "soberania digital", "licenças"]
+---
+
+import { Image } from 'astro:assets';
+import Callout from '../../../components/Callout.astro';
+import Chip from '../../../components/Chip.astro';
+import Timeline from '../../../components/Timeline.astro';
+import GlowBox from '../../../components/GlowBox.astro';
+import swartz from './swartz.jpg';
+import reprap from './reprap.jpg';
+
+> Viver sem conhecer o passado é andar no escuro.
+>
+> *PotiLivre*
+
+Software livre quase sempre é apresentado como categoria técnica: licença, repositório, build. Este texto parte de outro lugar. Software livre como prática de comunidade, como instrumento de autonomia e como disputa política. E como toda boa história, essa começa no território: no Rio Grande do Norte.
+
+Este artigo nasceu de uma palestra que dei sobre o tema. Os **[slides estão publicados aqui](https://guisso.dev/talks/software-livre/)**. O conteúdo, os slides e este texto estão sob `CC BY-SA 4.0`, no mesmo espírito da PotiLivre.
+
+## A comunidade vem antes do código
+
+### O que é a PotiLivre
+
+A **Comunidade Potiguar de Software Livre** foi fundada em **2013**, em Natal/RN. É uma organização independente, feita de voluntários, com uma missão clara: ser o principal ponto de integração entre as comunidades de software livre do estado, presente no maior número de cidades possível.
+
+A própria logo já é um manifesto. Um **"P" espelhado**, o "PotiLeft", homenagem direta ao conceito de **copyleft**. Antes de qualquer palestra, a comunidade diz quem é pelo próprio símbolo. A licença da comunidade é `CC BY-NC-SA 4.0`.
+
+### Antes da PotiLivre: o PSL-RN
+
+A história do software livre no RN não começa em 2013. Em 2004, **Gustavo "Bozo" Ribeiro** liderou a criação do **Projeto Software Livre Rio Grande do Norte (PSL-RN)**, o primeiro movimento organizado do estado. No mesmo ano, escreveu o artigo "GPL sem medo", um guia prático para o desenvolvedor brasileiro aplicar a GPL sem intimidação.
+
+<Timeline items={[
+  { meta: "2004", role: "Fundação do PSL-RN · artigo 'GPL sem medo'" },
+  { meta: "2005", role: "1º FLISoL no RN · I Encontro Potiguar (I EPSL)" },
+  { meta: "2006", role: "I Encontro Nordestino (ENSL) · colabora no FISL" },
+  { meta: "2007", role: "II ENSL (Aracaju) · III EPSL" },
+  { meta: "2009 – 2011", role: "III, IV e V ENSL (Salvador, Natal, Maceió)" },
+  { meta: "2014", role: "Encerramento do PSL-RN" },
+]} />
+
+O PSL-RN criou os **"Dias Livres"**: micro-eventos de palestras em escolas, precursores dos eventos descentralizados que mais tarde chegariam ao interior.
+
+Em 2013 surge a PotiLivre. Não como sucessora do PSL-RN, mas **em paralelo**: uma comunidade nova, com vida própria, somando forças ao movimento que já existia. Mantida 100% por voluntários, sem hierarquia nem cargos. A liderança se dá pela manutenção: quem cuida, conduz, e passa a responsabilidade adiante.
+
+### Uma década de eventos
+
+São mais de dez anos de atividade quase contínua: **FLISoL** anual desde 2013, Software Freedom Day, Python Day, a **PotiCon** (Conferência Potiguar de Software Livre), o **PotiTour** pelo interior, Debian Day, Potiday Dados, Dia do Software Livre no SEBRAE/RN. Mais de **28 eventos documentados**, alcançando **11 cidades** do RN.
+
+<Callout title="Comunidade livre não é automaticamente comunidade justa" variant="warning">
+No mapeamento que a PotiLivre fez de si mesma em 2024 (29 respostas, 11 cidades), **91,7% se identificam como homens**. A própria comunidade reconhece isso como desafio de diversidade. Liberdade técnica não garante inclusão: ela precisa ser conscientemente construída, e o mapeamento é o primeiro passo.
+</Callout>
+
+## O que é software livre e por que a licença importa
+
+### As 4 liberdades
+
+Software livre não é sobre **preço**. É sobre **liberdade**. São quatro, numeradas de 0 a 3 (como bom programa, começam no zero):
+
+0. Executar o programa como quiser, para **qualquer propósito**
+1. **Estudar** como funciona e adaptá-lo
+2. **Redistribuir** cópias para ajudar outras pessoas
+3. Distribuir suas **versões modificadas**
+
+Daí dois lembretes que evitam confusão: **livre ≠ gratuito**, e **livre ≈ código aberto** (com diferenças filosóficas relevantes). Em 1983, Richard Stallman inicia o Projeto **GNU**. Em 1991, Linus Torvalds lança o kernel **Linux**. GNU + Linux viram o sistema operacional livre de referência mundial.
+
+### Licença não é burocracia, é um dial de liberdade
+
+A melhor forma de entender as licenças livres é pensar nelas como um botão giratório: quão livre o derivado precisa permanecer? Na ponta permissiva, adoção máxima. Na ponta AGPL, proteção máxima. O resto está no meio.
+
+| Categoria | Exemplos | Copyleft | Abre no SaaS |
+|-----------|----------|:--------:|:-----------:|
+| **Permissivas** (use, feche, faça o que quiser, só mantenha o crédito) | <Chip>MIT</Chip> <Chip>BSD</Chip> <Chip>Apache 2.0</Chip> | não | não |
+| **Copyleft fraco / por arquivo** (só o arquivo modificado segue livre) | <Chip>LGPLv3</Chip> <Chip>MPL 2.0</Chip> | fraco | não |
+| **Copyleft forte** (todo derivado redistribuído também é livre) | <Chip>GPLv2</Chip> <Chip>GPLv3</Chip> | forte | não |
+| **Copyleft + rede** (abre o código mesmo rodando como serviço) | <Chip variant="solid">AGPLv3</Chip> | forte | **sim** |
+
+A **AGPL** fecha a chamada "brecha SaaS": se o software roda em servidor e outros o acessam pela rede, você precisa abrir o código. É a licença do Nextcloud e do Mastodon. Para hardware existe o **CERN OHL** (forte, fraca, permissiva) e, para conteúdo e documentação, o **CC BY-SA** (Wikipedia, OpenStreetMap).
+
+<Callout title="Domínio público ≠ software livre" variant="info">
+No artigo "GPL sem medo" (2004), Bozo explicou algo que poucos entendiam: código **sem licença** pode ser apropriado por qualquer um, que vira o "autor" sem que você possa contestar. A GPL protege contra oportunistas. O passo que faltava no tutorial da época (que usava o arquivo `COPYING`) é hoje convenção do mundo todo: o arquivo `LICENSE` na raiz do repositório.
+</Callout>
+
+### Licença é estratégia de circulação
+
+Licença não é só ideologia. Um mesmo projeto pode ter objetivos diferentes e, por isso, **licenças diferentes**. É o caso do meu projeto [gapes](https://github.com/fguisso/gapes):
+
+- **Software principal** → `AGPLv3`. Acesso amplo, gratuito, sempre moderno. Ninguém fecha o código e todos têm a versão mais recente.
+- **SDK / integração** → `Apache 2.0` ou `MIT`. Adoção máxima por grandes empresas e por IA. Se fosse GPL, muitas empresas evitariam por risco jurídico e o projeto não chegaria longe.
+
+A pergunta não é "qual é mais livre?", e sim "como esse código vai ganhar espaço sem ser **capturado** no caminho?". Núcleo blindado por copyleft, bordas abertas para integração. É o mesmo raciocínio da Apache Foundation.
+
+## Quando a licença muda, muda a geografia do poder
+
+Existe um padrão recorrente, que se repete projeto após projeto. Chamo de captura corporativa em seis atos:
+
+1. Empresa lança projeto open source
+2. Ganha comunidade, adoção, contribuições
+3. Uma nuvem concorrente oferece o projeto como serviço
+4. Empresa muda a licença para "fauxpen source"
+5. A comunidade forka sob uma **fundação neutra**
+6. O fork mantém o espírito aberto
+
+Licenças *source-available* (você vê o código, mas não pode usá-lo livremente) não são reconhecidas como open source pela OSI. Veja como a história se repete:
+
+| Projeto | De → Para | Ano | Fork |
+|---------|-----------|-----|------|
+| **Elasticsearch** | Apache 2.0 → SSPL/ELv2 | 2021 | OpenSearch |
+| **Terraform** | MPL 2.0 → BSL 1.1 | 2023 | OpenTofu |
+| **Redis** | BSD → SSPL/RSAL | 2024 | Valkey |
+| **MongoDB** | AGPL → SSPL | 2018 | DocumentDB |
+
+> Looks like Elastic has sucked all the benefit they could from open source and is now spitting out the bones.
+>
+> *Simon Phipps · Open Source Initiative*
+
+Quando a governança é centralizada demais, a empresa recolhe para si o valor criado pela comunidade, os contribuidores ficam sem defesa e a confiança (o ativo mais importante) é destruída. O que protege um bem comum é a combinação de **copyleft genuíno** desde o início, **governança neutra** (Linux Foundation, Apache, CNCF) e **fundações independentes** que não se compram junto com a empresa.
+
+<Callout title="A comunidade venceu" variant="success">
+Sob a pressão dos forks, **Elastic (2024)** e **Redis (2025)** voltaram a adotar licenças open source aprovadas pela OSI. O fork não foi só uma reação técnica: foi o que devolveu o poder de barganha à comunidade.
+</Callout>
+
+## Soberania, conhecimento e hardware livre
+
+### Dependência tecnológica é dependência política
+
+O `ODF` (ISO/IEC 26300, 2006) é um formato aberto e de todos. O `.docx` é proprietário. Quem controla o formato controla a memória dos documentos.
+
+| Contexto | Situação |
+|----------|----------|
+| **Brasil** (2024–25) | R$ **10,35 bi**/ano com Google, Microsoft e Oracle. 45ª posição em soberania digital (de 57) |
+| **Schleswig-Holstein** | 80% dos desktops públicos em LibreOffice. €15 mi economizados. ODF oficial |
+| **Dinamarca** | Ministério migra para LibreOffice em 2025 |
+
+> We must never make ourselves so dependent on so few that we can no longer act freely.
+>
+> *Ministra da Dinamarca*
+
+Isso não é abstrato. Minha esposa precisou abrir um HD externo com fotos antigas da família, formatado em NTFS (proprietário da Microsoft). Sem Windows em casa, o MacBook não lia. Foi preciso achar outro computador, copiar tudo e reformatar em formato aberto para recuperar as memórias. Fotos de família quase perdidas por causa de um formato fechado. O formato que você escolhe hoje decide se você abre seus arquivos daqui a 10 anos.
+
+### Aaron Swartz e o custo de lutar pelo conhecimento livre
+
+<Image src={swartz} alt="Aaron Swartz" width={520} style="border-radius:12px;filter:grayscale(1)" />
+
+<p style="font-size:0.85rem;opacity:0.7;margin-top:-0.5rem">Aaron Swartz · CC BY-SA, Wikimedia Commons</p>
+
+Aos 14 anos, Aaron Swartz já trabalhava na especificação do **RSS 1.0**. Ajudou a desenhar a arquitetura técnica do **Creative Commons**, co-definiu a sintaxe do **Markdown**, criou a Open Library no Internet Archive e foi figura central na derrota do **SOPA/PIPA**, em 2012.
+
+Em 2010–11, baixou cerca de 4 milhões de artigos do JSTOR (produzidos com dinheiro público) pela rede do MIT. O JSTOR não processou. O governo federal acusou em 13 pontos, com pena de até 50 anos e US$ 1 milhão. Sob essa pressão, tirou a própria vida em 11 de janeiro de 2013, aos 26 anos.
+
+> Information is power. But like all power, there are those who want to keep it for themselves.
+>
+> *Aaron Swartz*
+
+A pergunta sem resposta fácil: quem tem o direito de cercar o conhecimento produzido coletivamente?
+
+### Quando a patente cai, a democratização começa
+
+A impressora 3D conta essa história em uma linha do tempo:
+
+<Timeline items={[
+  { meta: "1988", role: "Scott Crump patenteia o FDM e funda a Stratasys" },
+  { meta: "1991", role: "Primeiras FDM comerciais: dezenas de milhares de dólares" },
+  { meta: "2005", role: "Adrian Bowyer cria o RepRap, impressora 3D open source (GPL) que imprime as próprias peças" },
+  { meta: "2009", role: "A patente FDM expira: o ponto de virada" },
+  { meta: "2009+", role: "MakerBot, Ultimaker, Prusa: o preço cai cerca de 100×" },
+]} />
+
+<Image src={reprap} alt="RepRap Mendel" width={420} style="border-radius:12px;filter:grayscale(1)" />
+
+<p style="font-size:0.85rem;opacity:0.7;margin-top:-0.5rem">RepRap "Mendel" · Wikimedia Commons</p>
+
+Duas décadas de patente significaram tecnologia cara e centralizada. A patente expira e a comunidade transforma a fabricação pessoal. As liberdades do software livre aplicadas ao físico ganharam licença própria: a **CERN OHL v2** (2020), aprovada pela OSI em 2021, nas variantes forte, fraca e permissiva.
+
+### Hardware livre é democratização da ciência
+
+Em 2016, o Hardware Livre USP construiu uma microcentrífuga de laboratório **open source** para o iGEM USP-UNIFESP. A comercial equivalente custa mais de R$ 3.000. A versão livre usa **Arduino** + ESC + motor de aeromodelo, **MDF** cortado a laser, 8 microtubos, de 2.000 a 15.000 RPM. Ganhou medalha de prata no iGEM 2016 e foi citada pelo blog da Adafruit. Código, esquemas e manual livres no GitHub.
+
+E não é só a centrífuga. Quando esquemas **e** código são abertos, equipamento científico caro vira acessível:
+
+| Equipamento | Comercial | Aberto | Projeto |
+|-------------|-----------|--------|---------|
+| Termociclador PCR | US$ 5k a 50k+ | US$ 50 a 499 | [OpenPCR](https://openpcr.org) · [NinjaPCR](https://github.com/hisashin/NinjaPCR) |
+| Bomba de seringa | US$ 500 a 10k | 5 a 10% do custo | [Poseidon](https://github.com/pachterlab/poseidon) |
+| Microscópio de fluorescência | dezenas a centenas de mil € | €100 | [FlyPi](https://doi.org/10.1371/journal.pbio.2002702) |
+| EEG | milhares de US$ | US$ 200 a 500 | [OpenBCI](https://openbci.com) |
+| Espectrômetro | US$ 10k a 100k+ | fração do custo | [Public Lab](https://publiclab.org/wiki/spectrometer) |
+| Ventilador mecânico | US$ 25k a 50k | projetos emergenciais | [MIT E-Vent](https://e-vent.mit.edu) |
+
+O **FlyPi**, criado pelo brasileiro **André Maia Chagas**, já foi ensinado a montar em universidades de Quênia, Uganda, Gana, Nigéria, África do Sul, Sudão e Tanzânia. Abrir o projeto baixa a barreira da ciência de milhares de dólares para dezenas.
+
+<Callout title="Hardware livre não é hobby" variant="info">
+É democratização do acesso à ciência. O mesmo princípio que abre o código abre o esquemático, e com ele a possibilidade de fazer pesquisa séria fora dos centros que podem pagar pelo equipamento caro.
+</Callout>
+
+## Por que essa luta ainda importa
+
+Repare no fio que conecta tudo:
+
+- Abrimos o **código** → abrimos a **ferramenta**.
+- Abrimos o **formato** → abrimos a **memória**.
+- Abrimos o **hardware** → fabricamos o **futuro**.
+- Construímos **comunidade** → liberdade **sustentável**.
+
+Nenhuma liberdade é sustentável sem vida coletiva. Toda liberdade sem proteção institucional pode ser recapturada. E sem disputa política, a tecnologia volta sempre para a mão de poucos. A pergunta de fundo é simples: quem decide como trabalhamos, estudamos, publicamos, governamos e como lembramos?
+
+<GlowBox accent="accent">
+
+**O que dá para fazer a partir de agora:**
+
+- **Estudantes e devs:** conheça as licenças antes de publicar o próximo projeto, contribua com um projeto livre (inclusive a PotiLivre) e vá aos eventos.
+- **Gestores e instituições:** adote o ODF como formato padrão, avalie o LibreOffice nos desktops e exija soberania tecnológica nas licitações de TI.
+- **Para todos:** questione quem controla as ferramentas que você usa e apoie comunidades como a PotiLivre. Elas existem por amor.
+
+</GlowBox>
+
+> Mude, mas comece devagar, porque a direção é mais importante que a velocidade.
+>
+> *Clarice Lispector · frase usada pela PotiLivre*
+
+## Para ir mais fundo
+
+- Slides desta palestra: [guisso.dev/talks/software-livre](https://guisso.dev/talks/software-livre/)
+- PotiLivre: [potilivre.org](https://potilivre.org) · FLISoL Natal: [flisol.potilivre.org](https://flisol.potilivre.org)
+- GPL sem medo (2004): [dicas-l.com.br](https://www.dicas-l.com.br/arquivo/gpl_sem_medo_como_libertar_seu_codigo.php)
+- Forks sob fundação neutra: [opentofu.org](https://opentofu.org) · [opensearch.org](https://opensearch.org) · [valkey.io](https://valkey.io)
+- CERN OHL: [ohwr.org/cernohl](https://ohwr.org/cernohl) · Hardware Livre USP: [hardwarelivreusp.org](https://hardwarelivreusp.org)
+- Aaron Swartz: [archive.org](https://archive.org/details/AaronSwartz)
+
+<p style="font-size:0.85rem;opacity:0.7">Conteúdo com base em fontes públicas e em pesquisa de junho/2026. Licença deste artigo: <strong>CC BY-SA 4.0</strong>.</p>
