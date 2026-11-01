@@ -124,14 +124,15 @@ const blogHref = routes.blog(locale);
 						{latestInitial.map((post) => {
 					const stats = postStats.get(slugFor(post));
 							return (
-								<PostCard
-								href={routes.blogPost(slugFor(post), locale)}
-									title={post.data.title}
-									description={post.data.description}
-									statsLabel={stats?.label}
-								tag={tagLookup.get(slugFor(post))}
-									image={post.data.heroImage?.src}
-								>
+									<PostCard
+										href={routes.blogPost(slugFor(post), locale)}
+										title={post.data.title}
+										description={post.data.description}
+										statsLabel={stats?.label}
+										tag={tagLookup.get(slugFor(post))}
+										image={post.data.heroImage?.src}
+										ctaLabel="Read article ↗"
+									>	
 									<FormattedDate slot="label" date={post.data.pubDate} locale={htmlLang} />
 								</PostCard>
 							);

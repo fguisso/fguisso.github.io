@@ -75,13 +75,14 @@ const site = getSiteMeta(locale);
 					{posts.map((post) => {
 					const stats = postStats.get(slugFor(post));
 						return (
-								<PostCard
+							<PostCard
 								href={routes.blogPost(slugFor(post), locale)}
-									title={post.data.title}
-									description={post.data.description}
-									statsLabel={stats?.label}
-									tag={post.data.tags?.[0] ?? null}
+								title={post.data.title}
+								description={post.data.description}
+								statsLabel={stats?.label}
+								tag={post.data.tags?.[0] ?? null}
 								image={post.data.heroImage?.src}
+								ctaLabel="Read article ↗"
 							>
 								<FormattedDate slot="label" date={post.data.pubDate} locale={htmlLang} />
 							</PostCard>
