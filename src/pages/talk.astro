@@ -295,7 +295,7 @@ const slugify = (value: string) =>
 												{...externalAttrs(talk.article.url)}
 												data-tianji-event={`click_talk_resource_${slugify(talk.talkTitle)}_article`}
 											>
-												Ler artigo
+												{locale === 'en' ? 'Read article' : 'Ler artigo'}
 											</GlowButton>
 										)}
 										{talk.video && (
