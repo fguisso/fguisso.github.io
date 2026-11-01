@@ -20,7 +20,7 @@ const {
 	tag,
 	statsLabel,
 	image,
-	ctaLabel = 'ler artigo ↗',
+	ctaLabel = Astro.currentLocale === 'en' ? 'Read article ↗' : 'ler artigo ↗',
 	class: className,
 	...rest
 } = Astro.props as Props;
