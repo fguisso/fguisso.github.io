@@ -16,23 +16,24 @@ interface Props { lang?: PostLanguage }
 const { lang = 'pt' } = Astro.props;
 const english = lang === 'en';
 const intro = english
-  ? "I'm from Mococa and live in Natal. I work in application security, automating tests and helping teams build safer software."
-  : 'Sou de Mococa e moro em Natal. Trabalho com segurança de aplicações, automatizando testes e ajudando times a desenvolver software mais seguro.';
+  ? "I've lived in Natal since 2019 and love the sun and the beach."
+  : 'Moro em Natal desde 2019 e curto sol e praia.';
+const role = english ? "I'm Head of Information Security at" : 'Sou Head of Information Security na';
 const background = english
-  ? 'I got my start building projects at Goroa Hacker Club and Dumont Hackerspace. Today I test ideas in my homelab and share what I learn here and in talks.'
-  : 'Comecei montando projetos no Goroa Hacker Club e no Dumont Hackerspace. Hoje testo ideias no meu homelab e compartilho o que aprendo aqui e em palestras.';
+  ? "I was 18 when my uncle taught me to make websites in Word and host them on the now-defunct VilaBOL. I've been tinkering with and breaking things on the internet ever since."
+  : 'Aos 18 anos, meu tio me ensinou a fazer sites no Word e a hospedá-los no extinto VilaBOL. Desde então, sigo mexendo e quebrando coisas pela internet.';
 const { gearPreview, lifePreview } = getEditorial(lang);
 const posts = await getPosts(lang);
 const featured = posts[0];
 ---
 
-<Site {lang} title={english ? 'Fernando Guisso | Engineering & Security' : 'Fernando Guisso | Engenharia e Segurança'} description={intro}>
+<Site {lang} title={english ? 'Fernando Guisso | Engineering & Security' : 'Fernando Guisso | Engenharia e Segurança'} description={`${intro} ${role} Tela.`}>
   <main class="shell alt-home" id="conteudo" tabindex="-1">
     <div class="alt-lead">
       <header class="alt-intro">
         <p class="eyebrow"><span class="signal" aria-hidden="true"></span> {english ? 'A personal corner of the internet' : 'Um canto pessoal da internet'}</p>
         <h1 class="signature text-shimmer">Fernando Guisso</h1>
-        <p class="intro-bio">{intro}</p>
+        <p class="intro-bio">{intro} {role} <a href="https://tela.com">Tela</a>.</p>
         <p class="intro-bio">{background}</p>
         <div class="alt-intro-links">
           <a href={localizedPath("/about/", lang)}>{english ? "About me" : "Sobre mim"} <span aria-hidden="true">↗</span></a>
