@@ -23,8 +23,8 @@ const role = english
   ? { lead: "I'm currently", title: 'Head of Information Security', preposition: 'at' }
   : { lead: 'Atualmente sou', title: 'o Head of Information Security', preposition: 'no' };
 const background = english
-  ? 'I test automations in my homelab, publish tools on GitHub, and keep notes on Linux and drumming in my wiki.'
-  : 'Testo automações no meu homelab, publico ferramentas no GitHub e anoto na Wiki o que aprendo sobre Linux e bateria.';
+  ? 'I test automations in my homelab, publish tools in open-source Git repositories, and keep notes in my wiki on what I learn about Linux, free software, and music (drums, singing, electric guitar, acoustic guitar).'
+  : 'Testo automações no homelab, publico ferramentas em repositórios Git open source e anoto na minha Wiki meus aprendizados com Linux, software livre e música (bateria, canto, guitarra, violão).';
 const { gearPreview, lifePreview } = getEditorial(lang);
 const posts = await getPosts(lang);
 const featured = posts[0];
