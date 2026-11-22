@@ -18,7 +18,9 @@ const english = lang === 'en';
 const intro = english
   ? "I'm a software engineer focused on security. I've lived in Natal since 2019, enjoying the sun and the beach."
   : 'Sou um engenheiro de software focado em segurança. Moro em Natal desde 2019, curtindo o sol e a praia.';
-const role = english ? "I'm currently Head of Information Security at" : 'Atualmente sou o Head de Information Security no';
+const role = english
+  ? { lead: "I'm currently", title: 'Head of Information Security', preposition: 'at' }
+  : { lead: 'Atualmente sou', title: 'o Head of Information Security', preposition: 'no' };
 const background = english
   ? "I was 18 when my uncle taught me to make websites in Word and host them on the now-defunct VilaBOL. I've been tinkering with and breaking things on the internet ever since."
   : 'Aos 18 anos, meu tio me ensinou a fazer sites no Word e a hospedá-los no extinto VilaBOL. Desde então, sigo mexendo e quebrando coisas pela internet.';
@@ -27,13 +29,13 @@ const posts = await getPosts(lang);
 const featured = posts[0];
 ---
 
-<Site {lang} title={english ? 'Fernando Guisso | Engineering & Security' : 'Fernando Guisso | Engenharia e Segurança'} description={`${intro} ${role} Tela.`}>
+<Site {lang} title={english ? 'Fernando Guisso | Engineering & Security' : 'Fernando Guisso | Engenharia e Segurança'} description={`${intro} ${role.lead} ${role.title} ${role.preposition} Tela.`}>
   <main class="shell alt-home" id="conteudo" tabindex="-1">
     <div class="alt-lead">
       <header class="alt-intro">
         <p class="eyebrow"><span class="signal" aria-hidden="true"></span> {english ? 'A personal corner of the internet' : 'Um canto pessoal da internet'}</p>
         <h1 class="signature text-shimmer">Fernando Guisso</h1>
-        <p class="intro-bio">{intro} {role} <a href="https://tela.com">Tela</a>.</p>
+        <p class="intro-bio">{intro} {role.lead} <em>{role.title}</em> {role.preposition} <a href="https://tela.com">Tela</a>.</p>
         <p class="intro-bio">{background}</p>
         <div class="alt-intro-links">
           <a href={localizedPath("/about/", lang)}>{english ? "About me" : "Sobre mim"} <span aria-hidden="true">↗</span></a>
