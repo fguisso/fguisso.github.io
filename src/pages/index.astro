@@ -22,9 +22,6 @@ const intro = english
 const role = english
   ? { lead: "I'm currently", title: 'Head of Information Security', preposition: 'at' }
   : { lead: 'Atualmente sou', title: 'o Head of Information Security', preposition: 'no' };
-const background = english
-  ? 'I test automations in my homelab, publish tools in open-source Git repositories, and keep notes in my wiki on what I learn about Linux, free software, and music (drums, singing, electric guitar, acoustic guitar).'
-  : 'Testo automações no homelab, publico ferramentas em repositórios Git open source e anoto na minha Wiki meus aprendizados com Linux, software livre e música (bateria, canto, guitarra, violão).';
 const { gearPreview, lifePreview } = getEditorial(lang);
 const posts = await getPosts(lang);
 const featured = posts[0];
@@ -37,7 +34,15 @@ const featured = posts[0];
         <p class="eyebrow"><span class="signal" aria-hidden="true"></span> {english ? 'A personal corner of the internet' : 'Um canto pessoal da internet'}</p>
         <h1 class="signature text-shimmer">Fernando Guisso</h1>
         <p class="intro-bio">{intro} {role.lead} <em>{role.title}</em> {role.preposition} <LinkPreview href="https://tela.com" image="/preview/tela-home.webp" suffix=".">Tela</LinkPreview></p>
-        <p class="intro-bio">{background}</p>
+        <p class="intro-bio">
+          {english ? 'I test automations in my ' : 'Testo automações no '}
+          <a href="https://wiki.guisso.dev/linux/homelab/">homelab</a>{english
+            ? ', publish tools in open-source Git repositories, and keep notes in my '
+            : ', publico ferramentas em repositórios Git open source e anoto na minha '}
+          <a href="https://wiki.guisso.dev/">{english ? 'wiki' : 'Wiki'}</a>{english
+            ? ' on what I learn about Linux, free software, and music (drums, singing, electric guitar, acoustic guitar).'
+            : ' meus aprendizados com Linux, software livre e música (bateria, canto, guitarra, violão).'}
+        </p>
         <div class="alt-intro-links">
           <a href={localizedPath("/about/", lang)}>{english ? "About me" : "Sobre mim"} <span aria-hidden="true">↗</span></a>
           <a class="alt-blog-link" href={localizedPath("/blog/", lang)}>{english ? "Read the articles" : "Ler os artigos"}</a>
