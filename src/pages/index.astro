@@ -15,10 +15,12 @@ import { getPosts, postHref, type PostLanguage } from '../utils/posts';
 interface Props { lang?: PostLanguage }
 const { lang = 'pt' } = Astro.props;
 const english = lang === 'en';
-const role = english ? 'Software engineer focused on application security' : 'Engenheiro de software focado em AppSec';
 const intro = english
-  ? 'I automate security testing, maintain open-source tools, and share what I learn on the blog and in talks.'
-  : 'Automatizo testes de segurança, mantenho ferramentas de código aberto e compartilho o que aprendo no blog e em palestras.';
+  ? "I'm from Mococa and live in Natal. I work in application security, automating tests and helping teams build safer software."
+  : 'Sou de Mococa e moro em Natal. Trabalho com segurança de aplicações, automatizando testes e ajudando times a desenvolver software mais seguro.';
+const background = english
+  ? 'I got my start building projects at Goroa Hacker Club and Dumont Hackerspace. Today I test ideas in my homelab and share what I learn here and in talks.'
+  : 'Comecei montando projetos no Goroa Hacker Club e no Dumont Hackerspace. Hoje testo ideias no meu homelab e compartilho o que aprendo aqui e em palestras.';
 const { gearPreview, lifePreview } = getEditorial(lang);
 const posts = await getPosts(lang);
 const featured = posts[0];
@@ -28,9 +30,10 @@ const featured = posts[0];
   <main class="shell alt-home" id="conteudo" tabindex="-1">
     <div class="alt-lead">
       <header class="alt-intro">
+        <p class="eyebrow"><span class="signal" aria-hidden="true"></span> {english ? 'A personal corner of the internet' : 'Um canto pessoal da internet'}</p>
         <h1 class="signature text-shimmer">Fernando Guisso</h1>
-        <p class="intro-role">{role}</p>
         <p class="intro-bio">{intro}</p>
+        <p class="intro-bio">{background}</p>
         <div class="alt-intro-links">
           <a href={localizedPath("/about/", lang)}>{english ? "About me" : "Sobre mim"} <span aria-hidden="true">↗</span></a>
           <a class="alt-blog-link" href={localizedPath("/blog/", lang)}>{english ? "Read the articles" : "Ler os artigos"}</a>
@@ -75,9 +78,10 @@ const featured = posts[0];
     gap: 16px;
   }
   .alt-lead { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: center; margin-bottom: 24px; }
+  .alt-intro .eyebrow { margin-block-end: 12px; }
   .alt-intro h1 { display: block; padding: 0; font-size: clamp(32px, 4.4vw, 56px); }
-  .intro-role { margin: 10px 0 0; color: var(--ink); font-size: clamp(15px, 1.7vw, 18px); font-weight: 500; }
-  .intro-bio { max-width: 43ch; margin: 10px 0 0; color: var(--body); }
+  .intro-bio { max-width: 46ch; margin: 14px 0 0; color: var(--body); line-height: 1.55; }
+  .intro-bio + .intro-bio { margin-top: 10px; }
   .alt-intro-links { display: flex; flex-wrap: wrap; column-gap: 16px; }
   .alt-intro-links a { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; font-size: 13px; }
   .alt-intro-links .alt-blog-link { display: none; color: var(--accent); }
