@@ -1,37 +1,77 @@
 ---
+import creativeCommonsIcon from '../assets/creative-commons.svg?url';
+import LogoWordmark from './LogoWordmark.astro';
 import { localizedPath } from '../utils/i18n';
 import type { PostLanguage } from '../utils/posts';
 
 interface Props { lang: PostLanguage; }
 const { lang } = Astro.props;
 const english = lang === 'en';
+const licenseHref = 'https://creativecommons.org/licenses/by-sa/4.0/' + (english ? '' : 'deed.pt-br');
+const licenseScope = english ? 'Original writing' : 'Textos autorais';
 ---
 
 <footer class="site-footer shell">
-  <a href={localizedPath('/', lang)} aria-label={english ? 'guisso.dev home' : 'guisso.dev, início'}>guisso.dev</a>
-  <a href={localizedPath('/rss.xml', lang)} type="application/rss+xml">RSS</a>
+  <a class="footer-brand" href={localizedPath('/', lang)} aria-label={english ? 'guisso.dev home' : 'guisso.dev, início'}>
+    <LogoWordmark class="footer-wordmark" aria-hidden="true" />
+    <LogoWordmark class="footer-monogram" monogram aria-hidden="true" />
+  </a>
+  <div class="footer-actions">
+    <a class="footer-rss" href={localizedPath('/rss.xml', lang)} type="application/rss+xml">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+        <circle cx="5.5" cy="18.5" r="1.5" fill="currentColor" />
+        <path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" />
+      </svg>
+      RSS
+    </a>
+    <a href={licenseHref} aria-label={`${licenseScope}, Creative Commons BY-SA 4.0`}>
+      <span class="footer-cc" style={{ '--cc-icon': `url("${creativeCommonsIcon}")` }} aria-hidden="true"></span>
+      <span>{licenseScope} · BY-SA 4.0</span>
+    </a>
+  </div>
 </footer>
 
 <style>
   .site-footer {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
-    gap: 0 16px;
+    gap: 8px;
     margin-block-start: clamp(3rem, 6vw, 4rem);
     padding-block: 8px 20px;
     border-block-start: 1px solid var(--line);
     font-size: var(--text-supporting);
   }
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 2vw, 18px);
+  }
   a {
     display: inline-flex;
     min-block-size: 44px;
     align-items: center;
+    gap: 5px;
     color: var(--muted);
     text-decoration: none;
   }
   a:is(:hover, :focus-visible) {
     color: var(--accent);
     text-decoration: underline;
+  }
+  .footer-brand, .footer-rss { min-inline-size: 44px; }
+  .footer-wordmark { width: 60px; height: auto; }
+  .footer-monogram { display: none; }
+  .footer-cc {
+    flex: none;
+    inline-size: 16px;
+    block-size: 16px;
+    background-color: currentColor;
+    mask: var(--cc-icon) center / contain no-repeat;
+  }
+  @media (max-width: 760px), (pointer: coarse), (max-width: 1024px) and (max-height: 540px) {
+    .site-footer { font-size: var(--text-caption); }
+    .footer-wordmark { display: none; }
+    .footer-monogram { display: block; width: 16px; height: auto; }
   }
 </style>
