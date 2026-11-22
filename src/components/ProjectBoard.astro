@@ -1,6 +1,7 @@
 ---
 import AsciiBackground from './AsciiBackground.astro';
 import Chip from './Chip.astro';
+import grooveWordmark from '../assets/groove-wordmark.svg?url';
 import { asciiBackgroundScene } from '../lib/ascii-background';
 import type { PostLanguage } from '../utils/posts';
 
@@ -16,6 +17,7 @@ const isCompact = compact || bento;
 const ProjectTitle = compact && !bento ? 'h3' : 'h2';
 const homelabScene = asciiBackgroundScene('Homelab');
 const dojoScene = asciiBackgroundScene('Dojo Shield');
+const grooveScene = asciiBackgroundScene('Groove');
 ---
 <div class:list={['project-board', { 'is-compact': isCompact, 'is-bento': bento }]}>
   <a class="project-tile sarif-tile" href="https://github.com/fguisso/sfer.nvim" rel="noreferrer" data-tianji-event={`click_project_sfer-nvim_${lang}`}>
@@ -57,9 +59,12 @@ const dojoScene = asciiBackgroundScene('Dojo Shield');
   )}
 
   {(!isCompact || bento) && (
-    <a class="project-tile" href="https://guisso.dev/GrooveScribe/" rel="noreferrer" data-tianji-event={`click_project_groovescribe_${lang}`}>
+    <a class="project-tile groove-tile" href="https://guisso.dev/groove/" rel="noreferrer" data-tianji-event={`click_project_groovescribe_${lang}`}>
       {bento ? <Chip class="project-chip">{english ? "Project" : "Projeto"}</Chip> : <div class="tile-top"><span>{english ? "MUSIC" : "MÚSICA"}</span><span aria-hidden="true">↗</span></div>}
-      <ProjectTitle>Groove</ProjectTitle>
+      <div class="groove-art">
+        <AsciiBackground scene={grooveScene} format="svg" />
+        <ProjectTitle class="groove-title"><img src={grooveWordmark} alt="Groove" width="166" height="45" /></ProjectTitle>
+      </div>
       <p>{english ? "A drum tab editor for writing and practicing rhythms in the browser." : "Editor de tablaturas de bateria para escrever e estudar ritmos no navegador."}</p>
       {!bento && <span class="tile-caption">{english ? "Open the editor ↗" : "Abrir editor ↗"}</span>}
     </a>
@@ -100,12 +105,12 @@ const dojoScene = asciiBackgroundScene('Dojo Shield');
     justify-content: flex-start;
     min-block-size: 96px;
   }
-  .lab-art :global(.article-title-ascii) {
+  :is(.lab-art, .groove-art) :global(.article-title-ascii) {
     inset-inline-start: 25%;
     inline-size: auto;
     mask-image: linear-gradient(to right, transparent, #000 38%);
   }
-  .lab-art :global(.article-ascii-vector) { display: block; inline-size: 100%; block-size: 100%; }
+  :is(.lab-art, .groove-art) :global(.article-ascii-vector) { display: block; inline-size: 100%; block-size: 100%; }
   .lab-art > span { text-align: start; }
   .is-bento .lab-art { min-block-size: 64px; background: none; color: var(--project-art-ink); }
   .is-bento .lab-art > span { color: var(--ink); }
@@ -115,6 +120,22 @@ const dojoScene = asciiBackgroundScene('Dojo Shield');
   }
   .is-bento :is(.lab-tile, .dojo-tile) p { color: var(--ink); }
   .is-bento :is(.lab-tile, .dojo-tile) :global(.project-chip) { color: var(--ink); border-color: var(--project-art-ink); }
+
+  .project-board .groove-tile { background: transparent; }
+  .groove-tile:hover { border-color: var(--muted); }
+  .groove-art {
+    position: relative;
+    display: flex;
+    align-items: center;
+    isolation: isolate;
+    min-block-size: 64px;
+    color: var(--ink);
+    filter: grayscale(1);
+  }
+  .groove-art :global(.article-ascii-vector) { opacity: .48; }
+  .groove-art .groove-title { margin: 0; }
+  .groove-title img { display: block; max-inline-size: 100%; block-size: auto; }
+  :global(html[data-tema="escuro"]) .groove-title img { filter: invert(1); }
 
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .is-bento .project-tile:hover { translate: 0 -3px; }
