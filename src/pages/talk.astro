@@ -11,7 +11,7 @@ import { slugifyTag } from '../utils/tags';
 interface Props { lang?: 'pt' | 'en'; }
 const { lang = 'pt' } = Astro.props;
 const english = lang === 'en';
-const { repoCard, repoHighlights, talks } = getTalkPage(lang);
+const { repoCard, repoHighlights, talks, standaloneSlides } = getTalkPage(lang);
 const posts = new Map((await getPosts(lang)).map(post => [post.data.canonicalSlug, post]));
 const presentations = talks.map(talk => ({
   ...talk,
@@ -24,7 +24,7 @@ const presentations = talks.map(talk => ({
     <header class="talk-intro">
       <div>
         <h1>{english ? 'Joined one of my talks? All' : 'Foi em alguma talk minha? Os'} <span class="signature">slides</span> {english ? 'are right here.' : 'estão aqui.'}</h1>
-        <p>{english ? 'I build every deck in' : 'Todas as apresentações são criadas em'} <a href="https://sli.dev/" data-tianji-event={`outbound_link_${lang}`}>Slidev</a>{english ? ', keep the source in Markdown, and publish automatically with GitHub Actions.' : ', versionadas em Markdown e publicadas automaticamente via GitHub Actions.'}</p>
+        <p>{english ? 'I build my newer decks in' : 'Monto os slides mais recentes em'} <a href="https://sli.dev/" data-tianji-event={`outbound_link_${lang}`}>Slidev</a>{english ? ', keep the source in Markdown, and publish automatically with GitHub Actions.' : ', versiono em Markdown e publico automaticamente via GitHub Actions.'}</p>
         <p>{english ? 'Some talks became articles with code, references, and further reading.' : 'Algumas talks também viraram posts com código, referências e material para continuar a leitura.'}</p>
         <div class="talk-profile">
           <TalkAvatarBadge />
@@ -40,7 +40,7 @@ const presentations = talks.map(talk => ({
     </header>
 
     <section id="agenda" class="talk-agenda" aria-labelledby="agenda-title">
-      <h2 id="agenda-title">{english ? 'Recent talks and downloadable materials' : 'Talks recentes e materiais para download'}</h2>
+      <h2 id="agenda-title">{english ? 'Talks and related materials' : 'Palestras e materiais'}</h2>
       <ol class="talk-timeline" role="list">
         {presentations.map((talk, index) => (
           <li>
@@ -75,6 +75,20 @@ const presentations = talks.map(talk => ({
         ))}
       </ol>
     </section>
+
+    <section id="slides" class="talk-archive" aria-labelledby="slides-title">
+      <h2 id="slides-title">{english ? 'Standalone slides' : 'Slides avulsos'}</h2>
+      <p>{english ? 'Decks in Portuguese without a confirmed event or presentation date.' : 'Apresentações sem evento ou data de apresentação confirmados.'}</p>
+      <ul role="list">
+        {standaloneSlides.map(slide => (
+          <li>
+            <a href={slide.url} data-tianji-event={`click_talk_resource_${slugifyTag(slide.label)}_slides`}>
+              {slide.label}<span aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
   </main>
 </Site>
 
@@ -93,7 +107,7 @@ const presentations = talks.map(talk => ({
   .talk-repo h2 { margin-bottom: 10px; }
   .talk-repo ul { margin: 0 0 18px; padding-inline-start: 1.2em; list-style: disc; font-size: 14px; }
   .talk-repo li::marker { color: var(--accent); }
-  .talk-agenda > h2 { font-size: clamp(24px, 4vw, 34px); margin-bottom: 20px; }
+  :is(.talk-agenda, .talk-archive) > h2 { font-size: clamp(24px, 4vw, 34px); margin-bottom: 20px; }
   .talk-timeline { display: grid; gap: 16px; list-style: none; margin: 0; padding: 0 0 0 22px; border-inline-start: 1px solid var(--line); }
   .talk-timeline > li { position: relative; min-width: 0; }
   .talk-timeline > li::before {
@@ -122,6 +136,17 @@ const presentations = talks.map(talk => ({
   .talk-article > span:first-child, .talk-article small { font-size: 12px; color: var(--muted); }
   .talk-article-arrow { position: absolute; inset: 12px 0 auto auto; color: var(--accent); }
   .talk-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .talk-archive { margin-top: calc(var(--section-gap) + 8px); }
+  .talk-archive ul { margin: 0; padding: 0; list-style: none; border-block-start: 1px solid var(--line); }
+  .talk-archive a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    padding-block: 10px;
+    border-block-end: 1px solid var(--line);
+  }
   @media (max-width: 880px) {
     .talk-intro { grid-template-columns: minmax(0, 1fr); }
   }

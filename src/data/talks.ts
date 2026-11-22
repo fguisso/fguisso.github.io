@@ -38,7 +38,7 @@ export function getTalkPage(lang: 'pt' | 'en') {
 			articleSlug: 'ebpf-and-security',
 			slides: {
 				label: t('Slides PT-BR', 'Slides (PT-BR)'),
-				url: 'https://guisso.dev/talks/ebpf-kubescape',
+				url: 'https://guisso.dev/talks/ebpf-kubescape/',
 			},
 		},
 		{
@@ -50,7 +50,7 @@ export function getTalkPage(lang: 'pt' | 'en') {
 			articleSlug: 'threat-modeling-intro',
 			slides: {
 				label: t('Slides PT-BR', 'Slides (PT-BR)'),
-				url: 'https://guisso.dev/talks/threat-modeling',
+				url: 'https://guisso.dev/talks/threat-modeling/',
 			},
 			video: {
 				label: t('Assistir no YouTube', 'Watch on YouTube'),
@@ -66,7 +66,7 @@ export function getTalkPage(lang: 'pt' | 'en') {
 			articleSlug: 'proxmox-debian-day',
 			slides: {
 				label: t('Slides', 'Slides (PT-BR)'),
-				url: 'https://guisso.dev/talks/proxmox-homelab',
+				url: 'https://guisso.dev/talks/homelab-proxmox/',
 			},
 		},
 		{
@@ -77,7 +77,7 @@ export function getTalkPage(lang: 'pt' | 'en') {
 				t('Palestra sobre as top 10 vulnerabilidades em LLM para você evitar nos seus projetos de AI e manter inferência sob controle.', 'How to avoid the OWASP Top 10 LLM vulnerabilities in your AI projects and keep inference flows under control.'),
 			slides: {
 				label: 'Slides',
-				url: 'https://guisso.dev/talks/top-10-llm-0.5',
+				url: 'https://guisso.dev/talks/top-10-llm-0.5/',
 			},
 		},
 		{
@@ -88,7 +88,7 @@ export function getTalkPage(lang: 'pt' | 'en') {
 				t('A palestra aborda problemas comuns em aplicações JavaScript: vulnerabilidades de sessão e ataques XSS, com técnicas práticas de mitigação.', 'Session bugs and XSS attacks are still common on JS apps. This talk breaks down the flaws and shows practical mitigations.'),
 			slides: {
 				label: 'Slides',
-				url: 'https://guisso.dev/talks/xss-session',
+				url: 'https://guisso.dev/talks/xss-session/',
 			},
 		},
 		{
@@ -124,6 +124,34 @@ export function getTalkPage(lang: 'pt' | 'en') {
 				url: 'https://youtu.be/2HKUgc0LjcI',
 			},
 		},
+		{
+			event: 'Bitconf 2016',
+			tag: 'blockchain',
+			talkTitle: t('Bitcoin Developer para iniciantes', 'Bitcoin Development for Beginners'),
+			slides: {
+				label: t('Slides', 'Slides (PT-BR)'),
+				url: 'https://guisso.dev/btc-dev-bitconf/',
+			},
+		},
+		{
+			event: 'Campus Party Brasil 2016',
+			tag: 'hardware',
+			talkTitle: 'NodeBots + Garoa Dojo Shield',
+			slides: {
+				label: t('Slides', 'Slides (PT-BR)'),
+				url: 'https://guisso.dev/nodebots-cpbr/',
+			},
+		},
 	];
-	return { repoCard, repoHighlights, talks };
+
+	const standaloneSlides: TalkResource[] = [
+		{ label: 'Carreira em AppSec', url: 'https://guisso.dev/talks/carreira-appsec/' },
+		{ label: 'Software Livre, Comunidade e Soberania', url: 'https://guisso.dev/talks/software-livre/' },
+		{ label: 'Segurança em IA', url: 'https://guisso.dev/talks/ai-sec/' },
+		{ label: 'Segurança no PyPI', url: 'https://guisso.dev/talks/pip-sec/' },
+		{ label: 'CI / CDon’t', url: 'https://guisso.dev/talks/cicdont/' },
+		{ label: 'CTF: Capture the Flag', url: 'https://guisso.dev/ctf-slides/build/' },
+	];
+
+	return { repoCard, repoHighlights, talks, standaloneSlides };
 }
