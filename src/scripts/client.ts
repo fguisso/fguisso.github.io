@@ -149,7 +149,9 @@ if (track && pill) {
 
     clearReveal();
     if (item.href === location.href || reducedMotion.matches) return;
-    const offset = Math.abs(item.getBoundingClientRect().left - pill.getBoundingClientRect().left);
+    const itemRect = item.getBoundingClientRect();
+    const pillRect = pill.getBoundingClientRect();
+    const offset = Math.hypot(itemRect.left - pillRect.left, itemRect.top - pillRect.top);
     if (offset < 1) return;
 
     event.preventDefault();

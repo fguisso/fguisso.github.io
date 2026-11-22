@@ -343,7 +343,7 @@ const contents = [
     <section class="guide-section" id="breakdown">
       <h2>{t('Anatomia de URL e comando', 'Anatomy of a URL and a command')}</h2>
       <p>{t('Os rótulos identificam cada segmento mesmo quando as cores se repetem.', 'Labels identify each segment even when colors repeat.')}</p>
-      <Breakdown {lang} parts={[
+      <Breakdown {lang} label={t('Trechos e rótulos da URL', 'URL segments and labels')} parts={[
         { text: 'https://', label: t('Protocolo', 'Protocol'), color: 'var(--secondary)' },
         { text: t('usuario:senha@', 'user:password@'), label: t('Credenciais', 'Credentials'), color: 'var(--guide-warning)' },
         { text: 'example.com', label: 'Host', sub: t('Domínio', 'Domain'), color: 'var(--accent)' },
@@ -360,7 +360,7 @@ const contents = [
           <p>Cada item de <code>parts</code> define o trecho em <code>text</code>, seu <code>label</code> e a cor em <code>color</code>. Use <code>sub</code> quando precisar explicar um rótulo.</p>
         )}
       </details>
-      <Breakdown {lang} parts={[
+      <Breakdown {lang} label={t('Trechos e rótulos do comando', 'Command segments and labels')} parts={[
         { text: 'git', label: t('Comando', 'Command'), color: 'var(--secondary)' },
         { text: ' log', label: t('Subcomando', 'Subcommand'), color: 'var(--accent)' },
         { text: ' --oneline', label: t('Opção', 'Option'), color: 'var(--body)' },

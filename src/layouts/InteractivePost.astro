@@ -33,7 +33,7 @@ const alternateHref = hasTranslation ? postHref(canonicalSlug, lang === 'en' ? '
 	}
 
 	.interactive-post-body:has(.site-header[data-compact-navigation]) .phreaking-page .ph-toc-fab {
-		/* Clear the 52px site menu and leave an 8px gap. */
-		bottom: calc(max(12px, env(safe-area-inset-bottom)) + 60px);
+		/* Clear the site menu and leave an 8px gap. */
+		bottom: calc(max(12px, env(safe-area-inset-bottom)) + 60px + var(--compact-nav-extra, 0px));
 	}
 </style>

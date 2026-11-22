@@ -149,15 +149,15 @@ const tonesById: Record<string, string> = Object.fromEntries(
 			<table>
 				<thead>
 					<tr>
-						<th></th>
-						{matrixCols.map((f) => <th>{f}</th>)}
+						<th scope="col"><span class="ph-matrix-col-label">{locale === 'pt' ? 'Frequência da linha' : 'Row frequency'}</span></th>
+						{matrixCols.map((f) => <th scope="col">{f}</th>)}
 					</tr>
 				</thead>
 				<tbody>
 					{
 						matrixRows.map((row) => (
 							<tr>
-								<td class="row-label">{row}</td>
+								<th scope="row" class="row-label">{row}</th>
 								{matrixCols.map((col) => {
 									if (col >= row) return <td class="empty"></td>;
 									const d = cellFor(col, row);

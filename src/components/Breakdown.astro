@@ -18,13 +18,15 @@ interface Part {
 
 interface Props {
   lang?: 'pt' | 'en';
+  label?: string;
   parts: Part[];
 }
 
-const { parts, lang = Astro.url.pathname.startsWith('/en/') ? 'en' : 'pt' } = Astro.props;
+const { parts, lang = Astro.url.pathname.startsWith('/en/') ? 'en' : 'pt',
+  label = lang === 'en' ? 'Example segments and labels' : 'Trechos e rótulos do exemplo' } = Astro.props;
 ---
 
-<div class="bd-row" tabindex="0" role="group" aria-label={lang === 'en' ? 'Example segments and labels' : 'Trechos e rótulos do exemplo'}>
+<div class="bd-row" tabindex="0" role="group" aria-label={label}>
   {parts.map((p) => (
     <div class="bd-seg" style={`--c:${p.color}`}>
       <div class="bd-text">{p.text}</div>

@@ -247,20 +247,20 @@ const strings = {
 				</button>
 			</div>
 
-			<dl class="ph-pcb-legend">
-				<div class="ph-pcb-legend-row">
-					<span class="ph-pcb-swatch is-intact"></span>
-					<dt>{strings.legendIntact}</dt>
-				</div>
-				<div class="ph-pcb-legend-row">
-					<span class="ph-pcb-swatch is-burned"></span>
-					<dt>{strings.legendBurned}</dt>
-				</div>
-				<div class="ph-pcb-legend-row">
-					<span class="ph-pcb-swatch is-restored"></span>
-					<dt>{strings.legendRestored}</dt>
-				</div>
-			</dl>
+			<ul class="ph-pcb-legend" role="list">
+				<li class="ph-pcb-legend-row">
+					<span class="ph-pcb-swatch is-intact" aria-hidden="true"></span>
+					<span>{strings.legendIntact}</span>
+				</li>
+				<li class="ph-pcb-legend-row">
+					<span class="ph-pcb-swatch is-burned" aria-hidden="true"></span>
+					<span>{strings.legendBurned}</span>
+				</li>
+				<li class="ph-pcb-legend-row">
+					<span class="ph-pcb-swatch is-restored" aria-hidden="true"></span>
+					<span>{strings.legendRestored}</span>
+				</li>
+			</ul>
 		</aside>
 	</div>
 
@@ -470,6 +470,7 @@ const strings = {
 	.ph-pcb-legend {
 		margin: 0;
 		padding: 0;
+		list-style: none;
 		display: flex;
 		flex-direction: column;
 		gap: 6px;
@@ -480,9 +481,6 @@ const strings = {
 		display: flex;
 		align-items: center;
 		gap: 10px;
-	}
-	.ph-pcb-legend dt {
-		margin: 0;
 	}
 	.ph-pcb-swatch {
 		display: inline-block;

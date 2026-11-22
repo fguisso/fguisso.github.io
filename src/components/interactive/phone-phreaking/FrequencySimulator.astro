@@ -79,7 +79,8 @@ const strings = {
 				<span class="ph-osc-freq-value" data-ph-osc-freq>440 Hz</span>
 			</span>
 		</div>
-		<input type="range" min="100" max="4000" step="1" value="440" data-ph-osc-range />
+		<input type="range" min="100" max="4000" step="1" value="440"
+			aria-label={locale === 'pt' ? 'Frequência do tom em hertz' : 'Tone frequency in hertz'} data-ph-osc-range />
 		<div class="ph-osc-scale">
 			<span>100</span><span>2000</span><span>4000</span>
 		</div>

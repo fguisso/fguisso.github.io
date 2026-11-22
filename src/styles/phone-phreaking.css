@@ -1245,7 +1245,7 @@ html:has(.phreaking-page) {
 .phreaking-page .ph-tap-cradle-caption {
 	font-family: var(--ph-mono, 'JetBrains Mono', monospace);
 	font-size: 10px;
-	color: var(--ph-muted, #6a7d6a);
+	color: color-mix(in srgb, var(--ph-muted, #6a7d6a) 90%, var(--ph-fg-soft));
 	letter-spacing: 0.05em;
 	text-align: center;
 	padding: 4px 0 2px;
@@ -1587,12 +1587,21 @@ html:has(.phreaking-page) {
 	background: transparent;
 }
 
-.phreaking-page .ph-matrix th {
+.phreaking-page .ph-matrix thead th {
 	color: var(--ph-green-dim);
 	font-weight: 400;
 	text-transform: none;
 	letter-spacing: 0;
 	font-family: inherit;
+}
+
+.phreaking-page .ph-matrix-col-label {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
 }
 
 .phreaking-page .ph-matrix td.cell {
@@ -1609,8 +1618,9 @@ html:has(.phreaking-page) {
 	background: rgba(255, 106, 61, 0.05);
 }
 
-.phreaking-page .ph-matrix td.row-label {
+.phreaking-page .ph-matrix th.row-label {
 	color: var(--ph-green-dim);
+	font-weight: inherit;
 	text-align: right;
 }
 
