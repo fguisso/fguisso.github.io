@@ -1,17 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="37 43 950 938">
   <!-- Source: https://eflag.io/assets/flag-color.png -->
-  <defs>
-    <linearGradient id="eflag-pink">
-      <stop stop-color="#e76afa"/>
-      <stop offset="1" stop-color="#ff00ce"/>
-    </linearGradient>
-    <linearGradient id="eflag-green">
-      <stop stop-color="#00ffee"/>
-      <stop offset=".49" stop-color="#04ef31"/>
-      <stop offset="1" stop-color="#05ff00"/>
-    </linearGradient>
-  </defs>
-  <path fill="url(#eflag-pink)" d="M37 43h950L37 981v-99l780-770H106z"/>
-  <path fill="url(#eflag-green)" d="M37 43l950 938H37l69-69h711L37 142z"/>
-  <path fill="#00ffee" d="M37 43l69 69v800l-69 69z"/>
+  <path d="M37 43h950L37 981v-99l780-770H106z"/>
+  <path d="M37 43l950 938H37l69-69h711L37 142z"/>
+  <path d="M37 43l69 69v800l-69 69z"/>
 </svg>

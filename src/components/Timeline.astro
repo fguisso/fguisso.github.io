@@ -38,7 +38,7 @@ const hasItems = items.length > 0;
 											<Fragment>
 												{index > 0 && ' / '}
 												<span class="timeline-company">
-													<img src={logo} alt="" width="26" height="26" loading="lazy" decoding="async" />
+													<span class="timeline-company-logo" style={{ '--company-logo': `url("${logo}")` }} aria-hidden="true"></span>
 													{name}
 												</span>
 											</Fragment>
@@ -88,12 +88,12 @@ const hasItems = items.length > 0;
   .meta, .tltag { margin: 0 0 3px; font-size: var(--text-caption); color: var(--muted); }
   .role, .tli-role { margin: 0; color: var(--ink); }
   .timeline-company { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; }
-  .timeline-company img {
+  .timeline-company-logo {
     flex: none;
-    padding: 4px;
-    border-radius: 6px;
-    background: #f7f7f3;
-    object-fit: contain;
+    inline-size: 18px;
+    block-size: 18px;
+    background-color: currentColor;
+    mask: var(--company-logo) center / contain no-repeat;
   }
   .tltag {
     display: inline-block;

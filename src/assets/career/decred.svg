@@ -1,9 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 278 235">
   <!-- Source: https://decred.org/brand/ -->
-  <defs>
-    <linearGradient id="linear-gradient" x1="135.57" y1="154.18" x2="279.38" y2="71.16" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#36bdba"/><stop offset="0.93" stop-color="#39d8aa"/></linearGradient>
-    <linearGradient id="linear-gradient-2" x1="8.23" y1="188.17" x2="126.22" y2="70.18" gradientUnits="userSpaceOnUse"><stop offset="0.2" stop-color="#2576f4"/><stop offset="1" stop-color="#3298da"/></linearGradient>
-  </defs>
-  <path fill="url(#linear-gradient)" d="M221,178l57,57H222l-94-94h58.16a47,47,0,0,0,0-94H167.2l-47-47H184a94,94,0,0,1,94,94C278,132.12,261.2,162,221,178Z"/>
-  <path fill="url(#linear-gradient-2)" d="M57,57,0,0H56.05l94,94H91.89a47,47,0,1,0,0,94H110.8l47,47H94A94,94,0,0,1,0,141C0,102.88,16.8,73,57,57Z"/>
+  <path d="M221,178l57,57H222l-94-94h58.16a47,47,0,0,0,0-94H167.2l-47-47H184a94,94,0,0,1,94,94C278,132.12,261.2,162,221,178Z"/>
+  <path d="M57,57,0,0H56.05l94,94H91.89a47,47,0,1,0,0,94H110.8l47,47H94A94,94,0,0,1,0,141C0,102.88,16.8,73,57,57Z"/>
 </svg>
