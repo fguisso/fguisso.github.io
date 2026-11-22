@@ -15,20 +15,24 @@ import { getPosts, postHref, type PostLanguage } from '../utils/posts';
 interface Props { lang?: PostLanguage }
 const { lang = 'pt' } = Astro.props;
 const english = lang === 'en';
+const role = english ? 'Software engineer focused on application security' : 'Engenheiro de software focado em AppSec';
+const intro = english
+  ? 'I automate security testing, maintain open-source tools, and share what I learn on the blog and in talks.'
+  : 'Automatizo testes de segurança, mantenho ferramentas de código aberto e compartilho o que aprendo no blog e em palestras.';
 const { gearPreview, lifePreview } = getEditorial(lang);
 const posts = await getPosts(lang);
 const featured = posts[0];
 ---
 
-<Site {lang} title={english ? 'Fernando Guisso | Engineering & Security' : 'Fernando Guisso | Engenharia e Segurança'} description={english ? "Software engineering, security, projects and notes by Fernando Guisso." : "Engenharia de software, segurança, projetos e registros de Fernando Guisso."}>
+<Site {lang} title={english ? 'Fernando Guisso | Engineering & Security' : 'Fernando Guisso | Engenharia e Segurança'} description={intro}>
   <main class="shell alt-home" id="conteudo" tabindex="-1">
     <div class="alt-lead">
       <header class="alt-intro">
-        <p class="eyebrow"><span class="signal" aria-hidden="true"></span> {english ? "A personal corner of the internet" : "Um canto pessoal da internet"}</p>
-        <h1>{english ? "Hi, I'm" : "Oi, eu sou o"} <span class="signature text-shimmer">Fernando Guisso<span class="signature-dot">.</span></span></h1>
-        <p>{english ? "Software engineering, security and curiosity. I build tools and share what I learn." : "Engenharia de software, segurança e curiosidade. Crio ferramentas e compartilho o que aprendo."}</p>
+        <h1 class="signature text-shimmer">Fernando Guisso</h1>
+        <p class="intro-role">{role}</p>
+        <p class="intro-bio">{intro}</p>
         <div class="alt-intro-links">
-          <a href={localizedPath("/about/", lang)}>{english ? "A little about me" : "Um pouco sobre mim"} <span aria-hidden="true">↗</span></a>
+          <a href={localizedPath("/about/", lang)}>{english ? "About me" : "Sobre mim"} <span aria-hidden="true">↗</span></a>
           <a class="alt-blog-link" href={localizedPath("/blog/", lang)}>{english ? "Read the articles" : "Ler os artigos"}</a>
         </div>
       </header>
@@ -71,9 +75,9 @@ const featured = posts[0];
     gap: 16px;
   }
   .alt-lead { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: center; margin-bottom: 24px; }
-  .alt-intro .signature { display: block; padding: 0; margin-top: 6px; }
-  .alt-intro h1 { font-size: clamp(29px, 4vw, 56px); }
-  .alt-intro > p:last-of-type { color: var(--body); margin: 16px 0 0; max-width: 34ch; }
+  .alt-intro h1 { display: block; padding: 0; font-size: clamp(32px, 4.4vw, 56px); }
+  .intro-role { margin: 10px 0 0; color: var(--ink); font-size: clamp(15px, 1.7vw, 18px); font-weight: 500; }
+  .intro-bio { max-width: 43ch; margin: 10px 0 0; color: var(--body); }
   .alt-intro-links { display: flex; flex-wrap: wrap; column-gap: 16px; }
   .alt-intro-links a { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; font-size: 13px; }
   .alt-intro-links .alt-blog-link { display: none; color: var(--accent); }
