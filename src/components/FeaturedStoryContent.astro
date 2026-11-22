@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import AsciiBackground from './AsciiBackground.astro';
 import Chip from './Chip.astro';
+import { splitArticleTitle } from '../lib/article-title';
 import { asciiBackgroundScene } from '../lib/ascii-background';
 import { readingMinutes, shortDate } from '../utils/posts';
 
@@ -11,19 +12,18 @@ interface Props {
 
 const { post } = Astro.props;
 const { data } = post;
-const english = data.lang === 'en';
 const scene = asciiBackgroundScene(data.title);
+const { prefix, suffix } = splitArticleTitle(data.title);
 const category = data.categories[0] ?? data.tags[0];
 ---
 
 <div class="featured-art article-art-palette" data-tone={scene.tone} data-surface="bento">
   <AsciiBackground {scene} />
-  <span class="art-words" aria-hidden="true">{english ? "security" : "segurança"}<br /><em>{english ? "from within." : "por dentro."}</em></span>
+  <h2 class="art-words">{prefix}{suffix && <>{' '}<em>{suffix}</em></>}</h2>
   {category && <div class="featured-topic"><Chip>{category}</Chip></div>}
 </div>
 <div class="featured-copy">
   <p class="story-meta"><time datetime={data.pubDate.toISOString()}>{shortDate(data.pubDate, data.lang)}</time> · {readingMinutes(post.body)} min</p>
-  <h2>{data.title}</h2>
   <p>{data.description}</p>
 </div>
 
@@ -37,7 +37,14 @@ const category = data.categories[0] ?? data.tags[0];
     color: var(--bento-ink);
   }
   .featured-art :global(.article-title-ascii) { inline-size: min(76%, 24rem); }
-  .featured-art .art-words { font-size: 33px; margin: auto 0; }
+  .featured-art .art-words {
+    margin: auto 0;
+    color: var(--bento-ink);
+    font-size: clamp(24px, 3vw, 33px);
+    line-height: 1.08;
+    letter-spacing: -.038em;
+    overflow-wrap: anywhere;
+  }
   .featured-art .art-words em { color: var(--article-title-accent); }
   .featured-topic {
     padding-block-start: 8px;
@@ -46,6 +53,5 @@ const category = data.categories[0] ?? data.tags[0];
   }
   .featured-copy { padding: 14px 20px 20px; }
   .featured-copy .story-meta { margin-bottom: 7px; color: var(--muted-on-panel, var(--muted)); }
-  .featured-copy h2 { font: 500 22px/1.18 var(--sans); letter-spacing: -.03em; margin: 0 0 8px; }
   .featured-copy > p:not(.story-meta) { margin: 0; line-height: 21px; }
 </style>

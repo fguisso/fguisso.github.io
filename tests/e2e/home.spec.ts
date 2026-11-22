@@ -9,7 +9,11 @@ test('home renders hero and latest posts', async ({ page }) => {
 	await expect(page.locator('.alt-intro .intro-bio')).toHaveCount(2);
 	await expect(page.locator('[data-hero-canvas]')).toBeVisible();
 	await expect(page.getByRole('heading', { level: 2, name: 'Últimos posts' })).toBeVisible();
-	await expect(page.getByRole('region', { name: 'Publicações' }).getByRole('link')).toHaveCount(3);
+	const latestPosts = page.getByRole('region', { name: 'Publicações' }).getByRole('link');
+	await expect(latestPosts).toHaveCount(3);
+	const featured = page.locator('a.featured-story');
+	const latestTitle = await latestPosts.first().locator('.row-title').innerText();
+	await expect(featured.locator('.featured-art').getByRole('heading', { level: 2 })).toHaveText(latestTitle);
 	await expect(page.getByRole('link', { name: 'Abrir todos os posts' })).toBeVisible();
 	await expect(page.getByRole('region', { name: 'Uses' })).toBeVisible();
 	await expect(page.getByRole('region', { name: 'Life' })).toBeVisible();
