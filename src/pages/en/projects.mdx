@@ -10,38 +10,47 @@ Git Pages is my favorite way to host static web apps without spinning up complex
 
 Everything currently lives on GitHub Pages, but I’m preparing a disaster-recovery setup that mirrors the same artifacts on GitLab Pages. The more layers I have, the easier it is to experiment in the lab without worrying about downtime.
 
-To take advantage of this approach each app must be 100% client-side, using modern browser APIs. If a project needs a dedicated backend, I publish it through a different stack—Git Pages plays the role of a fast showcase.
+To take advantage of this approach each app must be 100% client-side, using modern browser APIs. If a project needs a dedicated backend, I publish it through a different stack. Git Pages plays the role of a fast showcase.
 
 ## Main sites
 
-- [guisso.dev](https://guisso.dev) — Personal blog built with Hugo + Blowfish covering AppSec, homelab and technical experiments.
-- [wiki.guisso.dev](https://wiki.guisso.dev) — Technical wiki powered by Hugo + Hextra where I document architectures, tutorials, and daily references.
-- [devsec.guisso.dev](https://devsec.guisso.dev) — Library of security books and guides organized into learning tracks with Hugo + Hextra.
+- [guisso.dev](https://guisso.dev) - Personal blog built with Astro and MDX covering AppSec, homelab and technical experiments.
+- [wiki.guisso.dev](https://wiki.guisso.dev) - Technical wiki powered by Hugo + Hextra where I document architectures, tutorials, and daily references.
+- [devsec.guisso.dev](https://devsec.guisso.dev) - Library of security books and guides organized into learning tracks with Hugo + Hextra.
+
+## Tools and homelab
+
+- [Homelab](https://wiki.guisso.dev/linux/homelab/) - My Proxmox setup, the services I run, and notes on automating them.
+- [sfer.nvim](https://github.com/fguisso/sfer.nvim) - A Neovim plugin for reading SARIF reports in the editor.
+- [bashingse](https://github.com/fguisso/bashingse) - Scripts for setting up Debian desktops and containers.
+- [Dojo Shield](https://github.com/topics/dojo-shield) - Projects and exercises for secure development workshops.
 
 ## Technical presentations
 
 Decks built with Slidev and published automatically via GitHub Actions.
 
-- [eBPF and Kubescape](https://guisso.dev/talks/ebpf-kubescape) — Observability and security for cloud-native clusters.
-- [Homelab with Proxmox](https://guisso.dev/talks/proxmox-homelab) — Turning a mini PC into a fully fledged lab.
-- [Threat Modeling](https://guisso.dev/talks/threat-modeling) — Methods and exercises used in the Threat Modeling Express workshop.
-- [Top 10 LLM](https://guisso.dev/talks/top-10-llm-0.5) — Key considerations when building products with Large Language Models.
-- [XSS Session](https://guisso.dev/talks/xss-session) — Deep dive on session/XSS bugs tailored for front-end teams.
+- [eBPF and Kubescape](https://guisso.dev/talks/ebpf-kubescape) - Observability and security for cloud-native clusters.
+- [Homelab with Proxmox](https://guisso.dev/talks/proxmox-homelab) - Turning a mini PC into a fully fledged lab.
+- [Threat Modeling](https://guisso.dev/talks/threat-modeling) - Methods and exercises used in the Threat Modeling Express workshop.
+- [Top 10 LLM](https://guisso.dev/talks/top-10-llm-0.5) - Key considerations when building products with Large Language Models.
+- [XSS Session](https://guisso.dev/talks/xss-session) - Deep dive on session/XSS bugs tailored for front-end teams.
 
 ## Music tools
 
-- [GrooveScribe](https://guisso.dev/GrooveScribe) — Drum tab editor written in vanilla JavaScript, perfect for quick practice sessions.
-- [GTuner](https://guisso.dev/gtuner) — Guitar tuner built with Vue.js + Tailwind that uses the Web Audio API to read frequencies.
+- [Groove](https://guisso.dev/groove/) - An editor for writing and reading drum notation in the browser.
+- [DrumKiller](https://github.com/fguisso/drumkiller) - My fork of the rhythm game, with drum studies for MIDI pads.
+- [GrooveScribe](https://guisso.dev/GrooveScribe) - Drum tab editor written in vanilla JavaScript, perfect for quick practice sessions.
+- [GTuner](https://guisso.dev/gtuner) - Guitar tuner built with Vue.js + Tailwind that uses the Web Audio API to read frequencies.
 
 ## Educational games
 
-- [OWASPrdle](https://guisso.dev/OWASPrdle) — Wordle-style game to memorize OWASP vulnerabilities.
-- [Rock Paper WASP](https://guisso.dev/rock-paper-wasp) — Rock-paper-scissors with AppSec references to warm up workshops.
-- [Threat Modeling Express](https://guisso.dev/tme-game) — Card game to review threats after the workshop; see the [Threat Modeling Express](https://guisso.dev/blog/threat-modeling-intro/) post for the full content.
-- [Masters of Pwnage Deck Builder](https://masters-of-pwnage.github.io/mop-playable/) — Deck builder for the offensive-security card game.
+- [OWASPrdle](https://guisso.dev/OWASPrdle) - Wordle-style game to memorize OWASP vulnerabilities.
+- [Rock Paper WASP](https://guisso.dev/rock-paper-wasp) - Rock-paper-scissors with AppSec references to warm up workshops.
+- [Threat Modeling Express](https://guisso.dev/tme-game) - Card game to review threats after the workshop; see the [Threat Modeling Express](https://guisso.dev/blog/threat-modeling-intro/) post for the full content.
+- [Masters of Pwnage Deck Builder](https://masters-of-pwnage.github.io/mop-playable/) - Deck builder for the offensive-security card game.
 
 ## Digital art
 
-- [RFID Art](https://guisso.dev/RFIDArt/) — Interactive installation that reacts to NFC cards and converts reads into animations.
+- [RFID Art](https://guisso.dev/RFIDArt/) - Interactive installation that reacts to NFC cards and converts reads into animations.
   - Works only on Chromium browsers that expose the Web NFC API.
   - My lab to mix simple hardware with generative web experiences.

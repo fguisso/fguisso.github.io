@@ -1,5 +1,4 @@
 ---
-import ProjectBoard from '../components/ProjectBoard.astro';
 import { getRequestLocale, type LocaleCode } from '../i18n/config';
 import Site from './Site.astro';
 
@@ -16,13 +15,12 @@ const lang = forcedLocale ?? getRequestLocale(Astro);
 ---
 
 <Site {title} {description} {lang}>
-	<main id="conteudo" class="shell page-content markdown-page" tabindex="-1">
+	<main id="conteudo" class="reading-shell page-content markdown-page" tabindex="-1">
 		<header class="page-intro">
 			{eyebrow && <p class="eyebrow">{eyebrow}</p>}
 			<h1>{title}</h1>
 			{description && <p class="lead">{description}</p>}
 		</header>
-		<ProjectBoard {lang} />
 		<div class="prose markdown-page__content"><slot /></div>
 	</main>
 </Site>
@@ -33,7 +31,7 @@ const lang = forcedLocale ?? getRequestLocale(Astro);
 	}
 
 	.markdown-page__content {
-		margin-top: 2.5rem;
+		margin-top: var(--section-gap);
 		max-width: 70ch;
 	}
 </style>
