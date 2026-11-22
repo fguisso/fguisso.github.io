@@ -86,7 +86,9 @@ const presentations = talks.map(talk => ({
         {standaloneSlides.map(slide => (
           <li>
             <a href={slide.url} data-tianji-event={`click_talk_resource_${slugifyTag(slide.label)}_slides`}>
-              {slide.label}<span aria-hidden="true">↗</span>
+              <span>{slide.label}</span>
+              {slide.year && <span class="talk-slide-year">{slide.year}</span>}
+              <span class="talk-slide-arrow" aria-hidden="true">↗</span>
             </a>
           </li>
         ))}
@@ -163,14 +165,20 @@ const presentations = talks.map(talk => ({
   .talk-archive { margin-top: calc(var(--section-gap) + 8px); }
   .talk-archive ul { margin: 0; padding: 0; list-style: none; border-block-start: 1px solid var(--line); }
   .talk-archive a {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
     min-height: 44px;
     padding-block: 10px;
     border-block-end: 1px solid var(--line);
   }
+  .talk-slide-year {
+    color: var(--muted);
+    font-size: var(--text-supporting);
+    font-variant-numeric: tabular-nums;
+  }
+  .talk-slide-arrow { grid-column: 3; }
   @media (max-width: 880px) {
     .talk-intro { grid-template-columns: minmax(0, 1fr); }
   }

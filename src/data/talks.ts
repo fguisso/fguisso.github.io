@@ -3,6 +3,10 @@ type TalkResource = {
 	url: string;
 };
 
+type StandaloneSlide = TalkResource & {
+	year?: number;
+};
+
 type Talk = {
 	event: string;
 	tag: string;
@@ -126,15 +130,16 @@ export function getTalkPage(lang: 'pt' | 'en') {
 		},
 	];
 
-	const standaloneSlides: TalkResource[] = [
-		{ label: 'Carreira em AppSec', url: 'https://guisso.dev/talks/carreira-appsec/' },
-		{ label: 'Software Livre, Comunidade e Soberania', url: 'https://guisso.dev/talks/software-livre/' },
-		{ label: 'Segurança em IA', url: 'https://guisso.dev/talks/ai-sec/' },
-		{ label: 'Segurança no PyPI', url: 'https://guisso.dev/talks/pip-sec/' },
-		{ label: 'CI / CDon’t', url: 'https://guisso.dev/talks/cicdont/' },
-		{ label: 'CTF: Capture the Flag', url: 'https://guisso.dev/ctf-slides/build/' },
-		{ label: t('Bitcoin Developer para iniciantes', 'Bitcoin Development for Beginners'), url: 'https://guisso.dev/btc-dev-bitconf/' },
-		{ label: 'NodeBots + Garoa Dojo Shield', url: 'https://guisso.dev/nodebots-cpbr/' },
+	const standaloneSlides: StandaloneSlide[] = [
+		{ label: 'Carreira em AppSec', url: 'https://guisso.dev/talks/carreira-appsec/', year: 2026 },
+		{ label: 'Software Livre, Comunidade e Soberania', url: 'https://guisso.dev/talks/software-livre/', year: 2026 },
+		{ label: 'Segurança em IA', url: 'https://guisso.dev/talks/ai-sec/', year: 2026 },
+		{ label: 'Segurança no PyPI', url: 'https://guisso.dev/talks/pip-sec/', year: 2025 },
+		{ label: 'CI / CDon’t', url: 'https://guisso.dev/talks/cicdont/', year: 2025 },
+		{ label: 'Phone Phreaking', url: 'https://guisso.dev/talks/phreaking/', year: 2024 },
+		{ label: 'CTF: Capture the Flag', url: 'https://guisso.dev/ctf-slides/build/', year: 2016 },
+		{ label: t('Bitcoin Developer para iniciantes', 'Bitcoin Development for Beginners'), url: 'https://guisso.dev/btc-dev-bitconf/', year: 2016 },
+		{ label: 'NodeBots + Garoa Dojo Shield', url: 'https://guisso.dev/nodebots-cpbr/', year: 2015 },
 	];
 
 	return { repoCard, repoHighlights, talks, standaloneSlides };
