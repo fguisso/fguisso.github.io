@@ -12,7 +12,7 @@ const path = Astro.url.pathname;
 const more = [
   { href: booksCatalog, text: english ? 'Books' : 'Livros', external: true },
   { href: '/tags/', text: 'Tags' },
-  { href: '/style-guide/', text: 'Style guide' },
+  { href: '/style-guide/', text: english ? 'Style guide' : 'Guia de estilo' },
 ].map(({ href, text, external }) => ({ href: external ? href : localizedPath(href, lang), text, external }));
 const active = (href: string) => path.startsWith(href) ? 'page' : undefined;
 const home = localizedPath('/', lang);

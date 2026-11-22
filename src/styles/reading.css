@@ -176,7 +176,7 @@ body { letter-spacing: -.012em; }
   letter-spacing: normal;
 }
 .row-date, .row-meta, .story-meta, .trail,
-.toc-menu summary, .toc-menu nav a, .site-footer p, .footer-links a, .fixture-note { font-size: var(--text-caption); }
+.toc-menu summary, .toc-menu nav a, .fixture-note { font-size: var(--text-caption); }
 @media(max-width:760px) {
   .prose :is(h2, h3) { scroll-margin-top: 12px; }
   .article-header h1 { font-size: 34px; line-height: 38px; letter-spacing: -.04em; }

@@ -8,12 +8,30 @@ const english = lang === 'en';
 ---
 
 <footer class="site-footer shell">
-  <div>
-    <a class="footer-signature" href={localizedPath('/', lang)}>guisso.dev</a>
-    <p>{english ? 'Good security comes with the code.' : 'Segurança boa vem junto com o código.'}</p>
-  </div>
-  <div class="footer-links">
-    <a href={localizedPath('/style-guide/', lang)}>{english ? 'Style guide' : 'Guia de estilo'}</a>
-    <a href={localizedPath('/rss.xml', lang)}>RSS</a>
-  </div>
+  <a href={localizedPath('/', lang)} aria-label={english ? 'guisso.dev home' : 'guisso.dev, início'}>guisso.dev</a>
+  <a href={localizedPath('/rss.xml', lang)} type="application/rss+xml">RSS</a>
 </footer>
+
+<style>
+  .site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 16px;
+    margin-block-start: clamp(3rem, 6vw, 4rem);
+    padding-block: 8px 20px;
+    border-block-start: 1px solid var(--line);
+    font-size: var(--text-supporting);
+  }
+  a {
+    display: inline-flex;
+    min-block-size: 44px;
+    align-items: center;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  a:is(:hover, :focus-visible) {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+</style>
