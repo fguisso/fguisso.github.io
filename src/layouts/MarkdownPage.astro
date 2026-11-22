@@ -1,6 +1,6 @@
 ---
 import { getRequestLocale, type LocaleCode } from '../i18n/config';
-import { withBase } from '../utils/paths';
+import LogoWordmark from '../components/LogoWordmark.astro';
 import Site from './Site.astro';
 
 interface Props {
@@ -18,7 +18,7 @@ const lang = locale ?? getRequestLocale(Astro);
 <Site {title} {description} {lang}>
 	<main id="conteudo" class="reading-shell markdown-page" tabindex="-1">
 		<h1 class="markdown-page__title">
-			<img src={withBase('/favicon.svg')} alt="" width="32" height="32" />
+			<LogoWordmark monogram shineId="markdown-title-mark" width={32} height={32} aria-hidden="true" />
 			<span>{title}</span>
 		</h1>
 		<div class="prose markdown-page__content"><slot /></div>
@@ -37,7 +37,7 @@ const lang = locale ?? getRequestLocale(Astro);
 		gap: 12px;
 	}
 
-	.markdown-page__title img { flex: none; }
+	.markdown-page__title :global(.logo-wordmark) { flex: none; }
 
 	.markdown-page__content {
 		margin-block-start: calc(var(--section-gap) / 2);

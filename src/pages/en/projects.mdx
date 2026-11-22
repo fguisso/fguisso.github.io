@@ -5,6 +5,8 @@ title: Projects
 description: Collection of apps and sites I deploy to Git Pages to test ideas quickly.
 ---
 
+import { booksCatalog } from '../../data/navigation';
+
 Git Pages is my favorite way to host static web apps without spinning up complex infrastructure. Deploys are just a git push, hosting stays free for open source projects, and the CDN keeps content close to whoever visits.
 
 Everything currently lives on GitHub Pages, but I’m preparing a disaster-recovery setup that mirrors the same artifacts on GitLab Pages. The more layers I have, the easier it is to experiment in the lab without worrying about downtime.
@@ -15,7 +17,7 @@ To take advantage of this approach each app must be 100% client-side, using mode
 
 - [guisso.dev](https://guisso.dev) - Personal blog built with Astro and MDX covering AppSec, homelab and technical experiments.
 - [wiki.guisso.dev](https://wiki.guisso.dev) - Technical wiki powered by Hugo + Hextra where I document architectures, tutorials, and daily references.
-- [devsec.guisso.dev](https://devsec.guisso.dev) - Library of security books and guides organized into learning tracks with Hugo + Hextra.
+- <a href={booksCatalog}>eBooks</a> - Digital library with books to read and download.
 
 ## Tools and homelab
 

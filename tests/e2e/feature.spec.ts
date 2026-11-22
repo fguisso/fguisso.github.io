@@ -6,8 +6,10 @@ test('project Markdown renders its localized title and content', async ({ page }
 		await expect(page).toHaveTitle(title + ' · guisso.dev');
 		const heading = page.getByRole('heading', { level: 1, name: title });
 		await expect(heading).toBeVisible();
-		await expect(heading.locator('img')).toHaveAttribute('src', /\/favicon\.svg$/);
+		const menuMonogram = page.locator('.nav-monogram svg');
+		await expect(heading.locator('svg')).toHaveAttribute('viewBox', await menuMonogram.getAttribute('viewBox') ?? '');
 		await expect(page.locator('.markdown-page__content > p').first()).toContainText('Git Pages');
+		await expect(page.locator('main').getByRole('link', { name: 'eBooks', exact: true })).toHaveAttribute('href', 'https://guisso.dev/books/');
 	}
 });
 
