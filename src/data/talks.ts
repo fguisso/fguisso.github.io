@@ -124,24 +124,6 @@ export function getTalkPage(lang: 'pt' | 'en') {
 				url: 'https://youtu.be/2HKUgc0LjcI',
 			},
 		},
-		{
-			event: 'Bitconf 2016',
-			tag: 'blockchain',
-			talkTitle: t('Bitcoin Developer para iniciantes', 'Bitcoin Development for Beginners'),
-			slides: {
-				label: t('Slides', 'Slides (PT-BR)'),
-				url: 'https://guisso.dev/btc-dev-bitconf/',
-			},
-		},
-		{
-			event: 'Campus Party Brasil 2016',
-			tag: 'hardware',
-			talkTitle: 'NodeBots + Garoa Dojo Shield',
-			slides: {
-				label: t('Slides', 'Slides (PT-BR)'),
-				url: 'https://guisso.dev/nodebots-cpbr/',
-			},
-		},
 	];
 
 	const standaloneSlides: TalkResource[] = [
@@ -151,6 +133,8 @@ export function getTalkPage(lang: 'pt' | 'en') {
 		{ label: 'Segurança no PyPI', url: 'https://guisso.dev/talks/pip-sec/' },
 		{ label: 'CI / CDon’t', url: 'https://guisso.dev/talks/cicdont/' },
 		{ label: 'CTF: Capture the Flag', url: 'https://guisso.dev/ctf-slides/build/' },
+		{ label: t('Bitcoin Developer para iniciantes', 'Bitcoin Development for Beginners'), url: 'https://guisso.dev/btc-dev-bitconf/' },
+		{ label: 'NodeBots + Garoa Dojo Shield', url: 'https://guisso.dev/nodebots-cpbr/' },
 	];
 
 	return { repoCard, repoHighlights, talks, standaloneSlides };
