@@ -1,6 +1,5 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import { withBase } from '../utils/paths';
 
 type Variant = 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost';
 type Size = 'sm' | 'md' | 'lg';
@@ -11,8 +10,8 @@ interface Props extends HTMLAttributes<'button'> {
 	size?: Size;
 }
 
-const { href, variant = 'primary', size = 'md', class: className, ...rest } = Astro.props as Props;
-const resolvedHref = typeof href === 'string' ? withBase(href) : undefined;
+const { href, type = 'button', variant = 'primary', size = 'md', class: className, ...rest } = Astro.props as Props;
+const resolvedHref = typeof href === 'string' ? href : undefined;
 const classes = [
 	'btn',
 	`btn-${variant}`,
@@ -29,7 +28,36 @@ const classes = [
 		<slot />
 	</a>
 ) : (
-	<button class:list={classes} {...rest}>
+	<button {type} class:list={classes} {...rest}>
 		<slot />
 	</button>
 )}
+
+<style>
+	.btn {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 44px;
+		padding-inline: 16px;
+		padding-block: 8px;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		color: var(--ink);
+		background: var(--area);
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 1.3;
+		text-align: center;
+		text-decoration: none;
+	}
+	.btn:hover { color: var(--accent); border-color: var(--accent); }
+	.btn-accent { color: var(--page); background: var(--accent); border-color: var(--accent); }
+	.btn-accent:hover { color: var(--page); background: color-mix(in srgb, var(--accent) 88%, var(--ink)); }
+	.btn-secondary { color: var(--secondary); background: transparent; }
+	.btn-outline, .btn-ghost { background: transparent; }
+	.btn-ghost:not(:hover) { border-color: transparent; }
+	.btn-sm { padding-inline: 12px; font-size: 12px; }
+	.btn-lg { padding-inline: 20px; min-height: 48px; }
+	.btn:disabled { opacity: .55; cursor: default; color: var(--ink); border-color: var(--line); }
+</style>

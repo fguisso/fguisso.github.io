@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.skip(process.env.CI === 'true', 'Skip Tianji live beacon check on CI; runs only locally with network access.');
+test.skip(process.env.PLAYWRIGHT_TIANJI_LIVE !== '1', 'Enable explicitly to send live analytics events.');
 
 test('tianji sends a live pageview event after loading', async ({ page }) => {
 	const beaconRequests: string[] = [];

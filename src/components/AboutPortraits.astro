@@ -1,0 +1,160 @@
+---
+import { publicDir } from 'astro:config/server';
+import { withBase } from '../utils/paths';
+import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
+import { asciiGlyph } from '../lib/ascii-background-shapes';
+
+interface Props { lang?: 'pt' | 'en'; }
+const { lang = 'pt' } = Astro.props;
+const english = lang === 'en';
+const portraits = [
+  { kind: 'photo', src: 'style-guide/guisso-photo.webp', width: 192, height: 197, crop: .2, label: english ? 'Original photo of Fernando Guisso' : 'Foto original de Fernando Guisso' },
+  { kind: 'avatar', src: 'style-guide/guisso-avatar.webp', width: 144, height: 144, crop: .5, label: english ? 'ASCII avatar of Fernando Guisso' : 'Avatar de Fernando Guisso em ASCII' },
+] as const;
+const columns = 32;
+const rows = 26;
+const canvasWidth = 320;
+const canvasHeight = 256;
+const cellWidth = canvasWidth / columns;
+const cellHeight = canvasHeight / rows;
+const inlinePng = (buffer: Buffer) => `data:image/png;base64,${buffer.toString('base64')}`;
+const luminance = (r: number, g: number, b: number) => (.2126 * r + .7152 * g + .0722 * b) / 255;
+const portraitTones = [[118, 101, 161], [151, 132, 194], [130, 181, 154], [176, 233, 199]];
+const bayer = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+// Silhouette traced from guisso-photo.webp in the source image's coordinates.
+const photoContour = `M 88 19 C 102 14 120 20 133 28 C 143 32 147 41 147 54
+  C 147 63 148 73 147 82 C 149 90 148 104 146 114 C 144 131 141 144 134 154
+  C 143 159 145 170 151 181 L 161 197 H 0 V 183 C 12 179 25 177 34 174
+  C 35 168 33 157 36 149 C 37 142 42 137 54 136 C 52 132 49 128 49 123
+  C 48 119 48 114 50 111 L 52 103 C 52 98 53 92 53 86 C 54 75 54 65 56 57
+  C 56 47 61 38 70 29 C 76 24 82 21 88 19 Z`;
+
+async function renderGlyphs(glyphs: string[]) {
+  const vector = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvasWidth}" height="${canvasHeight}">
+    <g font-family="monospace" font-weight="600" font-size="${cellHeight * 1.26}" text-anchor="middle">${glyphs.join('')}</g>
+  </svg>`;
+  return inlinePng(await sharp(Buffer.from(vector)).png({ palette: true, colours: 128 }).toBuffer());
+}
+
+async function renderPortrait(portrait: typeof portraits[number]) {
+  const { src, width, height, crop, kind } = portrait;
+  const cropHeight = Math.round(width * 4 / 5);
+  const cropTop = Math.round((height - cropHeight) * crop);
+  const source = sharp(fileURLToPath(new URL(src, publicDir)))
+    .extract({ left: 0, top: cropTop, width, height: cropHeight });
+  const { data, info } = await source.clone().resize(columns, rows, { fit: 'fill' })
+    .removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const glyphs = Array.from({ length: columns * rows }, (_, i) => {
+    const offset = i * info.channels;
+    const red = data[offset], green = data[offset + 1], blue = data[offset + 2];
+    const light = luminance(red, green, blue);
+    const column = i % columns;
+    const row = Math.floor(i / columns);
+    let coverage = .11 + .89 * light;
+    let color = [38 + .85 * red, 44 + .82 * green, 41 + .83 * blue];
+    if (kind === 'photo') {
+      // Dither both glyph density and color, leaving the background transparent.
+      const threshold = (bayer[(row % 4) * 4 + column % 4] + .5) / 16;
+      const tone = portraitTones[Math.floor(light * (portraitTones.length - 1) + threshold)];
+      coverage = Math.max(0, Math.min(1, coverage + (threshold - .5) * .16));
+      color = color.map((channel, index) => channel * .65 + tone[index] * .35);
+    }
+    const x = (column + .5) * cellWidth;
+    const y = (row + .85) * cellHeight;
+    return `<text x="${x}" y="${y}" fill="rgb(${color.map(Math.round).join(',')})">${asciiGlyph(coverage)}</text>`;
+  });
+  if (kind === 'avatar') return { ...portrait, ascii: await renderGlyphs(glyphs), scenery: undefined };
+
+  const mask = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${columns}" height="${rows}"
+    viewBox="0 ${cropTop} ${width} ${cropHeight}" preserveAspectRatio="none"><path d="${photoContour}" fill="white"/></svg>`);
+  const { data: matte, info: { channels } } = await sharp(mask).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const isSubject = (index: number) => matte[(index + 1) * channels - 1] >= 128;
+  const [ascii, scenery] = await Promise.all([
+    renderGlyphs(glyphs.filter((_, index) => isSubject(index))),
+    renderGlyphs(glyphs.filter((_, index) => !isSubject(index))),
+  ]);
+  return { ...portrait, ascii, scenery };
+}
+
+const previews = await Promise.all(portraits.map(renderPortrait));
+---
+
+<div class="about-portraits">
+  {previews.map(({ kind, src, label, width, height, ascii, scenery }) => (
+    <button type="button" class={`about-portrait about-${kind}`} data-portrait-toggle
+      aria-label={label} aria-pressed="false" disabled>
+      <img class="portrait-original" src={withBase('/' + src)} alt="" {width} {height}
+        fetchpriority={kind === 'avatar' ? 'high' : undefined} decoding={kind === 'photo' ? 'async' : undefined} />
+      <img class="portrait-ascii" src={ascii} alt="" width={canvasWidth} height={canvasHeight} />
+      {scenery && <img class="portrait-ascii-scene" src={scenery} alt="" width={canvasWidth} height={canvasHeight} />}
+    </button>
+  ))}
+</div>
+
+<script>
+  for (const portrait of document.querySelectorAll<HTMLButtonElement>('[data-portrait-toggle]')) {
+    portrait.addEventListener('click', () => {
+      portrait.setAttribute('aria-pressed', String(portrait.getAttribute('aria-pressed') !== 'true'));
+    });
+    portrait.disabled = false;
+  }
+</script>
+
+<style>
+  .about-portraits {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 176px));
+    gap: 12px;
+  }
+
+  .about-portrait {
+    --alternate: 0;
+    position: relative;
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-panel);
+    background: var(--panel);
+    cursor: pointer;
+  }
+
+  .about-portrait[aria-pressed="true"] { --alternate: 1; --portrait-flash: portrait-scene-flash; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .about-portrait:hover { --alternate: 1; --portrait-flash: portrait-scene-flash; }
+  }
+
+  .about-portrait img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .about-photo { background: transparent; border-color: transparent; }
+  .about-photo .portrait-original { object-position: center 20%; opacity: var(--alternate); }
+  .about-photo .portrait-ascii { opacity: calc(1 - var(--alternate)); }
+  .portrait-ascii-scene { opacity: calc(.82 * (1 - var(--alternate))); }
+  .about-avatar .portrait-original { image-rendering: pixelated; }
+  .about-avatar .portrait-ascii {
+    background: color-mix(in srgb, #101113 92%, var(--accent));
+    opacity: var(--alternate);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .portrait-ascii, .about-photo .portrait-original { transition: opacity 220ms cubic-bezier(.2,.65,.3,1); }
+    .about-photo :is(.portrait-ascii, .portrait-original) { transition-delay: calc(var(--alternate) * 160ms); }
+    .portrait-ascii-scene { animation: var(--portrait-flash, none) 380ms ease-out; }
+  }
+
+  @keyframes portrait-scene-flash {
+    0% { opacity: .82; }
+    16%, 42% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+</style>

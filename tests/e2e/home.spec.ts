@@ -5,12 +5,10 @@ test('home renders hero and latest posts', async ({ page }) => {
 
 	await expect(page).toHaveTitle(/guisso\.dev/i);
 	await expect(page.getByRole('heading', { level: 1, name: /Fernando Guisso/i })).toBeVisible();
-	await expect(page.getByText(/Security Software Engineer/i)).toBeVisible();
-
-	await expect(page.getByRole('link', { name: /Ver posts/i })).toBeVisible();
-	await expect(page.locator('#latest')).toBeVisible();
-	await expect(page.getByRole('heading', { level: 2, name: /novos artigos/i })).toBeVisible();
-	await expect(page.locator('#latest-grid li').first()).toBeVisible();
-
-	await expect(page.getByRole('link', { name: /Veja mais/i })).toBeVisible();
+	await expect(page.locator('[data-hero-canvas]')).toBeVisible();
+	await expect(page.getByRole('heading', { level: 2, name: 'Últimos posts' })).toBeVisible();
+	await expect(page.getByRole('region', { name: 'Publicações' }).getByRole('link')).toHaveCount(3);
+	await expect(page.getByRole('link', { name: 'Abrir todos os posts' })).toBeVisible();
+	await expect(page.getByRole('region', { name: 'Uses' })).toBeVisible();
+	await expect(page.getByRole('region', { name: 'Life' })).toBeVisible();
 });

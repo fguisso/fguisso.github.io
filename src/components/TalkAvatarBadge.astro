@@ -1,92 +1,33 @@
 ---
 import type { ImageMetadata } from 'astro';
-import stackedPhoto from '../assets/guisso-photo.png';
-import stackedAvatar from '../assets/guisso-avatar.jpg';
 import { withBase } from '../utils/paths';
+import '../styles/talk-avatar.css';
 
 interface Props {
 	photoSrc?: ImageMetadata | string;
 	avatarSrc?: ImageMetadata | string;
+	variant?: 'default' | 'corner';
+	revealPhoto?: boolean;
 }
 
 const {
-	photoSrc = stackedPhoto,
-	avatarSrc = stackedAvatar
+	photoSrc = '/style-guide/guisso-photo.webp',
+	avatarSrc = '/style-guide/guisso-avatar.webp',
+	variant = 'default',
+	revealPhoto = true,
 } = Astro.props as Props;
 
-const photoSrcValue = withBase(typeof photoSrc === 'string' ? photoSrc : photoSrc.src);
-const avatarSrcValue = withBase(typeof avatarSrc === 'string' ? avatarSrc : avatarSrc.src);
+const photoSrcValue = typeof photoSrc === 'string' ? withBase(photoSrc) : photoSrc.src;
+const avatarSrcValue = typeof avatarSrc === 'string' ? withBase(avatarSrc) : avatarSrc.src;
 ---
 
-<div class="talk-avatar" aria-hidden="true">
-	<img
-		class="talk-avatar__circle talk-avatar__circle--primary"
-		src={avatarSrcValue}
-		alt=""
-		loading="lazy"
-		decoding="async"
-	/>
-	<img
-		class="talk-avatar__circle talk-avatar__circle--secondary"
-		src={photoSrcValue}
-		alt=""
-		loading="lazy"
-		decoding="async"
-	/>
+<div class="talk-avatar" data-variant={variant} aria-hidden="true">
+	<span class="talk-avatar__square talk-avatar__square--primary">
+		<img src={avatarSrcValue} alt="" width="54" height="54" loading="lazy" decoding="async" />
+	</span>
+	{revealPhoto && (
+		<span class="talk-avatar__square talk-avatar__square--secondary">
+			<img src={photoSrcValue} alt="" width="54" height="54" loading="lazy" decoding="async" />
+		</span>
+	)}
 </div>
-
-<style>
-		:global(:root) {
-			--talk-avatar-ease: cubic-bezier(0.33, 1, 0.68, 1);
-		}
-
-		.talk-avatar {
-			display: inline-flex;
-			align-items: center;
-			justify-content: flex-start;
-			padding: 0.25rem 0.5rem 0.25rem 0.25rem;
-			border-radius: 999px;
-			background: transparent;
-			gap: 0;
-		}
-
-		.talk-avatar__circle {
-			width: 3.35rem;
-			height: 3.35rem;
-			border-radius: 999px;
-			object-fit: cover;
-			box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
-			border: 2px solid rgba(2, 2, 4, 0.85);
-			background: rgba(255, 255, 255, 0.04);
-			transition: transform 0.45s var(--talk-avatar-ease), opacity 0.45s var(--talk-avatar-ease),
-				filter 0.45s var(--talk-avatar-ease);
-		}
-
-		.talk-avatar__circle + .talk-avatar__circle {
-			margin-left: -1.2rem;
-		}
-
-		.talk-avatar__circle--primary {
-			position: relative;
-			z-index: 2;
-			transform: translateX(0);
-		}
-
-		.talk-avatar__circle--secondary {
-			position: relative;
-			z-index: 1;
-			transform: translateX(-0.75rem) scale(0.88);
-			opacity: 0.65;
-			filter: saturate(0.75);
-		}
-
-		.talk-avatar:hover .talk-avatar__circle--primary {
-			transform: translateX(-0.2rem);
-		}
-
-		.talk-avatar:hover .talk-avatar__circle--secondary {
-			transform: translateX(-0.05rem) scale(0.95);
-			opacity: 1;
-			filter: saturate(1);
-		}
-</style>

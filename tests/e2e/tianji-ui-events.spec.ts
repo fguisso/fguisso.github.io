@@ -1,115 +1,64 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
-test.use({ locale: 'pt-BR', extraHTTPHeaders: { 'accept-language': 'pt-BR' } });
-
-const captureTianji = async (page: import('@playwright/test').Page) => {
-	const events: Array<Record<string, any>> = [];
-
-	// Listen without intercepting so events hit Tianji for real.
-	page.on('requestfinished', (req) => {
-		if (!req.url().includes('/api/website/send')) return;
-		try {
-			const body = req.postData();
-			if (body) events.push(JSON.parse(body));
-		} catch {
-			// ignore parse errors
-		}
+async function captureTianji(page: Page) {
+	const events: string[] = [];
+	await page.route('https://tc.guisso.dev/tracker.js', (route) => route.fulfill({
+		contentType: 'application/javascript',
+		body: `document.addEventListener('click', (event) => {
+			const item = event.target.closest('[data-tianji-event]');
+			if (item) fetch('https://tc.guisso.dev/api/website/send', {
+				method: 'POST',
+				body: JSON.stringify({ name: item.dataset.tianjiEvent }),
+				keepalive: true,
+			});
+		});`,
+	}));
+	await page.route('https://tc.guisso.dev/api/website/send', async (route) => {
+		events.push(route.request().postDataJSON().name);
+		await route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*' } });
 	});
-
-	// Close popups to keep current context stable when target="_blank".
-	page.on('popup', (popup) => popup.close().catch(() => {}));
 	return events;
-};
+}
 
-const hasEvent = (events: Array<Record<string, any>>, name: string | RegExp) =>
-	events.some((evt) => {
-		const n = evt?.payload?.name;
-		return typeof name === 'string' ? n === name : name.test(String(n));
-	});
-
-test('project click emits click_project', async ({ page }) => {
+test('a project click emits click_project', async ({ page }) => {
 	const events = await captureTianji(page);
-
-	await page.goto('/', { waitUntil: 'networkidle' });
-	await page.waitForSelector('script[src*="tc.guisso.dev/tracker.js"]', { state: 'attached' });
-
-	const projectLink = page.locator('.featured-project__link').first();
-	await projectLink.evaluate((el) => el.addEventListener('click', (e) => e.preventDefault(), { once: true }));
-	await projectLink.click();
-	await page.waitForTimeout(1500);
-
-	expect(hasEvent(events, /click_project_/)).toBe(true);
+	await page.goto('/');
+	const project = page.getByRole('link', { name: /Projeto sfer.nvim/ });
+	await project.evaluate((element) => element.addEventListener('click', (event) => event.preventDefault(), { once: true }));
+	await project.click();
+	await expect.poll(() => events).toContain('click_project_sfer-nvim_pt');
 });
 
-test('bio buttons emit download_bio_photo and copy_bio_text', async ({ page }) => {
+test('the bio buttons emit photo download and copy events', async ({ page }) => {
 	const events = await captureTianji(page);
-
-	await page.goto('/about', { waitUntil: 'networkidle' });
-	await page.waitForSelector('script[src*="tc.guisso.dev/tracker.js"]', { state: 'attached' });
-
-	const downloadLink = page.getByRole('link', { name: /Baixar foto/i });
-	await downloadLink.scrollIntoViewIfNeeded();
-	await downloadLink.evaluate((el) => el.addEventListener('click', (e) => e.preventDefault(), { once: true }));
-	await downloadLink.click();
-	await page.waitForTimeout(500);
-
-	try {
-		await page.waitForSelector('#bio-text, #bio-text-en', { timeout: 5000, state: 'attached' });
-	} catch {
-		await page.goto('/en/about', { waitUntil: 'networkidle' });
-		await page.waitForSelector('#bio-text, #bio-text-en', { timeout: 10000, state: 'attached' });
-	}
-
-	const copyBtn = page.locator('button.copy-icon');
-	await copyBtn.click({ timeout: 10000 });
-	await copyBtn.click({ timeout: 10000 });
-	await page.waitForTimeout(2500);
-
-	expect(hasEvent(events, /download_bio_photo_/)).toBe(true);
-	if (!hasEvent(events, /copy_bio_text_/)) {
-		// Fallback: force a track call to validate the pipeline even if the click handler is blocked.
-		await page.evaluate(() =>
-			window.tianji?.track?.('copy_bio_text_fallback', { location: 'bio', source: 'playwright-fallback' })
-		);
-		await page.waitForTimeout(1000);
-	}
-
-	expect(hasEvent(events, /copy_bio_text_/)).toBe(true);
+	await page.goto('/about/');
+	const download = page.getByRole('link', { name: /Baixar foto/ });
+	await download.evaluate((element) => element.addEventListener('click', (event) => event.preventDefault(), { once: true }));
+	await download.click();
+	await page.getByRole('button', { name: 'Copiar bio' }).click();
+	await expect.poll(() => events).toEqual(['download_bio_photo_pt', 'copy_bio_text_pt']);
 });
 
-test('talk resources emit click_talk_repo and click_talk_resource', async ({ page }) => {
+test('talk links emit repository and resource events', async ({ page }) => {
 	const events = await captureTianji(page);
-
-	await page.goto('/talk', { waitUntil: 'networkidle' });
-	await page.waitForSelector('script[src*="tc.guisso.dev/tracker.js"]', { state: 'attached' });
-
-	const repoLink = page.getByRole('link', { name: /Ver repositório/i });
-	await repoLink.evaluate((el) => el.addEventListener('click', (e) => e.preventDefault(), { once: true }));
-	await repoLink.click();
-	await page.waitForTimeout(800);
-
-	// Click first article link/button in the timeline actions
-	const articleLink = page.getByRole('link', { name: /Ler artigo/i }).first();
-	if (await articleLink.isVisible()) {
-		await articleLink.evaluate((el) => el.addEventListener('click', (e) => e.preventDefault(), { once: true }));
-		await articleLink.click();
-		await page.waitForTimeout(1200);
+	await page.goto('/talk/');
+	const repo = page.getByRole('link', { name: 'Ver repositório' });
+	const article = page.locator('.talk-article').first();
+	for (const link of [repo, article]) {
+		await link.evaluate((element) => element.addEventListener('click', (event) => event.preventDefault(), { once: true }));
+		await link.click();
 	}
-
-	expect(hasEvent(events, /click_talk_repo_/)).toBe(true);
-	expect(hasEvent(events, /click_talk_resource_/)).toBe(true);
+	await expect.poll(() => events.some((name) => name.startsWith('click_talk_repo_'))).toBe(true);
+	await expect.poll(() => events.some((name) => name.startsWith('click_talk_resource_'))).toBe(true);
 });
 
-test('footer socials emit outbound_link', async ({ page }) => {
+test('a social link emits an outbound event', async ({ page }) => {
 	const events = await captureTianji(page);
-
-	await page.goto('/', { waitUntil: 'networkidle' });
-	await page.waitForSelector('script[src*="tc.guisso.dev/tracker.js"]', { state: 'attached' });
-	const firstSocial = page.locator('.social-links a').first();
-	await firstSocial.scrollIntoViewIfNeeded();
-	await firstSocial.evaluate((el) => el.addEventListener('click', (e) => e.preventDefault(), { once: true }));
-	await firstSocial.click();
-	await page.waitForTimeout(1200);
-
-	expect(hasEvent(events, /outbound_link_/)).toBe(true);
+	await page.goto('/');
+	const marquee = page.getByRole('navigation', { name: 'Redes sociais' });
+	await marquee.getByRole('button', { name: 'Pausar movimento das redes sociais' }).click();
+	const social = marquee.getByRole('link', { name: 'GitHub' });
+	await social.evaluate((element) => element.addEventListener('click', (event) => event.preventDefault(), { once: true }));
+	await social.click();
+	await expect.poll(() => events).toContain('outbound_link_github_pt');
 });

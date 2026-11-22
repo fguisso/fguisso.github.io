@@ -21,3 +21,16 @@ const classes = [
 <span class:list={classes} {...rest}>
 	<slot />
 </span>
+
+<style>
+	.chip {
+		display: inline-block;
+		padding: 2px 9px;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		font: 500 12px/1.5 var(--sans);
+		color: var(--ink);
+		vertical-align: middle;
+	}
+	.chip--solid { border-color: transparent; background: var(--accent); color: var(--page); }
+</style>

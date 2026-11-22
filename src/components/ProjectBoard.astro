@@ -1,0 +1,122 @@
+---
+import AsciiBackground from './AsciiBackground.astro';
+import Chip from './Chip.astro';
+import { asciiBackgroundScene } from '../lib/ascii-background';
+import type { PostLanguage } from '../utils/posts';
+
+interface Props {
+  compact?: boolean;
+  bento?: boolean;
+  lang?: PostLanguage;
+}
+
+const { compact = false, bento = false, lang = 'pt' } = Astro.props;
+const english = lang === 'en';
+const isCompact = compact || bento;
+const ProjectTitle = compact && !bento ? 'h3' : 'h2';
+const homelabScene = asciiBackgroundScene('Homelab');
+const dojoScene = asciiBackgroundScene('Dojo Shield');
+---
+<div class:list={['project-board', { 'is-compact': isCompact, 'is-bento': bento }]}>
+  <a class="project-tile sarif-tile" href="https://github.com/fguisso/sfer.nvim" rel="noreferrer" data-tianji-event={`click_project_sfer-nvim_${lang}`}>
+    {bento ? <Chip class="project-chip">{english ? "Project" : "Projeto"}</Chip> : <div class="tile-top"><span>NEOVIM / APPSEC</span><span aria-hidden="true">↗</span></div>}
+    <div class="sarif-preview" aria-hidden="true">
+      <span class="code-comment">{english ? "// a place for findings" : "// um lugar para os findings"}</span>
+      <span><b>:edit</b> <i>{english ? "results.sarif" : "resultados.sarif"}</i></span>
+      <span class="code-guide">{english ? "└─ file · line · context" : "└─ arquivo · linha · contexto"}</span>
+    </div>
+    <ProjectTitle>sfer.nvim</ProjectTitle>
+    <p>{english ? "SARIF in the editor. Less context switching, more time with the code." : "SARIF no editor. Menos troca de contexto, mais tempo perto do código."}</p>
+    {!bento && <span class="tile-caption">{english ? "View the repository on GitHub ↗" : "Abrir repositório no GitHub ↗"}</span>}
+  </a>
+
+  <a class="project-tile lab-tile" href="https://wiki.guisso.dev/linux/homelab" rel="noreferrer" data-tianji-event={`click_project_homelab_${lang}`}>
+    {bento ? <Chip class="project-chip">{english ? "Project" : "Projeto"}</Chip> : <div class="tile-top"><span>{english ? "LEARNING BY DOING" : "APRENDER FAZENDO"}</span><span aria-hidden="true">↗</span></div>}
+    <div class="lab-art" aria-hidden="true">
+      <AsciiBackground scene={homelabScene} format="svg" />
+      <span>home<br /><em>lab.</em></span>
+    </div>
+    <ProjectTitle>{english ? "A lab of my own." : "Um laboratório, em casa."}</ProjectTitle>
+    <p>{english ? "Infrastructure, automation and the questions that only come up when you build things yourself." : "Infraestrutura, automações e as perguntas que só aparecem quando a gente coloca a mão na massa."}</p>
+    {!bento && <span class="tile-caption">{english ? "Open my wiki ↗" : "Abrir minha wiki ↗"}</span>}
+  </a>
+
+  {(!isCompact || bento) && (
+    <a class="project-tile dojo-tile" href="https://github.com/topics/dojo-shield" rel="noreferrer" data-tianji-event={`click_project_dojo-shield_${lang}`}>
+      {bento ? <Chip class="project-chip">{english ? "Project" : "Projeto"}</Chip> : <div class="tile-top"><span>{english ? "SECURE DEVELOPMENT" : "DESENVOLVIMENTO SEGURO"}</span><span aria-hidden="true">↗</span></div>}
+      {bento && (
+        <div class="lab-art" aria-hidden="true">
+          <AsciiBackground scene={dojoScene} format="svg" />
+          <span>dojo<br /><em>shield.</em></span>
+        </div>
+      )}
+      <ProjectTitle>Dojo Shield</ProjectTitle>
+      <p>{english ? "Hands-on activities and guided missions for practicing secure development." : "Dinâmicas hands-on e missões guiadas para praticar desenvolvimento seguro."}</p>
+      {!bento && <span class="tile-caption">{english ? "Explore on GitHub ↗" : "Explorar no GitHub ↗"}</span>}
+    </a>
+  )}
+
+  {(!isCompact || bento) && (
+    <a class="project-tile" href="https://guisso.dev/GrooveScribe/" rel="noreferrer" data-tianji-event={`click_project_groovescribe_${lang}`}>
+      {bento ? <Chip class="project-chip">{english ? "Project" : "Projeto"}</Chip> : <div class="tile-top"><span>{english ? "MUSIC" : "MÚSICA"}</span><span aria-hidden="true">↗</span></div>}
+      <ProjectTitle>GrooveScribe</ProjectTitle>
+      <p>{english ? "A drum tab editor for writing and practicing rhythms in the browser." : "Editor de tablaturas de bateria para escrever e estudar ritmos no navegador."}</p>
+      {!bento && <span class="tile-caption">{english ? "Open the editor ↗" : "Abrir editor ↗"}</span>}
+    </a>
+  )}
+</div>
+
+<style>
+  .project-board:not(.is-compact) { align-items: stretch; }
+  .project-board:not(.is-compact) .project-tile { display: flex; flex-direction: column; }
+  .project-board:not(.is-compact) .dojo-tile { grid-column: auto; }
+  .project-board:not(.is-compact) h2 { font-size: 21px; line-height: 27px; letter-spacing: -.025em; margin: 0 0 9px; }
+  .project-board:not(.is-compact) :is(.tile-top, .tile-caption) { font-size: var(--text-caption); }
+  .project-board:not(.is-compact) .tile-caption { margin-top: auto; }
+  .project-board:not(.is-bento) :is(.tile-top, .tile-caption, .code-comment, .code-guide) {
+    color: var(--body);
+  }
+  .project-board.is-bento { display: grid; gap: 16px; align-items: stretch; }
+  .is-bento .project-tile { background: none; transition: translate .18s ease, border-color .18s ease; }
+  .is-bento .lab-tile { --project-fill: var(--secondary); --project-accent: var(--accent); }
+  .is-bento .dojo-tile { --project-fill: var(--accent); --project-accent: var(--secondary); }
+  .is-bento :is(.lab-tile, .dojo-tile) {
+    --project-art-ink: color-mix(in srgb, var(--project-accent) 82%, var(--ink));
+    background: color-mix(in srgb, var(--panel) 65%, var(--project-fill));
+  }
+  .is-bento .project-tile :global(.project-chip) {
+    display: inline-block;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    padding: 2px 9px;
+    color: var(--muted);
+    font-size: var(--text-caption);
+  }
+  .is-bento .project-tile h2 { font-size: 21px; line-height: 27px; letter-spacing: -.025em; margin: 0 0 9px; }
+  .is-bento .project-tile p { margin-bottom: 0; }
+  .lab-art {
+    position: relative;
+    isolation: isolate;
+    justify-content: flex-start;
+    min-block-size: 96px;
+  }
+  .lab-art :global(.article-title-ascii) {
+    inset-inline-start: 25%;
+    inline-size: auto;
+    mask-image: linear-gradient(to right, transparent, #000 38%);
+  }
+  .lab-art :global(.article-ascii-vector) { display: block; inline-size: 100%; block-size: 100%; }
+  .lab-art > span { text-align: start; }
+  .is-bento .lab-art { min-block-size: 64px; background: none; color: var(--project-art-ink); }
+  .is-bento .lab-art > span { color: var(--ink); }
+  .is-bento .lab-art em { color: var(--project-art-ink); }
+  @media (width < 800px) {
+    .is-bento .lab-art em { color: color-mix(in srgb, var(--project-accent) 30%, var(--ink)); }
+  }
+  .is-bento :is(.lab-tile, .dojo-tile) p { color: var(--ink); }
+  .is-bento :is(.lab-tile, .dojo-tile) :global(.project-chip) { color: var(--ink); border-color: var(--project-art-ink); }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .is-bento .project-tile:hover { translate: 0 -3px; }
+  }
+</style>

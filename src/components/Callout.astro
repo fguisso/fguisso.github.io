@@ -1,74 +1,33 @@
 ---
-const { title = 'Nota', variant = 'info', icon } = Astro.props;
+interface Props {
+  title?: string;
+  variant?: 'info' | 'warning' | 'success' | 'danger';
+  icon?: string;
+}
 
-const colors = {
-	info: {
-		background: 'rgba(var(--accent), 0.12)',
-		border: 'rgb(var(--accent))',
-	},
-	warning: {
-		background: 'rgba(255, 170, 0, 0.12)',
-		border: 'rgb(255, 170, 0)',
-	},
-	success: {
-		background: 'rgba(26, 145, 70, 0.18)',
-		border: 'rgb(26, 145, 70)',
-	},
-	danger: {
-		background: 'linear-gradient(135deg, rgba(255, 77, 109, 0.18), rgba(154, 26, 255, 0.18))',
-		border: 'rgb(255, 77, 109)',
-	},
-};
-const current = colors[variant] ?? colors.info;
-const renderedIcon = icon ?? null;
+const { title = 'Nota', variant = 'info', icon } = Astro.props;
 ---
 
-<div class="callout" style={`background:${current.background};border-color:${current.border}`}>
-	<div class="header">
-		{renderedIcon && <span class="icon" aria-hidden="true">{renderedIcon}</span>}
-		<p class="title">{title}</p>
-	</div>
-	<div class="body">
-		<slot />
-	</div>
+<div class:list={['callout', 'callout--' + variant]}>
+  <p class="title">
+    {Astro.slots.has('icon') ? <span aria-hidden="true"><slot name="icon" /></span> : icon && <span class="article-emoji" aria-hidden="true">{icon}</span>}
+    {title}
+  </p>
+  <div class="body"><slot /></div>
 </div>
 
 <style>
-	.callout {
-		margin: 1.5rem 0;
-		padding: 1rem 1.25rem;
-		border-left: 4px solid;
-		border-radius: 12px;
-		box-shadow: var(--box-shadow);
-	}
-
-	.header {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.title {
-		margin: 0 0 0.35rem;
-		font-weight: 600;
-		color: rgb(var(--black));
-	}
-
-	.icon {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 1.75rem;
-		height: 1.75rem;
-		border-radius: 0.55rem;
-		border: 1px solid rgba(255, 255, 255, 0.18);
-		background: rgba(255, 255, 255, 0.06);
-		font-size: 0.95rem;
-		color: rgb(var(--black));
-	}
-
-	.body :global(p) {
-		margin: 0.25rem 0;
-		color: rgb(var(--gray));
-	}
+  .callout {
+    --callout-ink: var(--secondary);
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid color-mix(in srgb, var(--callout-ink) 42%, var(--line));
+    border-radius: var(--radius-panel);
+  }
+  .callout--success { --callout-ink: var(--accent); }
+  .callout--warning { --callout-ink: var(--guide-warning, light-dark(#795615, #ebc582)); }
+  .callout--danger { --callout-ink: var(--guide-danger, light-dark(#922e43, #f4a3ae)); }
+  .title { display: flex; align-items: center; gap: 8px; margin: 0 0 6px; font-weight: 600; color: var(--callout-ink); }
+  .title > span { display: inline-flex; }
+  .body :global(p:last-child) { margin-bottom: 0; }
 </style>

@@ -2,63 +2,102 @@
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<'svg'> {
-	label?: string;
-	showLeftMarker?: boolean;
-	showRightMarker?: boolean;
+  monogram?: boolean;
+  shineId?: string;
 }
 
-const {
-	label = 'guisso',
-	showLeftMarker = true,
-	showRightMarker = true,
-	class: className,
-	width,
-	...rest
-} = Astro.props as Props & { width?: number | string };
-const ariaLabel = (rest['aria-label'] as string | undefined) ?? `${label} logotipo`;
-
-const resolvedWidth = width ?? 180;
-const isMonogram = label.trim().toLowerCase() === 'g';
-const shouldRenderRight = showRightMarker && !isMonogram;
+const { monogram = false, shineId, class: className, ...attributes } = Astro.props;
+const [x, y, width, height] = monogram ? [14, 105, 141, 207] : [0, 0, 849.6, 329.92];
+const shapeId = shineId && shineId + '-shape';
+const bandId = shineId && shineId + '-band';
+const maskId = shineId && shineId + '-mask';
+const centerX = x + width / 2;
+const centerY = y + height / 2;
+const sweepDistance = (width + height) / 2 + width * 0.4;
 ---
 
 <svg
-	xmlns="http://www.w3.org/2000/svg"
-	viewBox="0 0 849.6 329.92"
-	class:list={['logo-wordmark', className]}
-	role="img"
-	aria-label={ariaLabel}
-	width={resolvedWidth}
-	{...rest}
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={[x, y, width, height].join(' ')}
+  class:list={['logo-wordmark', { 'logo-wordmark--animated': shineId }, className]}
+  role="img"
+  aria-label={monogram ? 'g' : 'guisso'}
+  fill="currentColor"
+  width={monogram ? 20 : 168}
+  height={monogram ? 20 : 65}
+  {...attributes}
 >
-	<title>{label}</title>
-	<text transform="translate(5.52 250.66)" fill="currentColor">{label}</text>
-	{showLeftMarker && (
-		<>
-			<polygon points="60.34 198.02 84.8 150.91 107.45 198.02 60.34 198.02" fill="currentColor" />
-			{shouldRenderRight && (
-				<polygon points="741.17 161.02 765.63 208.13 788.28 161.02 741.17 161.02" fill="currentColor" />
-			)}
-		</>
-	)}
+  {shineId && (
+    <defs>
+      <linearGradient
+        id={bandId}
+        gradientUnits="userSpaceOnUse"
+        x1={x}
+        y1={centerY}
+        x2={x + width}
+        y2={centerY}
+        gradientTransform={`rotate(-45 ${centerX} ${centerY})`}
+      >
+        <stop offset="24%" stop-color="white" stop-opacity="0" />
+        <stop offset="50%" stop-color="white" />
+        <stop offset="76%" stop-color="white" stop-opacity="0" />
+      </linearGradient>
+      <mask id={maskId} maskUnits="userSpaceOnUse" x={x} y={y} width={width} height={height}>
+        <rect
+          class="logo-shine-band"
+          x={x - sweepDistance}
+          y={y}
+          width={width + 2 * sweepDistance}
+          height={height}
+          fill={'url(#' + bandId + ')'}
+          style={`--shine-travel: ${sweepDistance}px`}
+        />
+      </mask>
+    </defs>
+  )}
+
+  <g id={shapeId}>
+    <g transform="translate(5.52 250.66)">
+      <path d="M 147.83 -138.93 L 147.83 -5.34 C 147.83 7.12 145.26 18.26 140.11 28.05 C 134.97 37.85 127.75 45.52 118.44 51.06 C 109.14 56.6 98.55 59.37 86.68 59.37 L 29.09 59.37 L 29.09 40.96 L 86.68 40.96 C 98.75 40.96 108.6 36.61 116.21 27.9 C 123.84 19.2 127.64 8.11 127.64 -5.34 L 127.64 -20.48 C 121.91 -12.57 114.88 -6.38 106.57 -1.93 C 98.26 2.52 89.15 4.75 79.26 4.75 C 66 4.75 54.12 1.58 43.64 -4.75 C 33.15 -11.08 24.93 -19.89 19 -31.17 C 13.06 -42.45 10.09 -55.31 10.09 -69.76 C 10.09 -84.01 13.01 -96.72 18.85 -107.91 C 24.69 -119.09 32.8 -127.84 43.19 -134.18 C 53.58 -140.51 65.41 -143.68 78.66 -143.68 C 88.76 -143.68 98.01 -141.45 106.42 -137 C 114.83 -132.54 121.91 -126.26 127.64 -118.14 L 127.64 -138.93 Z M 78.66 -13.66 C 88.16 -13.66 96.62 -16.03 104.05 -20.78 C 111.47 -25.53 117.25 -32.16 121.41 -40.67 C 125.57 -49.18 127.64 -58.78 127.64 -69.46 C 127.64 -80.15 125.57 -89.75 121.41 -98.26 C 117.25 -106.77 111.47 -113.4 104.05 -118.14 C 96.62 -122.89 88.16 -125.27 78.66 -125.27 C 69.36 -125.27 61.05 -122.89 53.73 -118.14 C 46.41 -113.4 40.67 -106.82 36.51 -98.41 C 32.36 -90 30.28 -80.45 30.28 -69.76 C 30.28 -58.88 32.36 -49.18 36.51 -40.67 C 40.67 -32.16 46.41 -25.53 53.73 -20.78 C 61.05 -16.03 69.36 -13.66 78.66 -13.66 Z M 78.66 -13.66" />
+      {!monogram && (
+        <>
+          <path transform="translate(166.53 0)" d="M 140.71 -138.93 L 140.71 0 L 120.52 0 L 120.52 -23.16 C 115.77 -14.25 109.49 -7.37 101.67 -2.52 C 93.86 2.32 84.8 4.75 74.51 4.75 C 64.81 4.75 55.86 2.77 47.64 -1.19 C 39.43 -5.14 32.9 -10.98 28.05 -18.7 C 23.2 -26.42 20.78 -35.52 20.78 -46.01 L 20.78 -138.93 L 40.96 -138.93 L 40.96 -54.92 C 40.96 -27.41 53.23 -13.66 77.77 -13.66 C 92.02 -13.66 102.71 -18.7 109.84 -28.79 C 116.96 -38.89 120.52 -52.45 120.52 -69.46 L 120.52 -138.93 Z M 140.71 -138.93" />
+          <path transform="translate(325.94 0)" d="M 29.68 0 L 29.68 -138.93 L 49.87 -138.93 L 49.87 0 Z M 39.78 -165.94 C 35.23 -165.94 31.42 -167.52 28.35 -170.69 C 25.28 -173.86 23.75 -177.71 23.75 -182.27 C 23.75 -186.62 25.28 -190.33 28.35 -193.4 C 31.42 -196.46 35.23 -198 39.78 -198 C 44.13 -198 47.89 -196.46 51.06 -193.4 C 54.22 -190.33 55.81 -186.52 55.81 -181.97 C 55.81 -177.62 54.22 -173.86 51.06 -170.69 C 47.89 -167.52 44.13 -165.94 39.78 -165.94 Z M 39.78 -165.94" />
+          <path transform="translate(405.48 0)" d="M 67.68 4.75 C 54.22 4.75 42.4 1.88 32.21 -3.86 C 22.02 -9.6 14.25 -17.71 8.91 -28.2 L 27.01 -37.11 C 34.34 -21.47 48.68 -13.66 70.05 -13.66 C 80.35 -13.66 88.86 -15.54 95.59 -19.3 C 102.31 -23.05 105.68 -28.89 105.68 -36.81 C 105.68 -44.92 102.96 -50.96 97.52 -54.92 C 92.07 -58.88 82.52 -61.45 68.87 -62.64 C 49.87 -64.22 36.27 -68.47 28.05 -75.4 C 19.84 -82.33 15.73 -91.53 15.73 -103.01 C 15.73 -115.87 20.38 -125.86 29.68 -132.99 C 38.98 -140.11 51.75 -143.68 67.98 -143.68 C 95.49 -143.68 114.19 -132.79 124.08 -111.02 L 105.98 -102.12 C 102.61 -110.03 97.71 -115.87 91.28 -119.63 C 84.85 -123.39 76.59 -125.27 66.5 -125.27 C 56.2 -125.27 48.34 -123.39 42.89 -119.63 C 37.45 -115.87 34.73 -110.53 34.73 -103.6 C 34.73 -97.07 37.65 -91.78 43.49 -87.72 C 49.33 -83.66 59.37 -81.04 73.62 -79.85 C 91.23 -78.27 104.34 -73.96 112.95 -66.94 C 121.56 -59.91 125.86 -50.66 125.86 -39.18 C 125.86 -29.88 123.19 -21.92 117.85 -15.29 C 112.51 -8.66 105.38 -3.66 96.48 -0.3 C 87.57 3.07 77.97 4.75 67.68 4.75 Z M 67.68 4.75" />
+          <path transform="translate(543.22 0)" d="M 67.68 4.75 C 54.22 4.75 42.4 1.88 32.21 -3.86 C 22.02 -9.6 14.25 -17.71 8.91 -28.2 L 27.01 -37.11 C 34.34 -21.47 48.68 -13.66 70.05 -13.66 C 80.35 -13.66 88.86 -15.54 95.59 -19.3 C 102.31 -23.05 105.68 -28.89 105.68 -36.81 C 105.68 -44.92 102.96 -50.96 97.52 -54.92 C 92.07 -58.88 82.52 -61.45 68.87 -62.64 C 49.87 -64.22 36.27 -68.47 28.05 -75.4 C 19.84 -82.33 15.73 -91.53 15.73 -103.01 C 15.73 -115.87 20.38 -125.86 29.68 -132.99 C 38.98 -140.11 51.75 -143.68 67.98 -143.68 C 95.49 -143.68 114.19 -132.79 124.08 -111.02 L 105.98 -102.12 C 102.61 -110.03 97.71 -115.87 91.28 -119.63 C 84.85 -123.39 76.59 -125.27 66.5 -125.27 C 56.2 -125.27 48.34 -123.39 42.89 -119.63 C 37.45 -115.87 34.73 -110.53 34.73 -103.6 C 34.73 -97.07 37.65 -91.78 43.49 -87.72 C 49.33 -83.66 59.37 -81.04 73.62 -79.85 C 91.23 -78.27 104.34 -73.96 112.95 -66.94 C 121.56 -59.91 125.86 -50.66 125.86 -39.18 C 125.86 -29.88 123.19 -21.92 117.85 -15.29 C 112.51 -8.66 105.38 -3.66 96.48 -0.3 C 87.57 3.07 77.97 4.75 67.68 4.75 Z M 67.68 4.75" />
+          <path transform="translate(680.95 0)" d="M 79.26 4.75 C 66 4.75 54.12 1.58 43.64 -4.75 C 33.15 -11.08 24.93 -19.94 19 -31.32 C 13.06 -42.7 10.09 -55.51 10.09 -69.76 C 10.09 -84.01 13.01 -96.72 18.85 -107.91 C 24.69 -119.09 32.8 -127.84 43.19 -134.18 C 53.58 -140.51 65.41 -143.68 78.66 -143.68 C 91.93 -143.68 103.8 -140.51 114.29 -134.18 C 124.78 -127.84 132.99 -119.04 138.93 -107.76 C 144.86 -96.48 147.83 -83.71 147.83 -69.46 C 147.83 -55.21 144.91 -42.45 139.07 -31.17 C 133.23 -19.89 125.12 -11.08 114.73 -4.75 C 104.34 1.58 92.52 4.75 79.26 4.75 Z M 78.66 -13.66 C 88.16 -13.66 96.62 -16.03 104.05 -20.78 C 111.47 -25.53 117.25 -32.16 121.41 -40.67 C 125.57 -49.18 127.64 -58.78 127.64 -69.46 C 127.64 -80.15 125.57 -89.75 121.41 -98.26 C 117.25 -106.77 111.47 -113.4 104.05 -118.14 C 96.62 -122.89 88.16 -125.27 78.66 -125.27 C 69.36 -125.27 61.05 -122.89 53.73 -118.14 C 46.41 -113.4 40.67 -106.82 36.51 -98.41 C 32.36 -90 30.28 -80.45 30.28 -69.76 C 30.28 -58.88 32.36 -49.18 36.51 -40.67 C 40.67 -32.16 46.41 -25.53 53.73 -20.78 C 61.05 -16.03 69.36 -13.66 78.66 -13.66 Z M 78.66 -13.66" />
+        </>
+      )}
+    </g>
+    <polygon points="60.34 198.02 84.8 150.91 107.45 198.02" />
+    {!monogram && <polygon points="741.17 161.02 765.63 208.13 788.28 161.02" />}
+  </g>
+
+  {shineId && <use class="logo-shine" href={'#' + shapeId} fill="white" mask={'url(#' + maskId + ')'} aria-hidden="true" />}
 </svg>
 
 <style>
-	.logo-wordmark {
-		display: block;
-		width: auto;
-		max-width: 100%;
-		color: inherit;
-	}
+  .logo-wordmark--animated { color: #9b9b9b; }
+  :global(html:is([data-tema=claro], [data-tema=areia])) .logo-wordmark--animated { color: #5f5f5f; }
+  .logo-shine { pointer-events: none; }
 
-	.logo-wordmark text {
-		font-size: 296.85px;
-		font-family: 'Didact Gothic', 'Oferta do Dia', 'Inter', sans-serif;
-	}
+  .logo-shine-band {
+    transform: translateX(calc(-1 * var(--shine-travel)));
+    animation: logo-shine-sweep 70s 4s infinite;
+  }
 
-	@media (max-width: 640px) {
-		.logo-wordmark {
-			width: 150px;
-		}
-	}
+  @keyframes logo-shine-sweep {
+    0%, 5%, 10% {
+      transform: translateX(calc(-1 * var(--shine-travel)));
+      animation-timing-function: linear;
+    }
+    4%, 9%, 14%, 100% {
+      transform: translateX(var(--shine-travel));
+      animation-timing-function: steps(1, jump-end);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce), print {
+    .logo-shine { display: none; }
+  }
 </style>

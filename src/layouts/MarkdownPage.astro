@@ -1,8 +1,7 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { getHtmlLang, getRequestLocale, type LocaleCode } from '../i18n/config';
+import ProjectBoard from '../components/ProjectBoard.astro';
+import { getRequestLocale, type LocaleCode } from '../i18n/config';
+import Site from './Site.astro';
 
 interface Props {
 	title: string;
@@ -13,80 +12,28 @@ interface Props {
 const { title, description, eyebrow, locale: forcedLocale } = Astro.props as Props & {
 	locale?: LocaleCode;
 };
-const locale = forcedLocale ?? getRequestLocale(Astro);
-const currentPath = Astro.url?.pathname ?? '/';
-const currentSearch = Astro.url?.search ?? '';
-const htmlLang = getHtmlLang(locale);
+const lang = forcedLocale ?? getRequestLocale(Astro);
 ---
 
-<!doctype html>
-<html lang={htmlLang}>
-	<head>
-		<BaseHead title={title} description={description ?? 'Página de conteúdo'} locale={locale} />
-	</head>
-	<body>
-		<Header locale={locale} pathname={currentPath} search={currentSearch} />
-		<main class="page-shell markdown-page">
-			<section class="markdown-page__hero">
-				{eyebrow && <p class="eyebrow">{eyebrow}</p>}
-				<h1>{title}</h1>
-				{description && <p class="markdown-page__description">{description}</p>}
-			</section>
-			<section class="markdown-page__content">
-				<slot />
-			</section>
-		</main>
-		<Footer locale={locale} />
-	</body>
-</html>
+<Site {title} {description} {lang}>
+	<main id="conteudo" class="shell page-content markdown-page" tabindex="-1">
+		<header class="page-intro">
+			{eyebrow && <p class="eyebrow">{eyebrow}</p>}
+			<h1>{title}</h1>
+			{description && <p class="lead">{description}</p>}
+		</header>
+		<ProjectBoard {lang} />
+		<div class="prose markdown-page__content"><slot /></div>
+	</main>
+</Site>
 
 <style>
 	.markdown-page {
-		padding-top: 4rem;
-		padding-bottom: 5rem;
-		display: flex;
-		flex-direction: column;
-		gap: 2rem;
-	}
-
-	.markdown-page__hero {
-		max-width: 780px;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	.markdown-page__description {
-		margin: 0;
-		color: var(--color-muted);
+		padding-bottom: 2rem;
 	}
 
 	.markdown-page__content {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-		max-width: 820px;
-	}
-
-	.markdown-page__content h2 {
-		margin-top: 2rem;
-	}
-
-	.markdown-page__content ul {
-		padding-left: 1.25rem;
-	}
-
-	.markdown-page__content li + li {
-		margin-top: 0.5rem;
-	}
-
-	@media (max-width: 640px) {
-		.markdown-page {
-			padding-top: 3rem;
-		}
-
-		.markdown-page__content {
-			gap: 1.25rem;
-		}
+		margin-top: 2.5rem;
+		max-width: 70ch;
 	}
 </style>

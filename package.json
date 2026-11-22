@@ -4,13 +4,11 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "dev:og": "node ./scripts/dev-og-server.mjs",
-    "generate:og": "node ./scripts/generate-og-images.mjs",
-    "build": "npm run generate:og && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "test:e2e": "playwright test",
-    "test:e2e:preview": "sh -c \"npm run build && npm run preview -- --host --port 4173 >/tmp/astro-preview.log 2>&1 & PREVIEW_PID=$!; npx wait-on http://localhost:4173 && npx playwright test; kill $PREVIEW_PID\""
+    "test:e2e:preview": "npm run build && playwright test"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.10",
@@ -18,12 +16,12 @@
     "@astrojs/sitemap": "^3.6.0",
     "@resvg/resvg-js": "^2.6.2",
     "astro": "^5.15.4",
-    "satori": "^0.18.3",
+    "fontkit": "2.0.4",
     "sharp": "^0.34.3",
     "three": "^0.184.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.2",
-    "wait-on": "^7.2.0"
+    "@types/fontkit": "2.0.9"
   }
 }

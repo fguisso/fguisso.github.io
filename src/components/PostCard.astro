@@ -1,49 +1,48 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
-import Chip from './Chip.astro';
-import { withBase } from '../utils/paths';
-
-interface Props extends HTMLAttributes<'li'> {
-	href: string;
-	title: string;
-	description: string;
-	tag?: string | null;
-	statsLabel?: string | null;
-	image?: string | null;
-	ctaLabel?: string;
-}
-
-const {
-	href,
-	title,
-	description,
-	tag,
-	statsLabel,
-	image,
-	ctaLabel = Astro.currentLocale === 'en' ? 'Read article ↗' : 'ler artigo ↗',
-	class: className,
-	...rest
-} = Astro.props as Props;
-const backgroundImage = image ? withBase(image) : null;
-const style = backgroundImage ? `--project-image: url("${backgroundImage}")` : undefined;
-const resolvedHref = withBase(href);
+import type { CollectionEntry } from 'astro:content';
+import { postHref, shortDate, readingMinutes } from '../utils/posts';
+interface Props { post: CollectionEntry<'blog'>; compact?: boolean; }
+const { post, compact = false } = Astro.props;
+const { data } = post;
+const Heading = compact ? 'h3' : 'h2';
+const date = shortDate(data.pubDate, data.lang);
 ---
-
-<li class:list={['featured-project', 'featured-project--post', className]} style={style} {...rest}>
-	<a href={resolvedHref} class="featured-project__link">
-		<div class="featured-project__content">
-			<span class="featured-project__label">
-				<slot name="label">Meta</slot>
-			</span>
-			<h3 class="featured-project__name">{title}</h3>
-			<p class="featured-project__description">{description}</p>
-			{statsLabel && <p class="featured-project__stats">{statsLabel}</p>}
-			{tag && (
-				<Chip variant="ghost">
-					{tag}
-				</Chip>
-			)}
-			<span class="featured-project__cta">{ctaLabel}</span>
-		</div>
-	</a>
+<li class:list={['post-row', { 'compact-row': compact }]} data-post data-search={[data.title, data.description, ...data.tags].join(' ')} data-post-tags={JSON.stringify(data.tags)}>
+  <span class="row-date">{data.showDate && <time datetime={data.pubDate.toISOString()}>{date}{!compact && <span class="archive-year">{' '}{data.pubDate.getUTCFullYear()}</span>}</time>}</span>
+  <a class="post-row-link" href={postHref(data.canonicalSlug, data.lang)}>
+    <Heading><span class="row-title">{data.title}</span><span class="row-arrow" aria-hidden="true">↗</span></Heading>
+    {!compact && <p>{data.description}</p>}
+    {!compact && <span class="row-meta">{data.tags[0]}{' '}<span aria-hidden="true">·</span>{' '}{readingMinutes(post.body)} {data.lang === 'en' ? 'min read' : 'min de leitura'}</span>}
+  </a>
 </li>
+
+<style>
+  .post-row :is(h2, h3) { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 12px; }
+  .row-title { overflow-wrap: anywhere; text-wrap: wrap; }
+  .row-date:empty { padding: 0; }
+  .archive-year { display: block; }
+  .post-row:not(.compact-row) { padding-block: 20px; }
+  .post-row:not(.compact-row) h2 { margin-bottom: 6px; }
+  .post-row:not(.compact-row) p { max-width: 68ch; margin: 0 0 8px; }
+
+  .compact-row {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 12px;
+    padding: 15px 0;
+  }
+
+  .compact-row:last-child { border-bottom: 0; }
+  .compact-row h3 {
+    gap: 8px;
+    font-size: 16px;
+    line-height: 1.35;
+    text-wrap: wrap;
+  }
+
+  .compact-row a:hover h3 { color: var(--accent); }
+
+  @media (max-width: 760px) {
+    .archive-year { display: inline; }
+    .post-row:not(.compact-row) .row-date:empty { display: none; }
+  }
+</style>

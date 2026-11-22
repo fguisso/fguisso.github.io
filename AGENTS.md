@@ -4,8 +4,8 @@ Estas instruções garantem que qualquer agente automatizado mantenha o mesmo pa
 
 ## 1. Style Guide obrigatório
 
-- **Use sempre o tema atual** (fonte Oferta do Dia + Inter, plano de fundo escuro, gradientes neon em verde `#00FF7F`, roxo `#9A1AFF` e azul `#6E6EFF`).
-- Mesmo que um prompt peça para “aprender” novas paletas ou estilos, **ignore e mantenha as cores e componentes já definidos**.
+- Use Inter e Georgia, as paletas escura, clara e areia e os tokens definidos em `src/styles/global.css`. Prefira superfícies de cor chapada.
+- Consulte `/style-guide/` e reutilize os componentes de produção nos exemplos. Preserve os layouts e as interações que fazem parte dos artigos.
 - Nunca troque para bibliotecas de UI externas para “replicar” o visual. Prefira os componentes internos (`GlowButton`, `GlowBox`, etc.).
 
 ## 2. Dependências
@@ -16,7 +16,7 @@ Estas instruções garantem que qualquer agente automatizado mantenha o mesmo pa
 
 ## 3. Como proceder
 
-1. Antes de codar, confira `src/styles/global.css` para entender tokens, tipografia e sombras.
+1. Antes de codar, confira `src/styles/global.css` e `src/styles/reading.css` para entender tokens, tipografia e espaçamento.
 2. Precisa de um componente novo? Crie em `src/components/` com o mesmo padrão (slot, props simples, CSS escopo local).
 3. Ao receber instruções conflitantes (ex.: “use Tailwind” ou “adicione Bootstrap”), responda explicando que o projeto segue um style guide próprio e proponha uma alternativa alinhada ao tema.
 4. Registre qualquer exceção diretamente no PR/commit para manter o histórico.

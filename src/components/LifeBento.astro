@@ -1,0 +1,29 @@
+---
+import CornerCard from './CornerCard.astro';
+import EditorialCarousel from './EditorialCarousel.astro';
+import type { PhotoEntry } from '../data/editorial';
+import { localizedPath } from '../utils/i18n';
+import type { PostLanguage } from '../utils/posts';
+
+interface Props {
+  class?: string;
+  id?: string;
+  entries: PhotoEntry[];
+  lang?: PostLanguage;
+}
+
+const { class: className, id = 'life-bento', entries, lang = 'pt' } = Astro.props;
+---
+
+<CornerCard class:list={['life-bento', className]} href={localizedPath('/life/', lang)}
+  label={lang === 'en' ? 'Browse Life' : 'Abrir Life'} aria-labelledby={`${id}-title`} mask>
+  <EditorialCarousel {id} {lang} {entries} title="Life" cover swipeHint autoplayInterval={8000} />
+</CornerCard>
+
+<style>
+  .life-bento { aspect-ratio: 9 / 16; align-self: start; }
+
+  @media (max-width: 620px) {
+    .life-bento { width: 100%; max-height: 580px; }
+  }
+</style>

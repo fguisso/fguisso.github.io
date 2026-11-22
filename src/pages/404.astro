@@ -1,0 +1,27 @@
+---
+import { localizedPath } from '../utils/i18n';
+import type { PostLanguage } from '../utils/posts';
+import GlowButton from '../components/GlowButton.astro';
+import Site from '../layouts/Site.astro';
+
+interface Props { lang?: PostLanguage }
+const { lang = Astro.url.pathname.startsWith('/en/') ? 'en' : 'pt' } = Astro.props;
+const english = lang === 'en';
+const title = english ? 'Page not found' : 'Página não encontrada';
+---
+<Site {title} {lang} alternateHref={english ? '/404.html' : '/en/404/'} shareable={false}>
+  <main class="reading-shell" id="conteudo" tabindex="-1">
+    <header class="page-intro">
+      <h1>{title}</h1>
+      <p class="lead">{english ? 'Check the address or search the archive by title or topic.' : 'Confira o endereço ou procure pelo título ou assunto no acervo.'}</p>
+    </header>
+    <div class="recovery-links">
+      <GlowButton href={localizedPath('/blog/', lang)} variant="outline">{english ? 'Search articles' : 'Buscar nos artigos'}</GlowButton>
+      <GlowButton href={localizedPath('/', lang)} variant="ghost">{english ? 'Go home' : 'Ir para o início'}</GlowButton>
+    </div>
+  </main>
+</Site>
+
+<style>
+  .recovery-links { display: flex; flex-wrap: wrap; gap: 8px 12px; }
+</style>

@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+import ListSearch from './ListSearch.astro';
+import type { PostLanguage } from '../utils/posts';
+interface Props { posts: CollectionEntry<'blog'>[]; search?: boolean; compact?: boolean; lang?: PostLanguage; }
+const { posts, search = false, compact = false, lang = 'pt' } = Astro.props;
+const english = lang === 'en';
+---
+<section aria-label={english ? 'Articles' : 'Publicações'} data-post-list data-language={lang} class:list={[{ 'post-list-search': search }]}>
+  {search && <ListSearch id="post-query" count={posts.length}
+    label={english ? 'Search articles' : 'Buscar artigos'}
+    placeholder={english ? 'Title, topic, or word…' : 'Título, assunto ou palavra…'}
+    clearLabel={english ? 'Clear search' : 'Limpar busca'}
+    singular={english ? 'article' : 'artigo'} plural={english ? 'articles' : 'artigos'} />}
+  <ul class="post-list">{posts.map((post) => <PostCard {post} {compact} />)}</ul>
+  <p data-search-empty hidden>{english ? 'No articles found. Try a different term.' : 'Nenhum artigo encontrado. Tente outro termo.'}</p>
+</section>
+
+<style>
+  .post-list-search .post-list { border-top: 1px solid var(--line); }
+  [data-search-empty] { margin: 0; padding-block: 16px; color: var(--muted); }
+</style>

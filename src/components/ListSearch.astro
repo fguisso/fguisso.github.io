@@ -1,0 +1,63 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  placeholder: string;
+  clearLabel: string;
+  count: number;
+  singular: string;
+  plural: string;
+}
+const { id, label, placeholder, clearLabel, count, singular, plural } = Astro.props;
+---
+<form class="post-search" role="search" data-list-search data-post-search={id === 'post-query' ? '' : undefined} data-singular={singular} data-plural={plural} hidden>
+  <div class="search-heading">
+    <label for={id}>{label}</label>
+    <span class="search-status" role="status" data-search-status>{count} {count === 1 ? singular : plural}</span>
+  </div>
+  <div class="search-field">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="5.8" /><path d="m15.2 15.2 4.3 4.3" /></svg>
+    <input id={id} name="q" type="search" placeholder={placeholder} autocomplete="off" />
+    <button class="search-clear" type="button" data-search-clear aria-label={clearLabel} hidden>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" /></svg>
+    </button>
+  </div>
+</form>
+
+<style>
+  .post-search { display: grid; gap: 8px; margin-bottom: 24px; }
+  .search-heading { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+  label { color: var(--ink); font-size: var(--text-supporting); font-weight: 500; }
+  .search-status { color: var(--muted); font-size: var(--text-caption); font-variant-numeric: tabular-nums; }
+  .search-field { position: relative; }
+  .search-field > svg { position: absolute; inset-inline-start: 14px; inset-block: 0; margin-block: auto; color: var(--muted-on-panel, var(--muted)); pointer-events: none; }
+  .search-field input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding-block: 8px;
+    padding-inline: 44px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-control);
+    background: var(--panel);
+    color: var(--ink);
+    font-size: 16px;
+  }
+  .search-field input::placeholder { color: var(--muted-on-panel, var(--muted)); opacity: 1; }
+  .search-field input::-webkit-search-cancel-button { display: none; }
+  .search-field:has(.search-clear:not([hidden])) input { padding-inline-end: 48px; }
+  .search-clear {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 2px;
+    margin-block: auto;
+    inline-size: 44px;
+    block-size: 44px;
+    display: grid;
+    place-items: center;
+    color: var(--muted-on-panel, var(--muted));
+  }
+  .search-clear:is(:hover, :focus-visible) { color: var(--ink); }
+  .search-clear:focus-visible { outline-offset: -4px; }
+</style>

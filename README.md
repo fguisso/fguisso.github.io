@@ -1,71 +1,26 @@
-# Astro Starter Kit: Blog
+# Blog de Fernando Guisso
 
-```sh
-npm create astro@latest -- --template blog
-```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## ▶️ Como rodar localmente
+## Como rodar localmente
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-O primeiro comando instala todas as dependências (incluindo `@astrojs/mdx`). Depois disso o blog fica disponível em `http://localhost:4321` com recarregamento automático enquanto você edita arquivos em `src/`.
+O Astro exibe no terminal a URL local, normalmente `http://localhost:4321/`.
 
-## 🚀 Project Structure
+## Build e testes
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+```sh
+npx playwright install chromium
+npm run test:e2e:preview
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+`npm run build` gera o site estático, os feeds, o sitemap e os PNGs de Open Graph em `dist/`. `npm run preview` serve esse build. Os testes de interface usam uma resposta local para o rastreador. Para exercitar a coleta real, rode com `PLAYWRIGHT_TIANJI_LIVE=1`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Conteúdo e componentes
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+- Os artigos ficam em `src/content/blog/`. A dupla `lang` e `canonicalSlug` determina os endereços e conecta as traduções.
+- Os guias de estilo em `/style-guide/` e `/en/style-guide/` usam os mesmos componentes das páginas do blog.
+- O Bento de Open Graph tem 24 px de respiro em cada lado de um PNG de 1200 × 630. A seed do título define o tom e a composição ASCII, com até três formas entre círculos e triângulos.
+- Uses e Life incluem referências editoriais creditadas a Paul Stamatiou, usadas como amostras no laboratório.

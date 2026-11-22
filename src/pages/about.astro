@@ -1,296 +1,125 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
+import { stat } from 'node:fs/promises';
+import photoUrl from '../assets/guisso-photo.png?url';
+import Site from '../layouts/Site.astro';
+import AboutPortraits from '../components/AboutPortraits.astro';
+import GlowButton from '../components/GlowButton.astro';
 import Timeline from '../components/Timeline.astro';
-import Avatar from '../assets/guisso-avatar.jpg';
-import Photo from '../assets/guisso-photo.png';
-import { getHtmlLang, getRequestLocale, type LocaleCode } from '../i18n/config';
 
-const locale: LocaleCode = getRequestLocale(Astro);
-const htmlLang = getHtmlLang(locale);
-const currentPath = Astro.url?.pathname ?? '/';
-const currentSearch = Astro.url?.search ?? '';
+interface Props { lang?: 'pt' | 'en'; }
+const { lang = 'pt' } = Astro.props;
+const english = lang === 'en';
+
+const photoName = 'fernando-guisso-foto.png';
+const photoFile = await stat('src/assets/guisso-photo.png');
+const photoKilobytes = Math.round(photoFile.size / 1000);
+
+const bio = english
+  ? "Fernando Guisso is a Security Software Engineer focused on AppSec/DevSecOps. He works on secure development, test automation, and vulnerability analysis for tech and finance companies (including will bank and Globo). Active in communities like SunsecRN and OWASP, he shares knowledge at events and open-source efforts. In his spare time, he’s learning drums and planning a one-man band."
+  : 'Fernando Guisso é Security Software Engineer em AppSec/DevSecOps. Trabalha com desenvolvimento seguro, automação de testes e análise de vulnerabilidades em empresas de tecnologia e finanças (passagens por will bank e Globo). Participa de comunidades como SunsecRN e OWASP, compartilha conhecimento em eventos e projetos open source. Nas horas vagas, estuda bateria e ensaia uma banda de um homem só.';
+const timeline = [
+  { meta: english ? '2024 - present' : '2024 - atual', role: 'will bank · Security Software Engineer (AppSec & Sec Eng)' },
+  { meta: '2022 - 2024', role: 'Globo · Sr. Information Security Analyst' },
+  { meta: '2019 - 2023', role: english ? 'eFlag · Strategic Technical Advisor (parallel)' : 'eFlag · Strategic Technical Advisor (paralelo)' },
+  { meta: '2021', role: 'Hash · Security Software Engineer' },
+  { meta: '2020 - 2021', role: 'Conviso · Information Security Analyst' },
+  { meta: '2020 - 2021', role: 'Decred · Blockchain Software Developer' },
+  { meta: '2017 - 2019', role: 'Campus Party / MCI · Community Manager / Specialist' },
+  { meta: '2017', role: 'Mantris · Full-stack Developer' },
+];
 ---
 
-<!doctype html>
-<html lang={htmlLang}>
-	<head>
-		<BaseHead
-			title="Sobre mim"
-			description="De Mococa para Natal, levando AppSec e DevSecOps para times de produto."
-			locale={locale}
-		/>
-	</head>
-	<body>
-		<Header locale={locale} pathname={currentPath} search={currentSearch} />
-		<main class="page-shell about-page">
-			<section class="intro">
-				<div class="avatars">
-					<div class="avatar">
-						<img src={Avatar.src} alt="Fernando Guisso" loading="lazy" width="220" height="220" />
-					</div>
-					<div class="avatar photo">
-						<img src={Photo.src} alt="Foto do Fernando Guisso" loading="lazy" width="220" height="220" />
-					</div>
-				</div>
-			</section>
-			<h1 class="page-title">Fernando Guisso</h1>
+<Site {lang} title={english ? 'About me' : 'Sobre mim'} description={english ? 'From Mococa to Natal, blending AppSec, DevSecOps, and community work.' : 'De Mococa para Natal, levando AppSec e DevSecOps para times de produto.'}>
+  <main class="reading-shell" id="conteudo" tabindex="-1">
+    <header class="page-intro about-heading">
+      <AboutPortraits {lang} />
+      <h1>Fernando <span class="signature">Guisso</span></h1>
+    </header>
 
-			<section class="story">
-				<p>
-					Antes do crachá vieram muitos eventos e projetos como voluntário. Noites em claro no
-					hackerspace com energético e cachorro-quente ou pizza. Goroa Hacker Club e Dumont
-					Hackerspace foram minha escola: horas estudando, montando coisas malucas com amigos e
-					conhecendo gente que abriu portas.
-				</p>
-				<p>
-					Não tenho graduação — lido com ansiedade e não me encaixei no ensino tradicional — mas
-					não recomendo pular: o diploma facilitaria muita coisa. Compensei com estudo, projetos,
-					home lab e comunidade.
-				</p>
-				<p>
-					Hoje sigo em AppSec/DevSecOps com o mesmo espírito: SunsecRN, OWASP, talks e mentoria.
-					Automatizo, monto pipelines e testo ideias no lab; aprender fazendo (e errando) ainda é
-					meu jeito favorito.
-				</p>
-			</section>
+    <div class="prose">
+      <p>{english
+        ? "Before the badge came countless events and volunteer projects. Sleepless nights in the hackerspace powered by energy drinks, hot dogs, or pizza. Goroa Hacker Club and Dumont Hackerspace were my school: hours studying and building wild projects with friends."
+        : 'Antes do crachá vieram muitos eventos e projetos como voluntário. Noites em claro no hackerspace com energético e cachorro-quente ou pizza. Goroa Hacker Club e Dumont Hackerspace foram minha escola: horas estudando, montando coisas malucas com amigos e conhecendo gente que abriu portas.'}</p>
+      <p>{english
+        ? "I don’t have a degree (anxiety and traditional classes didn’t click), but I wouldn’t advise skipping it; a diploma would’ve made plenty of moments less painful. I made up for it with obsessive study, personal projects, and a home lab where I break and fix things."
+        : 'Não tenho graduação (lido com ansiedade e não me encaixei no ensino tradicional), mas não recomendo pular: o diploma facilitaria muita coisa. Compensei com estudo, projetos, home lab e comunidade.'}</p>
+      <p>{english
+        ? "Today I’m in AppSec/DevSecOps with the same community vibe: SunsecRN, OWASP, talks, mentoring. I love automation, wiring pipelines, and testing ideas in the lab because learning by doing (and failing, and trying again) is how I roll."
+        : 'Hoje sigo em AppSec/DevSecOps com o mesmo espírito: SunsecRN, OWASP, talks e mentoria. Automatizo, monto pipelines e testo ideias no lab; aprender fazendo (e errando) ainda é meu jeito favorito.'}</p>
+    </div>
 
-			<section class="bio-copy">
-				<div class="bio-header">
-					<h2>Bio para copiar</h2>
-					<a
-						class="download-btn"
-						href={Photo.src}
-						download="fernando-guisso-foto.png"
-						data-tianji-event="download_bio_photo_pt"
-					>
-						Baixar foto
-					</a>
-				</div>
-				<div class="bio-field">
-					<textarea id="bio-text" readonly>
-Fernando Guisso é Security Software Engineer em AppSec/DevSecOps. Trabalha com desenvolvimento seguro, automação de testes e análise de vulnerabilidades em empresas de tecnologia e finanças (passagens por will bank e Globo). Participa de comunidades como SunsecRN e OWASP, compartilha conhecimento em eventos e projetos open source. Nas horas vagas, estuda bateria e ensaia uma banda de um homem só.</textarea>
-					<button
-						class="copy-icon"
-						type="button"
-						aria-label="Copiar bio"
-						data-copy-target="#bio-text"
-						data-tianji-event="copy_bio_text_pt"
-					>
-						<svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
-							<path
-								fill="currentColor"
-								d="M15 3H6a2 2 0 0 0-2 2v11h2V5h9V3Zm3 4H9a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Zm0 14H9V9h9v12Z"
-							/>
-						</svg>
-					</button>
-				</div>
-			</section>
+    <section class="about-section" aria-labelledby="bio-title">
+      <h2 id="bio-title">{english ? 'Bio to copy' : 'Bio para copiar'}</h2>
+      <div class="bio-box">
+        <textarea id="bio-text" aria-labelledby="bio-title" readonly rows="7">{bio}</textarea>
+        <div class="bio-controls" data-bio-controls hidden>
+          <p data-copy-status data-copied={english ? 'Bio copied.' : 'Bio copiada.'}
+            data-selected={english ? 'Text selected. Use the Copy command.' : 'Texto selecionado. Use o comando Copiar.'} role="status"></p>
+          <GlowButton variant="outline" size="sm" class="copy-bio" data-copy-bio data-tianji-event={`copy_bio_text_${lang}`}>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="8" width="12" height="12" rx="2" />
+              <path d="M4 15V6a2 2 0 0 1 2-2h9" />
+            </svg>
+            {english ? 'Copy bio' : 'Copiar bio'}
+          </GlowButton>
+        </div>
+      </div>
+      <div class="bio-download">
+        <GlowButton href={photoUrl} variant="outline" download={photoName} data-tianji-event={`download_bio_photo_${lang}`}>{english ? 'Download photo' : 'Baixar foto'} (PNG, {photoKilobytes} kB)</GlowButton>
+      </div>
+    </section>
 
-			<section class="timeline-block">
-				<h2>Linha do tempo</h2>
-				<Timeline
-					items={[
-						{ meta: '2024 — atual', role: 'will bank · Security Software Engineer (AppSec & Sec Eng)' },
-						{ meta: '2022 — 2024', role: 'Globo · Sr. Information Security Analyst' },
-						{ meta: '2019 — 2023', role: 'eFlag · Strategic Technical Advisor (paralelo)' },
-						{ meta: '2021', role: 'Hash · Security Software Engineer' },
-						{ meta: '2020 — 2021', role: 'Conviso · Information Security Analyst' },
-						{ meta: '2020 — 2021', role: 'Decred · Blockchain Software Developer' },
-						{ meta: '2017 — 2019', role: 'Campus Party / MCI · Community Manager / Specialist' },
-						{ meta: '2017', role: 'Mantris · Full-stack Developer' },
-					]}
-				/>
-			</section>
-		</main>
-		<Footer locale={locale} />
-	</body>
-</html>
-
-<style>
-	.about-page {
-		padding: 4rem 0 5rem;
-		display: grid;
-		gap: 2.25rem;
-	}
-
-	.intro {
-		display: grid;
-		grid-template-columns: 280px 1fr;
-		gap: 1.5rem;
-		align-items: center;
-	}
-
-	.avatars {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(120px, 1fr));
-		gap: 0.75rem;
-	}
-
-	.avatar {
-		position: relative;
-		width: 130px;
-		height: 130px;
-		border-radius: 18px;
-		overflow: hidden;
-		border: 1px solid rgba(255, 255, 255, 0.08);
-		box-shadow:
-			0 25px 60px rgba(0, 0, 0, 0.45),
-			0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-		background: radial-gradient(circle at 20% 20%, rgba(0, 255, 127, 0.22), transparent 55%),
-			radial-gradient(circle at 80% 0%, rgba(154, 26, 255, 0.18), transparent 45%),
-			radial-gradient(circle at 60% 100%, rgba(110, 110, 255, 0.14), transparent 55%);
-	}
-
-	.avatar img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
-	}
-
-	.avatar.photo {
-		width: 130px;
-		height: 130px;
-	}
-
-	.page-title {
-		margin: 0;
-		font-size: clamp(2.2rem, 4vw, 3.2rem);
-	}
-
-	.story {
-		display: grid;
-		gap: 0.9rem;
-		margin: 1.25rem 0 1.75rem;
-		color: var(--color-muted-strong);
-	}
-
-	.timeline-block {
-		display: grid;
-		gap: 0.5rem;
-		margin-top: 2rem;
-	}
-
-	.bio-copy {
-		display: grid;
-		gap: 0.65rem;
-		margin-top: 1.5rem;
-	}
-
-	.bio-header {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem;
-		align-items: center;
-	}
-
-	.bio-field {
-		position: relative;
-	}
-
-	.bio-copy textarea {
-		width: 100%;
-		min-height: 160px;
-		border-radius: 12px;
-		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.02);
-		color: var(--color-fg);
-		padding: 0.9rem 3rem 0.9rem 0.9rem;
-		font: italic 1rem/1.5 'Inter', system-ui, sans-serif;
-		resize: vertical;
-	}
-
-	.download-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		padding: 0.4rem 0.85rem;
-		border-radius: 10px;
-		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: linear-gradient(120deg, rgba(0, 255, 127, 0.12), rgba(154, 26, 255, 0.12));
-		color: var(--color-fg);
-		cursor: pointer;
-		text-decoration: none;
-		transition: border-color 0.2s ease, transform 0.2s ease;
-	}
-
-	.download-btn:hover {
-		border-color: rgba(0, 255, 127, 0.6);
-		transform: translateY(-1px);
-	}
-
-	.copy-icon {
-		position: absolute;
-		right: 0.55rem;
-		top: 0.55rem;
-		width: 38px;
-		height: 38px;
-		border-radius: 10px;
-		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.04);
-		color: var(--color-muted-strong);
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
-	}
-
-	.copy-icon:hover {
-		border-color: rgba(0, 255, 127, 0.6);
-		color: var(--color-fg);
-		transform: translateY(-1px);
-	}
-
-	@media (max-width: 640px) {
-		.timeline li::before {
-			left: 9px;
-		}
-
-		.intro {
-			grid-template-columns: 1fr;
-			justify-items: center;
-			text-align: center;
-		}
-
-		.avatars {
-			grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-		}
-
-		.bio-header {
-			justify-content: center;
-		}
-	}
-</style>
+    <section class="about-section" aria-labelledby="timeline-title">
+      <h2 id="timeline-title">{english ? 'Timeline' : 'Linha do tempo'}</h2>
+      <Timeline items={timeline} />
+    </section>
+  </main>
+</Site>
 
 <script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const copyBtn = document.querySelector<HTMLButtonElement>('.copy-icon');
-		const bioText = document.querySelector<HTMLTextAreaElement>('#bio-text');
-
-		copyBtn?.addEventListener('click', async () => {
-			if (!bioText) return;
-			const text = bioText.value;
-
-			const setLabel = (label: string) => {
-				copyBtn.setAttribute('aria-label', label);
-				setTimeout(() => copyBtn.setAttribute('aria-label', 'Copiar bio'), 1200);
-			};
-
-			try {
-				if (navigator?.clipboard?.writeText) {
-					await navigator.clipboard.writeText(text);
-				} else {
-					bioText.select();
-					document.execCommand('copy');
-					bioText.setSelectionRange(0, 0);
-				}
-				setLabel('Copiado!');
-			} catch (err) {
-				setLabel('Erro ao copiar');
-			}
-		});
-	});
+  const copy = document.querySelector<HTMLButtonElement>('[data-copy-bio]');
+  const bio = document.querySelector<HTMLTextAreaElement>('#bio-text');
+  const controls = document.querySelector<HTMLElement>('[data-bio-controls]');
+  const status = document.querySelector<HTMLElement>('[data-copy-status]');
+  if (copy && bio && controls && status) {
+    controls.hidden = false;
+    copy.addEventListener('click', async () => {
+      status.textContent = '';
+      status.removeAttribute('data-success');
+      try {
+        await navigator.clipboard.writeText(bio.value);
+        status.textContent = status.dataset.copied ?? '';
+        status.setAttribute('data-success', '');
+      } catch {
+        bio.focus();
+        bio.select();
+        status.textContent = status.dataset.selected ?? '';
+      }
+    });
+  }
 </script>
+
+<style>
+  .about-heading { margin-bottom: 24px; }
+  .about-heading h1 { margin-top: 22px; }
+  .about-section { margin-top: calc(var(--section-gap) + 8px); }
+  .about-section h2 { font-size: 24px; margin-bottom: 14px; }
+  .bio-box { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: 9rem;
+    padding: 14px 16px;
+    border: 0;
+    border-radius: 13px;
+    background: transparent;
+    color: var(--ink);
+    font: 16px/1.6 var(--sans);
+    resize: vertical;
+  }
+  .bio-controls { display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 4px 12px 12px; }
+  .bio-controls p { margin: 0; color: var(--muted-on-panel, var(--muted)); font-size: var(--text-caption); }
+  .bio-controls p[data-success] { color: var(--accent); }
+  .bio-controls :global(.copy-bio) { flex: none; gap: 6px; }
+  .bio-download { margin-top: 12px; }
+</style>

@@ -1,0 +1,9 @@
+---
+import EditorialItem from '../../layouts/EditorialItem.astro';
+import { getLife } from '../../data/life';
+
+export function getStaticPaths() {
+  return getLife('pt').map(item => ({ params: { slug: item.slug }, props: { item } }));
+}
+---
+<EditorialItem item={Astro.props.item} section="Life" lang="pt" />

@@ -1,0 +1,137 @@
+---
+import { socials } from '../data/socials';
+import type { PostLanguage } from '../utils/posts';
+
+interface Props { lang?: PostLanguage }
+const { lang = 'pt' } = Astro.props;
+const english = lang === 'en';
+const pauseLabel = english ? 'Pause scrolling social links' : 'Pausar movimento das redes sociais';
+const resumeLabel = english ? 'Resume scrolling social links' : 'Animar faixa de redes sociais';
+---
+
+<nav class="social-marquee" aria-label={english ? "Social links" : "Redes sociais"}>
+  <button class="social-toggle" type="button" data-social-toggle aria-label={pauseLabel} data-pause-label={pauseLabel} data-resume-label={resumeLabel} hidden>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path class="social-pause" d="M9 5v14m6-14v14" />
+      <path class="social-play" d="m9 5 10 7-10 7z" />
+    </svg>
+  </button>
+  <div class="social-window">
+    <div class="social-track">
+      {[false, true].map((copy) => (
+        <ul class:list={['social-row', { 'social-copy': copy }]} aria-hidden={copy ? 'true' : undefined}>
+          {socials.map(({ href, label, viewBox, path }) => (
+            <li>
+              <a {href} rel={label === 'Mastodon' ? 'me noreferrer' : 'noreferrer'} tabindex={copy ? -1 : undefined} data-tianji-event={`outbound_link_${label.toLowerCase()}_${lang}`}>
+                <svg width="18" height="18" viewBox={viewBox} fill="currentColor" aria-hidden="true"><path d={path} /></svg>
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-social-toggle]')) {
+    const marquee = button.closest('.social-marquee');
+    if (!marquee) continue;
+
+    marquee.setAttribute('data-playing', '');
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      const playing = marquee.toggleAttribute('data-playing');
+      button.setAttribute('aria-label', playing ? button.dataset.pauseLabel! : button.dataset.resumeLabel!);
+    });
+  }
+</script>
+
+<style>
+  .social-marquee {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    margin: 0 0 24px;
+    border-block: 1px solid var(--line);
+  }
+
+  .social-window {
+    grid-area: 1 / 1;
+    container-type: inline-size;
+    overflow: clip;
+  }
+
+  .social-track {
+    display: flex;
+  }
+
+  .social-row {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 18px;
+    width: 100%;
+    padding: 4px 12px;
+    margin: 0;
+    list-style: none;
+  }
+
+  .social-copy { display: none; }
+
+  .social-row a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    gap: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .social-row a:focus-visible { outline-offset: 2px; }
+
+  .social-toggle {
+    grid-area: 1 / 2;
+    display: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-inline-start: 1px solid var(--line);
+    color: var(--muted);
+  }
+
+  .social-toggle:is(:hover, :focus-visible) { color: var(--ink); }
+  .social-toggle:focus-visible { outline-offset: -3px; }
+  [data-playing] .social-play,
+  .social-marquee:not([data-playing]) .social-pause { display: none; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .social-toggle { display: grid; }
+
+    .social-marquee[data-playing]:not(:has(a:focus-visible)) {
+      .social-track {
+        width: max-content;
+        opacity: .72;
+        animation: reel 30s linear infinite;
+        transition: opacity .2s ease;
+      }
+
+      .social-row {
+        flex-wrap: nowrap;
+        width: auto;
+        min-width: max(100cqw, 500px);
+      }
+
+      .social-copy { display: flex; }
+
+      @media (hover: hover) {
+        .social-window:hover .social-track { opacity: 1; animation-play-state: paused; }
+      }
+    }
+  }
+
+  @keyframes reel { to { transform: translateX(-50%); } }
+</style>

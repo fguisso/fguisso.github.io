@@ -1,0 +1,21 @@
+---
+import ArticleTitle from './ArticleTitle.astro';
+import CornerCard from './CornerCard.astro';
+import TalkAvatarBadge from './TalkAvatarBadge.astro';
+import { asciiBackgroundScene, type ArticleArtTone } from '../lib/ascii-background';
+
+interface Props {
+  title: string;
+  as?: 'h1' | 'h3';
+  tone?: ArticleArtTone;
+}
+
+const { title, as, tone } = Astro.props;
+const scene = asciiBackgroundScene(title);
+const color = tone ?? scene.tone;
+---
+
+<CornerCard class="header-corner" mask>
+  <ArticleTitle {as} {title} {scene} tone={color} surface="bento" />
+  <TalkAvatarBadge slot="corner" variant="corner" />
+</CornerCard>

@@ -1,0 +1,13 @@
+---
+interface Props { headings?: { depth: number; slug: string; text: string }[]; }
+const { headings = [] } = Astro.props;
+const sections = headings.filter((heading) => heading.depth === 2);
+---
+<nav class="reading-dock" aria-label="Ferramentas de leitura">
+  <a href="/blog/">← Artigos</a>
+  {sections.length > 0 && <details class="toc-menu">
+    <summary>Índice <span aria-hidden="true">↑</span></summary>
+    <div class="toc-popover"><p>Neste artigo</p><ul><li><a href="#conteudo">Começo</a></li>{sections.map(({ slug, text }) => <li><a href={`#${slug}`}>{text}</a></li>)}</ul></div>
+  </details>}
+  <button type="button" class="theme-toggle" data-theme-toggle hidden>Tema: claro</button>
+</nav>

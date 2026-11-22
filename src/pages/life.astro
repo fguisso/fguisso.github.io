@@ -1,0 +1,23 @@
+---
+import Site from '../layouts/Site.astro';
+import EditorialList from '../components/EditorialList.astro';
+import { getLife } from '../data/life';
+import type { PostLanguage } from '../utils/posts';
+
+interface Props { lang?: PostLanguage }
+const { lang = 'pt' } = Astro.props;
+const life = getLife(lang);
+const description = lang === 'en'
+  ? 'Notes from meetups and photo essays from Paul Stamatiou’s travels.'
+  : 'Notas de encontros e ensaios fotográficos das viagens de Paul Stamatiou.';
+---
+
+<Site {lang} title="Life" {description}>
+  <main class="reading-shell" id="conteudo" tabindex="-1">
+    <header class="page-intro">
+      <h1>Life</h1>
+      <p class="lead">{description}</p>
+    </header>
+    <EditorialList entries={life} />
+  </main>
+</Site>

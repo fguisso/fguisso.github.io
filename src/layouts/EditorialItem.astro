@@ -1,0 +1,69 @@
+---
+import Site from './Site.astro';
+import type { EditorialArticle } from '../data/editorial';
+import { localizedPath } from '../utils/i18n';
+import { withBase } from '../utils/paths';
+import type { PostLanguage } from '../utils/posts';
+
+interface Props { item: EditorialArticle; section: 'Gear' | 'Life'; lang: PostLanguage }
+const { item, section, lang } = Astro.props;
+const indexHref = localizedPath('/' + section.toLowerCase() + '/', lang);
+const sectionLabel = section === 'Gear' ? 'Uses' : section;
+const english = lang === 'en';
+---
+<Site title={item.title + ' · ' + sectionLabel} description={item.description} {lang}>
+  <main class="reading-shell" id="conteudo" tabindex="-1">
+    <nav class="trail" aria-label={english ? 'Breadcrumb' : 'Localização'}>
+      <a href={indexHref}>← {sectionLabel}</a>
+    </nav>
+    <article>
+      <header class:list={['entry-intro', { 'side-photo': item.image && section === 'Gear' }]}>
+        <div class="article-header">
+          <p class="eyebrow">{item.label}</p>
+          <h1>{item.title}</h1>
+          <p class="lead">{item.description}</p>
+        </div>
+        {item.image && <figure>
+          <img {...item.image} src={withBase(item.image.src)} decoding="async" />
+          <figcaption>{item.credit}</figcaption>
+        </figure>}
+      </header>
+      <hr class="article-divider" />
+      <div class="entry-body">
+        {item.sections.map(({ heading, text, photo }) => <section>
+          <div class="prose">
+            <h2>{heading}</h2>
+            <p>{text}</p>
+          </div>
+          {photo && <figure class="story-photo">
+            <img src={withBase(photo.src)} width={photo.width} height={photo.height} alt={photo.alt} loading="lazy" decoding="async" />
+            <figcaption>{photo.caption}</figcaption>
+          </figure>}
+        </section>)}
+      </div>
+      <footer class="source">
+        <a href={item.source.href}>{item.source.title} <span aria-hidden="true">{item.source.href.startsWith('/') ? '→' : '↗'}</span></a>
+        {section === 'Life' && <a href={indexHref}>{english ? 'More from Life' : 'Mais de Life'} →</a>}
+      </footer>
+    </article>
+  </main>
+</Site>
+
+<style>
+  .entry-intro { display: grid; align-items: center; gap: 24px; }
+  .entry-intro .article-header, .entry-intro figure { margin: 0; }
+  .entry-intro .eyebrow { margin-bottom: 8px; }
+  .entry-intro .lead { margin-top: 12px; }
+  .story-photo { margin: 20px 0 0; }
+  .entry-intro img, .story-photo img { display: block; width: 100%; height: auto; border-radius: var(--radius-panel); }
+  figcaption { margin-top: 6px; color: var(--muted); font-size: var(--text-caption); }
+  .prose { max-width: 62ch; }
+  .prose h2 { margin: 0 0 8px; }
+  .prose p { margin: 0; }
+  .entry-body section + section { margin-top: var(--section-gap); }
+  .source { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 20px; margin-top: 24px; }
+  .source a { display: inline-block; padding-block: 12px; font-size: var(--text-supporting); }
+  @media (min-width: 720px) {
+    .entry-intro.side-photo { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+  }
+</style>

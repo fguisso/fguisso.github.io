@@ -1,0 +1,90 @@
+.article-art-palette { --article-title-accent: var(--accent); }
+
+.article-art-palette[data-tone="purple"] { --article-title-accent: var(--secondary); }
+
+.article-art-palette[data-surface="bento"] {
+  --bento-surface: var(--featured-art-surface);
+  --bento-ink: var(--featured-art-ink);
+  --article-title-accent: var(--featured-art-accent);
+}
+
+.article-art-palette[data-surface="bento"][data-tone="purple"] {
+  --article-title-accent: #b4a3f5;
+  --bento-surface: color-mix(in srgb, #101113 82%, var(--article-title-accent));
+  --bento-ink: color-mix(in srgb, #eeedf2 47%, var(--article-title-accent));
+}
+
+.article-title { position: relative; isolation: isolate; }
+.article-title > :is(h1, h2, h3) { overflow-wrap: anywhere; }
+
+.article-title em {
+  display: block;
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -.025em;
+  color: var(--article-title-accent);
+}
+
+.article-title[data-surface="bento"] {
+  padding: clamp(1.125rem, 3vw, 1.75rem);
+  border-radius: var(--radius-card);
+  background: var(--bento-surface);
+  color: var(--bento-ink);
+  overflow: clip;
+}
+
+.article-title[data-surface="bento"] > :is(h1, h2, h3) { color: inherit; }
+
+.header-corner .article-title { padding-inline-end: var(--corner-cutout); }
+
+.article-title-ascii {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inline-size: min(55%, 20rem);
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+  user-select: none;
+  mask-image: linear-gradient(to right, transparent, #000 48%);
+}
+
+.article-ascii-glyphs {
+  margin: 0;
+  color: var(--article-title-accent);
+  font: .55rem/.5625rem ui-monospace, monospace;
+  letter-spacing: 0;
+  white-space: pre;
+}
+
+.article-title-ascii pre {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 0;
+  transform: translateY(-50%);
+  opacity: .38;
+}
+
+.article-art-palette[data-surface="bento"] .article-title-ascii {
+  inline-size: min(62%, 24rem);
+}
+
+.article-art-palette[data-surface="bento"] .article-title-ascii pre {
+  opacity: .58;
+  font-size: .625rem;
+  line-height: .625rem;
+}
+
+@media (max-width: 760px) {
+  .article-title-ascii pre { opacity: .25; }
+  .article-art-palette[data-surface="bento"] .article-title-ascii pre { opacity: .33; }
+}
+
+@media print, (forced-colors: active) {
+  .article-title-ascii { display: none; }
+  .article-title em { color: inherit; }
+}
+
+@media print {
+  .article-title[data-surface="bento"] { background: transparent; color: var(--ink); }
+}

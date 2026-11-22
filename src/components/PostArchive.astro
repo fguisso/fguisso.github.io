@@ -1,0 +1,67 @@
+---
+import Site from '../layouts/Site.astro';
+import PostList from './PostList.astro';
+import { archiveHref, getPosts, type PostLanguage } from '../utils/posts';
+interface Props { lang?: PostLanguage; }
+const { lang = 'pt' } = Astro.props;
+const english = lang === 'en';
+const title = english ? 'Articles' : 'Artigos';
+const description = english ? 'Essays, notes, and interactive explanations.' : 'Ensaios, notas e explicações interativas.';
+const posts = await getPosts(lang);
+---
+<Site {title} {description} {lang} alternateHref={archiveHref(english ? 'pt' : 'en')}>
+  <main class="shell page-content post-archive" id="conteudo" tabindex="-1">
+    <header class="page-intro">
+      <h1>{title}</h1>
+      <p class="lead">{description}</p>
+    </header>
+    <PostList {posts} {lang} search />
+  </main>
+</Site>
+
+<script>
+  const mobile = matchMedia('(pointer: coarse)');
+  const viewport = window.visualViewport;
+  const form = document.querySelector<HTMLFormElement>('.post-archive [data-post-search]');
+  const results = form?.closest<HTMLElement>('[data-post-list]');
+
+  if (form && results) {
+    function syncPosition(align: boolean) {
+      if (!form || !results || !mobile.matches || !form.contains(document.activeElement)) return;
+      const zoomed = viewport && viewport.scale !== 1;
+      form.style.setProperty('--search-viewport-top', (zoomed ? 0 : viewport?.offsetTop ?? 0) + 'px');
+      if (!align || zoomed) return;
+
+      const inset = Number.parseFloat(getComputedStyle(form).top);
+      const delta = results.getBoundingClientRect().top - inset;
+      if (delta > 1) window.scrollBy({ top: delta, behavior: 'instant' });
+    }
+
+    form.addEventListener('focusin', event => {
+      if (event.relatedTarget instanceof Node && form.contains(event.relatedTarget)) return;
+      requestAnimationFrame(() => syncPosition(true));
+    });
+    viewport?.addEventListener('resize', () => syncPosition(true));
+    viewport?.addEventListener('scroll', () => syncPosition(false));
+  }
+</script>
+
+<style>
+  .post-archive { max-width: 800px; }
+  .post-archive .page-intro { margin-bottom: 28px; }
+  .post-archive .lead { margin-top: 12px; }
+
+  @media (pointer: coarse) {
+    /* Leave enough room to scroll the form to the top, even with zero matches. */
+    .post-archive :global(.post-list-search) { min-block-size: 100svh; }
+    .post-archive :global([data-post-search]) { position: relative; margin-bottom: 12px; }
+    .post-archive :global([data-post-search]:focus-within) {
+      position: sticky;
+      top: calc(max(8px, env(safe-area-inset-top)) + var(--search-viewport-top, 0px));
+      z-index: 3;
+      padding-bottom: 8px;
+      margin-bottom: 4px;
+      background: var(--page);
+    }
+  }
+</style>

@@ -67,8 +67,8 @@ export default defineConfig({
   - Repo CTA: `click_talk_repo_{talk-slug}`
   - Resources: `click_talk_resource_{talk-slug}_{article|video|slides}`
   - Slidev link: `outbound_link_pt`
-- Footer socials: `social_{platform}_{locale}` (e.g., `social_github_pt`, `social_linkedin_en`).
-- Test-only fallback: `copy_bio_text_fallback` (used by Playwright only when the click event is blocked).
+- Social marquee: `outbound_link_{platform}_{locale}` (e.g., `outbound_link_github_pt`).
+- E2E tests stub the tracker by default. Set `PLAYWRIGHT_TIANJI_LIVE=1` for the live pageview test.
 
 Notes:
 - Tianji properties (extra data) are temporarily ignored; we rely on event names only. If properties become available, we can reintroduce `data-tianji-event-*`.

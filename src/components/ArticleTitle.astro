@@ -1,0 +1,25 @@
+---
+import AsciiBackground from './AsciiBackground.astro';
+import { splitArticleTitle } from '../lib/article-title';
+import { asciiBackgroundScene, type ArticleArtTone, type AsciiBackgroundScene } from '../lib/ascii-background';
+
+interface Props {
+  title: string;
+  as?: 'h1' | 'h2' | 'h3';
+  tone?: ArticleArtTone;
+  surface?: 'plain' | 'bento';
+  scene?: AsciiBackgroundScene;
+  artFormat?: 'text' | 'svg';
+}
+
+const {
+  title, as: Heading = 'h1', surface = 'plain', artFormat = 'text',
+  scene = asciiBackgroundScene(title), tone = scene.tone,
+} = Astro.props;
+const { prefix, suffix } = splitArticleTitle(title);
+---
+
+<div class="article-title article-art-palette" data-tone={tone} data-surface={surface}>
+  <AsciiBackground {scene} format={artFormat} />
+  <Heading>{prefix}{suffix && <>{' '}<em>{suffix}</em></>}</Heading>
+</div>

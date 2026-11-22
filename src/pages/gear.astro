@@ -1,0 +1,23 @@
+---
+import Site from '../layouts/Site.astro';
+import EditorialList from '../components/EditorialList.astro';
+import { getGear } from '../data/gear';
+import type { PostLanguage } from '../utils/posts';
+
+interface Props { lang?: PostLanguage }
+const { lang = 'pt' } = Astro.props;
+const gear = getGear(lang);
+const description = lang === 'en'
+  ? 'Notes from my workbench and a few finds from Paul Stamatiou’s collection.'
+  : 'Notas da minha bancada e alguns achados da coleção de Paul Stamatiou.';
+---
+
+<Site {lang} title="Uses" {description}>
+  <main class="reading-shell" id="conteudo" tabindex="-1">
+    <header class="page-intro">
+      <h1>Uses</h1>
+      <p class="lead">{description}</p>
+    </header>
+    <EditorialList entries={gear} />
+  </main>
+</Site>

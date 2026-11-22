@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import AsciiBackground from './AsciiBackground.astro';
+import Chip from './Chip.astro';
+import { asciiBackgroundScene } from '../lib/ascii-background';
+import { readingMinutes, shortDate } from '../utils/posts';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { data } = post;
+const english = data.lang === 'en';
+const scene = asciiBackgroundScene(data.title);
+const category = data.categories[0] ?? data.tags[0];
+---
+
+<div class="featured-art article-art-palette" data-tone={scene.tone} data-surface="bento">
+  <AsciiBackground {scene} />
+  <span class="art-words" aria-hidden="true">{english ? "security" : "segurança"}<br /><em>{english ? "from within." : "por dentro."}</em></span>
+  {category && <div class="featured-topic"><Chip>{category}</Chip></div>}
+</div>
+<div class="featured-copy">
+  <p class="story-meta"><time datetime={data.pubDate.toISOString()}>{shortDate(data.pubDate, data.lang)}</time> · {readingMinutes(post.body)} min</p>
+  <h2>{data.title}</h2>
+  <p>{data.description}</p>
+</div>
+
+<style>
+  .featured-art {
+    flex: 1;
+    min-height: 138px;
+    padding: 14px 20px 12px;
+    isolation: isolate;
+    background: var(--bento-surface);
+    color: var(--bento-ink);
+  }
+  .featured-art :global(.article-title-ascii) { inline-size: min(76%, 24rem); }
+  .featured-art .art-words { font-size: 33px; margin: auto 0; }
+  .featured-art .art-words em { color: var(--article-title-accent); }
+  .featured-topic {
+    padding-block-start: 8px;
+    --ink: var(--bento-ink);
+    --line: color-mix(in srgb, var(--bento-ink) 33%, var(--bento-surface));
+  }
+  .featured-copy { padding: 14px 20px 20px; }
+  .featured-copy .story-meta { margin-bottom: 7px; color: var(--muted-on-panel, var(--muted)); }
+  .featured-copy h2 { font: 500 22px/1.18 var(--sans); letter-spacing: -.03em; margin: 0 0 8px; }
+  .featured-copy > p:not(.story-meta) { margin: 0; line-height: 21px; }
+</style>

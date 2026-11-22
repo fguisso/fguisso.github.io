@@ -1,0 +1,36 @@
+---
+interface Props {
+  variant?: 'category' | 'new';
+}
+
+const { variant = 'category' } = Astro.props;
+---
+
+<span class:list={['owasp-pill', { 'owasp-pill--new': variant === 'new' }]}>
+  {variant === 'category' ? (
+    <span class="owasp-icon" aria-hidden="true"></span>
+  ) : (
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+      <path stroke-linecap="round" d="M8 2v12M2 8h12M4 4l8 8m0-8-8 8" />
+    </svg>
+  )}
+  <slot />
+</span>
+
+<style>
+  .owasp-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--secondary);
+    background: color-mix(in srgb, var(--secondary) 6%, var(--page));
+    font: 500 12px/1.5 var(--sans);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  .owasp-pill--new { color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--page)); }
+  .owasp-icon { width: 14px; height: 14px; background: currentColor; mask: url('/icons/owasp.svg') center / contain no-repeat; }
+</style>

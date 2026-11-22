@@ -1,14 +1,18 @@
 ---
 import GlowButton from './GlowButton.astro';
+import OwaspPill from './OwaspPill.astro';
 
 interface Props {
 	autoPlay?: boolean;
 	lineDurationMs?: number;
 	replayDelayMs?: number;
 	class?: string;
+	locale?: 'pt' | 'en';
 }
 
-const { autoPlay = false, lineDurationMs = 420, replayDelayMs = 520, class: className } = Astro.props as Props;
+const { autoPlay = false, lineDurationMs = 420, replayDelayMs = 520, class: className, locale = 'pt' } = Astro.props;
+const english = locale === 'en';
+const connectionLabel = english ? 'Show connections' : 'Mostrar conexões';
 
 type Item = { code: string; label: string };
 type RowKind = 'new' | 'down' | 'merge';
@@ -46,36 +50,65 @@ const right2025: ItemWithBadge[] = [
 	{ code: 'A10', label: 'Mishandling of Exceptional Conditions', rowKind: 'new' },
 ];
 
+const connections = [
+	{ from: '2021-A10', to: '2025-A01', kind: 'merge' },
+	{ from: '2021-A05', to: '2025-A02', kind: 'same' },
+	{ from: '2021-A06', to: '2025-A03', kind: 'merge' },
+	{ from: '2021-A02', to: '2025-A04', kind: 'down' },
+	{ from: '2021-A03', to: '2025-A05', kind: 'down' },
+	{ from: '2021-A04', to: '2025-A06', kind: 'down' },
+	{ from: '2021-A07', to: '2025-A07', kind: 'same' },
+	{ from: '2021-A08', to: '2025-A08', kind: 'same' },
+	{ from: '2021-A09', to: '2025-A09', kind: 'same' },
+];
+const labelFor = (code: string, items: Item[]) => {
+	const id = code.slice(5);
+	return id + ' · ' + items.find(item => item.code === id)!.label;
+};
 ---
 
-<div
+<owasp-top10-map
 	class:list={['top10-map', className]}
+	data-connections={JSON.stringify(connections)}
 	data-autoplay={autoPlay ? 'true' : 'false'}
 	data-line-duration={String(lineDurationMs)}
 	data-replay-delay={String(replayDelayMs)}
+	data-replay-label={english ? 'Replay connections' : 'Repetir animação das conexões'}
 >
 	<div class="top10-map__actions">
 		<GlowButton
 			variant="accent"
 			size="sm"
 			data-start-anim
-			aria-label="Iniciar animacoes"
-			title="Iniciar animacoes"
+			hidden
+			aria-label={connectionLabel}
+			title={connectionLabel}
 			class="top10-map__play-btn"
 		>
 			<svg viewBox="0 0 24 24" aria-hidden="true">
 				<path d="M8 6v12l10-6-10-6z" fill="currentColor"></path>
 			</svg>
 		</GlowButton>
+		<details class="top10-map__connections">
+			<summary>{english ? 'Read the connections' : 'Ler as conexões'}</summary>
+			<div>
+				<table>
+					<thead><tr><th scope="col">2021</th><th scope="col">2025</th></tr></thead>
+					<tbody>{connections.map(({ from, to }) => (
+						<tr><td>{labelFor(from, left2021)}</td><td>{labelFor(to, right2025)}</td></tr>
+					))}</tbody>
+				</table>
+			</div>
+		</details>
 	</div>
 	<div class="top10-map__canvas" data-canvas>
 		<div class="top10-map__table-wrap" data-side="left" aria-label="OWASP Top 10 2021">
 			<div class="top10-map__table-shell">
-				<table class="top10-map__table" aria-label="OWASP Top 10 2021 table">
+				<table class="top10-map__table" aria-label="OWASP Top 10 2021">
 					<thead>
 						<tr>
 							<th scope="col" class="top10-map__head-cell top10-map__head-cell--code">2021</th>
-							<th scope="col" class="top10-map__head-cell">Categoria</th>
+							<th scope="col" class="top10-map__head-cell">{english ? 'Category' : 'Categoria'}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -83,12 +116,11 @@ const right2025: ItemWithBadge[] = [
 							<tr
 								class="top10-map__row"
 								data-node={`2021-${item.code}`}
-								id={`2021-${item.code}`}
 								data-row-kind={item.rowKind ?? ''}
 							>
 								<td class="top10-map__code">{item.code}</td>
 								<td class="top10-map__label-cell">
-									<span class="top10-map__label">{item.label}</span>
+									<div data-row-copy><span class="top10-map__label">{item.label}</span></div>
 								</td>
 							</tr>
 						))}
@@ -101,11 +133,11 @@ const right2025: ItemWithBadge[] = [
 
 		<div class="top10-map__table-wrap" data-side="right" aria-label="OWASP Top 10 2025">
 			<div class="top10-map__table-shell">
-				<table class="top10-map__table" aria-label="OWASP Top 10 2025 table">
+				<table class="top10-map__table" aria-label="OWASP Top 10 2025">
 					<thead>
 						<tr>
 							<th scope="col" class="top10-map__head-cell top10-map__head-cell--code">2025</th>
-							<th scope="col" class="top10-map__head-cell">Categoria</th>
+							<th scope="col" class="top10-map__head-cell">{english ? 'Category' : 'Categoria'}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -113,13 +145,14 @@ const right2025: ItemWithBadge[] = [
 							<tr
 								class="top10-map__row"
 								data-node={`2025-${item.code}`}
-								id={`2025-${item.code}`}
 								data-row-kind={item.rowKind ?? ''}
 							>
 								<td class="top10-map__code">{item.code}</td>
 								<td class="top10-map__label-cell">
-									<span class="top10-map__label">{item.label}</span>
-									{item.rowKind === 'new' && <span class="top10-map__new-pill">new</span>}
+									<div data-row-copy>
+										<span class="top10-map__label">{item.label}</span>
+										{item.rowKind === 'new' && <span class="top10-map__new-pill"><OwaspPill variant="new">{english ? 'New' : 'Nova'}</OwaspPill></span>}
+									</div>
 								</td>
 							</tr>
 						))}
@@ -128,456 +161,243 @@ const right2025: ItemWithBadge[] = [
 			</div>
 		</div>
 
-		<svg class="top10-map__arrows" data-arrows viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-			<defs>
-				<marker id="arrow-green" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-					<path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(88, 204, 146, 0.92)" />
-				</marker>
-				<marker id="arrow-red" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-					<path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(219, 90, 90, 0.9)" />
-				</marker>
-				<marker id="arrow-orange" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-					<path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(241, 160, 83, 0.92)" />
-				</marker>
-			</defs>
-		</svg>
+		<svg class="top10-map__arrows" data-arrows viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
 	</div>
-</div>
+</owasp-top10-map>
 
-<script is:inline>
-	(() => {
-		const root = document.currentScript?.previousElementSibling;
-		if (!(root instanceof HTMLElement)) return;
+<script>
+  type Connection = { from: string; to: string; kind: string };
 
-		const canvas = root.querySelector('[data-canvas]');
-		const svg = root.querySelector('[data-arrows]');
-		if (!(canvas instanceof HTMLElement) || !(svg instanceof SVGSVGElement)) return;
+  class OwaspTop10Map extends HTMLElement {
+    private cleanup?: () => void;
 
-		const autoPlay = root.dataset.autoplay === 'true';
-		const lineDuration = Math.max(180, Number(root.dataset.lineDuration || '420') || 420);
-		const lineStagger = Math.floor(lineDuration * 0.78);
-		const replayDelay = Math.max(0, Number(root.dataset.replayDelay || '520') || 520);
-		const startButton = root.querySelector('[data-start-anim]');
-		let hasStarted = false;
-		let isCooldown = false;
-		const arrowTimers = [];
-		const litRows = new Set();
+    connectedCallback() {
+      const canvas = this.querySelector<HTMLElement>('[data-canvas]')!;
+      const svg = this.querySelector<SVGSVGElement>('[data-arrows]')!;
+      const button = this.querySelector<HTMLButtonElement>('[data-start-anim]')!;
+      const rows = new Map(Array.from(this.querySelectorAll<HTMLTableRowElement>('[data-node]'), row => [row.dataset.node, row]));
+      const sourceRows = Array.from(this.querySelectorAll<HTMLTableRowElement>('[data-side="left"] [data-node]'));
+      const targetRows = Array.from(this.querySelectorAll<HTMLTableRowElement>('[data-side="right"] [data-node]'));
+      const rowPairs = sourceRows.map((source, index) => {
+        const target = targetRows[index];
+        return { source, target, sourceCopy: source.querySelector('[data-row-copy]')!, targetCopy: target.querySelector('[data-row-copy]')! };
+      });
+      const duration = Math.max(180, Number(this.dataset.lineDuration) || 420);
+      const stagger = Math.floor(duration * .78);
+      const replayDelay = Math.max(0, Number(this.dataset.replayDelay) || 0);
 
-		const LINKS = [
-			{ from: '2021-A10', to: '2025-A01', kind: 'merge' },
-			{ from: '2021-A05', to: '2025-A02', kind: 'same' },
-			{ from: '2021-A06', to: '2025-A03', kind: 'merge' },
-			{ from: '2021-A02', to: '2025-A04', kind: 'down' },
-			{ from: '2021-A03', to: '2025-A05', kind: 'down' },
-			{ from: '2021-A04', to: '2025-A06', kind: 'down' },
-			{ from: '2021-A07', to: '2025-A07', kind: 'same' },
-			{ from: '2021-A08', to: '2025-A08', kind: 'same' },
-			{ from: '2021-A09', to: '2025-A09', kind: 'same' },
-		];
+      const connections: Connection[] = JSON.parse(this.dataset.connections ?? '[]');
+      const edges = connections.map(({ from, to, kind }) => {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('pathLength', '1');
+        path.setAttribute('data-kind', kind);
+        path.setAttribute('class', 'top10-map__edge');
+        svg.append(path);
+        return { path, from: rows.get(from)!, to: rows.get(to)! };
+      });
+      const linkedRows = new Set(edges.map(edge => edge.to));
+      const unlinkedRows = targetRows.filter(row => !linkedRows.has(row));
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+      const timers: number[] = [];
+      let started = false;
 
-		const getMarker = (kind) => {
-			if (kind === 'merge') return 'url(#arrow-orange)';
-			if (kind === 'down') return 'url(#arrow-red)';
-			return 'url(#arrow-green)';
-		};
+      const drawGeometry = () => {
+        // Measure the text inside each cell so paired rows can grow and shrink together.
+        const cell = getComputedStyle(sourceRows[0].cells[1]);
+        const inset = parseFloat(cell.paddingTop) + parseFloat(cell.paddingBottom) + 1;
+        const heights = rowPairs.map(({ sourceCopy, targetCopy }) =>
+          Math.ceil(Math.max(sourceCopy.getBoundingClientRect().height, targetCopy.getBoundingClientRect().height) + inset),
+        );
+        rowPairs.forEach(({ source, target }, index) => {
+          const height = `${heights[index]}px`;
+          source.style.height = target.style.height = height;
+        });
 
-		const getStroke = (kind) => {
-			if (kind === 'merge') return 'rgba(241, 160, 83, 0.75)';
-			if (kind === 'down') return 'rgba(219, 90, 90, 0.72)';
-			return 'rgba(88, 204, 146, 0.72)';
-		};
+        const bounds = canvas.getBoundingClientRect();
+        if (!bounds.width || !bounds.height) return;
+        svg.setAttribute('viewBox', `0 0 ${bounds.width} ${bounds.height}`);
 
-		const clear = () => {
-			while (arrowTimers.length > 0) {
-				const timer = arrowTimers.pop();
-				window.clearTimeout(timer);
-			}
-			while (svg.lastChild && svg.lastChild.nodeName.toLowerCase() !== 'defs') {
-				svg.removeChild(svg.lastChild);
-			}
-		};
+        for (const { path, from, to } of edges) {
+          const source = from.getBoundingClientRect();
+          const target = to.getBoundingClientRect();
+          const x1 = source.right - bounds.left + 5;
+          const x2 = target.left - bounds.left - 5;
+          const y1 = source.top + source.height / 2 - bounds.top;
+          const y2 = target.top + target.height / 2 - bounds.top;
+          const width = x2 - x1;
+          const longJump = Math.abs(y2 - y1) > 4 * source.height;
+          const c1 = x1 + width * (longJump ? .20 : .55);
+          const c2 = x1 + width * (longJump ? .32 : .45);
+          path.setAttribute('d', `M ${x1} ${y1} C ${c1} ${y1}, ${c2} ${y2}, ${x2} ${y2}`);
+        }
+      };
 
-		const getRightRows = () => Array.from(canvas.querySelectorAll('[data-side="right"] tbody .top10-map__row'));
+      const reset = () => {
+        timers.splice(0).forEach(timer => window.clearTimeout(timer));
+        for (const { path } of edges) {
+          path.getAnimations().forEach(animation => animation.cancel());
+          path.style.visibility = 'hidden';
+        }
+        for (const row of targetRows) delete row.dataset.lit;
+      };
 
-		const applyLitState = () => {
-			const rightRows = getRightRows();
-			rightRows.forEach((row) => {
-				if (!(row instanceof HTMLElement)) return;
-				if (litRows.has(row.id)) {
-					row.setAttribute('data-lit', 'true');
-				} else {
-					row.removeAttribute('data-lit');
-				}
-			});
-		};
+      const play = () => {
+        reset();
+        drawGeometry();
+        const delay = started ? replayDelay : 0;
+        started = true;
+        button.setAttribute('aria-label', this.dataset.replayLabel!);
+        button.title = this.dataset.replayLabel!;
 
-		const resetLitState = () => {
-			litRows.clear();
-			applyLitState();
-		};
+        const revealEdge = (edge: typeof edges[number]) => {
+          edge.path.style.visibility = '';
+          edge.to.dataset.lit = 'true';
+        };
 
-		const lightRow = (rowId) => {
-			litRows.add(rowId);
-			applyLitState();
-		};
+        if (reducedMotion.matches) {
+          edges.forEach(revealEdge);
+          for (const row of unlinkedRows) row.dataset.lit = 'true';
+          return;
+        }
 
-		const startAnimation = (delayMs = 0) => {
-			clear();
-			resetLitState();
-			const run = () => {
-				isCooldown = false;
-				hasStarted = true;
-				draw(true);
-			};
-			if (delayMs > 0) {
-				isCooldown = true;
-				const timer = window.setTimeout(run, delayMs);
-				arrowTimers.push(timer);
-				return;
-			}
-			run();
-		};
+        edges.forEach((edge, index) => {
+          timers.push(window.setTimeout(() => {
+            edge.path.style.visibility = '';
+            const animation = edge.path.animate(
+              [{ strokeDashoffset: '1' }, { strokeDashoffset: '0' }],
+              { duration, easing: 'ease-in-out', fill: 'both' },
+            );
+            animation.onfinish = () => revealEdge(edge);
+          }, delay + index * stagger));
+        });
+        unlinkedRows.forEach((row, index) => {
+          timers.push(window.setTimeout(() => {
+            row.dataset.lit = 'true';
+          }, delay + (edges.length - 1) * stagger + duration + 140 + index * 90));
+        });
+      };
 
-		const point = (el, side) => {
-			const rCanvas = canvas.getBoundingClientRect();
-			const r = el.getBoundingClientRect();
-			const x = side === 'left' ? r.right - rCanvas.left : r.left - rCanvas.left;
-			const y = r.top - rCanvas.top + r.height * 0.5;
-			return { x, y };
-		};
+      reset();
+      drawGeometry();
+      this.dataset.ready = '';
+      const observer = new ResizeObserver(drawGeometry);
+      observer.observe(canvas);
+      for (const { sourceCopy, targetCopy } of rowPairs) {
+        observer.observe(sourceCopy);
+        observer.observe(targetCopy);
+      }
+      button.hidden = false;
+      button.addEventListener('click', play);
+      const frame = this.dataset.autoplay === 'true' ? requestAnimationFrame(play) : undefined;
+      this.cleanup = () => {
+        if (frame !== undefined) cancelAnimationFrame(frame);
+        button.removeEventListener('click', play);
+        observer.disconnect();
+        reset();
+        for (const { path } of edges) path.remove();
+      };
+    }
 
-		const draw = (animate = false) => {
-			const rCanvas = canvas.getBoundingClientRect();
-			const w = Math.max(1, rCanvas.width);
-			const h = Math.max(1, rCanvas.height);
-			svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-			clear();
-			applyLitState();
+    disconnectedCallback() {
+      this.cleanup?.();
+    }
+  }
 
-			LINKS.forEach((link, idx) => {
-				const fromEl = canvas.querySelector(`#${CSS.escape(link.from)}`);
-				const toEl = canvas.querySelector(`#${CSS.escape(link.to)}`);
-				if (!(fromEl instanceof HTMLElement) || !(toEl instanceof HTMLElement)) return;
-
-				const a = point(fromEl, 'left');
-				const b = point(toEl, 'right');
-
-				const dx = Math.max(60, Math.abs(b.x - a.x) * 0.5);
-				const c1x = a.x + dx;
-				const c2x = b.x - dx;
-				const d = `M ${a.x} ${a.y} C ${c1x} ${a.y}, ${c2x} ${b.y}, ${b.x} ${b.y}`;
-
-				const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-				p.setAttribute('d', d);
-				p.setAttribute('fill', 'none');
-				p.setAttribute('stroke', getStroke(link.kind));
-				p.setAttribute('stroke-width', link.kind === 'merge' ? '2.6' : '2.2');
-				p.setAttribute('stroke-linecap', 'round');
-
-				// Animation: draw the line using dash offset.
-				const len = 1200; // good enough; we only need consistent dash animation
-				if (animate) {
-					const delay = idx * lineStagger;
-					p.style.strokeDasharray = String(len);
-					p.style.strokeDashoffset = String(len);
-					p.style.animation = `top10-draw ${lineDuration}ms ease forwards ${delay}ms`;
-					const timer = window.setTimeout(() => {
-						p.setAttribute('marker-end', getMarker(link.kind));
-					}, delay + Math.floor(lineDuration * 0.86));
-					arrowTimers.push(timer);
-					const lightTimer = window.setTimeout(() => {
-						lightRow(link.to);
-					}, delay + Math.floor(lineDuration * 0.92));
-					arrowTimers.push(lightTimer);
-				} else {
-					p.style.strokeDasharray = 'none';
-					p.style.strokeDashoffset = '0';
-					p.style.animation = 'none';
-					p.setAttribute('marker-end', getMarker(link.kind));
-				}
-
-				svg.appendChild(p);
-			});
-
-			if (animate) {
-				const linkedTargets = new Set(LINKS.map((link) => link.to));
-				const rightRows = getRightRows();
-				const unlinkedRows = rightRows
-					.filter((row) => row instanceof HTMLElement)
-					.map((row) => row.id)
-					.filter((id) => !linkedTargets.has(id));
-				const totalAnimMs =
-					Math.floor((LINKS.length - 1) * lineStagger) + Math.floor(lineDuration * 0.92);
-				unlinkedRows.forEach((rowId, index) => {
-					const timer = window.setTimeout(() => {
-						lightRow(rowId);
-					}, totalAnimMs + 140 + index * 90);
-					arrowTimers.push(timer);
-				});
-			}
-		};
-
-		const ro = new ResizeObserver(() => {
-			if ((!hasStarted && !autoPlay) || isCooldown) return;
-			draw(false);
-		});
-		ro.observe(canvas);
-		window.addEventListener(
-			'resize',
-			() => {
-				if ((!hasStarted && !autoPlay) || isCooldown) return;
-				draw(false);
-			},
-			{ passive: true },
-		);
-
-		if (startButton instanceof HTMLElement) {
-			startButton.addEventListener('click', () => {
-				if (!hasStarted) {
-					startAnimation(0);
-					return;
-				}
-				startAnimation(replayDelay);
-			});
-		}
-
-		if (autoPlay) {
-			requestAnimationFrame(() => startAnimation(0));
-		}
-
-		if (!autoPlay) {
-			resetLitState();
-		}
-	})();
+  if (!customElements.get('owasp-top10-map')) customElements.define('owasp-top10-map', OwaspTop10Map);
 </script>
 
 <style>
-	.top10-map {
-		display: grid;
-		gap: 0.7rem;
-	}
+  .top10-map {
+    --map-warning: var(--guide-warning, light-dark(#795615, #ebc582));
+    --map-danger: var(--guide-danger, light-dark(#922e43, #f4a3ae));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    container-type: inline-size;
+  }
 
-	.top10-map__actions {
-		display: grid;
-		justify-items: start;
-	}
+  .top10-map__actions { display: flex; align-items: flex-start; gap: 12px; }
+  .top10-map__actions .top10-map__connections { flex: 1; min-width: 0; margin: 0; }
+  .top10-map__connections summary { width: fit-content; min-height: 44px; padding-block: 10px; cursor: pointer; color: var(--ink); font: 14px/24px var(--sans); }
+  .top10-map__connections table { width: 100%; table-layout: fixed; border-collapse: collapse; font: 13px/1.5 var(--sans); }
+  .top10-map__connections :is(th, td) { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: start; vertical-align: top; overflow-wrap: anywhere; }
+  .top10-map__actions .top10-map__play-btn { flex: 0 0 44px; padding: 0; }
+  .top10-map__play-btn svg { width: 18px; height: 18px; }
 
-	.top10-map__play-btn {
-		width: 2.1rem;
-		min-width: 2.1rem;
-		height: 2.1rem;
-		padding: 0;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-	}
+  .top10-map__canvas {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(2rem, 14cqi, 8rem) minmax(0, 1fr);
+    gap: 4px;
+    align-items: start;
+  }
 
-	.top10-map__play-btn svg {
-		width: 1rem;
-		height: 1rem;
-		margin-left: 0.04rem;
-	}
+  .top10-map__table-wrap { min-width: 0; }
+  .top10-map__table-shell { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-panel); }
+  .top10-map__table { width: 100%; table-layout: fixed; border-collapse: collapse; }
 
-	.top10-map__canvas {
-		position: relative;
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) clamp(4.6rem, 8vw, 7.6rem) minmax(0, 1fr);
-		gap: 0.7rem;
-		align-items: start;
-		padding: 0.25rem 0.1rem;
-	}
+  .top10-map__head-cell {
+    padding: 9px 8px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--muted-on-panel, var(--muted));
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .top10-map__head-cell--code { width: 52px; text-align: center; }
 
-	.top10-map__table-wrap {
-		display: grid;
-		gap: 0;
-		min-width: 0;
-	}
+  .top10-map__row td {
+    height: 48px;
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--row-kind, var(--page)) 6%, var(--page));
+    vertical-align: middle;
+    transition: background-color 220ms ease, color 220ms ease;
+  }
+  .top10-map__row:last-child td { border-bottom: 0; }
+  .top10-map__row[data-row-kind='new'] { --row-kind: var(--accent); }
+  .top10-map__row[data-row-kind='down'] { --row-kind: var(--map-danger); }
+  .top10-map__row[data-row-kind='merge'] { --row-kind: var(--map-warning); }
+  .top10-map__row[data-lit='true'] td { background: color-mix(in srgb, var(--row-kind, var(--secondary)) 12%, var(--page)); }
+  [data-ready] [data-side='right'] .top10-map__row:not([data-lit]) td { background: var(--page); }
+  [data-ready] [data-side='right'] .top10-map__row:not([data-lit]) .top10-map__label { color: var(--muted); }
 
-	.top10-map__table-shell {
-		border: 1px solid rgba(255, 255, 255, 0.14);
-		border-radius: 0.95rem;
-		overflow: hidden;
-		background: rgba(2, 2, 4, 0.35);
-		box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
-	}
+  .top10-map__label { color: var(--ink); font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; transition: color 220ms ease; }
+  .top10-map__label-cell { line-height: 1.35; }
+  .top10-map__code { color: var(--muted-on-panel, var(--muted)); font-size: 12px; text-align: center; }
+  .top10-map__new-pill {
+    display: inline-block;
+    margin-inline-start: 4px;
+    white-space: nowrap;
+    transition: opacity 180ms ease, translate 220ms ease, visibility 180ms;
+  }
+  [data-ready] .top10-map__row:not([data-lit]) .top10-map__new-pill {
+    visibility: hidden;
+    opacity: 0;
+    translate: 0 3px;
+  }
 
-	.top10-map__table {
-		width: 100%;
-		table-layout: fixed;
-		border-collapse: collapse;
-		border-spacing: 0;
-	}
+  .top10-map__arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .top10-map__arrows :global([data-kind='same']) { color: var(--accent); }
+  .top10-map__arrows :global([data-kind='down']) { color: var(--map-danger); }
+  .top10-map__arrows :global([data-kind='merge']) { color: var(--map-warning); }
+  .top10-map__arrows :global(.top10-map__edge) {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-dasharray: 1;
+    stroke-linecap: round;
+  }
 
-	.top10-map__head-cell {
-		text-align: left;
-		padding: 0.34rem 0.44rem;
-		font-size: 0.65rem;
-		font-weight: 700;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		color: var(--color-muted);
-		background: rgba(255, 255, 255, 0.04);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-	}
+  @container (max-width: 540px) {
+    .top10-map__head-cell--code { width: 32px; }
+    .top10-map__head-cell, .top10-map__row td { padding-inline: 4px; }
+    .top10-map__row td { height: 60px; }
+    .top10-map__new-pill { margin-inline-start: 0; }
+  }
 
-	.top10-map__head-cell--code {
-		width: 2.85rem;
-		text-align: center;
-	}
-
-	.top10-map__row td {
-		padding: 0.28rem 0.44rem;
-		height: 2.45rem;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-		vertical-align: middle;
-		background: rgba(255, 255, 255, 0.015);
-	}
-
-	.top10-map__row:last-child td {
-		border-bottom: none;
-	}
-
-	.top10-map__row td:first-child {
-		border-right: 1px solid rgba(255, 255, 255, 0.08);
-	}
-
-	.top10-map__row[data-row-kind='new'] td {
-		background: linear-gradient(90deg, rgba(88, 204, 146, 0.12), rgba(88, 204, 146, 0.03));
-	}
-
-	.top10-map__row[data-row-kind='down'] td {
-		background: linear-gradient(90deg, rgba(219, 90, 90, 0.11), rgba(219, 90, 90, 0.03));
-	}
-
-	.top10-map__row[data-row-kind='merge'] td {
-		background: linear-gradient(90deg, rgba(241, 160, 83, 0.13), rgba(241, 160, 83, 0.03));
-	}
-
-	/* Right table starts dimmed and rows light up as animation marks them as lit. */
-	.top10-map__table-wrap[data-side='right'] .top10-map__row td {
-		opacity: 0.34;
-		filter: saturate(0.72) brightness(0.82);
-		transition:
-			opacity 220ms ease,
-			filter 220ms ease,
-			background-color 220ms ease,
-			border-color 220ms ease;
-	}
-
-	.top10-map__table-wrap[data-side='right'] .top10-map__row[data-lit='true'] td {
-		opacity: 1;
-		filter: none;
-	}
-
-	.top10-map__label {
-		color: var(--color-muted-strong);
-		font-weight: 610;
-		font-size: 0.69rem;
-		line-height: 1.13;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-		max-height: calc(2 * 1.13em);
-		white-space: normal;
-	}
-
-	.top10-map__label-cell {
-		padding-right: 0.25rem;
-		overflow: hidden;
-	}
-
-	.top10-map__table-wrap[data-side='right'] .top10-map__label-cell {
-		position: relative;
-		padding-right: 2.2rem;
-		overflow: visible;
-	}
-
-	.top10-map__new-pill {
-		position: absolute;
-		top: 50%;
-		right: 0.42rem;
-		transform: translateY(-50%) scale(0.9);
-		z-index: 2;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.14rem 0.42rem 0.16rem;
-		border-radius: 999px;
-		border: 1px solid rgba(104, 223, 161, 0.48);
-		background: rgba(54, 165, 111, 0.28);
-		color: rgba(235, 250, 243, 0.94);
-		font-size: 0.5rem;
-		font-weight: 760;
-		line-height: 1;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		opacity: 0;
-		pointer-events: none;
-		transition:
-			opacity 150ms ease,
-			transform 150ms ease;
-	}
-
-	.top10-map__table-wrap[data-side='right'] .top10-map__row[data-row-kind='new'][data-lit='true'] .top10-map__new-pill {
-		opacity: 1;
-		transform: translateY(-50%) scale(1);
-		transition-delay: 220ms;
-	}
-
-	.top10-map__code {
-		color: var(--color-fg);
-		font-weight: 730;
-		font-size: 0.67rem;
-		letter-spacing: 0.04em;
-		text-align: center;
-		white-space: nowrap;
-	}
-
-	.top10-map__lane {
-		align-self: stretch;
-	}
-
-	.top10-map__arrows {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		pointer-events: none;
-	}
-
-	@keyframes top10-draw {
-		to {
-			stroke-dashoffset: 0;
-		}
-	}
-
-	@media (max-width: 980px) {
-		.top10-map__canvas {
-			grid-template-columns: 1fr;
-		}
-		.top10-map__lane {
-			display: none;
-		}
-		.top10-map__table {
-			font-size: 0.76rem;
-		}
-		.top10-map__head-cell--code {
-			width: 3.05rem;
-		}
-		.top10-map__row td {
-			height: 2.45rem;
-		}
-		.top10-map__arrows {
-			display: none;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.top10-map__arrows path {
-			animation: none !important;
-			stroke-dashoffset: 0 !important;
-		}
-	}
+  @media (prefers-reduced-motion: reduce) {
+    .top10-map__row td, .top10-map__label, .top10-map__new-pill { transition: none; }
+  }
 </style>

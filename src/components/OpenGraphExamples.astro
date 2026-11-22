@@ -1,0 +1,62 @@
+---
+import { asciiBackgroundScene } from '../lib/ascii-background';
+import { getPosts, type PostLanguage } from '../utils/posts';
+import { socialCardPath } from '../utils/social-card-paths';
+
+interface Props {
+  lang?: PostLanguage;
+  posts?: Awaited<ReturnType<typeof getPosts>>;
+}
+
+const { lang = 'pt', posts: suppliedPosts } = Astro.props;
+const t = (pt: string, en: string) => lang === 'en' ? en : pt;
+const posts = suppliedPosts ?? await getPosts(lang);
+const primary = posts[0];
+const tone = asciiBackgroundScene(primary.data.title).tone;
+const counterpart = posts.find(({ data }) => data.title.length <= 48 && asciiBackgroundScene(data.title).tone !== tone)
+  ?? posts.find(candidate => candidate !== primary);
+const samples = [{ post: primary, tone }];
+if (counterpart) samples.push({ post: counterpart, tone: asciiBackgroundScene(counterpart.data.title).tone });
+---
+
+<ul class="og-list" role="list">
+  {samples.map(({ post: { data }, tone }) => {
+    const png = socialCardPath(lang, data.canonicalSlug);
+    return (
+      <li>
+        <figure>
+          <figcaption>{tone === 'green' ? t('Bento verde · PNG', 'Green Bento · PNG') : t('Bento roxo · PNG', 'Purple Bento · PNG')}</figcaption>
+          <a href={png} aria-label={t(`Abrir o PNG de ${data.title}`, `Open PNG for ${data.title}`)}>
+            <img src={png} alt={data.title} width="1200" height="630" loading="lazy" decoding="async" />
+          </a>
+        </figure>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  .og-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  figure { margin: 0; }
+  figcaption {
+    margin-block-end: 8px;
+    color: var(--muted);
+    font-size: var(--text-supporting);
+  }
+
+  a { display: block; }
+
+  img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+</style>

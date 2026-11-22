@@ -1,548 +1,132 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
+import Site from '../layouts/Site.astro';
+import Chip from '../components/Chip.astro';
 import GlowBox from '../components/GlowBox.astro';
 import GlowButton from '../components/GlowButton.astro';
-import Header from '../components/Header.astro';
-import Chip from '../components/Chip.astro';
 import TalkAvatarBadge from '../components/TalkAvatarBadge.astro';
-import Timeline from '../components/Timeline.astro';
-import TimelineItem from '../components/TimelineItem.astro';
-import { getHtmlLang, getRequestLocale } from '../i18n/config';
-import { getSiteMeta } from '../theme.config';
+import { getTalkPage } from '../data/talks';
+import { formatDate, getPosts, postHref, readingMinutes, wordCount } from '../utils/posts';
+import { slugifyTag } from '../utils/tags';
 
-const locale = getRequestLocale(Astro);
-const htmlLang = getHtmlLang(locale);
-const currentPath = Astro.url?.pathname ?? '/';
-const currentSearch = Astro.url?.search ?? '';
-const site = getSiteMeta(locale);
-
-type TalkArticle = {
-	title: string;
-	url: string;
-	meta?: string;
-};
-
-type TalkResource = {
-	label: string;
-	url: string;
-};
-
-type Talk = {
-	event: string;
-	tag: string;
-	talkTitle: string;
-	summary?: string;
-	article?: TalkArticle;
-	slides?: TalkResource;
-	video?: TalkResource;
-};
-
-const repoCard = {
-	title: 'fguisso/talks',
-	description:
-		'Slides versionados com Slidev, publicados automaticamente no GitHub Pages através de uma pipeline GitHub Actions.',
-	url: 'https://github.com/fguisso/talks',
-};
-
-const repoHighlights = [
-	'Slide deck em Markdown com Slidev',
-	'Deploy contínuo no GitHub Pages',
-	'Trilhas responsivas para usar até no celular',
-];
-
-const talks: Talk[] = [
-	{
-		event: 'DevOpsDays Natal 2024',
-		tag: 'ebpf',
-		talkTitle: 'K8s Sob Controle: eBPF e Kubescape para Segurança Total',
-		summary:
-			'Eu fiz uma postagem com tudo que foi falado: demos de eBPF, políticas kubescape e o fluxo de observabilidade que aplicamos em produção.',
-		article: {
-			title: 'eBPF em Ação',
-			url: 'https://guisso.dev/posts/ebpf-and-security/',
-			meta: '8 novembro 2024 · 647 palavras · 4 minutos',
-		},
-		slides: {
-			label: 'Slides PT-BR',
-			url: 'https://guisso.dev/talks/ebpf-kubescape',
-		},
-	},
-		{
-			event: 'Meetup OWASP Brasília',
-			tag: 'threat-modeling',
-			talkTitle: 'Threat Modeling Express',
-			summary:
-				'Passei por threat modeling hands-on, com fluxos rápidos de STRIDE e catálogos prontos para sair da reunião com histórias de AppSec priorizadas.',
-			article: {
-				title: 'Threat Modeling Intro',
-				url: 'https://guisso.dev/blog/threat-modeling-intro/',
-				meta: '28 setembro 2024 · 2739 palavras · 13 minutos',
-			},
-			slides: {
-				label: 'Slides PT-BR',
-				url: 'https://guisso.dev/talks/threat-modeling',
-			},
-			video: {
-				label: 'Assistir no YouTube',
-				url: 'https://youtu.be/3TVmFqaAA1o',
-			},
-		},
-		{
-			event: 'Debian Day Natal 2024',
-			tag: 'homelab',
-			talkTitle: 'Proxmox e Homelab',
-			summary:
-				'Esta palestra foi total mão na massa: do bare metal ao cluster Proxmox. Se quiser rever cada comando, deixei o passo a passo completo no post.',
-			article: {
-				title: 'Proxmox e Homelab: Como Transformei um Mini PC em um Servidor de Respeito',
-				url: 'https://guisso.dev/misc/proxmox-debian-day/',
-				meta: '17 agosto 2024 · 576 palavras · 3 minutos',
-			},
-			slides: {
-				label: 'Slides',
-				url: 'https://guisso.dev/talks/proxmox-homelab',
-			},
-		},
-	{
-		event: 'Google IO Extended Natal 2023',
-		tag: 'LLM',
-		talkTitle: 'OWASP Top 10 LLM Vulnerabilities',
-		summary:
-			'Palestra sobre as top 10 vulnerabilidades em LLM para você evitar nos seus projetos de AI e manter inferência sob controle.',
-		slides: {
-			label: 'Slides',
-			url: 'https://guisso.dev/talks/top-10-llm-0.5',
-		},
-	},
-	{
-		event: 'Potiday JS 2023',
-		tag: 'appsec',
-		talkTitle: 'DevSec - Entendendo e corrigindo vulnerabilidades de Sessão e XSS',
-		summary:
-			'A palestra aborda problemas comuns em aplicações JavaScript: vulnerabilidades de sessão e ataques XSS, com técnicas práticas de mitigação.',
-		slides: {
-			label: 'Slides',
-			url: 'https://guisso.dev/talks/xss-session',
-		},
-	},
-		{
-			event: 'Semana ARATU II',
-			tag: 'appsec',
-			talkTitle: 'DAST na pipeline',
-			summary:
-				'Como adaptei scanners DAST para caber nos meus pipelines sem travar deploys, com ajustes de perfil e correlação automática de findings.',
-			video: {
-				label: 'Assistir no YouTube',
-				url: 'https://youtu.be/mNvtYrEjaHA',
-			},
-		},
-		{
-			event: 'DockerCon 2021 · Sala Brasil',
-			tag: 'appsec',
-			talkTitle: 'Segurança de imagens e containers direto na pipeline',
-			summary:
-				'Compartilhei o fluxo de hardening de imagens e políticas de runtime que implementei em pipelines GitOps para times distribuídos.',
-			video: {
-				label: 'Assistir no YouTube',
-				url: 'https://youtu.be/bR9SlnxJI-w',
-			},
-		},
-		{
-			event: 'Campus Party Amazônia',
-			tag: 'blockchain',
-			talkTitle: 'Pagamentos instantâneos com criptomoedas',
-			summary:
-				'Mostrei como montei um stack de pagamentos instantâneos usando carteiras self-hosted, contratos simples e UX acessível.',
-			video: {
-				label: 'Assistir no YouTube',
-				url: 'https://youtu.be/2HKUgc0LjcI',
-			},
-		},
-];
-
-const externalAttrs = (url?: string): Record<string, string> => {
-	if (!url || !url.startsWith('http')) {
-		return {};
-	}
-	return { target: '_blank', rel: 'noopener noreferrer' };
-};
-
-const slugify = (value: string) =>
-	value
-		.normalize('NFD')
-		.replace(/[\u0300-\u036f]/g, '')
-		.toLowerCase()
-		.replace(/[^a-z0-9]+/g, '-')
-		.replace(/^-+|-+$/g, '') || 'talk';
+interface Props { lang?: 'pt' | 'en'; }
+const { lang = 'pt' } = Astro.props;
+const english = lang === 'en';
+const { repoCard, repoHighlights, talks } = getTalkPage(lang);
+const posts = new Map((await getPosts(lang)).map(post => [post.data.canonicalSlug, post]));
+const presentations = talks.map(talk => ({
+  ...talk,
+  article: talk.articleSlug ? posts.get(talk.articleSlug) : undefined,
+}));
 ---
 
-<!doctype html>
-<html lang={htmlLang}>
-	<head>
-		<BaseHead
-			title={`Palestras · ${site.title}`}
-			description="Slides e artigos relacionados às minhas talks sobre AppSec, homelab, eBPF e automação."
-			locale={locale}
-		/>
-	</head>
-	<body>
-		<Header locale={locale} pathname={currentPath} search={currentSearch} />
-		<main class="page-shell talk-shell">
-			<section class="talk-hero">
-				<div class="talk-hero__copy">
-					<p class="eyebrow">palestras</p>
-					<h1>
-            Foi em alguma talk minha? Os <span class="display-special primary">slides</span> estão aqui.
-					</h1>
-					<p>
-						Todas as apresentações são criadas em <a href="https://sli.dev" target="_blank" rel="noopener noreferrer">Slidev</a>,
-						versão com <strong>Markdown</strong> e publicadas automaticamente via <strong>GitHub Actions</strong>. Assim consigo abrir os
-						mesmos slides em qualquer device — do auditório ao celular no aeroporto.
-					</p>
-					<p>
-						Se quiser mergulhar mais fundo, alguns talks viram posts longos no blog com código, links e comandos. Use essa
-						página como hub único para acessar slides, artigos e referências.
-					</p>
-					<div class="talk-hero__profile">
-						<TalkAvatarBadge />
-						<div>
-							<p class="talk-hero__profile-name">Fernando Guisso</p>
-							<p class="talk-hero__profile-note">Compartilhando e aprendendo, hack the planet!</p>
-						</div>
-					</div>
-				</div>
-				<GlowBox class="talk-hero__repo" accent="highlight" padding="relaxed">
-					<p class="talk-hero__repo-label">automação</p>
-					<h3>{repoCard.title}</h3>
-					<p class="talk-hero__repo-description">{repoCard.description}</p>
-					<ul class="talk-hero__repo-list">
-						{repoHighlights.map((item) => (
-							<li>{item}</li>
-						))}
-					</ul>
-						<div class="talk-hero__repo-actions">
-							<a
-								href="https://sli.dev"
-								class="talk-hero__repo-meta"
-								target="_blank"
-								rel="noopener noreferrer"
-								data-tianji-event="outbound_link_pt"
-							>
-								Feito com Slidev
-							</a>
-							<GlowButton
-								href={repoCard.url}
-								variant="accent"
-								size="sm"
-								target="_blank"
-								rel="noopener noreferrer"
-								data-tianji-event={`click_talk_repo_${slugify(repoCard.title)}`}
-							>
-								<span class="talk-hero__repo-icon" aria-hidden="true">
-									<svg viewBox="0 0 496 512" role="img">
-										<path
-											fill="currentColor"
-											d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm31.1 4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z"
-										/>
-									</svg>
-								</span>
-								Ver repositório
-							</GlowButton>
-						</div>
-					</GlowBox>
-				</section>
+<Site {lang} title={english ? 'Talks' : 'Palestras'} description={english ? 'Slides, recordings, and articles from my talks on AppSec, homelabs, eBPF, and automation.' : 'Slides, gravações e artigos das minhas palestras sobre AppSec, homelab, eBPF e automação.'}>
+  <main class="shell page-content talks-page" id="conteudo" tabindex="-1">
+    <header class="talk-intro">
+      <div>
+        <h1>{english ? 'Joined one of my talks? All' : 'Foi em alguma talk minha? Os'} <span class="signature">slides</span> {english ? 'are right here.' : 'estão aqui.'}</h1>
+        <p>{english ? 'I build every deck in' : 'Todas as apresentações são criadas em'} <a href="https://sli.dev/" data-tianji-event={`outbound_link_${lang}`}>Slidev</a>{english ? ', keep the source in Markdown, and publish automatically with GitHub Actions.' : ', versionadas em Markdown e publicadas automaticamente via GitHub Actions.'}</p>
+        <p>{english ? 'Some talks became articles with code, references, and further reading.' : 'Algumas talks também viraram posts com código, referências e material para continuar a leitura.'}</p>
+        <div class="talk-profile">
+          <TalkAvatarBadge />
+          <div><strong>Fernando Guisso</strong><p>{english ? 'Sharing and learning, hack the planet!' : 'Compartilhando e aprendendo, hack the planet!'}</p></div>
+        </div>
+      </div>
+      <GlowBox class="talk-repo">
+        <h2>{repoCard.title}</h2>
+        <p>{repoCard.description}</p>
+        <ul>{repoHighlights.map((item) => <li>{item}</li>)}</ul>
+        <GlowButton href={repoCard.url} variant="outline" data-tianji-event={`click_talk_repo_${slugifyTag(repoCard.title)}`}>{english ? 'View repository' : 'Ver repositório'}</GlowButton>
+      </GlowBox>
+    </header>
 
-				<section id="agenda" class="talk-list">
-				<div class="section-head">
-					<p class="eyebrow">agenda</p>
-					<h2>
-						<span class="display-special primary">Talks</span> recentes e materiais para download
-					</h2>
-					<p class="talk-list__intro">
-						Slides responsivos, com demos gravadas e links para artigos complementares. Clique para abrir direto no navegador ou baixar.
-					</p>
-				</div>
-				<Timeline class="talk-timeline">
-					{talks.map((talk, index) => (
-						<TimelineItem accent={index % 3 === 0 ? 'accent' : index % 3 === 1 ? 'secondary' : 'highlight'}>
-							<GlowBox class="talk-card">
-								<div class="talk-card__head">
-									<div>
-										<p class="talk-card__event">{talk.event}</p>
-										<h3>{talk.talkTitle}</h3>
-									</div>
-									<Chip variant="solid">{talk.tag}</Chip>
-								</div>
-								{talk.summary && <p class="talk-card__summary">{talk.summary}</p>}
-								{talk.article && (
-									<a class="talk-card__article" href={talk.article.url} {...externalAttrs(talk.article.url)}>
-										<div>
-											<p class="talk-card__article-label">Post relacionado</p>
-											<p class="talk-card__article-title">{talk.article.title}</p>
-											{talk.article.meta && <p class="talk-card__article-meta">{talk.article.meta}</p>}
-										</div>
-										<span aria-hidden="true" class="talk-card__article-icon">↗</span>
-									</a>
-								)}
-								{(talk.article || talk.slides || talk.video) && (
-									<div class="talk-card__actions">
-										{talk.article && (
-											<GlowButton
-												href={talk.article.url}
-												variant="ghost"
-												size="sm"
-												{...externalAttrs(talk.article.url)}
-												data-tianji-event={`click_talk_resource_${slugify(talk.talkTitle)}_article`}
-											>
-												{locale === 'en' ? 'Read article' : 'Ler artigo'}
-											</GlowButton>
-										)}
-										{talk.video && (
-											<GlowButton
-												href={talk.video.url}
-												variant="secondary"
-												size="sm"
-												target="_blank"
-												rel="noopener noreferrer"
-												data-tianji-event={`click_talk_resource_${slugify(talk.talkTitle)}_video`}
-											>
-												{talk.video.label}
-											</GlowButton>
-										)}
-										{talk.slides && (
-											<GlowButton
-												href={talk.slides.url}
-												variant="accent"
-												size="sm"
-												target="_blank"
-												rel="noopener noreferrer"
-												data-tianji-event={`click_talk_resource_${slugify(talk.talkTitle)}_slides`}
-											>
-												{talk.slides.label}
-											</GlowButton>
-										)}
-									</div>
-								)}
-							</GlowBox>
-						</TimelineItem>
-					))}
-				</Timeline>
-			</section>
-		</main>
-		<Footer locale={locale} />
-	</body>
-</html>
+    <section id="agenda" class="talk-agenda" aria-labelledby="agenda-title">
+      <h2 id="agenda-title">{english ? 'Recent talks and downloadable materials' : 'Talks recentes e materiais para download'}</h2>
+      <ol class="talk-timeline" role="list">
+        {presentations.map((talk, index) => (
+          <li>
+            <GlowBox class="talk-entry">
+              <div class="talk-entry-heading">
+                <div><p class="talk-event">{talk.event}</p><h3 id={`talk-title-${index}`}>{talk.talkTitle}</h3></div>
+                <Chip>{talk.tag}</Chip>
+              </div>
+              {talk.summary && <p>{talk.summary}</p>}
+              {talk.article && (
+                <a class="talk-article" href={postHref(talk.article.data.canonicalSlug, lang)} data-tianji-event={`click_talk_resource_${slugifyTag(talk.talkTitle)}_article`}>
+                  <span>{english ? 'Related article' : 'Post relacionado'}</span>
+                  <strong>{talk.article.data.title}</strong>
+                  <small>{formatDate(talk.article.data.pubDate, lang)} · {wordCount(talk.article.body)} {english ? 'words' : 'palavras'} · {readingMinutes(talk.article.body)} min</small>
+                  <span class="talk-article-arrow" aria-hidden="true">→</span>
+                </a>
+              )}
+              <div class="talk-actions">
+                {talk.video && (
+                  <GlowButton href={talk.video.url} variant="secondary" id={`talk-video-${index}`} aria-labelledby={`talk-video-${index} talk-title-${index}`} data-tianji-event={`click_talk_resource_${slugifyTag(talk.talkTitle)}_video`}>
+                    {talk.video.label}
+                  </GlowButton>
+                )}
+                {talk.slides && (
+                  <GlowButton href={talk.slides.url} variant="outline" id={`talk-slides-${index}`} aria-labelledby={`talk-slides-${index} talk-title-${index}`} data-tianji-event={`click_talk_resource_${slugifyTag(talk.talkTitle)}_slides`}>
+                    {talk.slides.label}
+                  </GlowButton>
+                )}
+              </div>
+            </GlowBox>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </main>
+</Site>
 
 <style>
-	.talk-shell {
-		padding-top: 4rem;
-		padding-bottom: 5rem;
-		display: flex;
-		flex-direction: column;
-		gap: 3.5rem;
-	}
-
-	.talk-hero {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 2.5rem;
-		align-items: stretch;
-	}
-
-	.talk-hero__copy h1 {
-		margin-bottom: 1rem;
-	}
-
-	.talk-hero__copy p {
-		color: var(--color-muted);
-	}
-
-	.talk-hero__cta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.85rem;
-		margin: 1.5rem 0 1rem;
-	}
-
-	.talk-hero__profile {
-		display: flex;
-		align-items: center;
-		gap: 0.9rem;
-		margin-top: 0.75rem;
-	}
-
-	.talk-hero__profile-name {
-		margin: 0;
-		font-weight: 600;
-		color: var(--color-fg);
-	}
-
-	.talk-hero__profile-note {
-		margin: 0.1rem 0 0;
-		color: var(--color-muted);
-		font-size: 0.9rem;
-	}
-
-	.talk-hero__repo {
-		min-height: 100%;
-	}
-
-	.talk-hero__repo-label {
-		text-transform: uppercase;
-		letter-spacing: 0.25em;
-		font-size: 0.7rem;
-		color: var(--color-highlight);
-		margin: 0 0 0.5rem;
-	}
-
-	.talk-hero__repo-description {
-		color: var(--color-muted);
-		margin-bottom: 1.5rem;
-	}
-
-	.talk-hero__repo-list {
-		list-style: none;
-		padding: 0;
-		margin: 0 0 1.5rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.4rem;
-		color: var(--color-muted-strong);
-	}
-
-	.talk-hero__repo-list li::before {
-		content: '•';
-		margin-right: 0.5rem;
-		color: var(--color-accent);
-	}
-
-	.talk-hero__repo-actions {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
-
-	.talk-hero__repo-meta {
-		font-size: 0.9rem;
-		color: var(--color-muted);
-	}
-
-	.talk-hero__repo-icon {
-		display: inline-flex;
-		width: 1rem;
-		height: 1rem;
-	}
-
-	.talk-hero__repo-icon svg {
-		width: 100%;
-		height: 100%;
-	}
-
-	.talk-list {
-		display: flex;
-		flex-direction: column;
-		gap: 2rem;
-	}
-
-	.talk-list .section-head h2 {
-		margin-bottom: 0.5rem;
-	}
-
-	.talk-list__intro {
-		max-width: 720px;
-		color: var(--color-muted);
-	}
-
-	.talk-timeline {
-		margin: 1rem 0 0;
-	}
-
-	.talk-card {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	.talk-card__head {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		gap: 1rem;
-	}
-
-	.talk-card__event {
-		font-size: 0.9rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		color: var(--color-muted);
-		margin: 0 0 0.35rem;
-	}
-
-	.talk-card__summary {
-		color: var(--color-muted);
-		margin: 0;
-	}
-
-	.talk-card__article {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		padding: 0.85rem 1rem;
-		border-radius: var(--border-radius);
-		background: rgba(255, 255, 255, 0.04);
-		border: 1px solid rgba(255, 255, 255, 0.08);
-		color: var(--color-fg);
-		text-decoration: none;
-		transition: border-color 0.2s ease, transform 0.2s ease;
-	}
-
-	.talk-card__article:hover {
-		border-color: rgba(0, 255, 127, 0.5);
-		transform: translateY(-2px);
-	}
-
-	.talk-card__article-label {
-		margin: 0;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--color-muted);
-	}
-
-	.talk-card__article-title {
-		margin: 0.1rem 0;
-		font-weight: 600;
-		color: var(--color-fg);
-	}
-
-	.talk-card__article-meta {
-		margin: 0;
-		color: var(--color-muted);
-		font-size: 0.85rem;
-	}
-
-	.talk-card__article-icon {
-		font-size: 1.3rem;
-		color: var(--color-accent);
-	}
-
-	.talk-card__actions {
-		margin-top: auto;
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-		gap: 0.75rem;
-		flex-wrap: wrap;
-	}
-
-	@media (max-width: 980px) {
-		.talk-hero {
-			grid-template-columns: 1fr;
-		}
-	}
+  .talk-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    margin-bottom: calc(var(--section-gap) + 8px);
+  }
+  .talk-intro h1 { font-size: clamp(34px, 5vw, 54px); margin-bottom: 20px; }
+  .talk-intro p { margin-bottom: 12px; }
+  .talk-profile { display: flex; gap: 12px; align-items: center; margin-top: 20px; }
+  .talk-profile p { margin: 0; font-size: 13px; }
+  .talk-repo h2 { margin-bottom: 10px; }
+  .talk-repo ul { margin: 0 0 18px; padding-inline-start: 1.2em; list-style: disc; font-size: 14px; }
+  .talk-repo li::marker { color: var(--accent); }
+  .talk-agenda > h2 { font-size: clamp(24px, 4vw, 34px); margin-bottom: 20px; }
+  .talk-timeline { display: grid; gap: 16px; list-style: none; margin: 0; padding: 0 0 0 22px; border-inline-start: 1px solid var(--line); }
+  .talk-timeline > li { position: relative; min-width: 0; }
+  .talk-timeline > li::before {
+    content: '';
+    position: absolute;
+    inset: 26px auto auto -27px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .talk-timeline > li:nth-child(even)::before { background: var(--secondary); }
+  .talk-entry-heading { display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+  .talk-event { margin-bottom: 3px; font-size: 12px; color: var(--muted); }
+  .talk-entry-heading h3 { font: 24px/1.25 var(--serif); }
+  .talk-entry p { max-width: 65ch; }
+  .talk-article {
+    position: relative;
+    display: grid;
+    gap: 3px;
+    margin-bottom: 10px;
+    padding: 12px 22px 12px 0;
+    border-block: 1px solid var(--line);
+    text-decoration: none;
+  }
+  .talk-article > span:first-child, .talk-article small { font-size: 12px; color: var(--muted); }
+  .talk-article-arrow { position: absolute; inset: 12px 0 auto auto; color: var(--accent); }
+  .talk-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  @media (max-width: 880px) {
+    .talk-intro { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .talk-timeline { padding-inline-start: 13px; }
+    .talk-timeline > li::before { inset-inline-start: -18px; }
+  }
 </style>

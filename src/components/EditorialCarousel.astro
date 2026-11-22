@@ -1,0 +1,283 @@
+---
+import type { PhotoEntry } from '../data/editorial';
+import Chip from './Chip.astro';
+import type { PostLanguage } from '../utils/posts';
+import { withBase } from '../utils/paths';
+
+interface Props {
+  id: string;
+  title: string;
+  lang?: PostLanguage;
+  entries: PhotoEntry[];
+  cover?: boolean;
+  autoplayInterval?: number;
+  swipeHint?: boolean;
+}
+
+const { id, title, entries, cover = false, autoplayInterval, swipeHint = false, lang = 'pt' } = Astro.props;
+const english = lang === 'en';
+const trackId = id + '-itens';
+const titleId = id + '-title';
+const albumLabel = (name: string, index: number) => english
+  ? `${name}, Life album, ${index + 1} of ${entries.length}`
+  : `${name}, álbum de Life, ${index + 1} de ${entries.length}`;
+---
+
+<div class:list={['editorial-carousel', { 'is-cover': cover }]} data-editorial-carousel data-carousel-interval={autoplayInterval}>
+  <div class="carousel-header">
+    <h2 id={titleId}>{cover ? <Chip variant="solid" class="cover-section-title">{title}</Chip> : title}</h2>
+    <div class="carousel-controls" data-carousel-controls hidden>
+      <button type="button" aria-label={english ? `Previous item in ${title}` : `Item anterior de ${title}`} aria-controls={trackId} data-carousel-prev aria-disabled="true" tabindex="-1"><span aria-hidden="true">←</span></button>
+      <button type="button" aria-label={english ? `Next item in ${title}` : `Próximo item de ${title}`} aria-controls={trackId} data-carousel-next aria-disabled="true" tabindex="-1"><span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+  {swipeHint && entries.length > 1 && (
+    <svg class="swipe-hint" data-swipe-hint aria-hidden="true" focusable="false" width="40" height="32" viewBox="0 0 32 26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m7 3-3 3 3 3M4 6h9" />
+      <path class="swipe-finger" d="M13 16V9a1.6 1.6 0 0 1 3.2 0v5l5.7 1.3a2.7 2.7 0 0 1 2 3.1l-.7 4.6H15l-5.7-6.4a1.6 1.6 0 0 1 2.2-2.2L13 16Z" />
+    </svg>
+  )}
+  <ul class="carousel-track" id={trackId} role="list" aria-labelledby={titleId} tabindex="0" data-carousel-track>
+    {entries.map((entry, index) => (
+      <li>
+        <a href={entry.href} aria-label={cover ? albumLabel(entry.title, index) : undefined}>
+          <span class="carousel-image"><img {...entry.image} src={withBase(entry.image.src)} loading="lazy" decoding="async" /></span>
+          <span class:list={{ 'cover-caption': cover }}>
+            {entry.title}
+          </span>
+        </a>
+        {!cover && <small>{entry.credit}</small>}
+      </li>
+    ))}
+  </ul>
+</div>
+
+<script>
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+  function setUnavailable(button: HTMLButtonElement, unavailable: boolean) {
+    button.setAttribute('aria-disabled', String(unavailable));
+    button.tabIndex = unavailable ? -1 : 0;
+  }
+
+  for (const carousel of document.querySelectorAll<HTMLElement>('[data-editorial-carousel]')) {
+    const track = carousel.querySelector<HTMLElement>('[data-carousel-track]')!;
+    const controls = carousel.querySelector<HTMLElement>('[data-carousel-controls]')!;
+    const previous = carousel.querySelector<HTMLButtonElement>('[data-carousel-prev]')!;
+    const next = carousel.querySelector<HTMLButtonElement>('[data-carousel-next]')!;
+    const slides = Array.from(track.children) as HTMLElement[];
+    if (slides.length < 2) continue;
+    const [first, second] = slides;
+
+    const syncControls = () => {
+      const end = track.scrollWidth - track.clientWidth;
+      controls.hidden = end <= 1;
+      setUnavailable(previous, track.scrollLeft <= 1);
+      setUnavailable(next, track.scrollLeft >= end - 1);
+    };
+
+    const scroll = (direction: number) => {
+      track.scrollBy({
+        left: (second.offsetLeft - first.offsetLeft) * direction,
+        behavior: reducedMotion.matches ? 'instant' : 'smooth',
+      });
+    };
+
+    previous.addEventListener('click', () => {
+      if (previous.getAttribute('aria-disabled') !== 'true') scroll(-1);
+    });
+    next.addEventListener('click', () => {
+      if (next.getAttribute('aria-disabled') !== 'true') scroll(1);
+    });
+    track.addEventListener('scroll', syncControls, { passive: true });
+    new ResizeObserver(syncControls).observe(track);
+    syncControls();
+
+    const interval = Number(carousel.dataset.carouselInterval);
+    if (!(interval > 0)) continue;
+
+    const hint = carousel.querySelector<HTMLElement>('[data-swipe-hint]');
+    const touchDevice = matchMedia('(any-pointer: coarse)');
+    const hintKey = 'blog-life-swipe-icon-seen';
+    let hintSeen = false;
+    let hintInView = false;
+    let inView = false;
+    let touching = false;
+    let keyboardFocus = false;
+    let timer: number | undefined;
+    let hintTimer: number | undefined;
+
+    function hideHint() {
+      window.clearTimeout(hintTimer);
+      hint?.removeAttribute('data-visible');
+    }
+
+    function showHint() {
+      if (!hint || hintSeen || !hintInView || !touchDevice.matches || document.hidden || controls.hidden) return;
+      hintSeen = true;
+      try {
+        if (localStorage.getItem(hintKey)) return;
+        localStorage.setItem(hintKey, '1');
+      } catch { /* The hint still works for this page when storage is unavailable. */ }
+      hint.setAttribute('data-visible', '');
+      hintTimer = window.setTimeout(hideHint, 4200);
+    }
+
+    function schedule() {
+      window.clearTimeout(timer);
+      if (!inView || document.hidden || reducedMotion.matches || touching || keyboardFocus) return;
+      timer = window.setTimeout(() => {
+        const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
+        if (atEnd) track.scrollTo({ left: 0, behavior: 'instant' });
+        else scroll(1);
+        schedule();
+      }, interval);
+    }
+
+    // A touch can leave the browser's focus on a link or scroll region after the swipe.
+    // Only keyboard focus should keep rotation paused once the finger is lifted.
+    carousel.addEventListener('pointerdown', () => { keyboardFocus = false; hideHint(); });
+    carousel.addEventListener('keydown', () => { keyboardFocus = true; hideHint(); schedule(); });
+    carousel.addEventListener('focusin', (event) => {
+      keyboardFocus = !touching && event.target instanceof Element && event.target.matches(':focus-visible');
+      schedule();
+    });
+    carousel.addEventListener('focusout', (event) => {
+      if (event.relatedTarget instanceof Node && carousel.contains(event.relatedTarget)) return;
+      keyboardFocus = false;
+      schedule();
+    });
+
+    const syncTouch = (event: TouchEvent) => {
+      touching = event.targetTouches.length > 0;
+      if (touching) { keyboardFocus = false; hideHint(); }
+      schedule();
+    };
+    for (const type of ['touchstart', 'touchend', 'touchcancel'] as const) {
+      carousel.addEventListener(type, syncTouch, { passive: true });
+    }
+    track.addEventListener('scroll', schedule, { passive: true });
+    reducedMotion.addEventListener('change', schedule);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { touching = false; hideHint(); }
+      else showHint();
+      schedule();
+    });
+
+    new IntersectionObserver(entries => {
+      inView = entries[entries.length - 1].isIntersecting;
+      if (!inView) hideHint();
+      schedule();
+    }).observe(carousel);
+    if (hint && touchDevice.matches) {
+      new IntersectionObserver(entries => {
+        hintInView = entries[entries.length - 1].intersectionRatio >= 0.98;
+        if (hintInView) showHint();
+      }, { threshold: 0.98 }).observe(hint);
+    }
+  }
+</script>
+
+<style>
+  .editorial-carousel { display: grid; grid-template-rows: auto 1fr; height: 100%; min-width: 0; padding: 12px 0 10px; }
+  .carousel-header { display: flex; align-items: center; justify-content: space-between; min-height: 44px; gap: 12px; margin: 0 20px 6px; }
+  .carousel-header h2 { margin: 0; font-size: 18px; }
+  .carousel-controls { display: flex; gap: 4px; }
+  .carousel-controls button { inline-size: 44px; block-size: 44px; border-radius: 50%; color: var(--ink); }
+  .carousel-controls button[aria-disabled='true'] { color: var(--muted); cursor: default; }
+  .carousel-controls button[aria-disabled='true']:not(:focus-visible) { opacity: .55; }
+  .carousel-controls button:not([aria-disabled='true']):hover { background: var(--area); color: var(--accent); }
+
+  .carousel-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: clamp(145px, 44%, 240px);
+    gap: 14px;
+    list-style: none;
+    margin: 0;
+    padding: 4px calc(var(--corner-cutout, 66px) + 12px) 8px 20px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline-start: 20px;
+    scrollbar-width: none;
+  }
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-track li { display: flex; flex-direction: column; min-width: 0; scroll-snap-align: start; }
+  .carousel-track a { display: flex; flex: 1; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; text-decoration: none; }
+  .carousel-track a:focus-visible { outline-offset: 0; }
+  .carousel-image { position: relative; display: block; flex: 1; aspect-ratio: 4 / 3; }
+  .carousel-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+  .carousel-track small { display: block; margin-top: 3px; color: var(--muted); font-size: var(--text-caption); }
+  .editorial-carousel:not(.is-cover) .carousel-track a > span:last-child { line-height: 1.35; }
+
+  .is-cover { position: relative; display: block; padding: 0; }
+  .is-cover .carousel-header { position: absolute; z-index: 1; inset: 12px 10px auto; gap: 6px; margin: 0; pointer-events: none; }
+  .is-cover .carousel-controls { pointer-events: auto; }
+  .is-cover .carousel-controls button {
+    inline-size: 44px;
+    block-size: 44px;
+    color: white;
+    background: #16131de6;
+  }
+  .is-cover .carousel-controls button[aria-disabled='true']:not(:focus-visible) { opacity: .65; }
+  .is-cover .carousel-controls button:not([aria-disabled='true']):hover { color: #16131d; background: white; }
+  .is-cover .carousel-track {
+    height: 100%;
+    grid-auto-columns: 100%;
+    grid-auto-rows: 100%;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    scroll-padding: 0;
+  }
+  .is-cover .carousel-track li { position: relative; }
+  .is-cover .carousel-track a { display: block; height: 100%; }
+  .is-cover .carousel-track a:focus-visible { outline-offset: -4px; }
+  .is-cover .carousel-image { height: 100%; aspect-ratio: auto; }
+  .is-cover .carousel-image img { border-radius: 0; }
+  .is-cover :global(.cover-section-title) {
+    display: block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: white;
+    background: #16131de6;
+  }
+  .cover-caption {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    inset: auto auto 16px 16px;
+    max-width: calc(100% - var(--corner-cutout, 66px) - 26px);
+    padding: 5px 10px;
+    border-radius: 8px;
+    color: white;
+    background: #16131de6;
+  }
+  .swipe-hint {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    z-index: 1;
+    inset: 64px auto auto 16px;
+    color: white;
+    filter: drop-shadow(0 0 1px #16131d) drop-shadow(0 1px 2px #16131d);
+    pointer-events: none;
+  }
+  .swipe-hint[data-visible] { visibility: visible; opacity: 1; }
+  @media (prefers-reduced-motion: no-preference) {
+    .swipe-hint { transition: opacity 260ms ease, visibility 0s linear 260ms; }
+    .swipe-hint[data-visible] { transition-delay: 0s; }
+    .swipe-hint[data-visible] .swipe-finger {
+      animation: swipe-finger 2.1s cubic-bezier(.45, 0, .35, 1) 2;
+    }
+    @keyframes swipe-finger {
+      0%, 100% { transform: translate(4px, -1px); opacity: .55; }
+      16% { transform: translate(4px, 0); opacity: 1; }
+      64% { transform: translate(-5px, 0); opacity: 1; }
+      80% { transform: translate(-5px, -1px); opacity: .55; }
+    }
+  }
+</style>

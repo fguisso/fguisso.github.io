@@ -9,10 +9,10 @@ interface Props extends HTMLAttributes<'div'> {
 	padding?: Padding;
 }
 
-const { accent = 'accent', padding = 'normal', class: className, ...rest } = Astro.props as Props;
+const { accent, padding = 'normal', class: className, ...rest } = Astro.props as Props;
 const classes = [
 	'glow-box',
-	`glow-box--${accent}`,
+	accent && `glow-box--${accent}`,
 	{
 		'glow-box--snug': padding === 'snug',
 		'glow-box--relaxed': padding === 'relaxed',
@@ -26,13 +26,15 @@ const classes = [
 </div>
 
 <style>
-	.glow-box--accent::before {
-		background: radial-gradient(circle, rgba(0, 255, 127, 0.45), transparent 55%);
+	.glow-box {
+		min-width: 0;
+		padding: 20px;
+		border: 1px solid var(--box-line, var(--line));
+		border-radius: 18px;
 	}
-	.glow-box--secondary::before {
-		background: radial-gradient(circle, rgba(154, 26, 255, 0.4), transparent 60%);
-	}
-	.glow-box--highlight::before {
-		background: radial-gradient(circle, rgba(110, 110, 255, 0.4), transparent 60%);
-	}
+	.glow-box--accent { --box-line: color-mix(in srgb, var(--accent) 48%, var(--line)); }
+	.glow-box--secondary, .glow-box--highlight { --box-line: color-mix(in srgb, var(--secondary) 48%, var(--line)); }
+	.glow-box--snug { padding: 14px; }
+	.glow-box--relaxed { padding: clamp(20px, 4vw, 32px); }
+	.glow-box > :global(:last-child) { margin-block-end: 0; }
 </style>

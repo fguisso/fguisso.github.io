@@ -1,0 +1,311 @@
+---
+import GlowButton from './GlowButton.astro';
+
+interface Props { locale?: 'pt' | 'en'; }
+const { locale = 'pt' } = Astro.props;
+const english = locale === 'en';
+const t = (pt: string, en: string) => english ? en : pt;
+const allowedHost = 'google.com';
+const otherHost = 'evil.com';
+const cases = [
+  { id: 'allowed', label: t('google.com aceito', 'google.com accepted'), url: `http://${allowedHost}` },
+  { id: 'blocked', label: t('evil.com bloqueado', 'evil.com blocked'), url: `http://${otherHost}` },
+  { id: 'divergent', label: t('Resultado do artigo', 'Article result'), observed: otherHost },
+] as const;
+const steps = [
+  { key: 'input', badge: t('ENTRADA', 'INPUT'), label: t('URL recebida', 'Received URL') },
+  { key: 'policy', badge: 'ALLOWLIST', label: t('Domínio interpretado', 'Parsed hostname') },
+  { key: 'normalize', badge: 'ENCODEURL', label: t('URL codificada', 'Encoded URL') },
+  { key: 'response', badge: 'HTTP 302', label: 'Location' },
+  { key: 'browser', badge: t('NAVEGADOR', 'BROWSER'), label: t('Destino observado', 'Observed destination') },
+];
+---
+
+<p data-redirect-example>{t(
+  'No teste do CVE-2024-29041, a validação aceitou google.com e o navegador interpretou evil.com como destino. Ative o JavaScript para acompanhar as etapas.',
+  'In the CVE-2024-29041 test, validation accepted google.com and the browser interpreted evil.com as the destination. Enable JavaScript to step through the result.',
+)}</p>
+<form class="redirect-demo" data-redirect-validation data-locale={locale} data-allowed-host={allowedHost} hidden>
+  <header class="redirect-chrome">
+    <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <strong>Express.js · CVE-2024-29041</strong>
+    <span class="severity-label">{t('CVSS 6,1 · Moderada', 'CVSS 6.1 · Moderate')}</span>
+  </header>
+
+  <div class="redirect-body">
+    <div class="redirect-presets" role="group" aria-label={t('Cenários de validação', 'Validation scenarios')}>
+      {cases.map((scenario) => (
+        <button type="button" data-scenario={scenario.id} data-url={'url' in scenario ? scenario.url : undefined}
+          data-observed={'observed' in scenario ? scenario.observed : undefined} aria-pressed="false">{scenario.label}</button>
+      ))}
+    </div>
+
+    <div class="redirect-fields">
+      <label>{t('Endereço de destino', 'Destination address')}
+        <input type="text" inputmode="url" name="destination" value={cases[0].url} required spellcheck="false" autocomplete="off" />
+      </label>
+      <label>{t('Domínio permitido', 'Allowed domain')}
+        <input type="text" name="host" value={allowedHost} required spellcheck="false" autocomplete="off" />
+      </label>
+    </div>
+    <GlowButton class="redirect-run" type="submit" variant="accent" size="sm">
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M5 3v10l8-5z" /></svg>
+      {t('Simular fluxo', 'Simulate pipeline')}
+    </GlowButton>
+
+    <ol class="redirect-steps" data-steps hidden>
+      {steps.map(({ key, badge, label }) => (
+        <li data-stage={key}>
+          <span class="redirect-stage-badge">{badge}</span>
+          <strong>{label}</strong>
+          <code data-step={key}></code>
+          <span data-stage-note></span>
+        </li>
+      ))}
+    </ol>
+    <output aria-live="polite" data-redirect-result></output>
+    <div class="redirect-browser" data-browser hidden>
+      <div class="redirect-browser-bar">
+        <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <code data-browser-location></code>
+      </div>
+      <div class="redirect-browser-body">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+          <path d="M4 5h16v14H4zM4 9h16M7 7h1m2 0h1" />
+        </svg>
+        <strong data-browser-domain></strong>
+        <span>{t('Prévia do destino observado', 'Preview of the observed destination')}</span>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-redirect-validation]')) {
+    const destination = form.querySelector<HTMLInputElement>('[name="destination"]')!;
+    const host = form.querySelector<HTMLInputElement>('[name="host"]')!;
+    const buttons = [...form.querySelectorAll<HTMLButtonElement>('[data-scenario]')];
+    const steps = form.querySelector<HTMLOListElement>('[data-steps]')!;
+    const rows = Array.from(steps.children) as HTMLElement[];
+    const result = form.querySelector<HTMLOutputElement>('[data-redirect-result]')!;
+    const browser = form.querySelector<HTMLElement>('[data-browser]')!;
+    const browserLocation = browser.querySelector('[data-browser-location]')!;
+    const browserDomain = browser.querySelector('[data-browser-domain]')!;
+    const defaultHost = form.dataset.allowedHost!;
+    const english = form.dataset.locale === 'en';
+    const copy = english ? {
+      received: 'Value supplied to the form.',
+      invalid: 'Enter an HTTP or HTTPS address with the default port and no credentials.',
+      accepted: 'The host is on the allowlist.',
+      rejected: 'The host is outside the allowlist.',
+      normalized: 'Address prepared for the redirect response.',
+      response: 'Location header sent to the simulated browser.',
+      confirmed: 'The destinations match.',
+      divergent: 'The browser in the article test interpreted a different host.',
+      omitted: 'Value omitted from the recorded case',
+      allowed: 'Destination allowed.',
+      blocked: 'Destination blocked.',
+      mismatch: 'Recorded result: the allowlist accepted google.com and the browser interpreted evil.com.',
+    } : {
+      received: 'Valor informado no formulário.',
+      invalid: 'Informe um endereço HTTP ou HTTPS com porta padrão e sem credenciais.',
+      accepted: 'O domínio consta na lista.',
+      rejected: 'O domínio está fora da lista.',
+      normalized: 'Endereço preparado para a resposta de redirecionamento.',
+      response: 'Cabeçalho Location enviado ao navegador simulado.',
+      confirmed: 'Os destinos coincidem.',
+      divergent: 'O navegador do teste interpretou outro domínio.',
+      omitted: 'Valor omitido no caso registrado',
+      allowed: 'Destino permitido.',
+      blocked: 'Destino bloqueado.',
+      mismatch: 'Resultado do teste: a allowlist aceitou google.com e o navegador interpretou evil.com.',
+    };
+    let observedHost: string | undefined;
+    let animations: Animation[] = [];
+
+    const reset = () => {
+      animations.forEach(animation => animation.cancel());
+      animations = [];
+      result.value = '';
+      steps.hidden = true;
+      browser.hidden = true;
+    };
+
+    const run = () => {
+      reset();
+      const address = destination.value.trim();
+      const expected = host.value.trim().toLowerCase();
+      const recorded = Boolean(observedHost);
+      let url: URL | undefined;
+      if (!recorded) {
+        try {
+          const candidate = new URL(address);
+          if (['http:', 'https:'].includes(candidate.protocol) && !candidate.username && !candidate.password && !candidate.port) url = candidate;
+        } catch {
+          // Keep invalid input visible at the allowlist stage.
+        }
+      }
+
+      const parsedHost = recorded ? defaultHost : url?.hostname;
+      const accepted = Boolean(parsedHost) && parsedHost === expected;
+      const observed = accepted ? observedHost ?? parsedHost : undefined;
+      const allowed = observed === expected;
+      const location = recorded ? copy.omitted : url?.href ?? '';
+      const values = [
+        [recorded ? copy.omitted : address, copy.received],
+        [parsedHost ?? '', parsedHost ? accepted ? copy.accepted : copy.rejected : copy.invalid],
+        [location, copy.normalized],
+        [location, copy.response],
+        [observed ?? '', allowed ? copy.confirmed : copy.divergent],
+      ];
+
+      for (const [index, row] of rows.entries()) {
+        row.hidden = index > 1 && !accepted;
+        row.querySelector('[data-step]')!.textContent = values[index][0];
+        row.querySelector('[data-stage-note]')!.textContent = values[index][1];
+      }
+      rows[1].dataset.verdict = accepted ? 'allowed' : 'blocked';
+      rows[4].dataset.verdict = allowed ? 'allowed' : 'blocked';
+      steps.hidden = false;
+
+      result.dataset.verdict = allowed ? 'allowed' : 'blocked';
+      result.value = recorded ? copy.mismatch : allowed ? copy.allowed : copy.blocked;
+      if (observed) {
+        browser.dataset.verdict = allowed ? 'allowed' : 'blocked';
+        browserLocation.textContent = recorded ? observed : location;
+        browserDomain.textContent = observed;
+        browser.hidden = false;
+      }
+
+      if (reducedMotion.matches) return;
+      const stages = [...rows.filter(row => !row.hidden), result, ...(!browser.hidden ? [browser] : [])];
+      animations = stages.map((stage, index) => stage.animate(
+        [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 250, delay: index * 155, fill: 'backwards', easing: 'cubic-bezier(.2,.65,.3,1)' },
+      ));
+    };
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        destination.value = button.dataset.url ?? '';
+        host.value = defaultHost;
+        observedHost = button.dataset.observed;
+        destination.readOnly = host.readOnly = Boolean(observedHost);
+        destination.placeholder = observedHost ? copy.omitted : '';
+        for (const item of buttons) item.setAttribute('aria-pressed', String(item === button));
+        run();
+      });
+    }
+    form.addEventListener('input', () => {
+      observedHost = undefined;
+      for (const button of buttons) button.setAttribute('aria-pressed', 'false');
+      reset();
+    });
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      run();
+    });
+    form.hidden = false;
+    buttons[0]?.click();
+    const example = form.previousElementSibling;
+    if (example instanceof HTMLElement && example.hasAttribute('data-redirect-example')) example.hidden = true;
+  }
+</script>
+
+<style>
+  .redirect-demo {
+    --redirect-danger: var(--guide-danger, light-dark(#922e43, #f4a3ae));
+    --redirect-warning: var(--guide-warning, light-dark(#795615, #ebc582));
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-panel);
+    container-type: inline-size;
+  }
+  .redirect-chrome, .redirect-browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--area);
+  }
+  .redirect-chrome { flex-wrap: wrap; border-radius: calc(var(--radius-panel) - 1px) calc(var(--radius-panel) - 1px) 0 0; }
+  .redirect-chrome strong { color: var(--ink); font-size: var(--text-supporting); }
+  .window-dots { display: inline-flex; flex: none; gap: 4px; }
+  .window-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--redirect-danger); }
+  .window-dots i:nth-child(2) { background: var(--redirect-warning); }
+  .window-dots i:nth-child(3) { background: var(--accent); }
+  .severity-label { margin-inline-start: auto; font-size: var(--text-caption); color: var(--redirect-warning); }
+
+  .redirect-body { display: grid; gap: 14px; min-width: 0; padding: clamp(12px, 3cqi, 22px); }
+  .redirect-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+  .redirect-fields { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: end; gap: 12px; }
+  label { display: grid; gap: 5px; min-width: 0; font-size: var(--text-supporting); }
+  input, .redirect-presets button { min-width: 0; min-height: 44px; padding: 7px 12px; border: 1px solid var(--line); color: var(--ink); }
+  input { width: 100%; border-radius: var(--radius-control); background: var(--panel); font-size: 16px; }
+  .redirect-presets button { border-radius: 999px; font-size: var(--text-supporting); transition: color 140ms ease, border-color 140ms ease; }
+  .redirect-presets button:is(:hover, [aria-pressed='true']) { border-color: var(--accent); color: var(--accent); }
+  .redirect-run { justify-self: start; gap: 6px; }
+
+  .redirect-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-control);
+    overflow: hidden;
+    font-size: var(--text-supporting);
+  }
+  .redirect-steps li {
+    display: grid;
+    grid-template-columns: 90px minmax(84px, .75fr) minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+    margin: 0;
+    padding: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .redirect-steps li:last-child, .redirect-steps li:has(+ [hidden]) { border-bottom: 0; }
+  .redirect-stage-badge {
+    --stage-color: var(--secondary);
+    justify-self: start;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--stage-color) 12%, var(--page));
+    color: var(--stage-color);
+    font: 650 11px/1.5 var(--sans);
+  }
+  [data-stage='response'] .redirect-stage-badge { --stage-color: var(--redirect-warning); }
+  [data-verdict='allowed'] .redirect-stage-badge { --stage-color: var(--accent); }
+  [data-verdict='blocked'] .redirect-stage-badge { --stage-color: var(--redirect-danger); }
+  .redirect-steps strong { color: var(--ink); }
+  .redirect-steps code, .redirect-browser code { color: var(--ink); overflow-wrap: anywhere; }
+
+  output {
+    padding: 10px 12px;
+    border: 1px solid color-mix(in srgb, var(--verdict-color) 45%, var(--line));
+    border-radius: var(--radius-control);
+    background: color-mix(in srgb, var(--verdict-color) 8%, var(--page));
+    color: var(--verdict-color);
+    font-size: 14px;
+    font-weight: 650;
+  }
+  output:empty { display: none; }
+  [data-verdict='allowed'] { --verdict-color: var(--accent); }
+  [data-verdict='blocked'] { --verdict-color: var(--redirect-danger); }
+  .redirect-browser { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--panel); }
+  .redirect-browser-bar code { padding: 3px 8px; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--page); font-size: var(--text-caption); }
+  .redirect-browser-body { display: grid; justify-items: center; gap: 5px; padding: 20px; font-size: var(--text-supporting); text-align: center; }
+  .redirect-browser-body svg, .redirect-browser-body strong { color: var(--verdict-color); }
+  .redirect-browser-body strong { overflow-wrap: anywhere; max-width: 100%; font-size: 16px; }
+  .redirect-browser-body span { color: var(--muted-on-panel, var(--muted)); }
+
+  @container (max-width: 550px) {
+    .redirect-fields { grid-template-columns: minmax(0, 1fr); }
+    .redirect-steps li { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5px 10px; }
+    .redirect-steps li :is(code, [data-stage-note]) { grid-column: 1 / -1; }
+    .redirect-steps li code:empty { display: none; }
+  }
+</style>

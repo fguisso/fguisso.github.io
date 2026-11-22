@@ -1,0 +1,154 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'section'> & {
+  mask?: boolean;
+} & (
+  | { href: string; label: string }
+  | { href?: never; label?: never }
+);
+const { href, label, class: className, mask = false, ...attributes } = Astro.props;
+const startCorner = Astro.slots.has('corner-start');
+---
+
+<section class:list={['corner-card', className, { 'has-mask': mask, 'has-start-corner': startCorner }]} {...attributes}>
+  {mask ? <div class="corner-content-mask"><slot /></div> : <slot />}
+  {startCorner && <div class="corner-action-start"><slot name="corner-start" /></div>}
+  {href
+    ? <a class="corner-action" href={href} aria-label={label}><span aria-hidden="true">↗</span></a>
+    : Astro.slots.has('corner') && <div class="corner-action"><slot name="corner" /></div>}
+</section>
+
+<style>
+  .corner-card {
+    --corner-cutout: 66px;
+    --corner-start-width: 176px;
+    --corner-start-height: 66px;
+    position: relative;
+    min-width: 0;
+    padding: 20px 20px 24px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+
+  .corner-card.has-mask {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0;
+  }
+
+  .corner-card:not(.has-mask) { padding-block-end: 54px; }
+
+  .corner-content-mask {
+    overflow: hidden;
+    border-radius: 17px;
+  }
+
+  .corner-action {
+    position: absolute;
+    inset: auto 6px 6px auto;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .corner-action-start {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    display: grid;
+    place-items: center;
+    inline-size: var(--corner-start-width);
+    block-size: var(--corner-start-height);
+  }
+
+  .corner-action span {
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    width: 43px;
+    height: 43px;
+    border: 1px solid var(--line);
+    background: var(--area);
+    box-shadow: 0 4px 8px #0003;
+    transition: translate .18s ease, border-color .18s ease;
+  }
+
+  .corner-action:is(:hover, :focus-visible) span { translate: 0 -3px; border-color: var(--accent); }
+  .corner-action:focus-visible { outline-offset: 0; }
+
+  @supports (clip-path: shape(from 0 0, line to 100% 100%, close)) {
+    .corner-card {
+      isolation: isolate;
+      border-color: transparent;
+    }
+
+    .corner-card::before,
+    .corner-card::after,
+    .corner-content-mask {
+      --outer-radius: calc(18px - var(--trim));
+      --turn: calc(12px - var(--trim));
+      --curve: calc(20px + var(--trim));
+      --cutout-start: calc(100% - var(--corner-cutout) - var(--turn));
+      --cutout-edge: calc(100% - var(--corner-cutout));
+      --cutout-center: calc(100% - var(--corner-cutout) + var(--curve));
+      clip-path: shape(
+        from var(--outer-radius) 0,
+        hline to calc(100% - var(--outer-radius)),
+        arc to 100% var(--outer-radius) of var(--outer-radius) cw,
+        vline to var(--cutout-start),
+        arc to calc(100% - var(--turn)) var(--cutout-edge) of var(--turn) cw,
+        hline to var(--cutout-center),
+        arc to var(--cutout-edge) var(--cutout-center) of var(--curve) ccw,
+        vline to calc(100% - var(--turn)),
+        arc to var(--cutout-start) 100% of var(--turn) cw,
+        hline to var(--outer-radius),
+        arc to 0 calc(100% - var(--outer-radius)) of var(--outer-radius) cw,
+        vline to var(--outer-radius),
+        arc to var(--outer-radius) 0 of var(--outer-radius) cw,
+        close
+      );
+    }
+
+    .corner-card::before, .corner-card::after {
+      content: '';
+      position: absolute;
+      inset: calc(var(--trim) - 1px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .corner-card.has-start-corner::before,
+    .corner-card.has-start-corner::after,
+    .corner-card.has-start-corner > .corner-content-mask {
+      clip-path: shape(
+        from calc(var(--corner-start-width) + var(--turn)) 0,
+        hline to calc(100% - var(--outer-radius)),
+        arc to 100% var(--outer-radius) of var(--outer-radius) cw,
+        vline to var(--cutout-start),
+        arc to calc(100% - var(--turn)) var(--cutout-edge) of var(--turn) cw,
+        hline to var(--cutout-center),
+        arc to var(--cutout-edge) var(--cutout-center) of var(--curve) ccw,
+        vline to calc(100% - var(--turn)),
+        arc to var(--cutout-start) 100% of var(--turn) cw,
+        hline to var(--outer-radius),
+        arc to 0 calc(100% - var(--outer-radius)) of var(--outer-radius) cw,
+        vline to calc(var(--corner-start-height) + var(--turn)),
+        arc to var(--turn) var(--corner-start-height) of var(--turn) cw,
+        hline to calc(var(--corner-start-width) - var(--curve)),
+        arc to var(--corner-start-width) calc(var(--corner-start-height) - var(--curve)) of var(--curve) ccw,
+        vline to var(--turn),
+        arc to calc(var(--corner-start-width) + var(--turn)) 0 of var(--turn) cw,
+        close
+      );
+    }
+
+    .corner-card::before { --trim: 0px; background: var(--line); }
+    .corner-card::after { --trim: 1px; background: var(--page); }
+    .corner-content-mask { --trim: 1px; border-radius: 0; }
+  }
+</style>

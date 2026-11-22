@@ -18,5 +18,5 @@ test('tianji tracker script loads with correct attrs and requests fire', async (
 	// Script tag is present with the expected attributes.
 	const script = page.locator('script[src="https://tc.guisso.dev/tracker.js"]');
 	await expect(script).toHaveAttribute('data-website-id', 'cmii1ghp20egvjpnvi3fc0asv');
-	await expect(script).toHaveAttribute('data-domains', 'guisso.dev,www.guisso.dev');
+	await expect(script).toHaveAttribute('data-domains', 'guisso.dev,www.guisso.dev,localhost,127.0.0.1');
 });

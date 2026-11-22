@@ -1,375 +1,68 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Chip from '../components/Chip.astro';
-import GlowButton from '../components/GlowButton.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
-import { t } from '../i18n';
-import { getHtmlLang, getRequestLocale, type LocaleCode } from '../i18n/config';
-import { routes } from '../utils/routes';
-import SeriesNav from '../components/SeriesNav.astro';
+import { Image } from 'astro:assets';
+import ArticleMeta from '../components/ArticleMeta.astro';
+import ArticleBentoTitle from '../components/ArticleBentoTitle.astro';
+import NavIcon from '../components/NavIcon.astro';
+import PostSeries from '../components/PostSeries.astro';
+import Site from './Site.astro';
+import { archiveHref, postHref, postTagHref, wordCount } from '../utils/posts';
 
-type Props = CollectionEntry<'blog'>['data'] & {
-	slug: string;
-	wordCount?: number;
-	readingTimeMinutes?: number;
-	locale?: LocaleCode;
-	availableLocales?: LocaleCode[];
-};
+interface Props {
+  post: CollectionEntry<'blog'>;
+  headings: { depth: number; slug: string; text: string }[];
+  readingTimeMinutes: number;
+  hasTranslation?: boolean;
+}
 
-const {
-	title,
-	description,
-	pubDate,
-	heroImage,
-	tags = [],
-	wordCount,
-	readingTimeMinutes,
-	slug,
-	locale: forcedLocale,
-	availableLocales,
-	series,
-} = Astro.props as Props;
-const locale = forcedLocale ?? getRequestLocale(Astro);
-const currentPath = Astro.url?.pathname ?? '/';
-const currentSearch = Astro.url?.search ?? '';
-const htmlLang = getHtmlLang(locale);
-const backToBlogHref = routes.blog(locale);
-const hasReadingStats =
-	typeof wordCount === 'number' && typeof readingTimeMinutes === 'number';
-const numberFormatter = new Intl.NumberFormat(htmlLang);
-const formattedWordCount = hasReadingStats ? numberFormatter.format(wordCount!) : '';
-const minutesLabel = t(locale, 'common.minutesLabel');
-const wordsLabel = t(locale, 'common.wordsLabel');
-const formattedReadingTime = hasReadingStats ? `${readingTimeMinutes} ${minutesLabel}` : '';
-const ogImagePath = `/og/${locale}/${slug}.png`;
-const categoryLabel = t(locale, 'post.categoryLabel');
-const heroAltPrefix = t(locale, 'post.heroAltPrefix');
-const continueExploring = t(locale, 'post.continueExploring');
-const backCtaLabel = t(locale, 'post.backCta');
+const { post, headings, readingTimeMinutes, hasTranslation } = Astro.props;
+const { title, description, pubDate, tags, categories, lang, canonicalSlug, heroImage, series, showDate, showTableOfContents } = post.data;
+const english = lang === 'en';
+const indexHeadings = headings.filter(({ depth }) => depth === 2);
+const showIndex = showTableOfContents !== false && indexHeadings.length > 0;
+const alternateHref = hasTranslation ? postHref(canonicalSlug, english ? 'pt' : 'en') : undefined;
+const category = categories[0] ?? tags[0];
+const archive = archiveHref(lang);
+const totalWords = wordCount(post.body);
 ---
-
-<html lang={htmlLang}>
-	<head>
-		<BaseHead title={title} description={description} image={ogImagePath} locale={locale} />
-	</head>
-
-	<body>
-		<Header
-			locale={locale}
-			pathname={currentPath}
-			search={currentSearch}
-			availableLocales={availableLocales}
-		/>
-		<main class="page-shell post-shell">
-				<article class="post-article" aria-labelledby="post-title">
-					<header class="post-header">
-						<p class="eyebrow">{categoryLabel}</p>
-					<h1 id="post-title">{title}</h1>
-					<p class="post-description text-muted">{description}</p>
-					<div class="post-meta__info" aria-label="Informações do artigo">
-						<span class="post-meta__entry">
-							<span class="post-meta__icon" aria-hidden="true">
-									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-										<rect x="3" y="4" width="18" height="17" rx="3" />
-										<path d="M8 2v4m8-4v4" stroke-linecap="round" />
-										<path d="M3 10h18" />
-									</svg>
-								</span>
-							<span class="post-meta__text">
-								<FormattedDate date={pubDate} locale={htmlLang} />
-							</span>
-						</span>
-						{
-							hasReadingStats && (
-								<>
-									<span class="post-meta__entry">
-										<span class="post-meta__icon" aria-hidden="true">
-											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-												<path d="M6 7h12M6 12h12M6 17h7" stroke-linecap="round" />
-											</svg>
-										</span>
-										<span class="post-meta__text">
-											{formattedWordCount} {wordsLabel}
-										</span>
-									</span>
-									<span class="post-meta__entry">
-										<span class="post-meta__icon" aria-hidden="true">
-											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-												<circle cx="12" cy="12" r="8.5" />
-												<path d="M12 8v4l2.25 1.5" stroke-linecap="round" stroke-linejoin="round" />
-											</svg>
-										</span>
-										<span class="post-meta__text">{formattedReadingTime}</span>
-									</span>
-								</>
-							)
-						}
-					</div>
-					{
-						tags.length > 0 && (
-							<ul class="post-tags" aria-label="Tags do artigo">
-								{tags.map((tag) => (
-									<li>
-										<Chip>{tag}</Chip>
-									</li>
-								))}
-							</ul>
-						)
-					}
-				</header>
-
-				{
-					series && (
-						<SeriesNav
-							seriesSlug={series.slug}
-							seriesTitle={series.title}
-							currentPart={series.part}
-							locale={locale}
-						/>
-					)
-				}
-
-				{
-					heroImage && (
-						<figure class="post-hero">
-							<Image
-								width={1200}
-								height={600}
-								src={heroImage}
-								alt={`${heroAltPrefix} ${title}`}
-								loading="lazy"
-							/>
-						</figure>
-					)
-				}
-
-				<section class="post-body" aria-label="Conteúdo do artigo">
-					<div class="post-flow prose">
-						<slot />
-					</div>
-				</section>
-
-				<footer class="post-footer" aria-label="Navegação complementar">
-					<p class="post-footer__label text-muted">{continueExploring}</p>
-					<nav class="post-footer__actions" aria-label="Ações do artigo">
-						<GlowButton href={backToBlogHref} variant="ghost" size="sm">
-							{backCtaLabel}
-						</GlowButton>
-					</nav>
-				</footer>
-			</article>
-		</main>
-		<Footer locale={locale} />
-	</body>
-</html>
-
-<style>
-	.post-shell {
-		padding-top: 4rem;
-		padding-bottom: 5rem;
-	}
-
-	.post-article {
-		display: flex;
-		flex-direction: column;
-		gap: 2.5rem;
-		width: min(900px, 100%);
-		margin: 0 auto;
-	}
-
-	.post-header {
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
-		text-align: left;
-		padding-bottom: 2.5rem;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-	}
-
-	.post-header::after {
-		content: '';
-		width: 120px;
-		height: 3px;
-		border-radius: 999px;
-		background: linear-gradient(90deg, #00ff7f, #9a1aff, #6e6eff);
-	}
-
-	.post-description {
-		font-size: 1.2rem;
-		line-height: 1.6;
-	}
-
-	.post-meta__info {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.75rem 1.25rem;
-		font-size: 0.95rem;
-		color: var(--color-muted);
-	}
-
-	.post-meta__entry {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.post-meta__text {
-		color: var(--color-fg);
-		font-weight: 500;
-	}
-
-	.post-meta__icon {
-		width: 1.1rem;
-		height: 1.1rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: #00ff7f;
-	}
-
-	.post-meta__icon svg {
-		width: 100%;
-		height: 100%;
-	}
-
-	.post-tags {
-		display: flex;
-		flex-wrap: wrap;
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		gap: 0.5rem;
-	}
-
-	.post-hero {
-		width: min(960px, 100%);
-		margin: 0 auto;
-	}
-
-	.post-hero img {
-		display: block;
-		width: 100%;
-		height: auto;
-		border-radius: var(--border-radius);
-		box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
-	}
-
-	.post-body {
-		display: flex;
-		justify-content: center;
-	}
-
-	.post-flow {
-		width: min(70ch, 100%);
-		margin: 0 auto;
-		padding: 0;
-	}
-
-	.post-flow :global(> p) {
-		margin-bottom: 1.6rem;
-	}
-
-	.post-flow :global(pre) {
-		margin: 2rem 0;
-		padding: 1.25rem;
-		background: rgba(6, 6, 9, 0.85);
-		border: 1px solid rgba(255, 255, 255, 0.08);
-		border-radius: var(--border-radius);
-	}
-
-	.post-flow :global(blockquote) {
-		border-left-color: var(--color-highlight);
-	}
-
-	/* ── Prose tables ── */
-	.post-flow :global(table) {
-		width: 100%;
-		border-collapse: collapse;
-		margin: 1.75rem 0 2.25rem;
-		font-size: 0.88rem;
-	}
-
-	.post-flow :global(thead tr) {
-		border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-	}
-
-	.post-flow :global(th) {
-		text-align: left;
-		padding: 0.45rem 0.75rem;
-		color: var(--color-muted);
-		font-family: 'JetBrains Mono', 'Fira Code', monospace;
-		font-size: 0.63rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		border: none;
-		background: transparent;
-		white-space: nowrap;
-	}
-
-	.post-flow :global(td) {
-		padding: 0.62rem 0.75rem;
-		border: none;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.055);
-		color: var(--color-muted);
-		vertical-align: top;
-		line-height: 1.6;
-	}
-
-	.post-flow :global(tr:last-child td) {
-		border-bottom: none;
-	}
-
-	.post-flow :global(tbody tr:hover td) {
-		background: rgba(255, 255, 255, 0.018);
-	}
-
-	.post-flow :global(td strong),
-	.post-flow :global(th strong) {
-		color: var(--color-fg);
-	}
-
-	.post-footer {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		gap: 1.25rem;
-		padding-top: 2.5rem;
-		border-top: 1px solid rgba(255, 255, 255, 0.08);
-	}
-
-	.post-footer__label {
-		margin: 0;
-		font-weight: 600;
-		max-width: 40ch;
-	}
-
-	.post-footer__actions {
-		display: flex;
-		gap: 0.75rem;
-	}
-
-	@media (max-width: 720px) {
-		.post-shell {
-			padding-top: 2.5rem;
-		}
-
-		.post-article {
-			gap: 2rem;
-		}
-
-		.post-header {
-			padding-bottom: 1.75rem;
-		}
-
-		.post-footer {
-			flex-direction: column;
-			align-items: flex-start;
-		}
-	}
-</style>
+<Site {title} {description} {lang} {alternateHref} postSlug={canonicalSlug}>
+  <main id="conteudo" class="article-shell" tabindex="-1">
+    <nav class="trail" aria-label={english ? 'Location' : 'Localização'}>
+      <a href={archive}>{english ? '← All articles' : '← Todos os artigos'}</a>
+    </nav>
+    <header class="article-header">
+      <ArticleBentoTitle {title} />
+      <p class="lead">{description}</p>
+      <ArticleMeta {category} date={showDate ? pubDate : undefined} wordCount={totalWords} {readingTimeMinutes} {lang} />
+    </header>
+    <hr class="article-divider" />
+    {showIndex && (
+      <aside class="article-index" data-article-index>
+        <details class="toc-menu" data-article-toc>
+          <summary>
+            <NavIcon name="blog" />
+            <span>{english ? 'In this article' : 'Neste artigo'}</span>
+            <NavIcon name="chevron-down" class="article-toc-chevron" />
+          </summary>
+          <nav aria-label={english ? 'Article contents' : 'Índice do artigo'}>
+            <a href="#conteudo">{english ? 'Top' : 'Começo'}</a>
+            {indexHeadings.map(({ slug, text }) => <a href={'#' + slug}>{text}</a>)}
+          </nav>
+        </details>
+      </aside>
+    )}
+    <div class="article-grid">
+      <article class="article-body">
+        {heroImage && <Image class="article-cover" src={heroImage} alt="" decoding="async" />}
+        {series && <PostSeries {series} {lang} />}
+        <div class="prose"><slot /></div>
+        <footer class="article-footer">
+          {tags.length > 0 && <ul class="tags" role="list" aria-label={english ? 'Topics' : 'Assuntos'}>
+            {tags.map(tag => <li><a href={postTagHref(tag, lang)}>#{tag}</a></li>)}
+          </ul>}
+          <a href={archive}>{english ? 'More articles ↗' : 'Mais anotações ↗'}</a>
+        </footer>
+      </article>
+    </div>
+  </main>
+</Site>

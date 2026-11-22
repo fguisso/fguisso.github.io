@@ -1,0 +1,63 @@
+---
+import { formatDate, type PostLanguage } from '../utils/posts';
+import Chip from './Chip.astro';
+
+interface Props {
+  category?: string;
+  date?: Date;
+  wordCount: number;
+  readingTimeMinutes: number;
+  lang?: PostLanguage;
+}
+
+const { category, date, wordCount, readingTimeMinutes, lang = 'pt' } = Astro.props;
+const english = lang === 'en';
+const words = new Intl.NumberFormat(english ? 'en-US' : 'pt-BR').format(wordCount);
+const stats: { text: string; icon: string; dateTime?: string }[] = [
+  {
+    text: `${words} ${english ? 'words' : 'palavras'}`,
+    icon: 'M5 6h14M5 12h14M5 18h9',
+  },
+  {
+    text: `${readingTimeMinutes} ${english ? 'min read' : 'min de leitura'}`,
+    icon: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM12 7v5l3 2',
+  },
+];
+
+if (date) {
+  stats.unshift({
+    text: formatDate(date, lang),
+    icon: 'M4 6h16v14H4zM8 4v4m8-4v4M4 10h16',
+    dateTime: date.toISOString().slice(0, 10),
+  });
+}
+---
+
+<ul class="article-meta" role="list" aria-label={english ? 'Article details' : 'Detalhes do artigo'}>
+  {category && <li><Chip>{category}</Chip></li>}
+  {stats.map(({ text, icon, dateTime }) => (
+    <li>
+      <svg class="article-meta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d={icon} />
+      </svg>
+      {dateTime ? <time datetime={dateTime}>{text}</time> : text}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+    font-size: var(--text-caption);
+  }
+
+  li { display: inline-flex; align-items: center; gap: 5px; }
+  .article-meta-icon { flex: none; color: var(--accent); }
+</style>

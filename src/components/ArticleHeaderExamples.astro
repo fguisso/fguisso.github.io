@@ -1,0 +1,103 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ArticleBentoTitle from './ArticleBentoTitle.astro';
+import ArticleMeta from './ArticleMeta.astro';
+import ArticleTitle from './ArticleTitle.astro';
+import { readingMinutes, wordCount, type PostLanguage } from '../utils/posts';
+
+interface Props { lang: PostLanguage; posts: CollectionEntry<'blog'>[] }
+
+const { lang, posts } = Astro.props;
+const t = (pt: string, en: string) => lang === 'en' ? en : pt;
+const examples = [
+  { number: 3, slug: 'escrevendo-artigos-e-palestras', color: 'green', name: t('Bento verde com avatar', 'Green Bento with avatar'), avatar: true },
+  { number: 4, slug: 'threat-modeling-intro', color: 'purple', name: t('Bento roxo com avatar', 'Purple Bento with avatar'), avatar: true },
+  { number: 5, slug: 'tianji-2025', color: 'green', name: t('Inter e Georgia itálica · verde', 'Inter and italic Georgia · green'), avatar: false },
+  { number: 6, slug: 'explorable-explanations-infoviz', color: 'purple', name: t('Inter e Georgia itálica · roxo', 'Inter and italic Georgia · purple'), avatar: false },
+] as const;
+const postsBySlug = new Map(posts.map(post => [post.data.canonicalSlug, post]));
+const variants = examples.flatMap(({ slug, ...variant }) => {
+  const post = postsBySlug.get(slug);
+  return post ? [{ post, ...variant }] : [];
+});
+---
+
+<div class="header-variants">
+  {variants.map(({ post, number, name, color, avatar }) => (
+    <section class="header-variant" id={`article-header-option-${number}`}>
+      <div class="variant-labels">
+        <p class="option-number">{t('Opção', 'Option')} {number}</p>
+        <p>{name}</p>
+      </div>
+      <header class="article-header">
+        {avatar ? (
+          <ArticleBentoTitle as="h3" title={post.data.title} tone={color} />
+        ) : (
+          <ArticleTitle as="h3" title={post.data.title} tone={color} />
+        )}
+        <p class="lead">{post.data.description}</p>
+        <ArticleMeta
+          category={post.data.categories[0] ?? post.data.tags[0]}
+          date={post.data.showDate ? post.data.pubDate : undefined}
+          wordCount={wordCount(post.body)}
+          readingTimeMinutes={readingMinutes(post.body)}
+          {lang}
+        />
+      </header>
+      <hr class="article-divider" />
+    </section>
+  ))}
+</div>
+
+<style>
+  .header-variants {
+    display: grid;
+    column-gap: 2rem;
+  }
+
+  .header-variant {
+    min-inline-size: 0;
+    padding-block-start: 12px;
+  }
+
+  .variant-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-block-end: 16px;
+  }
+
+  .variant-labels .option-number {
+    flex: none;
+    color: var(--ink);
+    font: 700 var(--text-supporting)/1.5 'Inter Article Title', var(--sans);
+    letter-spacing: normal;
+  }
+
+  .variant-labels p {
+    margin: 0;
+    color: var(--muted);
+    font: 200 var(--text-supporting)/1.5 'Inter Article Title', var(--sans);
+    text-align: end;
+  }
+
+  .header-variant :global(.article-title h3) {
+    font: 520 3rem/3.125rem 'Inter Article Title', var(--sans);
+    letter-spacing: -.04em;
+    overflow-wrap: anywhere;
+  }
+
+  .header-variant .lead { max-inline-size: none; }
+
+  @media (min-width: 60rem) {
+    .header-variants { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 760px) {
+    .header-variant :global(.article-title h3) {
+      font-size: 2.125rem;
+      line-height: 2.375rem;
+    }
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+import { asciiCanvas } from '../lib/ascii-background-shapes';
+import { renderAsciiBackground, type AsciiBackgroundScene } from '../lib/ascii-background';
+import '../styles/article-title.css';
+
+interface Props {
+  scene: AsciiBackgroundScene;
+  format?: 'text' | 'svg';
+}
+
+const { scene, format = 'text' } = Astro.props;
+const ascii = await renderAsciiBackground(scene.shapes);
+const { width, height, rows } = asciiCanvas;
+const rowHeight = height / rows;
+---
+
+<div class="article-title-ascii" aria-hidden="true">
+  {format === 'svg' ? (
+    <svg class="article-ascii-vector" viewBox={`0 0 ${width} ${height}`} focusable="false">
+      <g fill="currentColor" font-family="monospace" font-size={rowHeight}>
+        {ascii.split('\n').map((row, index) => (
+          <text x="0" y={rowHeight * (index + 0.8)} textLength={width} lengthAdjust="spacingAndGlyphs" set:text={row} />
+        ))}
+      </g>
+    </svg>
+  ) : <pre class="article-ascii-glyphs" set:text={ascii} />}
+</div>
+
+<style>
+  .article-ascii-vector text { white-space: pre; }
+</style>

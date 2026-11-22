@@ -1,0 +1,46 @@
+---
+import type { EditorialEntry } from '../data/editorial';
+
+interface Props {
+  entries: EditorialEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<ul class="editorial-list" role="list">
+  {entries.map(({ label, title, description, href }) => (
+    <li>
+      <a href={href} rel="noreferrer">
+        <span class="entry-label">{label}</span>
+        <span class="entry-title">{title}</span>
+        <span class="entry-description">{description}</span>
+        <span class="entry-arrow" aria-hidden="true">{href.startsWith('/') ? '→' : '↗'}</span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .editorial-list {
+    margin: 0;
+    padding: 0 16px;
+    list-style: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-list);
+  }
+  li + li { border-top: 1px solid var(--line); }
+  a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3px 16px;
+    padding: 16px 0;
+    min-height: 44px;
+    text-decoration: none;
+  }
+  .entry-label { grid-column: 1; font-size: var(--text-caption); color: var(--muted); }
+  .entry-title { grid-column: 1; font-size: var(--text-list-title); line-height: 1.4; }
+  .entry-description { grid-column: 1; color: var(--body); font-size: var(--text-supporting); }
+  .entry-arrow { grid-column: 2; grid-row: 2; align-self: baseline; font-size: var(--text-supporting); color: var(--muted); }
+  a:hover .entry-arrow { color: var(--accent); }
+</style>

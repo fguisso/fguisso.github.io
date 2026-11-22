@@ -1,0 +1,9 @@
+---
+import EditorialItem from '../../layouts/EditorialItem.astro';
+import { getGear } from '../../data/gear';
+
+export function getStaticPaths() {
+  return getGear('pt').map(item => ({ params: { slug: item.slug }, props: { item } }));
+}
+---
+<EditorialItem item={Astro.props.item} section="Gear" lang="pt" />

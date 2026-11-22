@@ -24,7 +24,6 @@ test('assets and tracker requests are issued', async ({ page }) => {
 	const trackerRequest = requests.find((url) => url.includes('tc.guisso.dev/tracker.js'));
 	expect(trackerRequest).toBeTruthy();
 
-	// Fonts are requested from Google; keep as a simple smoke-check for external fetches.
-	const fontRequest = requests.find((url) => url.includes('fonts.googleapis.com'));
+	const fontRequest = requests.find((url) => url.endsWith('/fonts/inter.woff2'));
 	expect(fontRequest).toBeTruthy();
 });
