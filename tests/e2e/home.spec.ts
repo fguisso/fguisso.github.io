@@ -15,6 +15,6 @@ test('home renders hero and latest posts', async ({ page }) => {
 	const latestTitle = await latestPosts.first().locator('.row-title').innerText();
 	await expect(featured.locator('.featured-art').getByRole('heading', { level: 2 })).toHaveText(latestTitle);
 	await expect(page.getByRole('link', { name: 'Abrir todos os posts' })).toBeVisible();
-	await expect(page.getByRole('region', { name: 'Uses' })).toBeVisible();
-	await expect(page.getByRole('region', { name: 'Life' })).toBeVisible();
+	await expect(page.getByRole('region', { name: 'Projetos' }).getByRole('link')).toHaveCount(4);
+	await expect(page.locator('.site-nav a[href="/gear/"], .site-nav a[href="/life/"]')).toHaveCount(0);
 });
