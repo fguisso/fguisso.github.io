@@ -5,8 +5,8 @@ import NavIcon from './NavIcon.astro';
 import { booksCatalog, primaryNavigation } from '../data/navigation';
 import type { PostLanguage } from '../utils/posts';
 
-interface Props { lang?: PostLanguage; alternateHref?: string; }
-const { lang = 'pt', alternateHref } = Astro.props;
+interface Props { lang?: PostLanguage; alternateHref?: string; compactNavigation?: boolean; }
+const { lang = 'pt', alternateHref, compactNavigation = false } = Astro.props;
 const english = lang === 'en';
 const path = Astro.url.pathname;
 const more = [
@@ -23,8 +23,9 @@ const moreLabel = english ? 'More' : 'Mais';
 const languageLabel = english ? 'Language' : 'Idioma';
 ---
 
-<header class="site-header">
-  <nav id="site-navigation" class="site-nav" aria-label={english ? 'Main navigation' : 'Navegação principal'} data-nav-track>
+<header class="site-header" data-compact-navigation={compactNavigation || undefined}>
+  <nav id="site-navigation" class="site-nav" aria-label={english ? 'Main navigation' : 'Navegação principal'} data-nav-track
+    data-mobile-menu={compactNavigation ? 'closed' : undefined}>
     <span class="nav-pill" data-nav-pill aria-hidden="true"></span>
     <span class="nav-progress" data-nav-progress aria-hidden="true">
       <span class="nav-progress-fill image-shimmer"></span>
@@ -89,6 +90,16 @@ const languageLabel = english ? 'Language' : 'Idioma';
     </button>
   </nav>
 </header>
+
+{compactNavigation && <noscript>
+  <style is:inline>
+    [data-compact-navigation] .site-nav[data-mobile-menu] { width: auto; }
+    [data-compact-navigation] [data-mobile-menu] > :is(.nav-brand, .nav-link) { display: flex; }
+    [data-compact-navigation] [data-mobile-menu] > .nav-disclosure { display: block; }
+    [data-compact-navigation] [data-mobile-menu] > .nav-launch { display: none; }
+    [data-compact-navigation] [data-mobile-menu] :is(.nav-brand, .nav-link) { width: clamp(38px, 11.6vw, 44px); }
+  </style>
+</noscript>}
 
 <style>
   .site-header {
@@ -236,67 +247,85 @@ const languageLabel = english ? 'Language' : 'Idioma';
     .nav-wordmark, .nav-label { display: none; }
     .nav-monogram { display: block; }
     .nav-panel { inset: auto 0 calc(100% + 10px) auto; }
-    [data-mobile-label]::after {
-      content: attr(data-mobile-label);
-      display: none;
-      position: absolute;
-      inset: auto auto calc(100% + 8px) 50%;
-      translate: -50% 0;
-      padding: 4px 8px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--area);
-      color: var(--ink);
-      font-size: var(--text-caption);
-      line-height: 1.4;
-      pointer-events: none;
-    }
-    [data-mobile-label]:is([data-revealed], :focus-visible)::after { display: block; }
-    .nav-disclosure[open] [data-mobile-label]::after { display: none; }
-
+    .site-nav:not([data-mobile-menu]) [data-mobile-label]:focus-visible::after { display: block; }
     @media (hover: hover) {
-      [data-mobile-label]:hover::after { display: block; }
-      .site-nav:has([data-mobile-label]:hover) [data-revealed]:not(:hover, :focus-visible)::after { display: none; }
+      .site-nav:not([data-mobile-menu]) [data-mobile-label]:hover::after { display: block; }
     }
-
-    .site-header:has([data-mobile-menu]) {
-      justify-content: flex-end;
-      padding-inline: max(8px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-right));
-    }
-    .site-nav[data-mobile-menu] {
-      --dock-size: min(100%, 376px);
-      width: 80px;
-      margin-inline-end: 0;
-      transition: width 260ms ease, margin-inline-end 260ms ease;
-    }
-    .site-nav[data-mobile-menu="open"] {
-      width: var(--dock-size);
-      margin-inline-end: calc((100% - var(--dock-size)) / 2);
-    }
-    [data-mobile-menu="closed"] > :not(.nav-launch, .nav-progress) { display: none; }
-    [data-mobile-menu="closed"] > .nav-launch, [data-mobile-menu="open"] > .nav-close {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0;
-      border-radius: 999px;
-      touch-action: manipulation;
-    }
-    .nav-launch { flex: 1; gap: 8px; color: var(--ink); }
-    .nav-launch :global(svg) { display: block; }
-    [data-mobile-menu="open"] > :is(.nav-brand, .nav-link, .nav-disclosure, .nav-close) {
-      width: auto;
-      min-width: 0;
-      flex: 1 1 0;
-    }
-    [data-mobile-menu="open"] .nav-disclosure > summary { width: 100%; }
-    [data-mobile-menu="open"] > :is(.nav-link, .nav-disclosure, .nav-close) {
-      animation: dock-items-in 250ms ease both;
-    }
-    .nav-close { color: var(--muted-on-panel, var(--muted)); }
-    @keyframes dock-items-in { 0%, 40% { opacity: 0; } 100% { opacity: 1; } }
   }
+
+  .site-header[data-compact-navigation] {
+    position: fixed;
+    inset: auto 0 max(12px, env(safe-area-inset-bottom));
+    margin: 0;
+  }
+
+  [data-mobile-label]::after {
+    content: attr(data-mobile-label);
+    display: none;
+    position: absolute;
+    inset: auto auto calc(100% + 8px) 50%;
+    translate: -50% 0;
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--area);
+    color: var(--ink);
+    font-size: var(--text-caption);
+    line-height: 1.4;
+    pointer-events: none;
+  }
+  [data-mobile-menu] [data-mobile-label]:is([data-revealed], :focus-visible)::after { display: block; }
+  .site-nav .nav-disclosure[open] [data-mobile-label]::after { display: none; }
+
+  @media (hover: hover) {
+    [data-mobile-menu] [data-mobile-label]:hover::after { display: block; }
+    [data-mobile-menu]:has([data-mobile-label]:hover) [data-revealed]:not(:hover, :focus-visible)::after { display: none; }
+  }
+
+  .site-header:has([data-mobile-menu]) {
+    justify-content: flex-end;
+    padding-inline: max(8px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-right));
+  }
+  .site-nav[data-mobile-menu] {
+    --dock-size: min(100%, 376px);
+    gap: 1px;
+    padding: 3px;
+    width: 80px;
+    margin-inline-end: 0;
+    transition: width 260ms ease, margin-inline-end 260ms ease;
+  }
+  .site-nav[data-mobile-menu] :is(.nav-brand, .nav-link) { padding: 0; }
+  [data-mobile-menu] :is(.nav-wordmark, .nav-label) { display: none; }
+  [data-mobile-menu] .nav-monogram { display: block; }
+  [data-mobile-menu] .nav-panel { inset: auto 0 calc(100% + 10px) auto; }
+  .site-nav[data-mobile-menu="open"] {
+    width: var(--dock-size);
+    margin-inline-end: calc((100% - var(--dock-size)) / 2);
+  }
+  [data-mobile-menu="closed"] > :not(.nav-launch, .nav-progress) { display: none; }
+  [data-mobile-menu="closed"] > .nav-launch, [data-mobile-menu="open"] > .nav-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0;
+    border-radius: 999px;
+    touch-action: manipulation;
+  }
+  .nav-launch { flex: 1; gap: 8px; color: var(--ink); }
+  .nav-launch :global(svg) { display: block; }
+  [data-mobile-menu="open"] > :is(.nav-brand, .nav-link, .nav-disclosure, .nav-close) {
+    width: auto;
+    min-width: 0;
+    flex: 1 1 0;
+  }
+  [data-mobile-menu="open"] .nav-disclosure > summary { width: 100%; }
+  [data-mobile-menu="open"] > :is(.nav-link, .nav-disclosure, .nav-close) {
+    animation: dock-items-in 250ms ease both;
+  }
+  .nav-close { color: var(--muted-on-panel, var(--muted)); }
+  @keyframes dock-items-in { 0%, 40% { opacity: 0; } 100% { opacity: 1; } }
+
   @media (prefers-reduced-motion: reduce) {
     .site-nav[data-mobile-menu] { transition: none; }
     .site-nav > .nav-pill { transition: none; }

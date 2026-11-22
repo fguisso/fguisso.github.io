@@ -12,7 +12,7 @@ const { title, description, canonicalSlug, lang } = post.data;
 const alternateHref = hasTranslation ? postHref(canonicalSlug, lang === 'en' ? 'pt' : 'en') : undefined;
 ---
 
-<Site {title} {description} {lang} {alternateHref} postSlug={canonicalSlug} bodyClass="interactive-post-body">
+<Site {title} {description} {lang} {alternateHref} postSlug={canonicalSlug} bodyClass="interactive-post-body" compactNavigation={canonicalSlug === 'phone-phreaking'}>
 	<main id="conteudo" class="interactive-post-main" tabindex="-1">
 		<slot />
 	</main>
@@ -30,5 +30,10 @@ const alternateHref = hasTranslation ? postHref(canonicalSlug, lang === 'en' ? '
 		max-width: none;
 		margin: 0;
 		padding: 0;
+	}
+
+	.interactive-post-body:has(.site-header[data-compact-navigation]) .phreaking-page .ph-toc-fab {
+		/* Clear the 52px site menu and leave an 8px gap. */
+		bottom: calc(max(12px, env(safe-area-inset-bottom)) + 60px);
 	}
 </style>

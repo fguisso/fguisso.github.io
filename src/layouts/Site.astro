@@ -16,8 +16,9 @@ interface Props {
   postSlug?: string;
   shareable?: boolean;
   bodyClass?: string;
+  compactNavigation?: boolean;
 }
-const { title, lang = 'pt', postSlug, shareable = true } = Astro.props;
+const { title, lang = 'pt', postSlug, shareable = true, compactNavigation = false } = Astro.props;
 const english = lang === 'en';
 const alternateLang = english ? 'pt' : 'en';
 const alternateHref = Astro.props.alternateHref
@@ -68,5 +69,5 @@ const imageAlt = postSlug ? title : (english
     <link rel="alternate" type="application/rss+xml" href={localizedPath('/rss.xml', lang)} hreflang={english ? 'en' : 'pt-BR'} title={english ? 'guisso.dev (English)' : 'guisso.dev (Português)'} />
     <script is:inline>try{const t=localStorage.getItem('guisso-theme');if(['claro','areia','escuro'].includes(t))document.documentElement.dataset.tema=t}catch{}</script>
   </head>
-  <body class={Astro.props.bodyClass}><a class="skip-link" href="#conteudo">{lang === 'en' ? 'Skip to content' : 'Pular para o conteúdo'}</a><Header {lang} {alternateHref} /><div class="site-stage"><slot /><Footer {lang} /></div><script src="../scripts/client.ts"></script></body>
+  <body class={Astro.props.bodyClass}><a class="skip-link" href="#conteudo">{lang === 'en' ? 'Skip to content' : 'Pular para o conteúdo'}</a><Header {lang} {alternateHref} {compactNavigation} /><div class="site-stage"><slot /><Footer {lang} /></div><script src="../scripts/client.ts"></script></body>
 </html>

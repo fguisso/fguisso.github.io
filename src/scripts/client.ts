@@ -38,6 +38,7 @@ if (track && pill) {
   if (articleIndex) disclosures.push(articleIndex);
   const progress = track.querySelector<HTMLElement>('[data-nav-progress]');
   const mobile = matchMedia('(max-width: 760px), (pointer: coarse), (max-width: 1024px) and (max-height: 540px)');
+  const forceCompact = track.closest('[data-compact-navigation]') !== null;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const launcher = track.querySelector<HTMLButtonElement>('[data-nav-launch]')!;
   const closeMenu = track.querySelector<HTMLButtonElement>('[data-nav-close]')!;
@@ -78,6 +79,7 @@ if (track && pill) {
   };
 
   const setMobileMenu = (open: boolean, moveFocus = false, preserveIndex = false) => {
+    const compact = forceCompact || mobile.matches;
     const activeElement = document.activeElement;
     const wasInside = track.contains(activeElement);
     window.clearTimeout(navigationTimer);
@@ -86,11 +88,11 @@ if (track && pill) {
     }
     clearReveal();
     hovered = focused = null;
-    if (mobile.matches) track.dataset.mobileMenu = open ? 'open' : 'closed';
+    if (compact) track.dataset.mobileMenu = open ? 'open' : 'closed';
     else delete track.dataset.mobileMenu;
-    launcher.setAttribute('aria-expanded', String(mobile.matches && open));
+    launcher.setAttribute('aria-expanded', String(compact && open));
     if ((moveFocus || wasInside) && !(preserveIndex && articleIndex?.contains(activeElement))) {
-      const destination = mobile.matches && !open ? launcher : homeLink;
+      const destination = compact && !open ? launcher : homeLink;
       destination.focus({ preventScroll: true });
     }
     updatePill();
@@ -98,7 +100,7 @@ if (track && pill) {
 
   launcher.addEventListener('click', () => setMobileMenu(true, true));
   closeMenu.addEventListener('click', () => setMobileMenu(false, true));
-  mobile.addEventListener('change', () => setMobileMenu(false, false, true));
+  if (!forceCompact) mobile.addEventListener('change', () => setMobileMenu(false, false, true));
 
   track.addEventListener('pointerover', (event) => {
     if (event.pointerType === 'touch') return;
