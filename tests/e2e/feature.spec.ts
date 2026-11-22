@@ -1,5 +1,16 @@
 import { test, expect } from '@playwright/test';
 
+test('project Markdown renders its localized title and content', async ({ page }) => {
+	for (const [url, title] of [['/projects/', 'Projetos'], ['/en/projects/', 'Projects']]) {
+		await page.goto(url);
+		await expect(page).toHaveTitle(title + ' · guisso.dev');
+		const heading = page.getByRole('heading', { level: 1, name: title });
+		await expect(heading).toBeVisible();
+		await expect(heading.locator('img')).toHaveAttribute('src', /\/favicon\.svg$/);
+		await expect(page.locator('.markdown-page__content > p').first()).toContainText('Git Pages');
+	}
+});
+
 test('user can open the archive and filter the original articles', async ({ page }) => {
 	await page.goto('/');
 

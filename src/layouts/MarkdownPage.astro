@@ -1,37 +1,46 @@
 ---
 import { getRequestLocale, type LocaleCode } from '../i18n/config';
+import { withBase } from '../utils/paths';
 import Site from './Site.astro';
 
 interface Props {
-	title: string;
-	description?: string;
-	eyebrow?: string;
+	frontmatter: {
+		title: string;
+		description?: string;
+		locale?: LocaleCode;
+	};
 }
 
-const { title, description, eyebrow, locale: forcedLocale } = Astro.props as Props & {
-	locale?: LocaleCode;
-};
-const lang = forcedLocale ?? getRequestLocale(Astro);
+const { title, description, locale } = Astro.props.frontmatter;
+const lang = locale ?? getRequestLocale(Astro);
 ---
 
 <Site {title} {description} {lang}>
-	<main id="conteudo" class="reading-shell page-content markdown-page" tabindex="-1">
-		<header class="page-intro">
-			{eyebrow && <p class="eyebrow">{eyebrow}</p>}
-			<h1>{title}</h1>
-			{description && <p class="lead">{description}</p>}
-		</header>
+	<main id="conteudo" class="reading-shell markdown-page" tabindex="-1">
+		<h1 class="markdown-page__title">
+			<img src={withBase('/favicon.svg')} alt="" width="32" height="32" />
+			<span>{title}</span>
+		</h1>
 		<div class="prose markdown-page__content"><slot /></div>
 	</main>
 </Site>
 
 <style>
 	.markdown-page {
+		margin-block-start: var(--section-gap);
 		padding-bottom: 2rem;
 	}
 
+	.markdown-page__title {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.markdown-page__title img { flex: none; }
+
 	.markdown-page__content {
-		margin-top: var(--section-gap);
+		margin-block-start: calc(var(--section-gap) / 2);
 		max-width: 70ch;
 	}
 </style>
