@@ -1,6 +1,16 @@
 ---
 import { stat } from 'node:fs/promises';
 import photoUrl from '../assets/guisso-photo.png?url';
+import telaLogo from '../assets/career/tela.svg?url';
+import willBankLogo from '../assets/career/will-bank.svg?url';
+import globoLogo from '../assets/career/globo.svg?url';
+import eflagLogo from '../assets/career/eflag.svg?url';
+import hashLogo from '../assets/career/hash.svg?url';
+import convisoLogo from '../assets/career/conviso.svg?url';
+import decredLogo from '../assets/career/decred.svg?url';
+import campusPartyLogo from '../assets/career/campus-party.svg?url';
+import mciLogo from '../assets/career/mci.svg?url';
+import mantrisLogo from '../assets/career/mantris.svg?url';
 import Site from '../layouts/Site.astro';
 import AboutPortraits from '../components/AboutPortraits.astro';
 import GlowButton from '../components/GlowButton.astro';
@@ -18,15 +28,23 @@ const bio = english
   ? "Fernando Guisso is Head of Information Security at Tela. His background in AppSec and DevSecOps includes secure development, test automation, and vulnerability analysis at companies such as will bank and Globo. Active in communities like SunsecRN and OWASP, he shares knowledge at events and in open-source projects. In his spare time, he’s learning drums and planning a one-man band."
   : 'Fernando Guisso é Head of Information Security na Tela. Tem experiência em AppSec e DevSecOps, com desenvolvimento seguro, automação de testes e análise de vulnerabilidades em empresas como will bank e Globo. Participa de comunidades como SunsecRN e OWASP, compartilha conhecimento em eventos e projetos open source. Nas horas vagas, estuda bateria e ensaia uma banda de um homem só.';
 const timeline = [
-  { meta: english ? '2026 - present' : '2026 - atual', role: 'Tela · Head of Information Security' },
-  { meta: '2024 - 2026', role: 'will bank · Security Software Engineer (AppSec & Sec Eng)' },
-  { meta: '2022 - 2024', role: 'Globo · Sr. Information Security Analyst' },
-  { meta: '2019 - 2023', role: english ? 'eFlag · Strategic Technical Advisor (parallel)' : 'eFlag · Strategic Technical Advisor (paralelo)' },
-  { meta: '2021', role: 'Hash · Security Software Engineer' },
-  { meta: '2020 - 2021', role: 'Conviso · Information Security Analyst' },
-  { meta: '2020 - 2021', role: 'Decred · Blockchain Software Developer' },
-  { meta: '2017 - 2019', role: 'Campus Party / MCI · Community Manager / Specialist' },
-  { meta: '2017', role: 'Mantris · Full-stack Developer' },
+  { meta: english ? '2026 - present' : '2026 - atual', companies: [{ name: 'Tela', logo: telaLogo }], role: 'Head of Information Security' },
+  { meta: '2024 - 2026', companies: [{ name: 'will bank', logo: willBankLogo }], role: 'Security Software Engineer (AppSec & Sec Eng)' },
+  { meta: '2022 - 2024', companies: [{ name: 'Globo', logo: globoLogo }], role: 'Sr. Information Security Analyst' },
+  {
+    meta: '2019 - 2023',
+    companies: [{ name: 'eFlag', logo: eflagLogo }],
+    role: english ? 'Strategic Technical Advisor (parallel)' : 'Strategic Technical Advisor (paralelo)',
+  },
+  { meta: '2021', companies: [{ name: 'Hash', logo: hashLogo }], role: 'Security Software Engineer' },
+  { meta: '2020 - 2021', companies: [{ name: 'Conviso', logo: convisoLogo }], role: 'Information Security Analyst' },
+  { meta: '2020 - 2021', companies: [{ name: 'Decred', logo: decredLogo }], role: 'Blockchain Software Developer' },
+  {
+    meta: '2017 - 2019',
+    companies: [{ name: 'Campus Party', logo: campusPartyLogo }, { name: 'MCI', logo: mciLogo }],
+    role: 'Community Manager / Specialist',
+  },
+  { meta: '2017', companies: [{ name: 'Mantris', logo: mantrisLogo }], role: 'Full-stack Developer' },
 ];
 ---
 

@@ -2,6 +2,7 @@
 interface TimelineItem {
 	meta: string;
 	role: string;
+	companies?: { name: string; logo: string }[];
 	variant?: 'warning' | 'danger' | 'success';
 }
 
@@ -32,7 +33,19 @@ const hasItems = items.length > 0;
 								<div class="dot" aria-hidden="true"></div>
 								<div class="entry">
 									<p class="meta">{item.meta}</p>
-									<p class="role">{item.role}</p>
+									<p class="role">
+										{item.companies?.map(({ name, logo }, index) => (
+											<Fragment>
+												{index > 0 && ' / '}
+												<span class="timeline-company">
+													<img src={logo} alt="" width="26" height="26" loading="lazy" decoding="async" />
+													{name}
+												</span>
+											</Fragment>
+										))}
+										{item.companies?.length ? ' · ' : ''}
+										{item.role}
+									</p>
 								</div>
 							</li>
 						)
@@ -74,6 +87,14 @@ const hasItems = items.length > 0;
 
   .meta, .tltag { margin: 0 0 3px; font-size: var(--text-caption); color: var(--muted); }
   .role, .tli-role { margin: 0; color: var(--ink); }
+  .timeline-company { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; }
+  .timeline-company img {
+    flex: none;
+    padding: 4px;
+    border-radius: 6px;
+    background: #f7f7f3;
+    object-fit: contain;
+  }
   .tltag {
     display: inline-block;
     padding: 1px 7px;
