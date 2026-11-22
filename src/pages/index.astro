@@ -5,6 +5,7 @@ import EditorialCarousel from '../components/EditorialCarousel.astro';
 import FeaturedStoryContent from '../components/FeaturedStoryContent.astro';
 import HeroCanvas from '../components/HeroCanvas.astro';
 import LifeBento from '../components/LifeBento.astro';
+import LinkPreview from '../components/LinkPreview.astro';
 import PostList from '../components/PostList.astro';
 import ProjectBoard from '../components/ProjectBoard.astro';
 import SocialMarquee from '../components/SocialMarquee.astro';
@@ -38,7 +39,7 @@ const featured = posts[0];
       <header class="alt-intro">
         <p class="eyebrow"><span class="signal" aria-hidden="true"></span> {english ? 'A personal corner of the internet' : 'Um canto pessoal da internet'}</p>
         <h1 class="signature text-shimmer">Fernando Guisso</h1>
-        <p class="intro-bio">{intro} {role.lead} <em>{role.title}</em> {role.preposition} <a href="https://tela.com">Tela</a>.</p>
+        <p class="intro-bio">{intro} {role.lead} <em>{role.title}</em> {role.preposition} <LinkPreview href="https://tela.com" image="/preview/tela-home.webp" suffix=".">Tela</LinkPreview></p>
         <p class="intro-bio">
           {background}{' '}<a href="https://www1.folha.uol.com.br/fsp/informat/fr2504200111.htm" hreflang="pt-BR">vila.bol.uol.com.br</a>. {sinceThen}
         </p>

@@ -1,0 +1,102 @@
+---
+import { withBase } from '../utils/paths';
+
+interface Props {
+  href: string;
+  image: string;
+  suffix?: string;
+}
+
+const { href, image, suffix } = Astro.props;
+const hostname = new URL(href).hostname;
+---
+
+<span data-link-preview><a {href}><slot /></a>{suffix}<span class="link-preview" popover="manual" aria-hidden="true">
+    <img src={withBase(image)} alt="" width="840" height="473" loading="lazy" decoding="async" />
+    <span class="link-preview-host">{hostname}</span>
+  </span></span>
+
+<script>
+  for (const wrapper of document.querySelectorAll('[data-link-preview]')) {
+    const link = wrapper.querySelector('a');
+    const preview = wrapper.querySelector<HTMLElement>('[popover]');
+    if (!link || !preview || typeof preview.showPopover !== 'function') continue;
+
+    let timer = 0;
+    const isOpen = () => preview.matches(':popover-open');
+    const close = () => {
+      window.clearTimeout(timer);
+      if (isOpen()) preview.hidePopover();
+    };
+
+    const position = () => {
+      if (!isOpen()) return;
+      const anchor = link.getBoundingClientRect();
+      const { width, height } = preview.getBoundingClientRect();
+      const gap = 8;
+      const { clientWidth, clientHeight } = document.documentElement;
+      if (anchor.bottom < 0 || anchor.top > clientHeight) {
+        close();
+        return;
+      }
+
+      const above = anchor.top - height - gap;
+      const top = above < gap ? anchor.bottom + gap : above;
+      const left = anchor.left + (anchor.width - width) / 2;
+      preview.style.top = Math.max(gap, Math.min(top, clientHeight - height - gap)) + 'px';
+      preview.style.left = Math.max(gap, Math.min(left, clientWidth - width - gap)) + 'px';
+    };
+
+    const show = () => {
+      window.clearTimeout(timer);
+      if (!isOpen()) preview.showPopover();
+      position();
+    };
+
+    const scheduleClose = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (!link.matches(':hover, :focus-visible') && !preview.matches(':hover')) close();
+      }, 160);
+    };
+
+    link.addEventListener('pointerenter', (event) => {
+      if (event.pointerType === 'touch') return;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(show, 180);
+    });
+    link.addEventListener('pointerleave', scheduleClose);
+    link.addEventListener('focus', () => {
+      if (link.matches(':focus-visible')) show();
+    });
+    link.addEventListener('blur', scheduleClose);
+    preview.addEventListener('pointerenter', () => window.clearTimeout(timer));
+    preview.addEventListener('pointerleave', scheduleClose);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') close();
+    });
+    window.addEventListener('resize', position);
+    window.addEventListener('scroll', position, { passive: true });
+  }
+</script>
+
+<style>
+  .link-preview {
+    position: fixed;
+    inset: 0 auto auto 0;
+    display: none;
+    box-sizing: border-box;
+    inline-size: min(23rem, calc(100vw - 24px));
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-list);
+    background: var(--panel);
+    color: var(--ink);
+    box-shadow: 0 12px 32px #0004;
+  }
+  .link-preview:popover-open { display: block; }
+  .link-preview img { display: block; inline-size: 100%; block-size: auto; }
+  .link-preview-host { display: block; padding: 6px 12px; font-size: var(--text-caption); }
+</style>
