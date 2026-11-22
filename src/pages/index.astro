@@ -16,9 +16,9 @@ interface Props { lang?: PostLanguage }
 const { lang = 'pt' } = Astro.props;
 const english = lang === 'en';
 const intro = english
-  ? "I've lived in Natal since 2019 and love the sun and the beach."
-  : 'Moro em Natal desde 2019 e curto sol e praia.';
-const role = english ? "I'm Head of Information Security at" : 'Sou Head of Information Security na';
+  ? "I'm a software engineer focused on security. I've lived in Natal since 2019, enjoying the sun and the beach."
+  : 'Sou um engenheiro de software focado em segurança. Moro em Natal desde 2019, curtindo o sol e a praia.';
+const role = english ? "I'm currently Head of Information Security at" : 'Atualmente sou o Head de Information Security no';
 const background = english
   ? "I was 18 when my uncle taught me to make websites in Word and host them on the now-defunct VilaBOL. I've been tinkering with and breaking things on the internet ever since."
   : 'Aos 18 anos, meu tio me ensinou a fazer sites no Word e a hospedá-los no extinto VilaBOL. Desde então, sigo mexendo e quebrando coisas pela internet.';
