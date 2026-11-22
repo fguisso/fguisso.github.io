@@ -5,6 +5,7 @@ import { asciiBackgroundScene, type ArticleArtTone, type AsciiBackgroundScene } 
 
 interface Props {
   title: string;
+  id?: string;
   as?: 'h1' | 'h2' | 'h3';
   tone?: ArticleArtTone;
   surface?: 'plain' | 'bento';
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const {
-  title, as: Heading = 'h1', surface = 'plain', artFormat = 'text',
+  title, id, as: Heading = 'h1', surface = 'plain', artFormat = 'text',
   scene = asciiBackgroundScene(title), tone = scene.tone,
 } = Astro.props;
 const { prefix, suffix } = splitArticleTitle(title);
@@ -21,5 +22,5 @@ const { prefix, suffix } = splitArticleTitle(title);
 
 <div class="article-title article-art-palette" data-tone={tone} data-surface={surface}>
   <AsciiBackground {scene} format={artFormat} />
-  <Heading>{prefix}{suffix && <>{' '}<em>{suffix}</em></>}</Heading>
+  <Heading {id}>{prefix}{suffix && <>{' '}<em>{suffix}</em></>}</Heading>
 </div>

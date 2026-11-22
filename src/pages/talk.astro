@@ -1,5 +1,6 @@
 ---
 import Site from '../layouts/Site.astro';
+import ArticleTitle from '../components/ArticleTitle.astro';
 import Chip from '../components/Chip.astro';
 import GlowBox from '../components/GlowBox.astro';
 import GlowButton from '../components/GlowButton.astro';
@@ -44,12 +45,16 @@ const presentations = talks.map(talk => ({
       <ol class="talk-timeline" role="list">
         {presentations.map((talk, index) => (
           <li>
-            <GlowBox class="talk-entry">
-              <div class="talk-entry-heading">
-                <div><p class="talk-event">{talk.event}</p><h3 id={`talk-title-${index}`}>{talk.talkTitle}</h3></div>
-                <Chip>{talk.tag}</Chip>
-              </div>
-              {talk.summary && <p>{talk.summary}</p>}
+            <article class="talk-entry" aria-labelledby={`talk-title-${index}`}>
+              <header class="talk-entry-heading">
+                <ArticleTitle title={talk.talkTitle} id={`talk-title-${index}`} as="h3" surface="bento" />
+                <div class="talk-meta">
+                  <span>{talk.event}</span>
+                  <Chip>{talk.tag}</Chip>
+                </div>
+              </header>
+              <hr class="article-divider" />
+              {talk.summary && <p class="talk-summary">{talk.summary}</p>}
               {talk.article && (
                 <a class="talk-article" href={postHref(talk.article.data.canonicalSlug, lang)} data-tianji-event={`click_talk_resource_${slugifyTag(talk.talkTitle)}_article`}>
                   <span>{english ? 'Related article' : 'Post relacionado'}</span>
@@ -70,7 +75,7 @@ const presentations = talks.map(talk => ({
                   </GlowButton>
                 )}
               </div>
-            </GlowBox>
+            </article>
           </li>
         ))}
       </ol>
@@ -100,7 +105,12 @@ const presentations = talks.map(talk => ({
     align-items: start;
     margin-bottom: calc(var(--section-gap) + 8px);
   }
-  .talk-intro h1 { font-size: clamp(34px, 5vw, 54px); margin-bottom: 20px; }
+  .talk-intro h1 {
+    font: 520 clamp(2.125rem, 5vw, 3.375rem)/1.08 'Inter Article Title', var(--sans);
+    letter-spacing: -.04em;
+    margin-bottom: 20px;
+  }
+  .talk-intro h1 .signature { font: inherit; }
   .talk-intro p { margin-bottom: 12px; }
   .talk-profile { display: flex; gap: 12px; align-items: center; margin-top: 20px; }
   .talk-profile p { margin: 0; font-size: 13px; }
@@ -108,7 +118,7 @@ const presentations = talks.map(talk => ({
   .talk-repo ul { margin: 0 0 18px; padding-inline-start: 1.2em; list-style: disc; font-size: 14px; }
   .talk-repo li::marker { color: var(--accent); }
   :is(.talk-agenda, .talk-archive) > h2 { font-size: clamp(24px, 4vw, 34px); margin-bottom: 20px; }
-  .talk-timeline { display: grid; gap: 16px; list-style: none; margin: 0; padding: 0 0 0 22px; border-inline-start: 1px solid var(--line); }
+  .talk-timeline { display: grid; gap: var(--section-gap); list-style: none; margin: 0; padding: 0 0 0 22px; border-inline-start: 1px solid var(--line); }
   .talk-timeline > li { position: relative; min-width: 0; }
   .talk-timeline > li::before {
     content: '';
@@ -120,10 +130,26 @@ const presentations = talks.map(talk => ({
     background: var(--accent);
   }
   .talk-timeline > li:nth-child(even)::before { background: var(--secondary); }
-  .talk-entry-heading { display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-  .talk-event { margin-bottom: 3px; font-size: 12px; color: var(--muted); }
-  .talk-entry-heading h3 { font: 24px/1.25 var(--serif); }
-  .talk-entry p { max-width: 65ch; }
+  .talk-entry-heading :global(.article-title[data-surface="bento"]) {
+    padding: clamp(1rem, 2.5vw, 1.375rem);
+    border-radius: var(--radius-panel);
+  }
+  .talk-entry-heading :global(h3) {
+    max-inline-size: 32ch;
+    font: 520 clamp(1.375rem, 3vw, 1.875rem)/1.14 'Inter Article Title', var(--sans);
+    letter-spacing: -.03em;
+  }
+  .talk-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    margin-block-start: 10px;
+    color: var(--muted);
+    font-size: var(--text-caption);
+  }
+  .talk-entry .article-divider { margin-block: 12px; }
+  .talk-summary { max-inline-size: 65ch; margin-block-end: 12px; }
   .talk-article {
     position: relative;
     display: grid;
